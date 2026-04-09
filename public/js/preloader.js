@@ -26,7 +26,7 @@
   var EXIT_DURATION   = 0.8;   // Link click exit animation
 
   var EXCLUDED_CLASS  = 'no-transition';
-  var INITIAL_SCALE   = 2;     // How big the text starts
+  var INITIAL_SCALE   = window.innerWidth < 480 ? 1.4 : 2; // Reduced scale for mobile
 
   // ── Wait for GSAP ───────────────────────────────────────────
   function waitForGsap(callback) {
@@ -73,15 +73,18 @@
     gsap.set(brand, {
       scale: INITIAL_SCALE,
       xPercent: 0,
+      yPercent: -50,
+      top: '50%',
       opacity: 1,
-      position: 'relative',
+      position: 'absolute',
     });
     // Tagline: off-screen to the right, hidden until needed
     gsap.set(tagline, {
       xPercent: 120,
+      yPercent: -50,
       opacity: 1,
       visibility: 'hidden',
-      top: 0,
+      top: '50%',
     });
     // Background: full circle
     gsap.set(bg, { clipPath: 'circle(150% at 50% 50%)' });
@@ -164,7 +167,14 @@
     // Reset overlay
     gsap.set(overlay, { display: 'block', pointerEvents: 'all' });
     gsap.set(mask, { opacity: 1 });
-    gsap.set(brand, { xPercent: 0, scale: 1, opacity: 1, position: 'relative' });
+    gsap.set(brand, { 
+      xPercent: 0, 
+      yPercent: -50,
+      top: '50%',
+      scale: 1, 
+      opacity: 1, 
+      position: 'absolute' 
+    });
     gsap.set(tagline, { opacity: 0, visibility: 'hidden' });
 
     // Background starts as collapsed circle
