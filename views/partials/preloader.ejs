@@ -1,0 +1,26 @@
+<style>
+/* ============================================================
+   PAGE TRANSITION OVERLAY — Cinematic 5-Stage
+   ============================================================ */
+.no-scroll-transition { overflow: hidden; position: relative; height: 100vh; }
+.page-transition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: all; }
+.page-transition__bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ede8df; clip-path: circle(150% at 50% 50%); will-change: clip-path; }
+.page-transition__text-mask { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; overflow: visible; white-space: nowrap; width: 95vw; max-width: 1100px; text-align: center; }
+.page-transition__text { position: absolute; top: 0; left: 0; width: 100%; text-align: center; white-space: nowrap; }
+.page-transition__text--brand { font-family: 'Manrope', sans-serif; font-size: clamp(1.8rem, 4.5vw, 3.5rem); font-weight: 800; color: #1a1a1a; letter-spacing: 0.08em; }
+.page-transition__text--tagline { font-family: 'Manrope', sans-serif; font-size: clamp(1.4rem, 3.5vw, 2.5rem); font-weight: 300; color: #1a1a1a; letter-spacing: 0.12em; visibility: hidden; }
+</style>
+
+<!-- ========= Page Transition Overlay ========= -->
+<div class="page-transition" id="page-transition">
+  <div class="page-transition__bg"></div>
+  <div class="page-transition__text-mask">
+    <div class="page-transition__text page-transition__text--brand">
+      AMBASSADORS ASSEMBLY
+    </div>
+    <div class="page-transition__text page-transition__text--tagline">
+      YOU BELONG HERE
+    </div>
+  </div>
+</div>
+<script src="/js/preloader.js"></script>

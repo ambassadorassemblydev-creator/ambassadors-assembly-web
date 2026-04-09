@@ -3,6 +3,8 @@
 
 # Dependencies
 node_modules/
+.cloudinary/
+.github/
 
 # Logs
 logs/
