@@ -1,0 +1,25 @@
+{
+  "files.associations": {
+    "*.ejs": "html",
+    "ejs": "html"
+  },
+  "emmet.includeLanguages": {
+    "ejs": "html",
+    "*.ejs": "html",
+  },
+  "[ejs]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false
+},
+  // Optional: turn off CSS validation if it still complains
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  
+  "mcpServers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=xzyxxmhgwganwffcwxxo&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
+    }
+  }
+}
