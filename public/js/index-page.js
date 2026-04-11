@@ -86,27 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ── Mobile-specific Scripts ─────────────────────────────────
   if (window.innerWidth < 767) {
-    let panels = gsap.utils.toArray(".panel");
-    let tops = panels.map(panel => ScrollTrigger.create({ trigger: panel, start: "top top" }));
-    panels.forEach((panel, i) => {
-      ScrollTrigger.create({
-        trigger: panel,
-        start: () => panel.offsetHeight < window.innerHeight ? "top top" : "bottom bottom",
-        pin: true,
-        pinSpacing: false
-      });
-    });
-
-    if (document.querySelector('.hero')) {
-      gsap.to('.hero', {
-        autoAlpha: 0,
-        scrollTrigger: {
-          trigger: '.hero',
-          scrub: true,
-          start: 'top top',
-        },
-      });
-    }
 
     const mobileLines = document.querySelector(".mobile-lines");
     if (mobileLines) {
@@ -299,6 +278,22 @@ document.addEventListener("DOMContentLoaded", () => {
       duration: 1,
       ease: 'sine',
     });
+  }
+
+  // ── Hide sticky bar when footer is visible ─────────────────
+  const stickyBar = document.getElementById('sticky-bar');
+  const footerEl = document.querySelector('.dmFooterContainer');
+  if (stickyBar && footerEl) {
+    const footerObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          stickyBar.style.transform = 'translateY(120%)';
+        } else {
+          stickyBar.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    footerObserver.observe(footerEl);
   }
 
   // ── Hamburger menu item animations ──────────────────────────

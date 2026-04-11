@@ -462,31 +462,36 @@ html.lenis, html.lenis body {
 /* ─── Preloader Responsive ─────────────────────────────────── */
 @media (max-width: 768px) {
   .page-transition__text-mask {
-    width: 100vw;
+    width: 95vw;
     max-width: 100vw;
     padding: 0 1rem;
     box-sizing: border-box;
+    white-space: normal;
+  }
+
+  .page-transition__text {
+    white-space: normal;
   }
 
   .page-transition__text--brand {
-    font-size: clamp(1.2rem, 7vw, 2rem);
+    font-size: clamp(1.1rem, 6vw, 1.8rem);
     letter-spacing: 0.04em;
   }
 
   .page-transition__text--tagline {
-    font-size: clamp(1rem, 5vw, 1.6rem);
+    font-size: clamp(0.9rem, 4.5vw, 1.4rem);
     letter-spacing: 0.06em;
   }
 }
 
 @media (max-width: 400px) {
   .page-transition__text--brand {
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 0.02em;
   }
 
   .page-transition__text--tagline {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     letter-spacing: 0.04em;
   }
 }
@@ -1693,4 +1698,61 @@ html.lenis, html.lenis body {
 @media (max-width: 480px) {
   .fs-menu__link { font-size: 1.8rem; }
   .fs-menu__content { padding: 80px 20px 30px; }
+}
+
+/* ============================================================
+   FIX: Hero Section Full Width on Mobile
+   Uses .panel class (our own) and .widget-bb326d (stable widget class)
+   to avoid touching Duda runtime IDs.
+   ============================================================ */
+
+@media (max-width: 767px) {
+  /* Remove section padding from the hero panel wrapper */
+  .panel .flex-element.group {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Hero swiper fills full device width */
+  .widget-bb326d {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(-1 * var(--section-padding-left, 0%));
+  }
+
+  .widget-bb326d .hero-swiper-wrap,
+  .widget-bb326d .heroSwiper {
+    width: 100% !important;
+    max-width: 100vw;
+  }
+}
+
+/* ============================================================
+   FIX: Footer — Cleaner Mobile Layout
+   Targets by our .footer-nav class and structural selectors
+   rather than Duda runtime IDs.
+   ============================================================ */
+
+@media (max-width: 767px) {
+  /* Hide the right-side CTA column ("Come To Church / Message Notes / etc") */
+  .footer-cta-column {
+    display: none !important;
+  }
+
+  /* Stack footer nav links vertically and center them */
+  .footer-nav {
+    text-align: center !important;
+  }
+
+  .footer-nav .dmNewParagraph p {
+    font-size: 20px !important;
+  }
+}
+
+/* ============================================================
+   Active Navigation Link Styling
+   ============================================================ */
+
+.fs-menu__link.active-link {
+  color: rgba(184, 159, 122, 1);
 }

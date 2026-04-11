@@ -11,9 +11,15 @@
 .page-transition__text--tagline { font-family: 'Manrope', sans-serif; font-size: clamp(1.1rem, 4.5vw, 2.5rem); font-weight: 300; color: #1a1a1a; letter-spacing: 0.12em; visibility: hidden; }
 
 @media (max-width: 480px) {
-  .page-transition__text--brand { font-size: clamp(1.1rem, 7vw, 1.8rem); letter-spacing: 0.04em; }
-  .page-transition__text--tagline { font-size: clamp(0.9rem, 5vw, 1.3rem); letter-spacing: 0.08em; }
-  .page-transition__text-mask { width: 95vw; }
+  .page-transition__text-mask { width: 95vw; white-space: normal; }
+  .page-transition__text { white-space: normal; }
+  .page-transition__text--brand { font-size: clamp(1rem, 6vw, 1.6rem); letter-spacing: 0.03em; }
+  .page-transition__text--tagline { font-size: clamp(0.85rem, 4.5vw, 1.2rem); letter-spacing: 0.06em; }
+}
+
+@media (max-width: 360px) {
+  .page-transition__text--brand { font-size: 0.95rem; letter-spacing: 0.02em; }
+  .page-transition__text--tagline { font-size: 0.8rem; letter-spacing: 0.04em; }
 }
 </style>
 

@@ -197,7 +197,7 @@
                                       </div>
                                     </div>
                                   </div>
-                                  <div id="16330117" class="flex-element group" data-auto="flex-element-group">
+                                  <div id="16330117" class="flex-element group footer-cta-column" data-auto="flex-element-group">
                                     <div id="group_7tv" class="flex-element group" data-auto="flex-element-group">
                                       <div id="widget_iss" class="flex-element widget-wrapper"
                                         data-auto="flex-element-widget-wrapper" data-widget-type="paragraph"
@@ -313,12 +313,11 @@
   <!--  Add full CSS and Javascript before the close tag of the body if needed -->
   <!-- Google Fonts Include -->
   <!-- loadCSS function fonts.jsp-->
-  <link rel="stylesheet" href="https://irp.cdn-website.com/fonts/css2?family=&amp;subset=latin-ext&amp;display=swap"
-    as="style" fetchpriority="low" onload="loadCSS(this)" type="text/css">
+  <!-- Google Fonts - removed CDN dependency, fonts served locally -->
   <style>
     @font-face {
       font-family: "AppleGaramond-LightItalic";
-      src: url("https://irp.cdn-website.com/23c7a45a/fonts/AppleGaramond-LightItalic-710d_400.ttf");
+      src: url("/fonts/AppleGaramond-LightItalic.ttf");
       font-weight: 400;
       font-style: normal;
     }
@@ -326,7 +325,7 @@
   <style>
     @font-face {
       font-family: "Articulatcf-regular";
-      src: url("https://irp.cdn-website.com/23c7a45a/fonts/Articulatcf-regular-7e0e_400.otf");
+      src: url("/fonts/Articulatcf-regular.otf");
       font-weight: 400;
       font-style: normal;
     }
@@ -334,7 +333,7 @@
   <style>
     @font-face {
       font-family: "Articulat_CF_Normal";
-      src: url("https://irp.cdn-website.com/23c7a45a/fonts/Articulat_CF_Normal-860f_400.otf");
+      src: url("/fonts/Articulat_CF_Normal.otf");
       font-weight: 400;
       font-style: normal;
     }
@@ -342,7 +341,7 @@
   <style>
     @font-face {
       font-family: "Articulat CF Demi Bold";
-      src: url("https://irp.cdn-website.com/23c7a45a/fonts/Articulat+CF+Demi+Bold-fc5e_400.ttf");
+      src: url("/fonts/Articulat-CF-Demi-Bold.ttf");
       font-weight: 400;
       font-style: normal;
     }
@@ -350,18 +349,15 @@
   <style>
     @font-face {
       font-family: "AppleGaramond-Light";
-      src: url("https://irp.cdn-website.com/23c7a45a/fonts/AppleGaramond-Light-7625_400.ttf");
+      src: url("/fonts/AppleGaramond-Light.ttf");
       font-weight: 400;
       font-style: normal;
     }
   </style>
   <!-- RT CSS Include d-css-runtime-flex-->
-  <link rel="stylesheet" as="style" fetchpriority="low" onload="loadCSS(this)"
-    href="https://static.cdn-website.com/mnlt/production/6329/_dm/s/rt/dist/css/d-css-runtime-flex.min.css"
-    type="text/css">
+  <link rel="stylesheet" href="/css/vendor/d-css-runtime-flex.min.css" type="text/css">
   <!-- End of RT CSS Include -->
-  <link rel="stylesheet" href="https://irp.cdn-website.com/WIDGET_CSS/12c723454157c5842f3b41d7c6af0b3b.css"
-    id="widgetCSS" as="style" fetchpriority="low" onload="loadCSS(this)" type="text/css">
+  <link rel="stylesheet" href="/css/vendor/widget-styles.css" id="widgetCSS" type="text/css">
   <!-- Support `img` size attributes -->
   <style>
     img[width][height] {
@@ -378,9 +374,7 @@
   <style id="pageAdditionalWidgetsCss" type="text/css">
   </style>
   <!-- Site CSS -->
-  <link rel="stylesheet"
-    href="https://irp.cdn-website.com/23c7a45a/files/23c7a45a_withFlex_1.min.css?v=a2d2b552a317d9290ea55621eb2f497a"
-    id="siteGlobalCss" as="style" fetchpriority="low" onload="loadCSS(this)" type="text/css">
+  <link rel="stylesheet" href="/css/vendor/site-global.min.css" id="siteGlobalCss" type="text/css">
   <style id="customWidgetStyle" type="text/css">
   </style>
   <style id="innerPagesStyle" type="text/css">
@@ -388,9 +382,7 @@
   <style id="additionalGlobalCss" type="text/css">
   </style>
   <!-- Page CSS -->
-  <link rel="stylesheet"
-    href="https://irp.cdn-website.com/23c7a45a/files/23c7a45a_home_withFlex_1.min.css?v=162cd7961304d7d6b399a2287d18743a"
-    id="homeCssLink" as="style" fetchpriority="low" onload="loadCSS(this)" type="text/css">
+  <link rel="stylesheet" href="/css/vendor/home-page.min.css" id="homeCssLink" type="text/css">
   <style id="pagestyle" type="text/css">
   </style>
   <style id="pagestyleDevice" type="text/css">
@@ -752,128 +744,14 @@
       });
     };
   </script>
-  <script type="text/javascript">
-    var d_version = "production_6329";
-    var build = "2026-03-31T14_44_35";
-    window['v' + 'ersion'] = d_version;
-    function buildEditorParent() {
-      window.isMultiScreen = true;
-      window.editorParent = {};
-      window.previewParent = {};
-      window.assetsCacheQueryParam = "?version=2026-03-31T14_44_35";
-      try {
-        var _p = window.parent;
-        if (_p && _p.document && _p.$ && _p.$.dmfw) {
-          window.editorParent = _p;
-        } else if (_p.isSitePreview) {
-          window.previewParent = _p;
-        }
-      } catch (e) {
-      }
-    }
-    buildEditorParent();
-  </script>
-  <!-- Injecting site-wide before scripts -->
-  <!-- End Injecting site-wide to the head -->
+  <!-- ========= Duda Runtime ========= -->
+  <script src="/js/duda-runtime-config.js"></script>
+  <script src="/js/vendor/d-js-runtime-flex-package.min.js" id="d-js-core" defer></script>
   <script>
-    window.cookiesNotificationMarkupPreview = 'null';
+    document.addEventListener('DOMContentLoaded', () => window.runtime.initLayout());
   </script>
-  <!-- HEAD RT JS Include -->
-  <script id="d-js-params">
-    window.INSITE = window.INSITE || {};
-    window.INSITE.device = "desktop";
-    window.rtCommonProps = {};
-    rtCommonProps["rt.ajax.ajaxScriptsFix"] = true;
-    rtCommonProps["rt.pushnotifs.sslframe.encoded"] = 'aHR0cHM6Ly97c3ViZG9tYWlufS5wdXNoLW5vdGlmcy5jb20=';
-    rtCommonProps["runtimecollector.url"] = 'https://rtc.multiscreensite.com';
-    rtCommonProps["performance.tabletPreview.removeScroll"] = 'false';
-    rtCommonProps["inlineEditGrid.snap"] = true;
-    rtCommonProps["popup.insite.cookie.ttl"] = '0.5';
-    rtCommonProps["rt.pushnotifs.force.button"] = true;
-    rtCommonProps["common.mapbox.token"] = '';
-    rtCommonProps["common.mapbox.js.override"] = false;
-    rtCommonProps["common.here.appId"] = '';
-    rtCommonProps["common.here.appCode"] = '';
-    rtCommonProps["isCoverage.test"] = false;
-    rtCommonProps["ecommerce.ecwid.script"] = 'https://app.multiscreenstore.com/script.js';
-    rtCommonProps["common.resources.dist.cdn"] = true;
-    rtCommonProps["common.build.dist.folder"] = 'production/6329';
-    rtCommonProps["common.resources.cdn.host"] = 'https://static.cdn-website.com';
-    rtCommonProps["common.resources.folder"] = 'https://static.cdn-website.com/mnlt/production/6329';
-    rtCommonProps["feature.flag.runtime.backgroundSlider.preload.slowly"] = true;
-    rtCommonProps["feature.flag.runtime.newAnimation.enabled"] = true;
-    rtCommonProps["feature.flag.runtime.newAnimation.jitAnimation.enabled"] = true;
-    rtCommonProps["feature.flag.sites.google.analytics.gtag"] = true;
-    rtCommonProps["feature.flag.runOnReadyNewTask"] = true;
-    rtCommonProps["isAutomation.test"] = false;
-    rtCommonProps["booking.cal.api.domain"] = 'api.cal.com';
-    rtCommonProps['common.mapsProvider'] = 'google';
-    rtCommonProps["google.places.key"] = '';
-    rtCommonProps['common.mapsProvider.version'] = '0.52.0';
-    rtCommonProps['common.geocodeProvider'] = 'google';
-    rtCommonProps['server.for.resources'] = '';
-    rtCommonProps['feature.flag.lazy.widgets'] = true;
-    rtCommonProps['feature.flag.single.wow'] = false;
-    rtCommonProps['feature.flag.disallowPopupsInEditor'] = true;
-    rtCommonProps['feature.flag.mark.anchors'] = true;
-    rtCommonProps['captcha.public.key'] = '';
-    rtCommonProps['captcha.invisible.public.key'] = '';
-    rtCommonProps["images.sizes.small"] = 160;
-    rtCommonProps["images.sizes.mobile"] = 640;
-    rtCommonProps["images.sizes.tablet"] = 1280;
-    rtCommonProps["images.sizes.desktop"] = 1920;
-    rtCommonProps["modules.resources.cdn"] = true;
-    rtCommonProps["import.images.storage.imageCDN"] = 'https://lirp.cdn-website.com/';
-    rtCommonProps["feature.flag.runtime.inp.threshold"] = 150;
-    rtCommonProps["feature.flag.performance.logs"] = false;
-    rtCommonProps["site.widget.form.captcha.type"] = 'g_recaptcha';
-    rtCommonProps["friendly.captcha.site.key"] = '';
-    rtCommonProps["cookiebot.mapbox.consent.category"] = 'marketing';
-    // feature flags that's used out of runtime module (in  legacy files)
-    rtCommonProps["platform.monolith.personalization.dateTimeCondition.popupMsgAction.moveToclient.enabled"] = true;
-    window.rtFlags = {};
-    rtFlags["unsuspendEcwidStoreOnRuntime.enabled"] = true;
-    rtFlags["scripts.widgetCount.enabled"] = true;
-    rtFlags["fnb.animations.tracking.enabled"] = true;
-    rtFlags["ecom.ecwidNewUrlStructure.enabled"] = false;
-    rtFlags["ecom.ecwid.accountPage.emptyBaseUrl.enabled"] = true;
-    rtFlags["ecom.ecwid.pages.links.disable.listeners"] = true;
-    rtFlags["ecom.ecwid.storefrontV3.enabled"] = false;
-    rtFlags["ecom.ecwid.old.store.fix.facebook.share"] = true;
-    rtFlags["feature.flag.photo.gallery.exact.size"] = true;
-    rtFlags["geocode.search.localize"] = false;
-    rtFlags["feature.flag.runtime.newAnimation.asyncInit.setTimeout.enabled"] = false;
-    rtFlags["twitter.heightLimit.enabled"] = true;
-    rtFlags["runtime.lottieOverflow"] = false;
-    rtFlags["runtime.monitoring.sentry.ignoreErrors"] = "";
-    rtFlags["streamline.monolith.personalization.supportMultipleConditions.enabled"] = false;
-    rtFlags["flex.animation.design.panel.layout"] = true;
-    rtFlags["runtime.cwv.report.cls.enabled"] = false;
-    rtFlags["runtime.cwv.report.lcp.enabled"] = false;
-    rtFlags["contact.form.useActiveForm"] = true;
-    rtFlags["contact.form.custom.errors.enabled"] = false;
-    rtFlags["runtime.ssr.productStore.internal.observer"] = true;
-    rtFlags["runtime.ssr.productCustomizations"] = true;
-    rtFlags["runtime.ssr.runtime.filter-sort.newFilterSortWidgetWithOptions.enabled"] = true;
-    rtFlags["runtime.ssr.ssrSlider.jumpThreshold.enabled"] = true;
-  </script>
-  <script
-    src="https://static.cdn-website.com/mnlt/production/6329/_dm/s/rt/dist/scripts/d-js-runtime-flex-package.min.js"
-    id="d-js-core" defer=""></script>
-  <!-- End of HEAD RT JS Include -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () =>
-      window.runtime.initLayout()
-    );
-  </script>
-  <!-- Duda tracking removed (UTM cookies, Snowplow analytics, PhotoSwipe, personalization) -->
-  <script type="text/javascript">
-    Parameters.NavigationAreaParams.MoreButtonText = 'MORE';
-    Parameters.NavigationAreaParams.LessButtonText = 'LESS';
-    Parameters.HomeLinkText = 'Home';
-  </script>
-  <!--  End Script tags -->
-  <!--  Begin Body End Markup -->
+
+  <!-- Icon Gradient (used by SVG icons) -->
   <svg height="0" width="0" style="position:absolute; z-index: -999;">
     <defs>
       <linearGradient id="icon-gradient" x1="0.5" y1="1" x2="0.5" y2="0">
@@ -882,10 +760,8 @@
       </linearGradient>
     </defs>
   </svg>
-  <script src="/js/index-page.js" defer></script>
-  <!--  End Body End Markup -->
-  <!--  Site Wide Html Markup -->
 
-  
+  <!-- App Scripts -->
+  <script src="/js/index-page.js" defer></script>
 </body>
 </html>

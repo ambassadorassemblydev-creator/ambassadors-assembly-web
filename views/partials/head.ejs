@@ -2,150 +2,78 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" class="">
 
 <head>
-  <style id="customRules"></style>
   <meta charset="utf-8">
-  <script async="" src="//d32hwlnfiv2gyn.cloudfront.net/sp-2.0.0-dm-0.1.min.js"></script>
-  <script type="text/javascript">
+  <!-- ========= Meta Tags ========= -->
+  <meta id="view" name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Favicons (Cloudinary) -->
+  <link rel="apple-touch-icon"
+    href="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
+  <link rel="icon" type="image/x-icon"
+    href="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.ambassadorsassembly.com/">
+
+  <!-- ========= Duda Runtime Stubs ========= -->
+  <!-- Minimal stubs required by the Duda runtime JS engine -->
+  <script id="d-js-dmapi">
     window._currentDevice = 'desktop';
-    window.Parameters = window.Parameters || {
+    window.SystemID = 'US_DIRECT_PRODUCTION';
+    window.Parameters = {
       HomeUrl: 'https://www.ambassadorsassembly.com/',
-      SystemID: 'US_DIRECT_PRODUCTION',
       SiteAlias: '23c7a45a',
-      SiteType: atob('RFVEQU9ORQ=='),
-      PublicationDate: 'Wed Apr 01 17:53:11 UTC 2026',
-      ExternalUid: null,
-      IsSiteMultilingual: false,
-      InitialPostAlias: '',
-      InitialPostPageUuid: '',
-      InitialDynamicItem: '',
-      DynamicPageInfo: {
-        isDynamicPage: false,
-        base64JsonRowData: 'null',
-      },
       InitialPageAlias: 'home',
-      InitialPageUuid: '333564086fb0472485865871fb197892',
-      InitialPageId: '1202667314',
-      InitialEncodedPageAlias: 'aG9tZQ==',
-      InitialHeaderUuid: 'ddf02070a6d741318057c56fcee925be',
-      CurrentPageUrl: '',
       IsCurrentHomePage: true,
       AllowAjax: false,
-      AfterAjaxCommand: null,
       HomeLinkText: 'Back To Home',
-      UseGalleryModule: false,
-      CurrentThemeName: 'Layout Theme',
-      ThemeVersion: '500000',
-      DefaultPageAlias: '',
-      RemoveDID: true,
-      WidgetStyleID: null,
       IsHeaderFixed: false,
-      IsHeaderSkinny: false,
-      IsBfs: true,
-      StorePageAlias: 'null',
-      StorePagesUrls: 'e30=',
-      IsNewStore: 'false',
-      StorePath: '',
-      StoreId: 'null',
-      StoreVersion: 0,
-      StoreBaseUrl: '',
-      StoreCleanUrl: true,
-      StoreDisableScrolling: true,
-      IsStoreSuspended: false,
       HasCustomDomain: true,
-      SimpleSite: false,
-      showCookieNotification: false,
-      cookiesNotificationMarkup: 'null',
-      translatedPageUrl: '',
-      isFastMigrationSite: false,
-      sidebarPosition: 'NA',
+      hasCustomCode: true,
+      isFlexSite: true,
+      isRuntimeServer: true,
+      isInEditor: false,
       currentLanguage: 'en',
       currentLocale: 'en',
-      NavItems: '{}',
-      errors: {
-        general: 'There was an error connecting to the page.<br/> Make sure you are not offline.',
-        password: 'Incorrect name/password combination',
-        tryAgain: 'Try again'
-      },
       NavigationAreaParams: {
         ShowBackToHomeOnInnerPages: true,
         NavbarSize: -1,
         NavbarLiveHomePage: 'https://www.ambassadorsassembly.com/',
         BlockContainerSelector: '.dmBody',
         NavbarSelector: '#dmNav:has(a)',
-        SubNavbarSelector: '#subnav_main'
+        SubNavbarSelector: '#subnav_main',
+        MoreButtonText: 'MORE',
+        LessButtonText: 'LESS'
       },
-      hasCustomCode: true,
-      planID: '7',
-      customTemplateId: 'null',
-      siteTemplateId: 'null',
-      productId: 'DM_DIRECT',
-      disableTracking: false,
-      pageType: 'FROM_SCRATCH',
-      isRuntimeServer: true,
-      isInEditor: false,
-      hasNativeStore: false,
-      defaultLang: 'en',
-      hamburgerMigration: null,
-      isFlexSite: true
+      LayoutID: {},
+      LayoutVariationID: {}
     };
-    window.Parameters.LayoutID = {};
     window.Parameters.LayoutID[window._currentDevice] = 30;
-    window.Parameters.LayoutVariationID = {};
     window.Parameters.LayoutVariationID[window._currentDevice] = 5;
-  </script>
-  <!-- Injecting site-wide to the head -->
-  <!-- End Injecting site-wide to the head -->
-  <!-- ========= Meta Tags ========= -->
-  <!-- Add manifest -->
-  <link rel="canonical" href="https://www.ambassadorsassembly.com/">
-  <meta id="view" name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <!--Add favorites icons-->
-  <link rel="apple-touch-icon"
-    href="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
-  <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
-  <!-- End favorite icons -->
-  <link rel="preconnect" href="https://lirp.cdn-website.com/">
-  <!-- render the required CSS and JS in the head section -->
-  <script id="d-js-dmapi">
-    window.SystemID = 'US_DIRECT_PRODUCTION';
+
     if (!window.dmAPI) {
       window.dmAPI = {
-        registerExternalRuntimeComponent: function () {
-        },
-        getCurrentDeviceType: function () {
-          return window._currentDevice;
-        },
+        registerExternalRuntimeComponent: function () {},
+        getCurrentDeviceType: function () { return window._currentDevice; },
         runOnReady: (ns, fn) => {
           const safeFn = dmAPI.toSafeFn(fn);
           ns = ns || 'global_' + Math.random().toString(36).slice(2, 11);
           const eventName = 'afterAjax.' + ns;
           if (document.readyState === 'complete') {
             $.DM.events.off(eventName).on(eventName, safeFn);
-            setTimeout(function () {
-              safeFn({
-                isAjax: false,
-              });
-            }, 0);
+            setTimeout(() => safeFn({ isAjax: false }), 0);
           } else {
             window?.waitForDeferred?.('dmAjax', () => {
               $.DM.events.off(eventName).on(eventName, safeFn);
-              safeFn({
-                isAjax: false,
-              });
+              safeFn({ isAjax: false });
             });
           }
         },
         toSafeFn: (fn) => {
-          if (fn?.safe) {
-            return fn;
-          }
+          if (fn?.safe) return fn;
           const safeFn = function (...args) {
-            try {
-              return fn?.apply(null, args);
-            } catch (e) {
-              console.log('function failed ' + e.message);
-            }
+            try { return fn?.apply(null, args); } catch (e) { console.log('function failed ' + e.message); }
           };
           safeFn.safe = true;
           return safeFn;
@@ -153,139 +81,53 @@
       };
     }
     if (!window.requestIdleCallback) {
-      window.requestIdleCallback = function (fn) {
-        setTimeout(fn, 0);
-      }
+      window.requestIdleCallback = function (fn) { setTimeout(fn, 0); };
     }
   </script>
-  <!-- loadCSS function header.jsp-->
-  <script id="d-js-load-css">
-    /**
-     * There are a few <link> tags with CSS resource in them that are preloaded in the page
-     * in each of those there is a "onload" handler which invokes the loadCSS callback
-     * defined here.
-     * We are monitoring 3 main CSS files - the runtime, the global and the page.
-     * When each load we check to see if we can append them all in a batch. If threre
-     * is no page css (which may happen on inner pages) then we do not wait for it
-     */
-    (function () {
-      let cssLinks = {};
-      function loadCssLink(link) {
-        link.onload = null;
-        link.rel = "stylesheet";
-        link.type = "text/css";
-      }
-      function checkCss() {
-        const pageCssLink = document.querySelector("[id*='CssLink']");
-        const widgetCssLink = document.querySelector("[id*='widgetCSS']");
-        if (cssLinks && cssLinks.runtime && cssLinks.global && (!pageCssLink || cssLinks.page) && (!widgetCssLink || cssLinks.widget)) {
-          const storedRuntimeCssLink = cssLinks.runtime;
-          const storedPageCssLink = cssLinks.page;
-          const storedGlobalCssLink = cssLinks.global;
-          const storedWidgetCssLink = cssLinks.widget;
-          storedGlobalCssLink.disabled = true;
-          loadCssLink(storedGlobalCssLink);
-          if (storedPageCssLink) {
-            storedPageCssLink.disabled = true;
-            loadCssLink(storedPageCssLink);
-          }
-          if (storedWidgetCssLink) {
-            storedWidgetCssLink.disabled = true;
-            loadCssLink(storedWidgetCssLink);
-          }
-          storedRuntimeCssLink.disabled = true;
-          loadCssLink(storedRuntimeCssLink);
-          requestAnimationFrame(() => {
-            setTimeout(() => {
-              storedRuntimeCssLink.disabled = false;
-              storedGlobalCssLink.disabled = false;
-              if (storedPageCssLink) {
-                storedPageCssLink.disabled = false;
-              }
-              if (storedWidgetCssLink) {
-                storedWidgetCssLink.disabled = false;
-              }
-              // (SUP-4179) Clear the accumulated cssLinks only when we're
-              // sure that the document has finished loading and the document 
-              // has been parsed.
-              if (document.readyState === 'interactive') {
-                cssLinks = null;
-              }
-            }, 0);
-          });
-        }
-      }
-      function loadCSS(link) {
-        try {
-          var urlParams = new URLSearchParams(window.location.search);
-          var noCSS = !!urlParams.get("nocss");
-          var cssTimeout = urlParams.get("cssTimeout") || 0;
-          if (noCSS) {
-            return;
-          }
-          if (link.href && link.href.includes("d-css-runtime")) {
-            cssLinks.runtime = link;
-            checkCss();
-          } else if (link.id === "siteGlobalCss") {
-            cssLinks.global = link;
-            checkCss();
-          }
-          else if (link.id && link.id.includes("CssLink")) {
-            cssLinks.page = link;
-            checkCss();
-          } else if (link.id && link.id.includes("widgetCSS")) {
-            cssLinks.widget = link;
-            checkCss();
-          }
-          else {
-            requestIdleCallback(function () {
-              window.setTimeout(function () {
-                loadCssLink(link);
-              }, parseInt(cssTimeout, 10));
-            });
-          }
-        } catch (e) {
-          throw e
-        }
-      }
-      window.loadCSS = window.loadCSS || loadCSS;
-    })();
-  </script>
+
+  <!-- Deferred promise utility (used by runtime) -->
   <script data-role="deferred-init" type="text/javascript">
-    /* usage: window.getDeferred(<deferred name>).resolve() or window.getDeferred(<deferred name>).promise.then(...)*/
     function Def() {
       this.promise = new Promise((function (a, b) {
-        this.resolve = a, this.reject = b
-      }).bind(this))
+        this.resolve = a; this.reject = b;
+      }).bind(this));
     }
     const defs = {};
-    window.getDeferred = function (a) {
-      return null == defs[a] && (defs[a] = new Def), defs[a]
-    }
+    window.getDeferred = function (a) { return null == defs[a] && (defs[a] = new Def), defs[a]; };
     window.waitForDeferred = function (b, a, c) {
       let d = window?.getDeferred?.(b);
-      d
-        ? d.promise.then(a)
-        : c && ["complete", "interactive"].includes(document.readyState)
-          ? setTimeout(a, 1)
-          : c
-            ? document.addEventListener("DOMContentLoaded", a)
-            : console.error(`Deferred  does not exist`);
+      d ? d.promise.then(a)
+        : c && ["complete", "interactive"].includes(document.readyState) ? setTimeout(a, 1)
+        : c ? document.addEventListener("DOMContentLoaded", a)
+        : console.error('Deferred does not exist');
     };
   </script>
-  
+
+  <!-- ========= Stylesheets ========= -->
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/index-page.css">
-  <style id="fontFallbacks">
-  </style>
-  <!-- End render the required css and JS in the head section -->
-  <link type="application/rss+xml" rel="alternate" href="https://www.ambassadorsassembly.com/feed/rss2">
-  <link type="application/atom+xml" rel="alternate" href="https://www.ambassadorsassembly.com/feed/atom">
+
+  <!-- ========= Page Title & SEO ========= -->
+  <title><%= pageTitle %></title>
+  <meta name="description" content="Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria. Join us for worship, community, and the Word.">
+
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.ambassadorsassembly.com/">
-  <title><%= pageTitle %></title>
-  <meta name="description"
-    content="Ambassadors Assembly | Worship with us today.">
+  <meta property="og:title" content="Ambassadors Assembly | Join Us on Sunday!">
+  <meta property="og:description" content="Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria. Join us for worship, community, and the Word.">
+  <meta property="og:image"
+    content="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Ambassadors Assembly | Join Us on Sunday!">
+  <meta name="twitter:description" content="Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria. Join us for worship, community, and the Word.">
+  <meta name="twitter:image"
+    content="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
+
+  <!-- ========= Structured Data (JSON-LD) ========= -->
+  <!-- TODO: Replace placeholder data with real Ambassadors Assembly info -->
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -301,67 +143,42 @@
       "@type": "WebPage",
       "@id": "https://www.ambassadorsassembly.com/#webpage",
       "url": "https://www.ambassadorsassembly.com/",
-      "name": "Ambassadors Assembly | Join us on Sunday!",
+      "name": "Ambassadors Assembly | Join Us on Sunday!",
       "isPartOf": { "@id": "https://www.ambassadorsassembly.com/#website" },
       "about": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-      "primaryImageOfPage": { "@id": "https://lirp.cdn-website.com/23c7a45a/dms3rep/multi/opt/Gradient+Logo+%281%29-1920w.png" }
+      "primaryImageOfPage": { "@id": "https://www.ambassadorsassembly.com/#primaryimage" }
     },
     {
       "@type": "ImageObject",
       "@id": "https://www.ambassadorsassembly.com/#primaryimage",
-      "url": "https://lirp.cdn-website.com/23c7a45a/dms3rep/multi/opt/Gradient+Logo+%281%29-1920w.png",
-      "contentUrl": "https://lirp.cdn-website.com/23c7a45a/dms3rep/multi/opt/Gradient+Logo+%281%29-1920w.png"
+      "url": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg",
+      "contentUrl": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg"
     },
     {
       "@type": ["Organization", "Place", "Church"],
       "@id": "https://www.ambassadorsassembly.com/#organization",
       "name": "Ambassadors Assembly",
       "url": "https://www.ambassadorsassembly.com/",
-      "logo": "https://lirp.cdn-website.com/23c7a45a/dms3rep/multi/opt/Gradient+Logo+%281%29-1920w.png",
-      "image": "https://lirp.cdn-website.com/23c7a45a/dms3rep/multi/opt/Gradient+Logo+%281%29-1920w.png",
-      "telephone": "+1-706-549-0000",
+      "logo": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg",
+      "image": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg",
+      "telephone": "+234-801-234-5678",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "4680 Lexington Rd",
-        "addressLocality": "Athens",
-        "addressRegion": "GA",
-        "postalCode": "30605",
-        "addressCountry": "US"
+        "streetAddress": "12 Adeola Odeku Street, Victoria Island",
+        "addressLocality": "Lagos",
+        "addressRegion": "Lagos",
+        "postalCode": "101241",
+        "addressCountry": "NG"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 33.9281434,
-        "longitude": -83.30156
+        "latitude": 6.4281,
+        "longitude": 3.4219
       },
       "sameAs": [
-        "https://www.youtube.com/c/CornerstoneChurchAthens",
-        "https://www.instagram.com/cornerstoneathens/",
-        "https://www.facebook.com/CornerstoneAthens"
-      ],
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": 4.6,
-        "reviewCount": 244,
-        "bestRating": 5,
-        "worstRating": 1
-      },
-      "review": [
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Lindsey H" },
-          "datePublished": "2024-09-29",
-          "reviewRating": { "@type": "Rating", "ratingValue": 5, "bestRating": 5, "worstRating": 1 },
-          "name": "Spirit filled and welcoming church home",
-          "reviewBody": "Spirit filled and Spirit led. Genuine pastor and family lead this church in the Spirit and love of Jesus. Lots of opportunities for the youth and outreach. Proud to have found my church home after years of searching."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Susan B" },
-          "datePublished": "2023-04-03",
-          "reviewRating": { "@type": "Rating", "ratingValue": 5, "bestRating": 5, "worstRating": 1 },
-          "name": "Uplifting worship and preaching",
-          "reviewBody": "Love coming here—always feel uplifted and filled with the Spirit from the worship to the preaching and prayer. Highly recommend to anyone looking to continue or start a relationship with Jesus."
-        }
+        "https://www.youtube.com/@AmbassadorsAssembly",
+        "https://www.instagram.com/ambassadorsassembly/",
+        "https://www.facebook.com/AmbassadorsAssembly"
       ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
@@ -374,7 +191,7 @@
               "name": "Sunday Worship Services",
               "serviceType": "Church service / worship gathering",
               "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Athens" }
+              "areaServed": { "@type": "City", "name": "Lagos" }
             }
           },
           {
@@ -384,7 +201,7 @@
               "name": "Kids Ministry",
               "serviceType": "Children's ministry",
               "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Athens" }
+              "areaServed": { "@type": "City", "name": "Lagos" }
             }
           },
           {
@@ -394,7 +211,7 @@
               "name": "Youth Ministry",
               "serviceType": "Student ministry",
               "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Athens" }
+              "areaServed": { "@type": "City", "name": "Lagos" }
             }
           },
           {
@@ -404,7 +221,7 @@
               "name": "Young Adults (18|28)",
               "serviceType": "Young adults ministry",
               "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Athens" }
+              "areaServed": { "@type": "City", "name": "Lagos" }
             }
           },
           {
@@ -414,7 +231,7 @@
               "name": "Small Groups",
               "serviceType": "Small group / community groups",
               "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Athens" }
+              "areaServed": { "@type": "City", "name": "Lagos" }
             }
           }
         ]
@@ -424,61 +241,23 @@
 }
   </script>
 
+  <!-- ========= Third-Party Libraries ========= -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2">
-  </script>
-  <script type="text/javascript">
-    !function (e, t) { (e = t.createElement("script")).src = "https://cdn.convertbox.com/convertbox/js/embed.js", e.id = "app-convertbox-script", e.async = true, e.dataset.uuid = "b48d17cd-8a5c-43f1-825b-122331b3940e", document.getElementsByTagName("head")[0].appendChild(e) }(window, document);
-  </script>
-  <script src="https://cdn.convertbox.com/convertbox/js/embed.js" id="app-convertbox-script" async=""
-    data-uuid="b48d17cd-8a5c-43f1-825b-122331b3940e"></script>
-  <!-- TODO: Replace with your own Google Analytics / Ads tag -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script> -->
-  <!-- <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'YOUR-GA-ID');
-  </script> -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Ambassadors Assembly | Join us on Sunday!">
-  <meta name="twitter:description"
-    content="Ambassadors Assembly | Join us on Sunday!.">
-  <meta name="twitter:image"
-    content="https://lirp.cdn-website.com/50e7ebb2/dms3rep/multi/opt/Gradient+Logo+%281%29-1920w.png">
-  <meta property="og:description"
-    content="Ambassadors Assembly | Join us on Sunday!.">
-  <meta property="og:title" content="Ambassadors Assembly | Join us on Sunday!">
-  <meta property="og:image"
-    content="https://lirp.cdn-website.com/50e7ebb2/dms3rep/multi/opt/Gradient+Logo+%281%29-1920w.png">
-  <!-- Old tracking pixel removed -->
-  <!-- Polyfills removed — modern browsers have native support -->
-  <script charset="utf-8" data-webpack="runtime:chunk-105"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/runtime-module-layout.446b4afe23db0902d141.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-192"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/runtime-flex-link-on-container.7515607156f8bea4af38.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-27"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/runtime-module-anchors.aa582360c9b24e7b7508.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-913"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/913.19ab55ffb0169c2b1b4b.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-897"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/897.b704f9d0fc47fb69c82a.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-873"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/873.da9188333f2e97dd657d.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-250"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/250.9195d93d432c603c3bc7.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-292"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/292.054f2011e77bbb884f03.js"></script>
-  <script charset="utf-8" data-webpack="runtime:chunk-555"
-    src="https://static.cdn-website.com/mnlt/production/6329/editor/apps/modules/runtime/555.c6ea78822c83cbef4649.js"></script>
-  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- ========= Duda Runtime Chunks (local) ========= -->
+  <script charset="utf-8" src="/js/vendor/runtime-module-layout.js"></script>
+  <script charset="utf-8" src="/js/vendor/runtime-flex-link-on-container.js"></script>
+  <script charset="utf-8" src="/js/vendor/runtime-module-anchors.js"></script>
+  <script charset="utf-8" src="/js/vendor/913.js"></script>
+  <script charset="utf-8" src="/js/vendor/897.js"></script>
+  <script charset="utf-8" src="/js/vendor/873.js"></script>
+  <script charset="utf-8" src="/js/vendor/250.js"></script>
+  <script charset="utf-8" src="/js/vendor/292.js"></script>
+  <script charset="utf-8" src="/js/vendor/555.js"></script>
 </head>
