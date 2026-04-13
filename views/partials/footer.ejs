@@ -1,21 +1,4 @@
-  <!-- ========= LOVE IN ACTION — Scroll-Scrubbed Parallax ========= -->
-                          <div class="love-section" id="love-section">
-                            <!-- Giant background words -->
-                            <div class="love-giant love-giant--love">LOVE</div>
-                            <div class="love-giant love-giant--in">IN</div>
-                            <div class="love-giant love-giant--action">ACTION</div>
-                            <div class="love-giant love-giant--action-shadow">ACTION</div>
 
-                            <!-- Pinned center text -->
-                            <div class="love-center" id="love-center">
-                              <div class="love-center__text">OUR MISSION IS<br>LOVE IN ACTION</div>
-                              <!-- Collapsing circle -->
-                              <svg class="love-circle" id="love-circle" viewBox="0 0 400 400" fill="none">
-                                <circle cx="200" cy="200" r="195" stroke="#1a1a1a" stroke-width="1.5"/>
-                              </svg>
-                            </div>
-                          </div>
-                          <!-- ========= END LOVE IN ACTION ========= -->
 
                   <div class="dmFooterContainer flex_hfcontainer">
                     <div id="flex-footer" role="contentinfo">
@@ -702,8 +685,9 @@
         function initSwiper() {
           var swiperEl = element.querySelector('.heroSwiper');
           if (!swiperEl) return;
+          var numSlides = swiperEl.querySelectorAll('.swiper-slide').length;
           var swiper = new Swiper(swiperEl, {
-            loop: true,
+            loop: false,
             autoplay: {
               delay: 7000,
               disableOnInteraction: false,
@@ -763,5 +747,3 @@
 
   <!-- App Scripts -->
   <script src="/js/index-page.js" defer></script>
-</body>
-</html>

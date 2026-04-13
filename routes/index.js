@@ -1,5 +1,9 @@
 import express from 'express';
 import { pageController } from '../controllers/pageController.js';
+import authRoutes from './auth.js'; // <-- ADD THIS
+import { accountController } from '../controllers/accountController.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
+import apiRoutes from './api.js'; // <-- ADD THIS
 
 const router = express.Router();
 
@@ -8,14 +12,11 @@ const router = express.Router();
 // ==========================================
 router.get('/', pageController.renderHome);
 router.get('/sermons', pageController.renderSermons);
-// router.get('/events', pageController.renderEvents);
-// router.get('/about', pageController.renderAbout);
-
+router.get('/my-account', authMiddleware.protect, accountController.renderDashboard);
 // ==========================================
-// FUTURE ROUTES (Placeholders)
+// AUTH VIEWS & API
 // ==========================================
-// router.use('/auth', authRoutes);
-// router.use('/admin', adminRoutes);
-// router.use('/api', apiRoutes);
+router.use('/', authRoutes); // <-- ADD THIS
+router.use('/api', apiRoutes); 
 
 export default router;

@@ -365,8 +365,8 @@
                                 </div>
                               </div>
                               <div class="sermons-row" id="sermons-row">
-<% if (sermons && sermons.length > 0) { %>
-  <% sermons.forEach(sermon => { %>
+     <% if (sermons && sermons.length > 0) { %>
+    <% sermons.forEach(sermon => { %>
                                 <div class="sermon-card">
                                   <div class="sermon-card__img">
                                     <img src="<%= sermon.thumbnail_url %>" alt="<%= sermon.title %>" loading="lazy">
@@ -374,10 +374,10 @@
                                   <h3 class="sermon-card__title"><%= sermon.title %></h3>
                                   <a href="/sermons" class="sermon-card__link">View Sermon <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg></a>
                                 </div>
-  <% }) %>
-<% } else { %>
+       <% }) %>
+    <% } else { %>
                                 <p>No recent sermons found.</p>
-<% } %>
+     <% } %>
                               </div>
                             </div>
                           </section>
@@ -404,8 +404,8 @@
                                 </div>
                               </div>
                               <div class="events-row" id="events-row">
-<% if (events && events.length > 0) { %>
-  <% events.forEach(evt => { %>
+      <% if (events && events.length > 0) { %>
+     <% events.forEach(evt => { %>
                                 <div class="event-card-new">
                                   <div class="event-card-new__img">
                                     <img src="<%= evt.cover_image_url %>" alt="<%= evt.title %>" loading="lazy">
@@ -414,10 +414,10 @@
                                   <h3 class="event-card-new__title"><%= evt.title %></h3>
                                   <a href="/events" class="event-card-new__link">View Event <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg></a>
                                 </div>
-  <% }) %>
-<% } else { %>
+    <% }) %>
+    <% } else { %>
                                 <p>No events upcoming.</p>
-<% } %>
+    <% } %>
                               </div>
                             </div>
                           </section>
@@ -569,5 +569,24 @@
                             </div>
                           </section>
                           <!-- ========= END NEWSLETTER ========= -->
+  <!-- ========= LOVE IN ACTION — Scroll-Scrubbed Parallax ========= -->
+                          <div class="love-section" id="love-section">
+                            <!-- Giant background words -->
+                            <div class="love-giant love-giant--love">LOVE</div>
+                            <div class="love-giant love-giant--in">IN</div>
+                            <div class="love-giant love-giant--action">ACTION</div>
+                            <div class="love-giant love-giant--action-shadow">ACTION</div>
 
+                            <!-- Pinned center text -->
+                            <div class="love-center" id="love-center">
+                              <div class="love-center__text">OUR MISSION IS<br>LOVE IN ACTION</div>
+                              <!-- Collapsing circle -->
+                              <svg class="love-circle" id="love-circle" viewBox="0 0 400 400" fill="none">
+                                <circle cx="200" cy="200" r="195" stroke="#1a1a1a" stroke-width="1.5"/>
+                              </svg>
+                            </div>
+                          </div>
+                          <!-- ========= END LOVE IN ACTION ========= -->
                         <%- include('../partials/footer') %>
+                        </body>
+                        </html>

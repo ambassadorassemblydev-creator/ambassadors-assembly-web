@@ -290,11 +290,11 @@ CREATE TRIGGER potential_family_matches_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 -- Function to auto-detect potential families on new profile
-CREATE OR REPLACE FUNCTION detect_potential_families()
+CREATE OR REPLACE FUNCTION public.detect_potential_families()
 RETURNS TRIGGER AS $$
 BEGIN
   -- Find other profiles with the same last name
-  INSERT INTO potential_family_matches (shared_surname, user_id_1, user_id_2, match_reasons, confidence_score)
+  INSERT INTO public.potential_family_matches (shared_surname, user_id_1, user_id_2, match_reasons, confidence_score)
   SELECT
     NEW.last_name,
     LEAST(NEW.id, p.id),
@@ -311,19 +311,19 @@ BEGIN
       WHEN NEW.city IS NOT NULL AND NEW.city = p.city THEN 0.65
       ELSE 0.40
     END
-  FROM profiles p
+  FROM public.profiles p
   WHERE p.last_name = NEW.last_name
     AND p.id != NEW.id
     AND p.last_name IS NOT NULL
     AND p.last_name != ''
     AND NOT EXISTS (
-      SELECT 1 FROM potential_family_matches pfm
+      SELECT 1 FROM public.potential_family_matches pfm
       WHERE (pfm.user_id_1 = LEAST(NEW.id, p.id) AND pfm.user_id_2 = GREATEST(NEW.id, p.id))
     );
 
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 CREATE TRIGGER on_profile_detect_family
   AFTER INSERT OR UPDATE OF last_name ON profiles

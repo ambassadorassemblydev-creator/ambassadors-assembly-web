@@ -1,0 +1,59 @@
+<%- include('../partials/head') %>
+
+<!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
+<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+  
+  <%- include('../partials/preloader') %>
+  
+  <!-- ========= Site Content ========= -->
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+                  <!-- NAVBAR -->
+                  <%- include('../partials/navbar') %>
+
+                  <!-- ======================================================== -->
+                  <!-- PAGE SPECIFIC STYLES AND CONTENT GO HERE -->
+                  <!-- ======================================================== -->
+                  
+                  <style>
+                    /* Add page-specific styles here */
+                    .page-container {
+                      padding: 120px 4% 60px; /* Accounts for navbar */
+                      min-height: 100vh;
+                      background-color: var(--dm_color_dark);
+                      color: white;
+                    }
+                  </style>
+
+                  <main class="page-container">
+                    <h1>Your Content Here</h1>
+                    <p>This is the base template maintaining the exact Duda structure.</p>
+                  </main>
+
+                  <!-- ======================================================== -->
+
+                </div> <!-- close site_content -->
+              </div> <!-- close dmLayoutWrapper -->
+            </div> <!-- close dmInner -->
+          </div> <!-- close dmOuter -->
+        </div> <!-- close runtime-module-container -->
+      </div> <!-- close dmwrapped -->
+    </div> <!-- close dm_wrapper -->
+  </div> <!-- close dmwr -->
+
+  <!-- FOOTER -->
+  <%- include('../partials/footer') %>
+
+  <!-- ANY ADDITIONAL SCRIPTS GO HERE -->
+  <script>
+    // Page specific JS here
+  </script>
+
+<!-- Note: footer.ejs already closes the body and html tags! -->

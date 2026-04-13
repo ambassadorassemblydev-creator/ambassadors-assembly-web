@@ -72,9 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ── Mobile Ministry Swiper ──────────────────────────────────
-  if (document.querySelector('.min-swiper')) {
+  const minSwiperEl = document.querySelector('.min-swiper');
+  if (minSwiperEl) {
+    const numSlides = minSwiperEl.querySelectorAll('.swiper-slide').length;
     const minSwiper = new Swiper('.min-swiper', {
-      loop: true,
+      loop: false,
       slidesPerView: 1,
       spaceBetween: 20,
       navigation: {

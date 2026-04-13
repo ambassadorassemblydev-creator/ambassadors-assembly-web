@@ -1,0 +1,9 @@
+<%- include('../partials/head') %>
+<body style="background: #131313; color: white; height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
+  <div style="text-align: center; background: rgba(255,255,255,0.05); padding: 50px; border-radius: 20px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);">
+    <h1 style="font-size: 80px; margin: 0; color: #3B6FB5;"><%= typeof statusCode !== 'undefined' ? statusCode : 'Error' %></h1>
+    <p style="opacity: 0.6;"><%= typeof msg !== 'undefined' ? msg : 'Something went wrong on our end.' %></p>
+    <a href="/" style="display: inline-block; margin-top: 20px; color: white; text-decoration: none; border: 1px solid white; padding: 10px 20px; border-radius: 50px;">Return Home</a>
+  </div>
+</body>
+</html>

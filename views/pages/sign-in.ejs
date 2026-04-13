@@ -1,0 +1,477 @@
+<%- include('../partials/head') %>
+
+<!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
+<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+  
+  <%- include('../partials/preloader') %>
+  
+  <!-- ========= Site Content ========= -->
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+                  <!-- NAVBAR -->
+                  <%- include('../partials/navbar') %>
+
+                  <!-- ======================================================== -->
+                  <!-- PAGE SPECIFIC CSS (Muted, Dark, Cinematic Glassmorphism) -->
+                  <!-- ======================================================== -->
+                  <style>
+                    .auth-section {
+                      position: relative;
+                      width: 100%;
+                      min-height: 100vh;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      padding: 120px 4% 60px; /* Accounts for fixed navbar */
+                      background-image: url('https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg');
+                      background-size: cover;
+                      background-position: center;
+                      font-family: 'Articulat_CF_Normal', sans-serif;
+                      color: #ffffff;
+                    }
+
+                    /* Split Screen Glass Container */
+                    .auth-container {
+                      display: flex;
+                      flex-direction: row;
+                      width: 100%;
+                      max-width: 1100px;
+                      background: rgba(19, 19, 19, 0.4);
+                      backdrop-filter: blur(24px);
+                      -webkit-backdrop-filter: blur(24px);
+                      border: 1px solid rgba(255, 255, 255, 0.08);
+                      border-radius: 20px;
+                      overflow: hidden;
+                      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+                    }
+
+                    /* Left Side: Testimonial & Branding */
+                    .auth-brand-side {
+                      flex: 1;
+                      padding: 60px 50px;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: space-between;
+                      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+                      border-right: 1px solid rgba(255, 255, 255, 0.05);
+                    }
+
+                    .auth-logo-box {
+                      background: rgba(255, 255, 255, 0.9);
+                      padding: 15px 25px;
+                      border-radius: 12px;
+                      display: inline-block;
+                      width: fit-content;
+                      margin-bottom: 40px;
+                    }
+
+                    .auth-logo-box img {
+                      height: 50px;
+                      width: auto;
+                      object-fit: contain;
+                    }
+
+                    .auth-quote p {
+                      font-family: 'AppleGaramond-Light', serif;
+                      font-size: 28px;
+                      line-height: 1.4;
+                      color: rgba(255, 255, 255, 0.9);
+                      margin-bottom: 15px;
+                    }
+
+                    .auth-quote span {
+                      font-size: 14px;
+                      text-transform: uppercase;
+                      letter-spacing: 2px;
+                      color: rgba(255, 255, 255, 0.5);
+                    }
+
+                    /* Right Side: The Form */
+                    .auth-form-side {
+                      flex: 1;
+                      padding: 60px 50px;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;
+                    }
+
+                    .auth-form-header h1 {
+                      font-family: 'Articulat CF Demi Bold', sans-serif;
+                      font-size: 36px;
+                      margin: 0 0 10px 0;
+                      color: #ffffff;
+                    }
+
+                    .auth-form-header p {
+                      font-size: 15px;
+                      color: rgba(255, 255, 255, 0.6);
+                      margin: 0 0 40px 0;
+                    }
+
+                    /* Minimalist Inputs */
+                    .input-group {
+                      position: relative;
+                      margin-bottom: 30px;
+                    }
+
+                    .input-group input {
+                      width: 100%;
+                      padding: 15px 0;
+                      font-size: 16px;
+                      color: #ffffff;
+                      background: transparent;
+                      border: none;
+                      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                      outline: none;
+                      transition: border-color 0.3s ease;
+                      font-family: inherit;
+                    }
+
+                    .input-group label {
+                      position: absolute;
+                      top: 15px;
+                      left: 0;
+                      font-size: 16px;
+                      color: rgba(255, 255, 255, 0.5);
+                      pointer-events: none;
+                      transition: 0.3s ease all;
+                    }
+
+                    /* Floating Label Magic */
+                    .input-group input:focus ~ label,
+                    .input-group input:not(:placeholder-shown) ~ label {
+                      top: -10px;
+                      font-size: 12px;
+                      color: #ffffff;
+                    }
+
+                    .input-group input:focus {
+                      border-bottom: 1px solid #ffffff;
+                    }
+
+                    /* Form Actions */
+                    .form-actions {
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 40px;
+                      font-size: 14px;
+                    }
+
+                    .form-actions a {
+                      color: rgba(255, 255, 255, 0.6);
+                      text-decoration: none;
+                      transition: color 0.3s;
+                    }
+
+                    .form-actions a:hover {
+                      color: #ffffff;
+                    }
+
+                    .checkbox-wrapper {
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      color: rgba(255, 255, 255, 0.6);
+                    }
+
+                    /* Submit Button */
+                    .auth-submit-btn {
+                      width: 100%;
+                      padding: 16px;
+                      border-radius: 12px;
+                      background: rgba(255, 255, 255, 0.05);
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                      color: #ffffff;
+                      font-family: 'Articulat CF Demi Bold', sans-serif;
+                      font-size: 16px;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                    }
+
+                    .auth-submit-btn:hover {
+                      background: rgba(255, 255, 255, 0.15);
+                      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+                    }
+
+                    .auth-footer-link {
+                      text-align: center;
+                      margin-top: 30px;
+                      font-size: 14px;
+                      color: rgba(255, 255, 255, 0.6);
+                    }
+
+                    .auth-footer-link a {
+                      color: #ffffff;
+                      text-decoration: none;
+                      font-family: 'Articulat CF Demi Bold', sans-serif;
+                    }
+
+                    /* Error Message Box */
+                    .error-alert {
+                      display: none;
+                      background: rgba(255, 59, 48, 0.1);
+                      border: 1px solid rgba(255, 59, 48, 0.3);
+                      color: #ff453a;
+                      padding: 12px;
+                      border-radius: 8px;
+                      margin-bottom: 25px;
+                      font-size: 14px;
+                      text-align: center;
+                      word-wrap: break-word;
+                      overflow-wrap: break-word;
+                      white-space: pre-wrap;
+                    }
+
+                    /* Responsive Mobile View */
+                    @media (max-width: 768px) {
+                      .auth-container {
+                        flex-direction: column;
+                      }
+                      .auth-brand-side {
+                        display: none; /* Hidden on mobile to focus strictly on login */
+                      }
+                      .auth-form-side {
+                        padding: 40px 30px;
+                      }
+                    }
+                    /* ======================================================== */
+/* THE NUKE: STRIP DUDA'S WHITE BACKGROUNDS & PADDING       */
+/* ======================================================== */
+
+/* 1. Strip the white backgrounds off all Duda wrappers */
+body.dmRoot, 
+#dm, 
+.dm_wrapper, 
+.dmOuter, 
+.dmInner, 
+#site_content, 
+.dmBody, 
+#allWrapper, 
+#dm_content,
+#dmFlexHeaderContainer,
+#flex-header {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* 2. Float the header OVER the page */
+#dmFlexHeaderContainer {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000 !important;
+}
+
+/* 3. Remove Duda's invisible margins/padding that push content down */
+#dmFirstContainer, 
+#allWrapper, 
+#dm_content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 4. Hide the footer on the Sign-In page for a true App-like feel (Optional) */
+.dmFooterContainer {
+  display: none !important; 
+}
+                  </style>
+
+                  <!-- ======================================================== -->
+                  <!-- SIGN IN HTML -->
+                  <!-- ======================================================== -->
+                  <section class="auth-section">
+                    <div class="auth-container">
+                      
+                      <!-- Left Split: Branding -->
+                      <div class="auth-brand-side">
+                        <div class="auth-logo-box">
+                          <a href="/">
+                            <!-- Using the logo you attached -->
+                            <img src="https://storage.googleapis.com/chat-engine-prod/d4094a6e-dc0f-48d8-99ee-7132a01344da/3013d5df-4d69-42b7-a3a5-51dc5d862d83.jpg" alt="The Ambassadors Assembly">
+                          </a>
+                        </div>
+                        <div class="auth-quote">
+                          <p>"We exist to share Christ with those who don't know Him and lead those who do into a growing relationship with Him."</p>
+                          <span>— Ambassadors Assembly</span>
+                        </div>
+                      </div>
+
+                      <!-- Right Split: Form -->
+                      <div class="auth-form-side">
+                        <div class="auth-form-header">
+                          <h1>Welcome Back.</h1>
+                          <p>Sign in to access your dashboard and resources.</p>
+                        </div>
+
+                        <!-- Alert box for JS errors -->
+                        <div class="error-alert" id="auth-error"></div>
+
+                        <form id="sign-in-form">
+                          <!-- CSRF Token -->
+                          <input type="hidden" name="_csrf" id="csrfToken" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+
+                          <div class="input-group">
+                            <input type="email" id="email" name="email" placeholder=" " required>
+                            <label for="email">Email Address</label>
+                          </div>
+                          
+                          <div class="input-group">
+                            <input type="password" id="password" name="password" placeholder=" " required>
+                            <label for="password">Password</label>
+                          </div>
+
+                          <div class="form-actions">
+                            <label class="checkbox-wrapper">
+                              <input type="checkbox" id="remember"> Remember me
+                            </label>
+                            <a href="/forgot-password">Forgot password?</a>
+                          </div>
+
+                          <button type="submit" class="auth-submit-btn" id="submit-btn">
+                            Sign In
+                          </button>
+
+                          <div class="auth-footer-link">
+                            Don't have an account? <a href="/sign-up">Sign Up Here</a>
+                          </div>
+                        </form>
+                      </div>
+
+                    </div>
+                  </section>
+                  <!-- ======================================================== -->
+                  <!-- END SIGN IN HTML -->
+  
+                  <!-- ======================================================== -->
+                   <!-- ======================================================== -->
+<!-- FORGOT PASSWORD MODAL (Glassmorphism) -->
+<!-- ======================================================== -->
+<style>
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px);
+    z-index: 2000; display: none; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .modal-content {
+    background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px; padding: 40px; width: 90%; max-width: 450px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5); transform: translateY(20px);
+    transition: transform 0.3s ease; position: relative; color: white; font-family: 'Articulat_CF_Normal', sans-serif;
+  }
+  .modal-close {
+    position: absolute; top: 20px; right: 20px; cursor: pointer; color: rgba(255,255,255,0.5);
+  }
+  .modal-close:hover { color: white; }
+  .modal-overlay.active { display: flex; opacity: 1; }
+  .modal-overlay.active .modal-content { transform: translateY(0); }
+</style>
+
+<div class="modal-overlay" id="forgot-pwd-modal">
+  <div class="modal-content">
+    <div class="modal-close" id="close-modal">✕</div>
+    <h2 style="font-family: 'Articulat CF Demi Bold'; margin-top:0;">Reset Password</h2>
+    <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 25px;">Enter your email and we'll send you a secure reset link.</p>
+    
+    <div class="error-alert" id="reset-error"></div>
+    <div class="error-alert" id="reset-success" style="background: rgba(50,215,75,0.1); color: #32d74b; border-color: #32d74b;"></div>
+
+    <div class="input-group">
+      <input type="email" id="reset-email" placeholder=" " required>
+      <label for="reset-email">Email Address</label>
+    </div>
+    <button class="auth-submit-btn" id="send-reset-btn">Send Reset Link</button>
+  </div>
+</div>
+
+<script>
+  // Add this inside your existing DOMContentLoaded in sign-in.ejs
+  document.querySelector('a[href="/forgot-password"]').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('forgot-pwd-modal').classList.add('active');
+  });
+  document.getElementById('close-modal').addEventListener('click', () => {
+    document.getElementById('forgot-pwd-modal').classList.remove('active');
+  });
+</script>
+<%- include('../partials/footer') %>
+<!-- ======================================================== -->
+                </div> <!-- 8. Closing site_content -->
+              </div> <!-- 7. Closing dmLayoutWrapper -->
+            </div> <!-- 6. Closing dmStyle_innerContainer -->
+          </div> <!-- 5. Closing dmStyle_outerContainer -->
+        </div> <!-- 4. Closing runtime-module-container -->
+      </div> <!-- 3. Closing dm-home-page -->
+    </div> <!-- 2. Closing dm_wrapper -->
+  </div> <!-- 1. Closing dmwr -->
+
+  <!-- FOOTER -->
+  
+
+ 
+
+  <!-- AUTHENTICATION JAVASCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("sign-in-form");
+      const errorBox = document.getElementById("auth-error");
+      const submitBtn = document.getElementById("submit-btn");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        // Clear previous errors & show loading
+        errorBox.style.display = "none";
+        submitBtn.textContent = "Signing In...";
+        submitBtn.style.opacity = "0.7";
+        submitBtn.disabled = true;
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const _csrf = document.getElementById("csrfToken") ? document.getElementById("csrfToken").value : undefined;
+
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-csrf-token': _csrf
+            },
+            body: JSON.stringify({ email, password, _csrf })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign in. Please try again.");
+          }
+
+          // Success! Redirect to the dashboard
+          window.location.href = "/my-account";
+
+        } catch (err) {
+          // Show error
+          errorBox.textContent = err.message;
+          errorBox.style.display = "block";
+          
+          // Reset button
+          submitBtn.textContent = "Sign In";
+          submitBtn.style.opacity = "1";
+          submitBtn.disabled = false;
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

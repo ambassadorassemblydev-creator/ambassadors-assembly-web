@@ -56,14 +56,20 @@
                 <div id="group_5ii" class="flex-element group glass" data-auto="flex-element-group"
                   data-hidden-on-mobile="">
                   <!-- Custom minimal nav: Join Us + Sign In -->
-                  <div class="aa-nav" id="aa-nav">
-                    <a href="/plan-a-visit"
-                      class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/plan-a-visit' ? 'active-link' : '' %>">Join
-                      Us Today</a>
-                    <a href="/sign-in"
-                      class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/sign-in' ? 'active-link' : '' %>">Sign
-                      In</a>
-                  </div>
+                 <!-- ========= MINIMAL DESKTOP NAV ========= -->
+<div class="aa-nav" id="aa-nav">
+  <a href="/plan-a-visit" class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/plan-a-visit' ? 'active-link' : '' %>">Join Us Today</a>
+  
+  <% if (user) { %>
+    <!-- If they are logged in, show their account link -->
+    <a href="/my-account" class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/my-account' ? 'active-link' : '' %>">
+      Hello, <%= (user.user_metadata && user.user_metadata.first_name) ? user.user_metadata.first_name : user.first_name || 'Member' %>
+    </a>
+  <% } else { %>
+    <!-- If they are NOT logged in, show Sign In -->
+    <a href="/sign-in" class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/sign-in' ? 'active-link' : '' %>">Sign In</a>
+  <% } %>
+</div>
                 </div>
               </div>
             </div>
@@ -89,13 +95,26 @@
 <!-- ========= END AI CHAT ICON ========= -->
 
 <!-- ========= ACCOUNT ICON ========= -->
-<a class="account-fab" id="account-fab" href="/sign-in" aria-label="My Account">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-    stroke-linejoin="round">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-</a>
+<!-- ========= ACCOUNT ICON ========= -->
+<% if (user) { %>
+  <!-- Logged In: Go to Dashboard -->
+  <a class="account-fab" id="account-fab" href="/my-account" aria-label="My Account">
+    <!-- You can optionally show their initials here, but let's keep the sleek icon -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  </a>
+<% } else { %>
+  <!-- Logged Out: Go to Sign In -->
+  <a class="account-fab" id="account-fab" href="/sign-in" aria-label="Sign In">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  </a>
+<% } %>
+<!-- ========= END ACCOUNT ICON ========= -->
 <!-- ========= END ACCOUNT ICON ========= -->
 
 <!-- ========= FULLSCREEN MENU OVERLAY ========= -->

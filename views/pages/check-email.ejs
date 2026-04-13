@@ -1,0 +1,143 @@
+<%- include('../partials/head') %>
+
+<!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
+<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+                  <!-- NAVBAR -->
+                  <%- include('../partials/navbar') %>
+
+                  <!-- ======================================================== -->
+                  <!-- PAGE SPECIFIC CSS (Cinematic Glassmorphism)              -->
+                  <!-- ======================================================== -->
+                  <style>
+                    /* STRIP DUDA'S WHITE BACKGROUNDS & PADDING */
+                    body.dmRoot, #dm, .dm_wrapper, .dmOuter, .dmInner, #site_content, .dmBody, #allWrapper, #dm_content, #dmFlexHeaderContainer, #flex-header {
+                      background-color: transparent !important;
+                      background-image: none !important;
+                    }
+                    #dmFlexHeaderContainer {
+                      position: absolute !important;
+                      top: 0; left: 0; width: 100%; z-index: 1000 !important;
+                    }
+                    #dmFirstContainer, #allWrapper, #dm_content {
+                      margin: 0 !important; padding: 0 !important;
+                    }
+
+                    /* BACKGROUND & LAYOUT */
+                    .auth-section {
+                      position: relative;
+                      width: 100%;
+                      min-height: 100vh;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      padding: 160px 4% 60px; /* Accounts for absolute navbar */
+                      background-image: url('https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg');
+                      background-size: cover;
+                      background-position: center;
+                      font-family: 'Articulat_CF_Normal', sans-serif;
+                      color: #ffffff;
+                    }
+
+                    .check-email-container {
+                      background: rgba(19, 19, 19, 0.4);
+                      backdrop-filter: blur(24px);
+                      -webkit-backdrop-filter: blur(24px);
+                      padding: 60px;
+                      border-radius: 20px;
+                      border: 1px solid rgba(255, 255, 255, 0.08);
+                      text-align: center;
+                      max-width: 500px;
+                      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+                    }
+
+                    .mail-icon-box {
+                      background: rgba(255, 255, 255, 0.9);
+                      padding: 15px;
+                      border-radius: 50%;
+                      width: 80px;
+                      height: 80px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      margin: 0 auto 30px;
+                    }
+
+                    .check-email-container h1 {
+                      font-family: 'Articulat CF Demi Bold', sans-serif;
+                      font-size: 32px;
+                      margin: 0 0 15px 0;
+                    }
+
+                    .check-email-container p {
+                      color: rgba(255, 255, 255, 0.6);
+                      line-height: 1.6;
+                      margin-bottom: 40px;
+                      font-size: 16px;
+                    }
+
+                    .auth-submit-btn {
+                      display: inline-block;
+                      width: 100%;
+                      padding: 16px;
+                      border-radius: 12px;
+                      background: rgba(255, 255, 255, 0.05);
+                      border: 1px solid rgba(255, 255, 255, 0.1);
+                      color: #ffffff;
+                      font-family: 'Articulat CF Demi Bold', sans-serif;
+                      font-size: 16px;
+                      text-decoration: none;
+                      transition: all 0.3s ease;
+                    }
+
+                    .auth-submit-btn:hover {
+                      background: rgba(255, 255, 255, 0.15);
+                      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+                    }
+                  </style>
+
+                  <!-- ======================================================== -->
+                  <!-- CHECK EMAIL HTML -->
+                  <!-- ======================================================== -->
+                  <section class="auth-section">
+                    <div class="check-email-container">
+                      
+                      <div class="mail-icon-box">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#131313" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                          <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                      </div>
+
+                      <h1>Check your email.</h1>
+                      <p>We've sent a secure confirmation link to your inbox. Please click the link to verify your account and join the Ambassadors Assembly community.</p>
+
+                      <a href="/sign-in" class="auth-submit-btn">Back to Sign In</a>
+                      
+                    </div>
+                  </section>
+                  <!-- ======================================================== -->
+                  <!-- END CHECK EMAIL HTML -->
+                  <!-- ======================================================== -->
+  <%- include('../partials/footer') %>
+                </div> <!-- Closing site_content -->
+              </div> <!-- Closing dmLayoutWrapper -->
+            </div> <!-- Closing dmStyle_innerContainer -->
+          </div> <!-- Closing dmStyle_outerContainer -->
+        </div> <!-- Closing runtime-module-container -->
+      </div> <!-- Closing dm-home-page -->
+    </div> <!-- Closing dm_wrapper -->
+  </div> <!-- Closing dmwr -->
+
+  <!-- FOOTER -->

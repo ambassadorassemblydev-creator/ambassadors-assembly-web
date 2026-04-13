@@ -1,0 +1,338 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <!-- DASHBOARD MAIN -->
+        <style>
+          html, body {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            width: 100%;
+          }
+          .account-main {
+            padding: 160px 4% 100px;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            color: white;
+            font-family: 'Articulat_CF_Normal', sans-serif;
+            position: relative;
+            z-index: 1;
+            overflow: hidden; /* Contains the glows */
+          }
+          /* Background Animated Glows */
+          .account-bg-glow {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(59, 111, 181, 0.15) 0%, transparent 60%);
+            z-index: -1;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: pulseGlow 10s infinite alternate;
+          }
+          .account-bg-glow:nth-child(2) {
+            top: auto;
+            bottom: -10%;
+            left: auto;
+            right: -10%;
+            background: radial-gradient(circle, rgba(234, 246, 255, 0.05) 0%, transparent 60%);
+            animation-delay: -5s;
+          }
+          
+          .account-header {
+            margin-bottom: 60px;
+            animation: accFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+          }
+          .account-header .pre-title {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 13px;
+            color: #3B6FB5;
+            font-weight: 700;
+          }
+          .account-header h1 {
+            font-family: 'Articulat CF Demi Bold';
+            font-size: clamp(36px, 6vw, 64px);
+            margin: 10px 0;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          .account-header p {
+            color: rgba(255,255,255,0.6);
+            max-width: 600px;
+            line-height: 1.6;
+            font-size: 18px;
+            margin: 0;
+          }
+          
+          .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+            gap: 30px;
+            width: 100%;
+          }
+          
+          .glass-card-acc {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: accFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            display: flex;
+            flex-direction: column;
+          }
+          .glass-card-acc:nth-child(1) { animation-delay: 0.1s; }
+          .glass-card-acc:nth-child(2) { animation-delay: 0.2s; }
+          .glass-card-acc:nth-child(3) { animation-delay: 0.3s; }
+        
+          .glass-card-acc:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(59, 111, 181, 0.3);
+          }
+          .glass-card-acc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% -20%, rgba(59, 111, 181, 0.15), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+          }
+          .glass-card-acc:hover::before {
+            opacity: 1;
+          }
+        
+          .acc-card-title {
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-family: 'Articulat CF Demi Bold';
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+          }
+          .acc-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(59, 111, 181, 0.1);
+            border: 1px solid rgba(59, 111, 181, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3B6FB5;
+          }
+          
+          .acc-details {
+            flex-grow: 1;
+          }
+          .acc-details p, .acc-list-item {
+            margin: 0;
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px 0;
+            gap: 10px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+          }
+          .acc-details p:last-child, .acc-list-item:last-child {
+            border-bottom: none;
+          }
+          .acc-details p strong, .acc-list-item strong {
+            color: white;
+            font-weight: 500;
+          }
+          .acc-badge {
+            background: rgba(59, 111, 181, 0.15);
+            color: #3B6FB5;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(59, 111, 181, 0.3);
+          }
+        
+          .acc-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 25px;
+            padding: 12px 28px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            background: rgba(255,255,255,0.03);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            align-self: flex-start;
+          }
+          .acc-btn svg {
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+          }
+          .acc-btn:hover {
+            background: #3B6FB5;
+            border-color: #3B6FB5;
+            transform: scale(1.05);
+          }
+          .acc-btn:hover svg {
+            transform: translateX(4px);
+          }
+        
+          @keyframes accFadeUp {
+            0% { opacity: 0; transform: translateY(30px); filter: blur(4px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+          }
+          @keyframes pulseGlow {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.1); }
+          }
+
+          @media (max-width: 768px) {
+            .account-grid { grid-template-columns: 1fr; }
+            .account-header h1 { font-size: 40px; }
+            .glass-card-acc { padding: 30px 20px; }
+          }
+        </style>
+
+        <main class="account-main">
+          <div class="account-bg-glow"></div>
+          <div class="account-bg-glow"></div>
+          
+          <!-- Welcome Header -->
+          <header class="account-header">
+            <span class="pre-title">Member Portal</span>
+            <h1>Welcome, <%= user.first_name %>.</h1>
+            <p>Manage your ministry involvement, track your giving, and stay connected with your Ambassadors Assembly family.</p>
+          </header>
+
+          <!-- The Hub Grid -->
+          <div class="account-grid">
+            
+            <!-- CARD: Profile Summary -->
+            <div class="glass-card-acc">
+              <h3 class="acc-card-title">
+                <div class="acc-icon-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                Personal Details
+              </h3>
+              <div class="acc-details">
+                <p><span>Name</span> <strong><%= user.first_name %> <%= user.last_name %></strong></p>
+                <p><span>Email</span> <strong><%= user.email %></strong></p>
+                <p><span>Member ID</span> <span class="acc-badge"><%= user.member_id || 'Pending' %></span></p>
+              </div>
+              <a href="/my-account/profile" class="acc-btn">
+                Edit Profile
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </a>
+            </div>
+
+            <!-- CARD: Recent Giving -->
+            <div class="glass-card-acc">
+              <h3 class="acc-card-title">
+                <div class="acc-icon-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
+                Recent Giving
+              </h3>
+              <div class="acc-details">
+                <% if (donations && donations.length > 0) { %>
+                  <% donations.forEach(d => { %>
+                    <div class="acc-list-item">
+                      <span><%= d.donation_categories.name %></span>
+                      <strong>£<%= d.amount %></strong>
+                    </div>
+                  <% }) %>
+                <% } else { %>
+                  <p style="border: none; margin-top: 10px; opacity: 0.5;">No recent donations found.</p>
+                <% } %>
+              </div>
+              <a href="/give" class="acc-btn">
+                Give Again
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </a>
+            </div>
+
+            <!-- CARD: My Ministries -->
+            <div class="glass-card-acc">
+              <h3 class="acc-card-title">
+                <div class="acc-icon-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                My Ministries
+              </h3>
+              <div class="acc-details">
+                <% if (user.ministry_members && user.ministry_members.length > 0) { %>
+                  <% user.ministry_members.forEach(m => { %>
+                    <div class="acc-list-item">
+                      <span style="display: flex; align-items: center; gap: 10px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#3B6FB5" stroke="#3B6FB5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <%= m.ministries.name %>
+                      </span>
+                    </div>
+                  <% }) %>
+                <% } else { %>
+                  <p style="border: none; margin-top: 10px; opacity: 0.5;">You haven't joined a ministry yet.</p>
+                <% } %>
+              </div>
+              <a href="/ministries" class="acc-btn">
+                Join a Ministry
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </a>
+            </div>
+
+          </div>
+        </main>
+        <%- include('../partials/footer') %>
+                </div> <!-- 8. Closing site_content -->
+              </div> <!-- 7. Closing dmLayoutWrapper -->
+            </div> <!-- 6. Closing dmStyle_innerContainer -->
+          </div> <!-- 5. Closing dmStyle_outerContainer -->
+        </div> <!-- 4. Closing runtime-module-container -->
+      </div> <!-- 3. Closing dm-home-page -->
+    </div> <!-- 2. Closing dm_wrapper -->
+  </div> <!-- 1. Closing dmwr -->
+
+  <!-- FOOTER MUST GO OUTSIDE THE DOM WRAPPER OR DUDA CSS WILL BREAK -->
+  </html>
+</body>

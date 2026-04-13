@@ -1,55 +1,108 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import indexRouter from './routes/index.js'; // Make sure to include .js!
+import dotenv from 'dotenv';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
+
+
+import { logger } from './config/logger.js';
+import { globalErrorHandler } from './middlewares/errorHandler.js';
+import { AppError } from './utils/AppError.js';
+import indexRouter from './routes/index.js';
+import { authMiddleware } from './middlewares/authMiddleware.js';
+import { doubleCsrfProtection, generateToken, csrfErrorHandler } from './middlewares/csrfMiddleware.js';
+import { accountController } from './controllers/accountController.js';
+
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// High IQ Dev Mode: Structured Logging Context
-const isDev = process.env.NODE_ENV !== 'production';
-
-// This is a required trick to get folder paths working with modern "import" syntax
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 1. Tell Express we are using EJS for our views folder
+// ==========================================
+// 1. GLOBAL MIDDLEWARES (Security & Parsing)
+// ==========================================
+// Set Security HTTP Headers (Top 1% Security)
+app.use(helmet({ contentSecurityPolicy: false })); // Disabled CSP temporarily for Cloudinary/Stripe scripts
+
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: '10kb' })); 
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(cookieParser());
+
+// 1. Initialize CSRF Protection Globally
+app.use(doubleCsrfProtection);
+app.use(csrfErrorHandler);
+
+// 2. Pass the CSRF Token to ALL EJS Templates automatically
+app.use((req, res, next) => {
+  res.locals.csrfToken = generateToken(req, res);
+  next();
+});
+
+// Rate Limiting (Prevents DDoS and Brute Force attacks)
+const limiter = rateLimit({
+  max: 100, // Limit each IP to 100 requests per windowMs
+  windowMs: 60 * 60 * 1000, // 1 Hour
+  message: 'Too many requests from this IP, please try again in an hour!'
+});
+app.use('/api', limiter);
+
+// ==========================================
+// 2. VIEW ENGINE & ASSETS
+// ==========================================
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// High IQ Dev Mode: Expose Global Variables to all EJS templates
-// These variables will be available in any .ejs file globally without passing them in res.render()
+// Global Template Variables
 app.locals.siteName = 'Ambassadors Assembly';
 app.locals.currentYear = new Date().getFullYear();
 
-// Middleware: Request Logger (High IQ Dev Mode)
+// Request Logger (High IQ Filtering)
 app.use((req, res, next) => {
-    if (isDev) {
-        console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    }
-    next();
+  const noise = ['.js', '.css', '.map', '.json', '.png', '.jpg', '/editor/'];
+  const isNoise = noise.some(ext => req.url.includes(ext));
+
+  if (!isNoise) {
+    logger.info(`${req.method} ${req.originalUrl}`);
+  }
+  next();
 });
 
-// 2. Tell Express where to find your CSS, Images, and Client JS
-// This automatically makes everything in your "public" folder available to the browser
-app.use(express.static(path.join(__dirname, 'public')));
+// ==========================================
+// 3. ROUTES
+// ==========================================
+// Check for a logged-in user on EVERY page load
+app.use(authMiddleware.checkUser);
 
-// 3. Connect your Routes
 app.use('/', indexRouter);
 
-// High IQ Dev Mode: 404 handler (Catch-all for missing routes)
+// Handle unhandled routes (404)
 app.use((req, res, next) => {
-    res.status(404).send('404 - Page Not Found'); // Can eventually render a 404.ejs
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// High IQ Dev Mode: Global Error Handler
-app.use((err, req, res, next) => {
-    console.error(`[ERROR] ${err.message}`);
-    res.status(500).send('500 - Internal Server Error');
-});
+// ==========================================
+// 4. GLOBAL ERROR HANDLER
+// ==========================================
+app.use(globalErrorHandler);
 
-// 4. Start the Server!
+// ==========================================
+// 5. SERVER START
+// ==========================================
 app.listen(PORT, () => {
-    console.log(`🚀 Ambassadors Assembly server is running in ${isDev ? 'Development' : 'Production'} mode!`);
-    console.log(`👉 Open your browser to: http://localhost:${PORT}`);
+  logger.info(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
+
+// Catch Unhandled Promise Rejections (e.g., DB goes down)
+process.on('unhandledRejection', err => {
+  logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
+  logger.error(err.name, err.message);
+  process.exit(1);
 });

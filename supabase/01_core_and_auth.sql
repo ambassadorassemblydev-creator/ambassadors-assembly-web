@@ -42,7 +42,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Helper: generate unique member ID like "AA-2026-00001"
-CREATE OR REPLACE FUNCTION generate_member_id()
+CREATE OR REPLACE FUNCTION public.generate_member_id()
 RETURNS TEXT AS $$
 DECLARE
   next_num INT;
@@ -52,11 +52,11 @@ BEGIN
   SELECT COALESCE(MAX(
     CAST(SUBSTRING(member_id FROM 9) AS INT)
   ), 0) + 1 INTO next_num
-  FROM profiles
+  FROM public.profiles
   WHERE member_id LIKE 'AA-' || year_str || '-%';
   RETURN 'AA-' || year_str || '-' || LPAD(next_num::TEXT, 5, '0');
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SET search_path = public;
 
 
 -- ============================================================
@@ -273,28 +273,28 @@ CREATE TRIGGER member_notes_updated_at
 -- ============================================================
 -- AUTO-CREATE PROFILE ON SIGNUP (Trigger)
 -- ============================================================
-CREATE OR REPLACE FUNCTION handle_new_user()
+CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO profiles (id, email, first_name, last_name, member_id)
+  INSERT INTO public.profiles (id, email, first_name, last_name, member_id)
   VALUES (
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data ->> 'first_name', ''),
     COALESCE(NEW.raw_user_meta_data ->> 'last_name', ''),
-    generate_member_id()
+    public.generate_member_id()
   );
 
   -- Assign default 'guest' role
-  INSERT INTO user_roles (user_id, role_id)
+  INSERT INTO public.user_roles (user_id, role_id)
   VALUES (
     NEW.id,
-    (SELECT id FROM roles WHERE name = 'guest')
+    (SELECT id FROM public.roles WHERE name = 'guest')
   );
 
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
@@ -304,12 +304,12 @@ CREATE TRIGGER on_auth_user_created
 -- ============================================================
 -- UPDATE LOGIN TRACKING (call from your app on login)
 -- ============================================================
-CREATE OR REPLACE FUNCTION track_user_login(p_user_id UUID)
+CREATE OR REPLACE FUNCTION public.track_user_login(p_user_id UUID)
 RETURNS VOID AS $$
 BEGIN
-  UPDATE profiles
+  UPDATE public.profiles
   SET last_login_at = NOW(),
       login_count = COALESCE(login_count, 0) + 1
   WHERE id = p_user_id;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
