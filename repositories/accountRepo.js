@@ -7,7 +7,7 @@ import { supabase, supabaseService } from '../config/supabase.js';
 export const accountRepo = {
   // Fetch everything a user needs for their dashboard in one complex query
   getUserDashboardData: async (userId) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('profiles')
       .select(`
         *,
@@ -86,7 +86,7 @@ export const accountRepo = {
     return profile;
   },
     updateProfile: async (userId, updateData) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('profiles')
       .update({
         first_name: updateData.firstName,
