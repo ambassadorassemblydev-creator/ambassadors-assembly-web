@@ -25,13 +25,28 @@ export const accountController = {
       logger.info(`Loading dashboard for user: ${userId}`);
 
       // High IQ: Fetch both datasets in parallel to minimize load time
-      const [profile, donations] = await Promise.all([
+      let [profile, donations] = await Promise.all([
         accountRepo.getUserDashboardData(userId),
         accountRepo.getRecentDonations(userId)
       ]);
 
+      // ─── SELF-HEALING RECOVERY BLOCK ───
       if (!profile) {
-        return next(new AppError('Account profile not found.', 404));
+        logger.warn(`⚠️ Profile missing for authenticated user ${userId}. Attempting self-healing...`);
+        
+        try {
+          const authData = req.user; // Data from the JWT
+          profile = await accountRepo.provisionProfile(
+            userId, 
+            authData.email,
+            authData.first_name || authData.user_metadata?.first_name,
+            authData.last_name || authData.user_metadata?.last_name
+          );
+          logger.info(`✅ Self-healing successful for user ${userId}`);
+        } catch (recoverErr) {
+          logger.error(`❌ Self-healing failed for ${userId}: ${recoverErr.message}`);
+          return next(new AppError('Your account profile is missing and could not be automatically recovered. Please contact support.', 404));
+        }
       }
 
       res.render('pages/my-account', {

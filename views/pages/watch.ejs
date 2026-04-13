@@ -1,0 +1,466 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot no-scroll-transition" style="background: #050505; margin:0; padding:0;">
+  <%- include('../partials/preloader') %>
+
+  <!-- BG AMBIENCE -->
+  <div class="watch-bg">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+  </div>
+
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5">
+      <div id="site_content">
+        <%- include('../partials/navbar') %>
+
+        <div id="dmFirstContainer" class="dmBody">
+          <div class="watch-container">
+            
+            <!-- LEFT: THE STAGE -->
+            <main class="stage">
+              <div class="video-container glass-fx">
+                <% if (content && content.status === 'scheduled') { %>
+                  <div class="countdown-overlay">
+                    <div class="countdown-content">
+                      <span class="pre-live">STARTING SOON</span>
+                      <h2 id="countdown-timer">00:00:00</h2>
+                      <p>Join us for <%= displayTitle %></p>
+                    </div>
+                  </div>
+                <% } else if (videoUrl) { %>
+                  <iframe src="<%= videoUrl %>" frameborder="0" allowfullscreen></iframe>
+                <% } else { %>
+                  <div class="offline-placeholder">
+                    <div class="offline-card glass-fx">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                      <h2>No active broadcast at the moment.</h2>
+                      <p>Check back during service times or explore our recent messages below.</p>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+
+              <div class="content-info">
+                <div class="meta-row">
+                  <span class="badge-live <%= (content && content.status === 'live') ? 'active' : '' %>">
+                    <%= (content && content.status === 'live') ? 'LIVE' : 'MESSAGE' %>
+                  </span>
+                  <% if (speaker) { %>
+                    <span class="speaker-pill">Speaker: <%= speaker.name %></span>
+                  <% } %>
+                </div>
+                <h1><%= displayTitle %></h1>
+                <p class="description"><%= description %></p>
+
+                <div class="quick-actions">
+                  <a href="/give" class="action-btn give-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Give / Donate
+                  </a>
+                  <a href="/give" class="action-btn partner">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Partner
+                  </a>
+                  <button class="action-btn share" onclick="copyWatchLink()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                    Invite a Friend
+                  </button>
+                </div>
+              </div>
+            </main>
+
+            <!-- RIGHT: THE HUB -->
+            <aside class="interaction-hub glass-fx">
+              <div class="hub-tabs">
+                <button class="hub-tab active" data-tab="chat">CHAT</button>
+                <button class="hub-tab" data-tab="notes">NOTES</button>
+                <button class="hub-tab" data-tab="bible">BIBLE</button>
+                <button class="hub-tab" data-tab="prayer">PRAYER</button>
+              </div>
+
+              <div class="hub-panels">
+                <!-- PANEL: CHAT -->
+                <div class="hub-panel active" id="panel-chat">
+                  <div id="chat-messages" class="chat-feed">
+                    <div class="system-msg">Welcome to Ambassadors Assembly Online. We're glad you're here!</div>
+                  </div>
+                  <div class="chat-controls">
+                    <% if (user) { %>
+                      <form id="chat-form" class="glass-input-group">
+                        <input type="text" id="chat-input" placeholder="Join the conversation..." autocomplete="off">
+                        <button type="submit" id="chat-submit">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                        </button>
+                      </form>
+                    <% } else { %>
+                      <div class="auth-box">
+                        <a href="/sign-in" class="auth-link">Sign in to participate in chat</a>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+
+                <!-- PANEL: NOTES -->
+                <div class="hub-panel" id="panel-notes">
+                  <div class="panel-scroll">
+                    <% if (content && content.notes_pdf_url) { %>
+                      <a href="<%= content.notes_pdf_url %>" target="_blank" class="download-notes">
+                         View Official Outline (PDF)
+                      </a>
+                    <% } %>
+                    <div class="my-notes-section">
+                      <h3>Private Notes</h3>
+                      <p class="small">Saved to your device automatically.</p>
+                      <textarea id="personal-notes" placeholder="Jot down what speaks to you..."></textarea>
+                      <button class="save-notes-btn" onclick="exportNotes()">Download as Text</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PANEL: BIBLE -->
+                <div class="hub-panel" id="panel-bible">
+                  <div class="panel-scroll bible-view">
+                    <% if (scripture && scripture.reference) { %>
+                      <div class="scripture-card">
+                        <span class="ref-label">TODAY'S TEXT</span>
+                        <h3><%= scripture.reference %></h3>
+                        <div class="bible-text"><%- scripture.text %></div>
+                      </div>
+                    <% } else { %>
+                      <div class="bible-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V4a2 2 0 0 1 2-2h10l4 4v10a2 2 0 0 1-2 2H6.5a2.5 2.5 0 0 0-2.5 2.5z"/></svg>
+                        <p>Join us as we explore God's Word together.</p>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+
+                <!-- PANEL: PRAYER -->
+                <div class="hub-panel" id="panel-prayer">
+                  <div class="panel-scroll">
+                    <h3>We'd love to pray for you.</h3>
+                    <p>Our intercessors are standing by. Share your request below.</p>
+                    <form id="prayer-form" class="prayer-glass-form">
+                      <input type="text" id="prayer-title" placeholder="Request Subject" required>
+                      <textarea id="prayer-desc" placeholder="What can we pray about?" required></textarea>
+                      <label class="anon-check">
+                        <input type="checkbox" id="prayer-anon"> Submit Anonymously
+                      </label>
+                      <button type="submit" class="submit-prayer-btn">Submit Request</button>
+                    </form>
+                    <div id="prayer-status"></div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --accent: #3B6FB5;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    body { font-family: 'Articulat_CF_Normal', sans-serif; color: white; }
+
+    /* BACKGROUND */
+    .watch-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: #050505; }
+    .bg-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; }
+    .blob-1 { width: 60vw; height: 60vw; top: -10%; left: -10%; background: var(--accent); }
+    .blob-2 { width: 40vw; height: 40vw; bottom: -5%; right: -5%; background: #5f99e8; }
+
+    /* LAYOUT */
+    .watch-container { display: grid; grid-template-columns: 1fr 400px; gap: 0; min-height: 100vh; padding-top: 80px; }
+    
+    /* STAGE */
+    .stage { padding: 40px; }
+    .video-container { 
+      position: relative; 
+      padding-top: 56.25%; 
+      background: black; 
+      border-radius: 20px; 
+      overflow: hidden; 
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    .video-container iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
+    .glass-fx { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); }
+
+    .content-info { margin-top: 40px; max-width: 900px; }
+    .meta-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+    .badge-live { background: #333; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 800; letter-spacing: 1px; }
+    .badge-live.active { background: #ff453a; box-shadow: 0 0 15px rgba(255, 69, 58, 0.3); }
+    .speaker-pill { color: var(--accent); font-weight: 600; font-size: 14px; }
+    .content-info h1 { font-family: 'Articulat CF Demi Bold'; font-size: clamp(32px, 4vw, 48px); margin: 0 0 15px; }
+    .description { color: rgba(255,255,255,0.6); line-height: 1.6; font-size: 18px; }
+
+    .quick-actions { display: flex; gap: 15px; margin-top: 40px; }
+    .action-btn { 
+      padding: 12px 28px; border-radius: 50px; display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; border: 1px solid var(--glass-border);
+      color: white; background: var(--glass);
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .action-btn.give-primary { background: var(--accent); border-color: var(--accent); box-shadow: 0 10px 20px rgba(59, 111, 181, 0.2); }
+    .action-btn.partner { background: rgba(255,255,255,0.05); }
+
+    /* OFFLINE STATES */
+    .offline-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .offline-card { 
+      padding: 40px; border-radius: 20px; text-align: center; max-width: 80%;
+      display: flex; flex-direction: column; align-items: center; gap: 15px;
+    }
+    .offline-card h2 { font-size: 24px; margin: 0; color: rgba(255,255,255,0.9); }
+    .offline-card p { font-size: 14px; margin: 0; opacity: 0.6; max-width: 300px; }
+
+    /* COUNTDOWN */
+    .countdown-overlay { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; text-align: center; background: rgba(0,0,0,0.8); }
+    .pre-live { font-weight: 800; color: var(--accent); letter-spacing: 3px; font-size: 12px; }
+    #countdown-timer { font-size: 84px; font-family: 'Articulat CF Heavy'; margin: 10px 0; }
+
+    /* INTERACTION HUB */
+    .interaction-hub { 
+      display: flex; flex-direction: column; 
+      border-radius: 24px; overflow: hidden;
+      margin: 40px 40px 40px 0;
+      height: calc(100vh - 160px); position: sticky; top: 80px; 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transition: margin 0.3s ease;
+    }
+    .hub-tabs { display: flex; border-bottom: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); }
+    .hub-tab { 
+      flex: 1; padding: 20px; border: 0; background: none; color: rgba(255,255,255,0.4); 
+      font-size: 10px; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+    }
+    .hub-tab.active { color: white; background: var(--glass); box-shadow: inset 0 -2px 0 var(--accent); }
+
+    .hub-panels { flex: 1; overflow: hidden; position: relative; }
+    .hub-panel { 
+      position: absolute; top:0; left:0; width:100%; height:100%; 
+      display: none; flex-direction: column; padding: 0;
+    }
+    .hub-panel.active { display: flex; }
+    .panel-scroll { padding: 30px; overflow-y: auto; flex: 1; }
+
+    /* CHAT PANEL */
+    .chat-feed { flex: 1; padding: 20px; overflow-y: auto; scroll-behavior: smooth; }
+    .chat-msg { margin-bottom: 15px; font-size: 14px; line-height: 1.4; animation: msgFade 0.3s ease; }
+    @keyframes msgFade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .chat-msg .name { font-weight: 800; color: var(--accent); margin-right: 8px; font-size: 12px; }
+    .system-msg { text-align: center; font-size: 12px; color: rgba(255,255,255,0.3); font-style: italic; margin: 20px 0; }
+    
+    .chat-controls { padding: 20px; border-top: 1px solid var(--glass-border); }
+    .glass-input-group { 
+      display: flex; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .glass-input-group input { 
+      flex: 1; background: transparent; border: 0; padding: 15px; color: white; outline: none;
+    }
+    .glass-input-group button { 
+      background: var(--accent); border: 0; padding: 0 20px; color: white; cursor: pointer; transition: 0.3s;
+    }
+    .auth-box { text-align: center; font-size: 13px; color: rgba(255,255,255,0.5); }
+    .auth-link { color: white; text-decoration: underline; }
+
+    /* BIBLE & NOTES */
+    .download-notes { 
+      display: block; padding: 15px; border: 1px dashed var(--glass-border); 
+      border-radius: 12px; text-align: center; color: var(--accent); font-weight: 700;
+      margin-bottom: 30px; text-decoration: none; transition: 0.3s;
+    }
+    .download-notes:hover { background: rgba(59, 111, 181, 0.1); }
+    #personal-notes { 
+      width: 100%; min-height: 300px; background: rgba(255,255,255,0.03); 
+      border: 1px solid var(--glass-border); border-radius: 12px; color: white;
+      padding: 15px; font-family: inherit; margin-top: 15px; outline: none; font-size: 15px; line-height: 1.5;
+    }
+    .save-notes-btn { 
+      width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border:0;
+      background: var(--glass); color: white; font-weight: 600; cursor: pointer;
+    }
+    .bible-text { line-height: 1.8; color: rgba(255,255,255,0.7); font-size: 17px; }
+
+    /* PRAYER PANEL */
+    .prayer-glass-form { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
+    .prayer-glass-form input, .prayer-glass-form textarea {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+      padding: 15px; border-radius: 10px; color: white; font-family: inherit; outline: none;
+    }
+    .anon-check { font-size: 13px; display: flex; align-items: center; gap: 10px; opacity: 0.7; }
+    .submit-prayer-btn { 
+      background: var(--accent); color: white; border:0; padding: 15px; 
+      border-radius: 50px; font-weight: 700; cursor: pointer; margin-top: 10px;
+    }
+    #prayer-status { margin-top: 15px; font-size: 14px; text-align: center; color: var(--accent); }
+
+    @media (max-width: 1100px) {
+      .watch-container { grid-template-columns: 1fr; padding-bottom: 60px; }
+      .interaction-hub { 
+        height: 600px; 
+        margin: 20px; 
+        border-radius: 20px;
+        position: static; 
+      }
+      .stage { padding: 20px; }
+      .quick-actions { flex-wrap: wrap; gap: 10px; }
+      .action-btn { flex: 1; min-width: 140px; justify-content: center; padding: 12px 15px; font-size: 13px; }
+      #countdown-timer { font-size: 48px; }
+      .offline-card { padding: 30px 20px; max-width: 90%; }
+    }
+
+    @media (max-width: 600px) {
+      .stage { padding: 15px; }
+      .video-container { border-radius: 12px; }
+      .content-info h1 { font-size: 28px; }
+      .interaction-hub { margin: 15px; height: 500px; }
+      .action-btn { width: 100%; flex: none; }
+    }
+  </style>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = '<%= supabaseUrl %>';
+    const supabaseAnonKey = '<%= supabaseAnonKey %>';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    const currentUser = <%- JSON.stringify(locals.user || null) %>;
+    const contentId = '<%= (content && content.id) ? content.id : "general" %>';
+
+    // ─── TAB LOGIC ───
+    document.querySelectorAll('.hub-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.hub-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.hub-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`panel-${btn.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    // ─── CHAT LOGIC ───
+    const chatFeed = document.getElementById('chat-messages');
+    
+    // Subscribe to realtime comments
+    supabaseClient
+      .channel('public:sermon_comments')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sermon_comments' }, payload => {
+        if(payload.new.sermon_id === contentId) {
+          appendMessage(payload.new.author_name || 'Member', payload.new.content);
+        }
+      })
+      .subscribe();
+
+    function appendMessage(name, text) {
+      const msg = document.createElement('div');
+      msg.className = 'chat-msg';
+      msg.innerHTML = `<span class="name">${name}</span><span class="text">${text}</span>`;
+      chatFeed.appendChild(msg);
+      chatFeed.scrollTop = chatFeed.scrollHeight;
+    }
+
+    const chatForm = document.getElementById('chat-form');
+    if (chatForm) {
+      chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('chat-input');
+        const val = input.value.trim();
+        if(!val) return;
+        input.value = '';
+
+        const name = currentUser ? `${currentUser.first_name || currentUser.user_metadata.first_name}` : 'Guest';
+        
+        await supabaseClient.from('sermon_comments').insert([{
+          sermon_id: contentId,
+          user_id: currentUser?.id,
+          author_name: name,
+          content: val,
+          is_approved: true
+        }]);
+      });
+    }
+
+    // ─── NOTES LOGIC (Persistence) ───
+    const notesArea = document.getElementById('personal-notes');
+    const storageKey = `notes_${contentId}`;
+    if (notesArea) {
+      notesArea.value = localStorage.getItem(storageKey) || '';
+      notesArea.addEventListener('input', (e) => {
+        localStorage.setItem(storageKey, e.target.value);
+      });
+    }
+
+    function exportNotes() {
+      const notes = notesArea.value;
+      if (!notes.trim()) return alert("Notes are empty!");
+      const blob = new Blob([notes], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Ambassadors_Notes_${contentId}.txt`;
+      a.click();
+    }
+
+    // ─── PRAYER LOGIC ───
+    const prayerForm = document.getElementById('prayer-form');
+    if (prayerForm) {
+      prayerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('prayer-title').value;
+        const desc = document.getElementById('prayer-desc').value;
+        const isAnon = document.getElementById('prayer-anon').checked;
+        const statusDiv = document.getElementById('prayer-status');
+
+        statusDiv.innerHTML = "Submitting...";
+
+        const { error } = await supabaseClient.from('prayer_requests').insert([{
+          title,
+          description: desc,
+          is_anonymous: isAnon,
+          user_id: currentUser?.id,
+          requester_name: currentUser ? (currentUser.first_name || currentUser.user_metadata.first_name) : 'Guest',
+          status: 'pending'
+        }]);
+
+        if(!error) {
+          statusDiv.innerHTML = "🙏 Request received. We are praying with you.";
+          prayerForm.reset();
+        } else {
+          statusDiv.innerHTML = "Error submitting. Please try again.";
+        }
+      });
+    }
+
+    // ─── COUNTDOWN LOGIC ───
+    <% if (content && content.status === 'scheduled') { %>
+      const startTime = new Date('<%= content.scheduled_start %>').getTime();
+      const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = startTime - now;
+        if(diff < 0) {
+          clearInterval(timer);
+          window.location.reload();
+          return;
+        }
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        document.getElementById('countdown-timer').innerHTML = 
+          `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      }, 1000);
+    <% } %>
+
+    function copyWatchLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Invite link copied to clipboard!");
+    }
+  </script>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

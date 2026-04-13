@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
-
+import { RedisStore } from 'rate-limit-redis';
+import { redis } from './config/redis.js';
 
 import { logger } from './config/logger.js';
 import { globalErrorHandler } from './middlewares/errorHandler.js';
@@ -46,10 +47,16 @@ app.use((req, res, next) => {
 });
 
 // Rate Limiting (Prevents DDoS and Brute Force attacks)
+// High IQ: Uses Redis as a persistent store so limits aren't reset on server restart
 const limiter = rateLimit({
-  max: 100, // Limit each IP to 100 requests per windowMs
-  windowMs: 60 * 60 * 1000, // 1 Hour
-  message: 'Too many requests from this IP, please try again in an hour!'
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per 15 mins
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: redis ? new RedisStore({
+    sendCommand: (...args) => redis.call(...args),
+  }) : undefined,
+  message: 'Too many requests from this IP, please try again in 15 minutes!'
 });
 app.use('/api', limiter);
 

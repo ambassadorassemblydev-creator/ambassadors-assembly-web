@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 
 /**
  * Account Repository
@@ -17,7 +17,7 @@ export const accountRepo = {
         )
       `)
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
 
@@ -53,6 +53,37 @@ export const accountRepo = {
 
     if (error) throw error;
     return data;
+  },
+  
+  /**
+   * High IQ Self-Healing: Provision a missing profile
+   * Uses service_role to bypass RLS and triggers
+   */
+  provisionProfile: async (userId, email, firstName, lastName) => {
+    const { data: profile, error } = await supabaseService
+      .from('profiles')
+      .insert([{
+        id: userId,
+        email,
+        first_name: firstName || '',
+        last_name: lastName || '',
+        member_id: `AA-RECOVER-${Math.floor(Math.random() * 10000)}` // Temporary recovery ID
+      }])
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+    
+    // Also assign guest role if missing
+    await supabaseService
+      .from('user_roles')
+      .insert([{
+        user_id: userId,
+        role_id: (await supabaseService.from('roles').select('id').eq('name', 'guest').single()).data.id
+      }])
+      .select();
+
+    return profile;
   },
     updateProfile: async (userId, updateData) => {
     const { data, error } = await supabase
