@@ -64,9 +64,10 @@
                   </div>
 
                   <% if (event.registration_required) { %>
-                    <a href="<%= event.registration_url || '#' %>" class="register-btn" target="_blank">
+                    <button id="regButton" class="register-btn" onclick="showRegConfirmation()">
                       Register Now
-                    </a>
+                    </button>
+                    <p id="attendingBadge" class="open-event-badge" style="display:none; color:#22c55e;">You're Attending ✅</p>
                   <% } else { %>
                     <div class="open-event-badge">
                       Free Entry • No Registration Required
@@ -88,6 +89,39 @@
         </main>
 
       </div>
+    </div>
+  </div>
+
+  <!-- REGISTRATION CONFIRMATION MODAL -->
+  <div id="regModal" class="modal-overlay">
+    <div class="modal-glass">
+      <div class="modal-header">
+        <h2>Confirm Registration</h2>
+        <p>You are about to register for <strong><%= event.title %></strong>.</p>
+      </div>
+      <div class="modal-body">
+        <ul class="reg-bullets">
+          <li><strong>Date:</strong> <%= new Date(event.start_date).toLocaleDateString() %></li>
+          <li><strong>Time:</strong> <%= new Date(event.start_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></li>
+        </ul>
+        <p class="reg-notice">Your profile details will be shared with the event organizers.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeModal('regModal')">Cancel</button>
+        <button class="modal-btn primary" id="confirmRegBtn" onclick="submitRegistration('<%= event.id %>')">Confirm & Sign Up</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="successModal" class="modal-overlay">
+    <div class="modal-glass success">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Successfully Registered!</h2>
+      <p>We've added this event to your dashboard. See you there!</p>
+      <button class="modal-btn primary" onclick="location.href='/my-account?tab=events'">Go to My Dashboard</button>
     </div>
   </div>
 
@@ -201,6 +235,37 @@
       .event-hero { height: 60vh; }
       .event-title { font-size: 3rem; }
     }
+
+    /* MODAL STYLES */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+      z-index: 9999; display: none; align-items: center; justify-content: center;
+      opacity: 0; transition: 0.4s;
+    }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-glass {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 32px; padding: 50px; width: 100%; max-width: 500px;
+      text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+      transform: translateY(20px); transition: 0.4s;
+    }
+    .modal-overlay.active .modal-glass { transform: translateY(0); }
+    
+    .modal-header h2 { font-size: 2rem; margin-bottom: 10px; font-family: 'Articulat CF Demi Bold'; }
+    .modal-header p { opacity: 0.6; margin-bottom: 30px; }
+    
+    .reg-bullets { list-style: none; padding: 0; margin: 0 0 30px; text-align: left; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; }
+    .reg-bullets li { margin-bottom: 8px; font-size: 0.95rem; }
+    .reg-notice { font-size: 12px; opacity: 0.4; margin-bottom: 30px; }
+    
+    .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .modal-btn { padding: 18px; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+    .modal-btn.primary { background: var(--accent); color: white; }
+    .modal-btn.secondary { background: rgba(255,255,255,0.05); color: white; }
+    .modal-btn:hover { transform: translateY(-3px); opacity: 0.9; }
+
+    .success-icon { width: 80px; height: 80px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; color: white; box-shadow: 0 20px 40px rgba(34, 197, 94, 0.3); }
   </style>
 
   <script>
@@ -213,6 +278,46 @@
     function copyLink() {
       navigator.clipboard.writeText(window.location.href);
       alert('Event link copied!');
+    }
+
+    function showRegConfirmation() {
+      document.getElementById('regModal').classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    async function submitRegistration(eventId) {
+      const btn = document.getElementById('confirmRegBtn');
+      btn.innerText = 'Registering...';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('/api/events/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+          closeModal('regModal');
+          document.getElementById('successModal').classList.add('active');
+          document.getElementById('regButton').style.display = 'none';
+          document.getElementById('attendingBadge').style.display = 'block';
+        } else {
+          alert(result.message || 'Error occurred during registration.');
+          btn.innerText = 'Confirm & Sign Up';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        console.error('Registration failed:', err);
+        alert('Could not complete registration. Please try again.');
+        btn.innerText = 'Confirm & Sign Up';
+        btn.disabled = false;
+      }
     }
   </script>
 </body>

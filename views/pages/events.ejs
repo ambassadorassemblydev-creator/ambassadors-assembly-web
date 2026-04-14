@@ -24,15 +24,15 @@
                     }
 
                     .events-hero {
-                      padding: 180px 6% 120px;
-                      background: #0e0e0e;
+                      padding: 220px 6% 160px;
+                      background: #050505;
                       position: relative;
                       overflow: hidden;
                     }
 
-                    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-                    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.15; filter: contrast(1.1) grayscale(0.2); }
-                    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, #0e0e0e 0%, rgba(14,14,14,0.7) 100%); }
+                    .give-bg { position: absolute; top:0; left:0; width:100%; height:100%; z-index: 1; pointer-events: none; }
+                    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: brightness(0.6) contrast(1.2); }
+                    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, rgba(5,5,5,0.4) 0%, #050505 100%); }
 
                     .hero-content {
                       position: relative;
@@ -77,11 +77,11 @@
                     }
 
                     .grid-container {
-                      max-width: 1200px;
+                      max-width: 1400px;
                       margin: 0 auto;
                       display: grid;
                       grid-template-columns: repeat(2, 1fr);
-                      gap: 80px 60px;
+                      gap: 120px 80px; /* Increased gap to prevent overlap from staggering */
                     }
 
                     .event-item {
@@ -90,15 +90,15 @@
                       position: relative;
                     }
 
-                    /* Parabolic Offset */
-                    .event-item:nth-child(even) { transform: translateY(100px); }
+                    /* Parabolic Offset - Refined to prevent collisions */
+                    .event-item:nth-child(even) { transform: translateY(120px); }
 
                     .event-card {
                       background: var(--glass);
                       backdrop-filter: blur(20px);
                       -webkit-backdrop-filter: blur(20px);
                       border: 1px solid var(--glass-border);
-                      border-radius: 30px;
+                      border-radius: 40px;
                       overflow: hidden;
                       transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
                     }
@@ -177,7 +177,24 @@
                     @media (max-width: 1100px) {
                       .grid-container { gap: 60px 40px; }
                       .event-title { font-size: 1.5rem; }
+                      .filters-container { flex-direction: column; align-items: stretch; gap: 20px; }
+                      .search-box { max-width: none; }
                     }
+
+                    /* FILTERS */
+                    .filters-section { padding: 40px 6%; background: #0e0e0e; border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 90; backdrop-filter: blur(20px); }
+                    .filters-container { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+                    
+                    .search-box { flex-grow: 1; max-width: 500px; position: relative; }
+                    .search-input { width: 100%; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 100px; padding: 15px 30px 15px 60px; color: white; font-family: inherit; font-size: 0.95rem; transition: 0.3s; }
+                    .search-input:focus { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.06); outline: none; }
+                    .search-icon { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); opacity: 0.4; }
+                    
+                    .category-pills { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+                    .category-pills::-webkit-scrollbar { display: none; }
+                    .pill { padding: 12px 24px; border-radius: 50px; border: 1px solid var(--glass-border); background: var(--glass); color: rgba(255,255,255,0.6); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s; white-space: nowrap; }
+                    .pill:hover { background: rgba(255,255,255,0.06); color: white; }
+                    .pill.active { background: white; color: black; border-color: white; }
 
                     @media (max-width: 768px) {
                       .grid-container { grid-template-columns: 1fr; gap: 40px; }
@@ -202,14 +219,31 @@
                       </div>
                     </section>
 
+                    <section class="filters-section">
+                      <div class="filters-container">
+                        <div class="search-box">
+                          <div class="search-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+                          <input type="text" id="eventSearch" class="search-input" placeholder="Search events by title or location...">
+                        </div>
+                        <div class="category-pills">
+                          <button class="pill active" data-cat="all">All Events</button>
+                          <button class="pill" data-cat="worship">Worship</button>
+                          <button class="pill" data-cat="conference">Conference</button>
+                          <button class="pill" data-cat="outreach">Outreach</button>
+                          <button class="pill" data-cat="youth">Youth</button>
+                        </div>
+                      </div>
+                    </section>
+
                     <section class="events-grid-section">
                       <div class="grid-container">
                         <% if (events && events.length > 0) { %>
                           <% events.forEach((evt, i) => { 
                              const startDate = new Date(evt.start_date);
                              const dateStr = startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                             const category = (evt.event_type || 'other').toLowerCase();
                           %>
-                            <a href="/events/<%= evt.slug %>" class="event-item gsap-event" data-index="<%= i %>">
+                            <a href="/events/<%= evt.slug %>" class="event-item gsap-event" data-index="<%= i %>" data-title="<%= evt.title.toLowerCase() %>" data-loc="<%= (evt.location_name || '').toLowerCase() %>" data-cat="<%= category %>">
                               <div class="event-card">
                                 <div class="card-media">
                                   <img src="<%= evt.cover_image_url || 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop' %>" 
@@ -267,6 +301,44 @@
         duration: 1.2,
         stagger: 0.15,
         ease: 'power3.out'
+      });
+
+      // FILTERING LOGIC
+      const searchInput = document.getElementById('eventSearch');
+      const pills = document.querySelectorAll('.pill');
+      const eventItems = document.querySelectorAll('.event-item');
+      let currentCat = 'all';
+
+      function filterEvents() {
+        const query = searchInput.value.toLowerCase();
+        
+        eventItems.forEach(item => {
+          const title = item.dataset.title;
+          const loc = item.dataset.loc;
+          const cat = item.dataset.cat;
+          
+          const matchesQuery = title.includes(query) || loc.includes(query);
+          const matchesCat = currentCat === 'all' || cat === currentCat;
+          
+          if (matchesQuery && matchesCat) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // Refresh AOS/Animations if needed (optional)
+      }
+
+      searchInput.addEventListener('input', filterEvents);
+      
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          currentCat = pill.dataset.cat;
+          filterEvents();
+        });
       });
     });
   </script>

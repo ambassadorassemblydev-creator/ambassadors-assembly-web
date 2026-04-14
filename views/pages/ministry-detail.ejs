@@ -1,0 +1,168 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #050505; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <main class="ministry-detail-page">
+          <!-- AMBIENT BG -->
+          <div class="give-bg">
+            <div class="bg-overlay"></div>
+            <% if (ministry.cover_image_url) { %>
+              <img src="<%= ministry.cover_image_url %>" alt="<%= ministry.name %>" class="bg-img">
+            <% } else { %>
+              <div class="bg-img-placeholder" style="background: conic-gradient(from 335deg at 51.5% 61.1%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%);"></div>
+            <% } %>
+          </div>
+
+          <section class="min-detail-hero">
+            <div class="hero-content">
+              <nav class="breadcrumb gsap-hero">
+                <a href="/ministries">Ministries</a>
+                <span class="sep">/</span>
+                <span class="curr"><%= ministry.name %></span>
+              </nav>
+              <h1 class="gsap-hero"><%= ministry.name %></h1>
+              <p class="gsap-hero"><%= ministry.description %></p>
+              
+              <div class="hero-actions gsap-hero">
+                <a href="#join-section" class="primary-btn">Join Ministry</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="min-main-content">
+            <div class="content-grid">
+              <!-- LEFT: INFO -->
+              <div class="info-side">
+                <div class="glass-card gsap-up">
+                  <h3>About the Ministry</h3>
+                  <div class="rich-text">
+                    <p><%= ministry.long_description || 'We are dedicated to serving the body of Christ through this department. Join us as we grow together in faith and service.' %></p>
+                  </div>
+                </div>
+
+                <% if (ministry.ministry_leads && ministry.ministry_leads.length > 0) { %>
+                  <div class="leads-section gsap-up">
+                    <h4>Ministry Leadership</h4>
+                    <div class="leads-grid">
+                      <% ministry.ministry_leads.forEach(lead => { %>
+                        <div class="lead-item">
+                          <img src="<%= lead.profiles.avatar_url %>" alt="<%= lead.profiles.first_name %>">
+                          <div class="lead-text">
+                            <strong><%= lead.profiles.first_name %> <%= lead.profiles.last_name %></strong>
+                            <span>Ministry Lead</span>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+
+              <!-- RIGHT: JOIN FORM -->
+              <div class="form-side" id="join-section">
+                <div class="join-card glass-fx gsap-up">
+                  <h3>Get Involved</h3>
+                  <p>Ready to serve? Fill out the form below to express your interest in joining the <%= ministry.name %>.</p>
+                  
+                  <form action="/ministries/<%= ministry.slug %>/join" method="POST" class="join-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <div class="form-group">
+                      <label>Why do you want to join? (Optional)</label>
+                      <textarea name="notes" placeholder="Tell us a bit about your interest or experience..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Request</button>
+                    <p class="form-note">By submitting, you agree to be contacted by the ministry leads.</p>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <style>
+    .ministry-detail-page { padding-bottom: 120px; }
+    
+    .min-detail-hero { height: 75vh; display: flex; align-items: center; padding: 0 6%; position: relative; }
+    .breadcrumb { margin-bottom: 30px; display: flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+    .breadcrumb a { color: rgba(255,255,255,0.4); text-decoration: none; transition: 0.3s; }
+    .breadcrumb a:hover { color: white; }
+    .breadcrumb .sep { color: rgba(255,255,255,0.2); }
+    .breadcrumb .curr { color: #3b82f6; }
+
+    .min-detail-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; letter-spacing: -0.04em; line-height: 0.95; margin-bottom: 30px; }
+    .min-detail-hero p { font-size: 1.3rem; color: rgba(255,255,255,0.7); max-width: 800px; line-height: 1.6; margin-bottom: 40px; }
+
+    .primary-btn { display: inline-block; padding: 20px 45px; background: white; color: black; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 0.95rem; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .primary-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(255,255,255,0.1); }
+
+    .min-main-content { padding: 0 6%; margin-top: -60px; }
+    .content-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 60px; max-width: 1400px; margin: 0 auto; align-items: start; }
+
+    .glass-card { padding: 60px; border-radius: 40px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(20px); }
+    .glass-card h3 { font-size: 2rem; font-weight: 800; margin-bottom: 25px; }
+    .rich-text p { font-size: 1.1rem; color: rgba(255,255,255,0.6); line-height: 1.8; }
+
+    .leads-section { margin-top: 60px; }
+    .leads-section h4 { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; color: rgba(255,255,255,0.3); margin-bottom: 30px; }
+    .leads-grid { display: flex; flex-wrap: wrap; gap: 30px; }
+    .lead-item { display: flex; align-items: center; gap: 15px; }
+    .lead-item img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
+    .lead-text strong { display: block; font-size: 0.95rem; }
+    .lead-text span { font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+
+    .join-card { padding: 50px; border-radius: 40px; }
+    .join-card h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 15px; }
+    .join-card p { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 35px; }
+
+    .form-group { margin-bottom: 25px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+    .form-group textarea { width: 100%; height: 150px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; color: white; font-family: inherit; transition: 0.3s; resize: none; }
+    .form-group textarea:focus { border-color: #3b82f6; background: rgba(255,255,255,0.06); outline: none; }
+    
+    .submit-btn { width: 100%; padding: 20px; background: #3b82f6; color: white; border: none; border-radius: 16px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.4s; }
+    .submit-btn:hover { background: #2563eb; transform: scale(1.02); }
+
+    .form-note { font-size: 0.75rem !important; color: rgba(255,255,255,0.2) !important; text-align: center; margin-top: 20px; }
+
+    .glass-fx { background: rgba(30,30,30,0.4); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); }
+
+    /* Ambient BG */
+    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.25; filter: contrast(1.1) grayscale(0.2); }
+    .bg-img-placeholder { width: 100%; height: 100%; opacity: 0.15; }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #050505 0%, rgba(5,5,5,0.85) 100%); }
+
+    @media (max-width: 1000px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .min-detail-hero { height: 60vh; text-align: center; justify-content: center; }
+      .breadcrumb { justify-content: center; }
+      .min-detail-hero p { margin: 0 auto 40px; }
+    }
+  </style>
+
+  <script>
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-hero', { y: 40, opacity: 0, duration: 1.5, stagger: 0.2, ease: 'power4.out' });
+      gsap.from('.gsap-up', { 
+        scrollTrigger: { trigger: '.content-grid', start: 'top 80%' },
+        y: 60, opacity: 0, duration: 1.2, stagger: 0.2, ease: 'power3.out' 
+      });
+    });
+  </script>
+</body>
+</html>

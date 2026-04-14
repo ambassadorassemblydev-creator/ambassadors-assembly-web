@@ -11,5 +11,6 @@ router.get('/check-email', (req, res) => res.render('pages/check-email', { pageT
 // API Endpoints (POST)
 router.post('/api/login', authController.login);
 router.post('/api/signup', authController.signUp); // <-- ADD THIS
+router.get('/logout', authController.logout);
 
 export default router;

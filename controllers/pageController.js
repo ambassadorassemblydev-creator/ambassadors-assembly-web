@@ -10,21 +10,17 @@ export const pageController = {
     // Render the Home Page
     renderHome: async (req, res) => {
         try {
-            // High IQ: Check cache first to avoid DB round-trips
             const cachedData = await cache.get('home_page_data');
-            
             let sermons, events, ministries;
+            
             if (cachedData) {
                 ({ sermons, events, ministries } = cachedData);
             } else {
-                // Fetch everything concurrently for maximum speed
                 [sermons, events, ministries] = await Promise.all([
                     sermonRepo.getRecentSermons(6),
                     eventRepo.getUpcomingEvents(7),
                     ministryRepo.getFeaturedMinistries(6)
                 ]);
-                
-                // Store in cache for 5 minutes
                 await cache.set('home_page_data', { sermons, events, ministries }, 300);
             }
 
@@ -45,7 +41,7 @@ export const pageController = {
         }
     },
 
-    // Render the Sermons Archive Page (Unchanged)
+    // Render the Sermons Archive Page
     renderSermons: async (req, res) => {
         try {
             const cacheKey = 'sermons_archive_top_20';
@@ -53,7 +49,7 @@ export const pageController = {
 
             if (!sermons) {
                 sermons = await sermonRepo.getRecentSermons(20);
-                await cache.set(cacheKey, sermons, 600); // 10 minute cache
+                await cache.set(cacheKey, sermons, 600);
             }
             
             res.render('pages/sermons', {
@@ -72,23 +68,17 @@ export const pageController = {
         try {
             const { slug } = req.params;
             const cacheKey = `sermon_detail_${slug}`;
-            
             let data = await cache.get(cacheKey);
             
             if (!data) {
                 const sermon = await sermonRepo.getSermonBySlug(slug);
                 if (!sermon) {
-                    return res.status(404).render('pages/error', { 
-                        message: 'Sermon not found', 
-                        error: { status: 404 } 
-                    });
+                    return res.status(404).render('pages/error', { message: 'Sermon not found', error: { status: 404 } });
                 }
-
                 const [relatedSermons, latestSermons] = await Promise.all([
                     sermonRepo.getRelatedSermons(sermon.id, sermon.series_id),
                     sermonRepo.getRecentSermons(3)
                 ]);
-
                 data = { sermon, relatedSermons, latestSermons };
                 await cache.set(cacheKey, data, 1800);
             }
@@ -99,7 +89,7 @@ export const pageController = {
                 sermon: data.sermon,
                 relatedSermons: data.relatedSermons || [],
                 latestSermons: data.latestSermons || [],
-                isLiveNow: false // Realtime check would go here
+                isLiveNow: false
             });
         } catch (error) {
             console.error('[PageController] Error rendering sermon detail:', error.message);
@@ -134,14 +124,11 @@ export const pageController = {
         try {
             const { slug } = req.params;
             const cacheKey = `event_detail_${slug}`;
-            
             let event = await cache.get(cacheKey);
             
             if (!event) {
                 event = await eventRepo.getEventBySlug(slug);
-                if (!event) {
-                    return res.status(404).render('pages/error', { message: 'Event not found' });
-                }
+                if (!event) return res.status(404).render('pages/error', { message: 'Event not found' });
                 await cache.set(cacheKey, event, 1800);
             }
 
@@ -170,6 +157,43 @@ export const pageController = {
         }
     },
 
+    // Render a specific Ministry Detail Page
+    renderMinistryDetail: async (req, res) => {
+        try {
+            const { slug } = req.params;
+            const ministry = await ministryRepo.getMinistryBySlug(slug);
+            
+            if (!ministry) return res.status(404).render('pages/error', { message: 'Ministry not found' });
+
+            res.render('pages/ministry-detail', {
+                pageTitle: `${ministry.name} | Ambassadors Assembly`,
+                currentPath: req.path,
+                ministry
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering ministry detail:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading ministry details' });
+        }
+    },
+
+    // Handle Join Ministry Request
+    handleJoinMinistry: async (req, res) => {
+        try {
+            const { slug } = req.params;
+            const { notes } = req.body;
+            const userId = req.user.id;
+
+            const ministry = await ministryRepo.getMinistryBySlug(slug);
+            if (!ministry) return res.status(404).json({ error: 'Ministry not found' });
+
+            await ministryRepo.joinMinistry(ministry.id, userId, notes);
+            res.redirect(`/ministries/${slug}?success=Your interest has been logged.`);
+        } catch (error) {
+            console.error('[PageController] Error joining ministry:', error.message);
+            res.redirect(`${req.header('Referer') || '/ministries'}?error=Something went wrong.`);
+        }
+    },
+
     // Render the Ministries Grid
     renderMinistries: async (req, res) => {
         try {
@@ -188,11 +212,14 @@ export const pageController = {
     // Render About Us Page
     renderAbout: async (req, res) => {
         try {
+            const staff = await memberRepo.getStaff();
             res.render('pages/about', {
                 pageTitle: 'About Us | Ambassadors Assembly',
-                currentPath: req.path
+                currentPath: req.path,
+                staff: staff || []
             });
         } catch (error) {
+            console.error('[PageController] Error rendering about:', error.message);
             res.status(500).render('pages/error', { message: 'Error loading page' });
         }
     },

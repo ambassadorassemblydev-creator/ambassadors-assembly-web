@@ -61,5 +61,42 @@ export const memberRepo = {
       logger.error(`Error searching members: ${error.message}`);
       throw error;
     }
+  },
+
+  /**
+   * Get all users with a church position (Staff/Leadership).
+   */
+  getStaff: async () => {
+    try {
+      const { data, error } = await supabase
+        .from('church_workers')
+        .select(`
+          profiles!user_id (
+            id,
+            first_name,
+            last_name,
+            avatar_url
+          ),
+          church_positions (
+            title,
+            department
+          )
+        `)
+        .order('id', { ascending: true });
+
+      if (error) throw error;
+
+      return data.map(w => ({
+        id: w.profiles?.id,
+        first_name: w.profiles?.first_name,
+        last_name: w.profiles?.last_name,
+        avatar_url: w.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${w.profiles?.first_name}+${w.profiles?.last_name}&background=random`,
+        role: w.church_positions?.title,
+        department: w.church_positions?.department
+      }));
+    } catch (error) {
+      logger.error(`Error fetching staff: ${error.message}`);
+      return [];
+    }
   }
 };

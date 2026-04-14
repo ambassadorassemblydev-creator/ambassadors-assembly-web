@@ -85,21 +85,86 @@ export const accountRepo = {
 
     return profile;
   },
-    updateProfile: async (userId, updateData) => {
+
+  /**
+   * Fetch all active church departments for onboarding selection
+   */
+  getDepartments: async () => {
+    const { data, error } = await supabase
+      .from('church_departments')
+      .select('id, name, slug, description')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+
+    if (error) throw error;
+    return data;
+  },
+
+  updateProfile: async (userId, updateData) => {
+    // Standardize payload
+    const payload = {
+      updated_at: new Date()
+    };
+
+    // Mapping camelCase to snake_case if present
+    if (updateData.firstName !== undefined) payload.first_name = updateData.firstName;
+    if (updateData.lastName !== undefined) payload.last_name = updateData.lastName;
+    if (updateData.phone !== undefined) payload.phone = updateData.phone;
+    if (updateData.addressLine1 !== undefined) payload.address_line_1 = updateData.addressLine1;
+    if (updateData.city !== undefined) payload.city = updateData.city;
+    if (updateData.bio !== undefined) payload.bio = updateData.bio;
+    
+    // Onboarding fields
+    if (updateData.gender !== undefined) payload.gender = updateData.gender;
+    if (updateData.date_of_birth !== undefined) payload.date_of_birth = updateData.date_of_birth;
+    if (updateData.marital_status !== undefined) payload.marital_status = updateData.marital_status;
+    if (updateData.wedding_anniversary !== undefined) payload.wedding_anniversary = updateData.wedding_anniversary;
+    if (updateData.address !== undefined) payload.address_line_1 = updateData.address;
+    if (updateData.is_baptized !== undefined) payload.is_baptized = updateData.is_baptized;
+    if (updateData.baptism_date !== undefined) payload.baptism_date = updateData.baptism_date;
+    if (updateData.is_onboarded !== undefined) payload.is_onboarded = updateData.is_onboarded;
+    if (updateData.department_interest !== undefined) payload.department_interest = updateData.department_interest;
+    if (updateData.salvation_date !== undefined) payload.salvation_date = updateData.salvation_date;
+    if (updateData.previous_church !== undefined) payload.previous_church = updateData.previous_church;
+    if (updateData.occupation !== undefined) payload.occupation = updateData.occupation;
+
     const { data, error } = await supabaseService
       .from('profiles')
-      .update({
-        first_name: updateData.firstName,
-        last_name: updateData.lastName,
-        phone: updateData.phone,
-        address_line_1: updateData.addressLine1,
-        city: updateData.city,
-        bio: updateData.bio,
-        updated_at: new Date()
-      })
+      .update(payload)
       .eq('id', userId)
       .select()
       .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Fetch all events a user has registered for
+   */
+  getUserEvents: async (userId) => {
+    const { data, error } = await supabase
+      .from('event_registrations')
+      .select(`
+        *,
+        events(*)
+      `)
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Fetch all prayer requests submitted by a user
+   */
+  getUserPrayers: async (userId) => {
+    const { data, error } = await supabase
+      .from('prayer_requests')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
     return data;

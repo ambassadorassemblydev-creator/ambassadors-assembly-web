@@ -127,13 +127,17 @@ CREATE TABLE profiles (
   receive_birthday_greeting BOOLEAN DEFAULT TRUE,
 
   -- Status
+  is_onboarded BOOLEAN DEFAULT FALSE,
   status user_status DEFAULT 'active',
   deactivated_at TIMESTAMPTZ,
   deactivation_reason TEXT,
 
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+
+  -- New Onboarding Fields
+  department_interest TEXT
 );
 
 CREATE TRIGGER profiles_updated_at

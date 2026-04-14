@@ -63,22 +63,52 @@
 
           <!-- WHAT TO EXPECT -->
           <section class="expect-section">
-            <div class="expect-header gsap-visit">
-              <h2>What to Expect</h2>
-            </div>
-            
-            <div class="expect-grid">
-              <div class="expect-card gsap-up">
-                <h4>How should I dress?</h4>
-                <p>Come as you are! You'll see everything from suits to jeans. We care more about you than what you're wearing.</p>
-              </div>
-              <div class="expect-card gsap-up">
-                <h4>What about my kids?</h4>
-                <p>Ambassadors Kids provides a fun, safe, and engaging environment for children to learn about Jesus at their level.</p>
-              </div>
-              <div class="expect-card gsap-up">
-                <h4>How long is the service?</h4>
-                <p>Our services typically last about 90 minutes. They involve powerful worship and a deep, practical Word from God.</p>
+            <div class="content-container">
+              <div class="expect-grid-layout">
+                <div class="expect-text gsap-visit">
+                  <span class="small-label">The Experience</span>
+                  <h2>What to Expect</h2>
+                  <p>We know that visiting a new church can be intimidating. Here’s a glimpse into what your first Sunday at Ambassadors Assembly will look like.</p>
+                  
+                  <div class="expect-features">
+                    <div class="feature-item gsap-up">
+                      <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                      </div>
+                      <div class="feature-text">
+                        <h4>Atmosphere of Love</h4>
+                        <p>A welcoming family where you'll be greeted with a smile and a warm embrace.</p>
+                      </div>
+                    </div>
+                    <div class="feature-item gsap-up">
+                      <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                      </div>
+                      <div class="feature-text">
+                        <h4>Punctuality</h4>
+                        <p>We honor your time. Our services start on time and are designed to be impactful.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="expect-cards-side">
+                  <div class="expect-card-premium glass-fx gsap-up">
+                    <div class="card-tag">Style</div>
+                    <h4>How should I dress?</h4>
+                    <p>Come as you are! You'll see everything from suits to jeans. We care more about you than what you're wearing. Our focus is on the heart, not the outward appearance.</p>
+                  </div>
+                  <div class="expect-card-premium glass-fx gsap-up">
+                    <div class="card-tag">Family</div>
+                    <h4>What about my kids?</h4>
+                    <p>Ambassadors Kids provides a fun, safe, and engaging environment for children to learn about Jesus at their level. We have age-appropriate classes for infants through pre-teens.</p>
+                  </div>
+                  <div class="expect-card-premium glass-fx gsap-up">
+                    <div class="card-tag">Service</div>
+                    <h4>How long is it?</h4>
+                    <p>Our services typically last about 90 minutes. They involve powerful, spirit-led worship and a deep, practical Word from God that you can apply to your life immediately.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -114,14 +144,25 @@
     .map-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(255,255,255,0.1); }
     .parking-info { margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); font-size: 0.95rem; }
 
-    .expect-section { padding: 120px 6% 0; }
-    .expect-header { text-align: center; margin-bottom: 80px; }
-    .expect-header h2 { font-size: 3rem; font-weight: 900; }
+    .expect-section { padding: 120px 6%; background: #050505; }
+    .content-container { max-width: 1400px; margin: 0 auto; }
+    
+    .expect-grid-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: start; }
+    .expect-text h2 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 30px; letter-spacing: -0.02em; }
+    .expect-text p { font-size: 1.1rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 60px; }
 
-    .expect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1400px; margin: 0 auto; }
-    .expect-card { padding: 40px; border-radius: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
-    .expect-card h4 { font-size: 1.25rem; font-weight: 800; margin-bottom: 15px; color: #3b82f6; }
-    .expect-card p { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .expect-features { display: flex; flex-direction: column; gap: 40px; }
+    .feature-item { display: flex; gap: 25px; }
+    .feature-icon { width: 50px; height: 50px; border-radius: 16px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .feature-icon svg { width: 24px; height: 24px; }
+    .feature-text h4 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+    .feature-text p { font-size: 0.95rem; color: rgba(255,255,255,0.4); margin-bottom: 0; }
+
+    .expect-cards-side { display: flex; flex-direction: column; gap: 30px; }
+    .expect-card-premium { padding: 50px; border-radius: 40px; position: relative; overflow: hidden; }
+    .card-tag { position: absolute; top: 30px; right: 40px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.2); }
+    .expect-card-premium h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; color: #3b82f6; }
+    .expect-card-premium p { font-size: 1rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 0; }
 
     .glass-fx { background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); }
 

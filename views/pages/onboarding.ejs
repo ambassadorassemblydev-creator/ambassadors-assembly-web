@@ -1,6 +1,6 @@
 <%- include('../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #0a0a0a; color: white;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #050505; color: white;">
   
   <%- include('../partials/preloader') %>
   
@@ -18,12 +18,29 @@
           <div class="onboard-container gsap-up">
             <div class="onboard-card glass-fx">
               
+              <!-- PROGRESS TRACKER -->
+              <div class="progress-tracker">
+                <div class="step-indicator <%= step >= 1 ? 'active' : '' %>">
+                  <span class="step-num">1</span>
+                  <span class="step-label">Personal</span>
+                </div>
+                <div class="step-line <%= step >= 2 ? 'active' : '' %>"></div>
+                <div class="step-indicator <%= step >= 2 ? 'active' : '' %>">
+                  <span class="step-num">2</span>
+                  <span class="step-label">Spiritual</span>
+                </div>
+              </div>
+
               <div class="onboard-header">
-                <img src="/logo.png" alt="Ambassadors Assembly" class="ob-logo" onerror="this.style.display='none'">
-                <h2>Welcome to the Family</h2>
-                <p>Complete your profile to unlock the full potential of your membership and help us serve you better.</p>
+                <h2><%= step === 1 ? 'Welcome to the Family' : 'Your Spiritual Journey' %></h2>
+                <p>
+                  <%= step === 1 
+                    ? 'Let’s start with some basic details to get your profile ready.' 
+                    : 'Tell us a bit more about your walk with God and how you’d like to serve.' %>
+                </p>
                 <% if (typeof error !== 'undefined' && error) { %>
                   <div class="ob-error">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     <%= error %>
                   </div>
                 <% } %>
@@ -31,81 +48,159 @@
 
               <form action="/onboarding" method="POST" class="ob-form">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="step" value="<%= step %>">
                 
-                <h3 class="section-title">Personal Details</h3>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Gender <span>*</span></label>
-                    <select name="gender" required>
-                      <option value="" disabled selected>Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Date of Birth <span>*</span></label>
-                    <input type="date" name="dob" required>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Phone Number <span>*</span></label>
-                    <input type="tel" name="phone" placeholder="+234 ..." required>
-                  </div>
-                  <div class="form-group">
-                    <!-- Placeholder for alignment or extra field -->
-                  </div>
-                </div>
+                <% if (step === 1) { %>
+                  <!-- STEP 1: PERSONAL DETAILS -->
+                  <div class="form-section">
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label>Gender <span>*</span></label>
+                        <div class="custom-select-wrapper">
+                          <input type="hidden" name="gender" value="<%= user && user.gender ? user.gender : '' %>" required>
+                          <div class="custom-select-trigger"><%= user && user.gender ? user.gender : 'Select Gender' %></div>
+                          <div class="custom-options">
+                            <div class="option" data-value="Male">Male</div>
+                            <div class="option" data-value="Female">Female</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Date of Birth <span>*</span></label>
+                        <input type="date" name="dob" value="<%= user && user.date_of_birth ? user.date_of_birth : '' %>" required>
+                      </div>
+                    </div>
 
-                <h3 class="section-title">Family & Status</h3>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Marital Status <span>*</span></label>
-                    <select name="marital_status" id="maritalStatus" onchange="toggleAnniversary()" required>
-                      <option value="" disabled selected>Select Status</option>
-                      <option value="Single">Single</option>
-                      <option value="Married">Married</option>
-                      <option value="Divorced">Divorced</option>
-                      <option value="Widowed">Widowed</option>
-                    </select>
-                  </div>
-                  <div class="form-group" id="anniversaryGroup" style="display: none;">
-                    <label>Wedding Anniversary</label>
-                    <input type="date" name="wedding_anniversary">
-                  </div>
-                </div>
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label>Phone Number / WhatsApp <span>*</span></label>
+                        <input type="tel" name="phone" placeholder="+234 ..." value="<%= user && user.phone ? user.phone : '' %>" required>
+                      </div>
+                      <div class="form-group">
+                        <label>Marital Status <span>*</span></label>
+                        <div class="custom-select-wrapper">
+                          <input type="hidden" name="marital_status" value="<%= user && user.marital_status ? user.marital_status : '' %>" required onchange="toggleAnniversary()">
+                          <div class="custom-select-trigger"><%= user && user.marital_status ? user.marital_status : 'Select Status' %></div>
+                          <div class="custom-options">
+                            <div class="option" data-value="Single">Single</div>
+                            <div class="option" data-value="Married">Married</div>
+                            <div class="option" data-value="Divorced">Divorced</div>
+                            <div class="option" data-value="Widowed">Widowed</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-                <h3 class="section-title">Spiritual Journey</h3>
-                <div class="form-row">
-                  <div class="form-group span-full">
-                    <label class="checkbox-label">
-                      <input type="checkbox" name="is_baptized" id="isBaptized" onchange="toggleBaptismDate()">
-                      <span class="custom-check"></span>
-                      I have been baptized by immersion
-                    </label>
-                  </div>
-                  <div class="form-group span-full" id="baptismDateGroup" style="display: none;">
-                    <label>Baptism Date (Approximate is fine)</label>
-                    <input type="date" name="baptism_date">
-                  </div>
-                </div>
+                    <div id="anniversaryGroup" class="form-group" style="display: <%= user && user.marital_status === 'Married' ? 'block' : 'none' %>;">
+                      <label>Wedding Anniversary</label>
+                      <input type="date" name="wedding_anniversary" value="<%= user && user.wedding_anniversary ? user.wedding_anniversary : '' %>">
+                    </div>
 
-                <h3 class="section-title">Location</h3>
-                <div class="form-row">
-                  <div class="form-group span-full">
-                    <label>Home Address <span>*</span></label>
-                    <input type="text" name="addressLine1" placeholder="123 Example St" required>
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label>Home Address <span>*</span></label>
+                        <input type="text" name="addressLine1" placeholder="123 Example St" value="<%= user && user.address_line_1 ? user.address_line_1 : '' %>" required>
+                      </div>
+                      <div class="form-group">
+                        <label>City / Region <span>*</span></label>
+                        <input type="text" name="city" placeholder="Lagos, Nigeria" value="<%= user && user.city ? user.city : '' %>" required>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group span-full">
-                    <label>City / Region <span>*</span></label>
-                    <input type="text" name="city" placeholder="Lagos, Nigeria" required>
-                  </div>
-                </div>
 
-                <div class="form-actions">
-                  <button type="submit" class="submit-btn">Complete Setup</button>
-                  <p class="privacy-note">Your data is securely stored and exclusively used by Ambassadors Assembly pastoral logic.</p>
-                </div>
+                  <div class="form-actions">
+                    <button type="submit" class="submit-btn highlight">Continue to Step 2 
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                  </div>
+
+                <% } else if (step === 2) { %>
+                  <!-- STEP 2: SPIRITUAL & DEPARTMENTAL -->
+                  <div class="form-section">
+                    
+                    <!-- Baptism -->
+                    <div class="form-group card-group">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="is_baptized" id="isBaptized" onchange="toggleBaptismDate()" <%= user && user.is_baptized ? 'checked' : '' %>>
+                        <span class="custom-check"></span>
+                        <div class="label-info">
+                          <strong>I have been baptized by immersion</strong>
+                          <p>Water baptism following a decision to follow Christ.</p>
+                        </div>
+                      </label>
+                      <div id="baptismDateGroup" class="sub-group" style="display: <%= user && user.is_baptized ? 'block' : 'none' %>; margin-top: 15px;">
+                        <label>Approximate Baptism Date</label>
+                        <input type="date" name="baptism_date" value="<%= user && user.baptism_date ? user.baptism_date : '' %>">
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label>Salvation Date (Approx)</label>
+                        <input type="date" name="salvation_date" value="<%= user && user.salvation_date ? user.salvation_date : '' %>">
+                      </div>
+                      <div class="form-group">
+                        <label>Previous Church (If any)</label>
+                        <input type="text" name="previous_church" placeholder="Name of previous ministry" value="<%= user && user.previous_church ? user.previous_church : '' %>">
+                      </div>
+                    </div>
+
+                    <!-- Department Interest -->
+                    <div class="form-group">
+                      <label>Area of Interest / Department</label>
+                      <% 
+                        const userDept = user && user.church_workers && user.church_workers.length > 0 
+                          ? user.church_workers[0].church_departments.name 
+                          : (user && user.ministry_members && user.ministry_members.length > 0 ? user.ministry_members[0].ministries.name : null);
+                      %>
+                      
+                      <% if (userDept) { %>
+                        <div class="already-in-dept">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                          You are currently part of: <strong><%= userDept %></strong>
+                        </div>
+                      <% } %>
+
+                      <!-- CUSTOM TILE SELECTION -->
+                      <div class="custom-tile-grid">
+                        <input type="hidden" name="department_interest" id="deptInput" value="<%= user && user.department_interest ? user.department_interest : (userDept || '') %>">
+                        
+                        <% departments.forEach(dept => { %>
+                          <div class="dept-tile <%= (user && user.department_interest === dept.name) || userDept === dept.name ? 'selected' : '' %>" 
+                               onclick="selectDept('<%= dept.name %>')"
+                               data-dept="<%= dept.name %>">
+                            <div class="tile-icon">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                            </div>
+                            <div class="tile-info">
+                              <strong><%= dept.name %></strong>
+                              <p><%= dept.description || 'Serve in this operational unit.' %></p>
+                            </div>
+                            <div class="selection-indicator">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                          </div>
+                        <% }) %>
+                      </div>
+                      <p class="field-hint">Select a department where you feel led to serve. You can change this later.</p>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Occupation / Professional Background</label>
+                      <input type="text" name="occupation" placeholder="e.g. Software Engineer, Doctor, Student" value="<%= user && user.occupation ? user.occupation : '' %>">
+                    </div>
+                  </div>
+
+                  <div class="form-actions dual">
+                    <a href="/onboarding?step=1" class="back-btn">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                      Back to Step 1
+                    </a>
+                    <button type="submit" class="submit-btn highlight">Complete My Profile 
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </button>
+                  </div>
+                <% } %>
 
               </form>
             </div>
@@ -120,103 +215,200 @@
   <style>
     :root {
       --accent: #3b82f6;
-      --glass: rgba(255, 255, 255, 0.03);
+      --glass: rgba(255, 255, 255, 0.04);
       --glass-border: rgba(255, 255, 255, 0.08);
       --input-bg: rgba(255, 255, 255, 0.05);
     }
 
-    .onboarding-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 60px 20px; position: relative; }
+    .onboarding-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 20px; position: relative; }
 
     /* Ambient BG */
     .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.15; filter: contrast(1.1) grayscale(0.2); }
-    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, rgba(14,14,14,0.6) 0%, rgba(14,14,14,0.95) 100%); }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.1; filter: contrast(1.1); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at center, rgba(14,14,14,0.4) 0%, rgba(5,5,5,1) 80%); }
 
     /* Container */
-    .onboard-container { width: 100%; max-width: 700px; margin: 0 auto; }
+    .onboard-container { width: 100%; max-width: 800px; margin: 0 auto; }
     
-    .glass-fx { background: var(--glass); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid var(--glass-border); border-radius: 32px; padding: 50px; }
+    .glass-fx { background: var(--glass); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid var(--glass-border); border-radius: 40px; padding: 60px; box-shadow: 0 40px 100px rgba(0,0,0,0.5); }
+
+    /* Progress Tracker */
+    .progress-tracker { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 60px; }
+    .step-indicator { display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: 0.3; transition: 0.4s; }
+    .step-indicator.active { opacity: 1; }
+    .step-num { width: 36px; height: 36px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+    .step-indicator.active .step-num { background: white; color: black; }
+    .step-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
+    .step-line { width: 100px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .step-line.active { background: white; }
 
     /* Header */
-    .onboard-header { text-align: center; margin-bottom: 40px; }
-    .ob-logo { height: 40px; margin-bottom: 20px; }
-    .onboard-header h2 { font-family: 'Manrope', sans-serif; font-size: 2.5rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 12px; }
-    .onboard-header p { font-size: 1.05rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .onboard-header { text-align: center; margin-bottom: 50px; }
+    .onboard-header h2 { font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 12px; line-height: 1.1; }
+    .onboard-header p { font-size: 1.1rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 500px; margin: 0 auto; }
 
-    .ob-error { margin-top: 20px; padding: 15px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; color: #ef4444; font-size: 0.9rem; font-weight: 700; }
+    .ob-error { margin-top: 30px; padding: 18px 25px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 16px; color: #ef4444; font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
 
     /* Form */
-    .section-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin: 40px 0 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; }
-    .section-title:first-of-type { margin-top: 0; }
+    .form-section { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .form-group.span-full { grid-column: 1 / -1; }
-
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+    .form-group { margin-bottom: 30px; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 10px; }
     .form-group label span { color: #ef4444; }
 
-    .form-group input[type="text"],
-    .form-group input[type="tel"],
-    .form-group input[type="date"],
-    .form-group select {
-      width: 100%; background: var(--input-bg); border: 1px solid rgb(50, 50, 50); border-radius: 12px;
-      padding: 16px 20px; color: white; font-size: 1rem; font-family: 'Manrope', sans-serif;
+    .form-group input {
+      width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;
+      padding: 18px 22px; color: white; font-size: 1rem; font-family: inherit;
       outline: none; transition: 0.3s;
     }
-    .form-group input:focus, .form-group select:focus { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); }
-    .form-group select option { background: #1a1a1a; color: white; }
+    .form-group input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
+
+    /* Custom Select */
+    .custom-select-wrapper { position: relative; width: 100%; }
+    .custom-select-trigger {
+      width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;
+      padding: 18px 22px; color: white; cursor: pointer; transition: 0.3s;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .custom-select-trigger:after { content: ""; border: solid rgba(255,255,255,0.4); border-width: 0 2px 2px 0; display: inline-block; padding: 3px; transform: rotate(45deg); transition: 0.3s; }
+    .custom-select-wrapper.open .custom-select-trigger:after { transform: rotate(-135deg); }
+    .custom-options {
+      position: absolute; top: 120%; left: 0; right: 0; background: #1a1a1a; border: 1px solid var(--glass-border);
+      border-radius: 12px; z-index: 100; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden;
+    }
+    .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; transform: translateY(0); }
+    .custom-options .option { padding: 15px 20px; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: 600; }
+    .custom-options .option:hover { background: var(--accent); color: white; }
+
+    /* Custom Tile Grid */
+    .custom-tile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 15px; }
+    .dept-tile {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 18px;
+      padding: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative; display: flex; gap: 15px; border-left: 4px solid transparent;
+    }
+    .dept-tile:hover { background: rgba(255,255,255,0.06); transform: translateX(5px); }
+    .dept-tile.selected { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); border-left-color: var(--accent); }
+    
+    .tile-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
+    .tile-info strong { display: block; font-size: 15px; margin-bottom: 4px; }
+    .tile-info p { font-size: 11px; opacity: 0.4; margin: 0; line-height: 1.4; }
+    
+    .selection-indicator { position: absolute; top: 15px; right: 15px; opacity: 0; transform: scale(0.5); transition: 0.3s; color: var(--accent); }
+    .dept-tile.selected .selection-indicator { opacity: 1; transform: scale(1); }
+
+    .field-hint { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px; }
+
+    /* Card Group Items */
+    .card-group { background: rgba(255,255,255,0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); }
+    .already-in-dept { display: flex; align-items: center; gap: 10px; padding: 12px 18px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; color: #93c5fd; font-size: 13px; margin-bottom: 15px; }
 
     /* Checkbox Custom */
-    .checkbox-label { display: flex; align-items: center; gap: 15px; cursor: pointer; user-select: none; font-size: 1.05rem !important; }
-    .checkbox-label input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
-    .custom-check { height: 24px; width: 24px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .checkbox-label { display: flex; align-items: flex-start; gap: 18px; cursor: pointer; user-select: none; }
+    .checkbox-label input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .custom-check { flex-shrink: 0; height: 26px; width: 26px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.3s; margin-top: 2px; }
     .checkbox-label:hover input ~ .custom-check { background: rgba(255,255,255,0.2); }
     .checkbox-label input:checked ~ .custom-check { background: var(--accent); border-color: var(--accent); }
-    .custom-check:after { content: ""; display: none; width: 6px; height: 12px; border: solid #0a0a0a; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 2px; }
+    .custom-check:after { content: ""; display: none; width: 6px; height: 12px; border: solid white; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); margin-bottom: 3px; }
     .checkbox-label input:checked ~ .custom-check:after { display: block; }
 
+    .label-info strong { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .label-info p { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin: 0; }
+
     /* Actions */
-    .form-actions { margin-top: 50px; text-align: center; border-top: 1px solid var(--glass-border); padding-top: 40px; }
+    .form-actions { margin-top: 20px; }
+    .form-actions.dual { display: flex; gap: 20px; align-items: center; }
+    
     .submit-btn {
-      width: 100%; padding: 20px; background: white; color: black; border-radius: 100px;
-      border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
-      box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+      width: 100%; padding: 22px; background: rgba(255,255,255,0.05); color: white; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.1); font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
     }
-    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,255,255,0.2); }
-    .privacy-note { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 20px; }
+    .submit-btn.highlight { background: white; color: black; border: none; box-shadow: 0 10px 40px rgba(255,255,255,0.15); }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .submit-btn.highlight:hover { background: #f0f0f0; box-shadow: 0 20px 50px rgba(255,255,255,0.25); }
+    
+    .back-btn { text-decoration: none; color: rgba(255,255,255,0.5); font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; white-space: nowrap; padding: 0 20px; transition: 0.3s; }
+    .back-btn:hover { color: white; }
 
     @media (max-width: 600px) {
-      .form-row { grid-template-columns: 1fr; }
-      .glass-fx { padding: 30px 20px; }
-      .onboard-header h2 { font-size: 2rem; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .glass-fx { padding: 40px 20px; border-radius: 0; }
+      .onboarding-page { padding: 0; }
+      .onboard-header h2 { font-size: 2.2rem; }
+      .progress-tracker { gap: 10px; margin-bottom: 40px; }
+      .step-line { width: 50px; }
+      .form-actions.dual { flex-direction: column-reverse; }
     }
   </style>
 
   <script>
     function toggleAnniversary() {
-      const status = document.getElementById('maritalStatus').value;
+      const input = document.querySelector('input[name="marital_status"]');
+      const status = input ? input.value : '';
       const group = document.getElementById('anniversaryGroup');
-      if (status === 'Married') {
-        group.style.display = 'block';
-      } else {
-        group.style.display = 'none';
-        group.querySelector('input').value = '';
-      }
+      if (!group) return;
+      group.style.display = status === 'Married' ? 'block' : 'none';
     }
+
+    function selectDept(deptName) {
+      document.getElementById('deptInput').value = deptName;
+      document.querySelectorAll('.dept-tile').forEach(t => t.classList.remove('selected'));
+      const active = document.querySelector(`.dept-tile[data-dept="${deptName}"]`);
+      if (active) active.classList.add('selected');
+    }
+
+    // Custom Select Interaction Logic
+    document.querySelectorAll('.custom-select-trigger').forEach(trigger => {
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const wrapper = this.parentElement;
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+          if (w !== wrapper) w.classList.remove('open');
+        });
+        wrapper.classList.toggle('open');
+      });
+    });
+
+    document.querySelectorAll('.custom-options .option').forEach(option => {
+      option.addEventListener('click', function() {
+        const val = this.dataset.value;
+        const wrapper = this.closest('.custom-select-wrapper');
+        const trigger = wrapper.querySelector('.custom-select-trigger');
+        const input = wrapper.querySelector('input');
+        
+        trigger.innerText = val;
+        input.value = val;
+        wrapper.classList.remove('open');
+        
+        // Trigger onchange manually for marital status toggle
+        if (input.name === 'marital_status') {
+           toggleAnniversary();
+        }
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+    });
 
     function toggleBaptismDate() {
       const isBaptized = document.getElementById('isBaptized').checked;
       const group = document.getElementById('baptismDateGroup');
-      if (isBaptized) {
-        group.style.display = 'block';
-      } else {
-        group.style.display = 'none';
-        group.querySelector('input').value = '';
-      }
+      if (!group) return;
+      group.style.display = isBaptized ? 'block' : 'none';
     }
 
+    // Auto-refresh layout on load as backup
     window.addEventListener('load', () => {
-      gsap.from('.gsap-up', { y: 40, opacity: 0, duration: 1, ease: 'power3.out' });
+      toggleAnniversary();
+      toggleBaptismDate();
+      if (typeof gsap !== 'undefined') {
+        gsap.from('.gsap-up', { y: 30, opacity: 0, duration: 1, ease: 'expo.out' });
+      }
     });
   </script>
 </body>

@@ -55,5 +55,10 @@ export const authService = {
       
     if (error) throw new AppError('Profile not found', 404);
     return data;
+  },
+
+  logout: async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw new AppError(error.message, 500);
   }
 };

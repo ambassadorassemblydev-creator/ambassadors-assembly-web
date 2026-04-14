@@ -10,7 +10,12 @@ const {
   generateCsrfToken: generateToken,
 } = doubleCsrf({
   getSecret: () => csrfSecret,
-  getSessionIdentifier: (req) => (req.cookies && req.cookies.jwt) ? req.cookies.jwt : "anonymous",
+  getSessionIdentifier: (req) => {
+    // High IQ: Prefer user ID for stability across session refreshes
+    if (req.user && req.user.id) return req.user.id;
+    if (req.cookies && req.cookies.jwt) return req.cookies.jwt;
+    return "anonymous";
+  },
   cookieName: process.env.NODE_ENV === "production" ? "__Host-aa.x-csrf-token" : "aa.x-csrf-token",
   cookieOptions: {
     httpOnly: true,

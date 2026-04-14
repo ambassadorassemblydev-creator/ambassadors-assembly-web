@@ -81,11 +81,10 @@ export const authMiddleware = {
       const userId = req.user?.id;
       if (!userId) return res.redirect('/sign-in');
 
-      // Check if profile is complete (e.g. they have at least updated is_baptized or filled marital_status or address)
-      // Since first_name and last_name are usually set on signup, we check for something explicitly asked in onboarding.
+      // Check if profile is complete via the is_onboarded flag
       const { data: profile, error } = await supabase
         .from('profiles')
-        .select('is_baptized, marital_status')
+        .select('is_onboarded')
         .eq('id', userId)
         .single();
         
@@ -93,10 +92,10 @@ export const authMiddleware = {
         return res.redirect('/onboarding');
       }
 
-      // If marital_status is null, we assume they haven't onboarded yet.
-      if (!profile.marital_status) {
+      // If is_onboarded is false, we assume they haven't finished the process.
+      if (!profile.is_onboarded) {
         // Only redirect if they are not already on the onboarding page
-        if (req.originalUrl !== '/onboarding' && req.originalUrl !== '/api/onboarding') {
+        if (req.originalUrl !== '/onboarding' && !req.originalUrl.startsWith('/onboarding') && req.originalUrl !== '/api/onboarding') {
           return res.redirect('/onboarding');
         }
       }

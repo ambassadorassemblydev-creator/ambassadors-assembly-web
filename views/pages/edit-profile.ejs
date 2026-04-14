@@ -1,0 +1,197 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <style>
+          .edit-profile-container {
+            padding: 160px 4% 100px;
+            min-height: 100vh;
+            max-width: 1000px;
+            margin: 0 auto;
+            color: white;
+            font-family: 'Articulat_CF_Normal', sans-serif;
+            position: relative;
+            z-index: 1;
+          }
+          .glass-form-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 32px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: formAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+          .form-header { margin-bottom: 40px; }
+          .form-header h1 {
+            font-family: 'Articulat CF Demi Bold';
+            font-size: 32px;
+            margin: 0 0 10px;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          .form-header p { color: rgba(255,255,255,0.5); font-size: 16px; }
+
+          .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+          }
+          .form-group { margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px; }
+          .form-group.full { grid-column: 1 / -1; }
+          
+          label { font-size: 14px; font-weight: 600; color: #3B6FB5; text-transform: uppercase; letter-spacing: 1px; }
+          input, select, textarea {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 16px 20px;
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+          }
+          input:focus, select:focus, textarea:focus {
+            background: rgba(59, 111, 181, 0.05);
+            border-color: #3B6FB5;
+            box-shadow: 0 0 0 4px rgba(59, 111, 181, 0.1);
+          }
+          
+          .submit-btn {
+            background: #3B6FB5;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+          }
+          .submit-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(59, 111, 181, 0.3);
+          }
+
+          .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-size: 15px;
+          }
+          .alert-error { background: rgba(255, 71, 87, 0.1); border: 1px solid rgba(255, 71, 87, 0.2); color: #ff4757; }
+          .alert-success { background: rgba(46, 213, 115, 0.1); border: 1px solid rgba(46, 213, 115, 0.2); color: #2ed573; }
+
+          @keyframes formAppear {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .glass-form-card { padding: 30px 20px; }
+          }
+        </style>
+
+        <main class="edit-profile-container">
+          <div class="glass-form-card">
+            <header class="form-header">
+              <h1>Edit Profile</h1>
+              <p>Update your personal information and spiritual details.</p>
+            </header>
+
+            <% if (error) { %>
+              <div class="alert alert-error"><%= error %></div>
+            <% } %>
+            <% if (success) { %>
+              <div class="alert alert-success"><%= success %></div>
+            <% } %>
+
+            <form action="/my-account/profile" method="POST">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              
+              <div class="profile-grid">
+                <!-- Personal Info -->
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" name="firstName" value="<%= user.first_name %>" required>
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" name="lastName" value="<%= user.last_name %>" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <input type="tel" name="phone" value="<%= user.phone %>">
+                </div>
+                <div class="form-group">
+                  <label>Marital Status</label>
+                  <select name="marital_status">
+                    <option value="single" <%= user.marital_status === 'single' ? 'selected' : '' %>>Single</option>
+                    <option value="married" <%= user.marital_status === 'married' ? 'selected' : '' %>>Married</option>
+                    <option value="divorced" <%= user.marital_status === 'divorced' ? 'selected' : '' %>>Divorced</option>
+                    <option value="widowed" <%= user.marital_status === 'widowed' ? 'selected' : '' %>>Widowed</option>
+                  </select>
+                </div>
+
+                <div class="form-group full">
+                  <label>Home Address</label>
+                  <input type="text" name="addressLine1" value="<%= user.address_line_1 %>">
+                </div>
+
+                <div class="form-group full">
+                  <label>Short Bio</label>
+                  <textarea name="bio" rows="4"><%= user.bio %></textarea>
+                </div>
+
+                <!-- Spiritual / Church Details -->
+                <div class="form-group">
+                  <label>Occupation</label>
+                  <input type="text" name="occupation" value="<%= user.occupation %>">
+                </div>
+                <div class="form-group">
+                  <label>Preferred Department</label>
+                  <input type="text" name="department_interest" value="<%= user.department_interest %>" placeholder="e.g. Media, Choir...">
+                </div>
+              </div>
+
+              <button type="submit" class="submit-btn">
+                Save Changes
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              </button>
+              
+              <a href="/my-account" style="margin-left: 20px; color: rgba(255,255,255,0.4); text-decoration: none; font-size: 14px;">Cancel</a>
+            </form>
+          </div>
+        </main>
+
+        <%- include('../partials/footer') %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

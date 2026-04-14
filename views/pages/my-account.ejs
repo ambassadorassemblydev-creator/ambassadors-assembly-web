@@ -1,6 +1,6 @@
 <%- include('../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #0c0c0c;">
   
   <%- include('../partials/preloader') %>
   
@@ -15,324 +15,342 @@
 
         <%- include('../partials/navbar') %>
 
-        <!-- DASHBOARD MAIN -->
         <style>
-          html, body {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-            width: 100%;
+          :root {
+            --sidebar-width: 280px;
+            --accent-blue: #3B6FB5;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.06);
           }
-          .account-main {
-            padding: 160px 4% 100px;
+
+          .dashboard-wrapper {
+            display: flex;
             min-height: 100vh;
-            max-width: 1400px;
-            margin: 0 auto;
-            color: white;
-            font-family: 'Articulat_CF_Normal', sans-serif;
-            position: relative;
-            z-index: 1;
-            overflow: hidden; /* Contains the glows */
+            padding-top: 80px; /* Offset for navbar */
+            background: radial-gradient(circle at 0% 0%, rgba(59, 111, 181, 0.05) 0%, transparent 50%);
           }
-          /* Background Animated Glows */
-          .account-bg-glow {
-            position: absolute;
-            top: -10%;
-            left: -10%;
-            width: 50vw;
-            height: 50vw;
-            background: radial-gradient(circle, rgba(59, 111, 181, 0.15) 0%, transparent 60%);
-            z-index: -1;
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: pulseGlow 10s infinite alternate;
-          }
-          .account-bg-glow:nth-child(2) {
-            top: auto;
-            bottom: -10%;
-            left: auto;
-            right: -10%;
-            background: radial-gradient(circle, rgba(234, 246, 255, 0.05) 0%, transparent 60%);
-            animation-delay: -5s;
-          }
-          
-          .account-header {
-            margin-bottom: 60px;
-            animation: accFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
+
+          /* SIDEBAR */
+          .dash-sidebar {
+            width: var(--sidebar-width);
+            height: calc(100vh - 80px);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            padding: 40px 20px;
+            border-right: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
-          }
-          .account-header .pre-title {
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 13px;
-            color: #3B6FB5;
-            font-weight: 700;
-          }
-          .account-header h1 {
-            font-family: 'Articulat CF Demi Bold';
-            font-size: clamp(36px, 6vw, 64px);
-            margin: 10px 0;
-            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          }
-          .account-header p {
-            color: rgba(255,255,255,0.6);
-            max-width: 600px;
-            line-height: 1.6;
-            font-size: 18px;
-            margin: 0;
-          }
-          
-          .account-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
-            gap: 30px;
-            width: 100%;
-          }
-          
-          .glass-card-acc {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 40px;
-            border-radius: 24px;
+            background: rgba(12, 12, 12, 0.6);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            animation: accFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            z-index: 100;
+          }
+
+          .sidebar-profile {
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+          }
+          .sidebar-profile .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--accent-blue), #1e293b);
             display: flex;
-            flex-direction: column;
-          }
-          .glass-card-acc:nth-child(1) { animation-delay: 0.1s; }
-          .glass-card-acc:nth-child(2) { animation-delay: 0.2s; }
-          .glass-card-acc:nth-child(3) { animation-delay: 0.3s; }
-        
-          .glass-card-acc:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border-color: rgba(59, 111, 181, 0.3);
-          }
-          .glass-card-acc::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 50% -20%, rgba(59, 111, 181, 0.15), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
-          }
-          .glass-card-acc:hover::before {
-            opacity: 1;
-          }
-        
-          .acc-card-title {
-            margin-top: 0;
-            margin-bottom: 25px;
-            font-family: 'Articulat CF Demi Bold';
+            align-items: center;
+            justify-content: center;
             font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+          }
+          .sidebar-profile h3 { font-size: 18px; margin: 0; font-family: 'Articulat CF Demi Bold'; }
+          .sidebar-profile p { font-size: 12px; color: rgba(255,255,255,0.4); margin: 5px 0 0; }
+
+          .nav-links { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+          .nav-item { margin-bottom: 8px; }
+          .nav-link {
             display: flex;
             align-items: center;
             gap: 15px;
-          }
-          .acc-icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: rgba(59, 111, 181, 0.1);
-            border: 1px solid rgba(59, 111, 181, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #3B6FB5;
-          }
-          
-          .acc-details {
-            flex-grow: 1;
-          }
-          .acc-details p, .acc-list-item {
-            margin: 0;
-            font-size: 16px;
-            color: rgba(255,255,255,0.7);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 15px 0;
-            gap: 10px;
-            word-break: break-word;
-            overflow-wrap: break-word;
-          }
-          .acc-details p:last-child, .acc-list-item:last-child {
-            border-bottom: none;
-          }
-          .acc-details p strong, .acc-list-item strong {
-            color: white;
-            font-weight: 500;
-          }
-          .acc-badge {
-            background: rgba(59, 111, 181, 0.15);
-            color: #3B6FB5;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            border: 1px solid rgba(59, 111, 181, 0.3);
-          }
-        
-          .acc-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 25px;
-            padding: 12px 28px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            color: rgba(255,255,255,0.5);
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
-            border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            background: rgba(255,255,255,0.03);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            align-self: flex-start;
+            transition: all 0.3s ease;
           }
-          .acc-btn svg {
-            width: 16px;
-            height: 16px;
-            margin-left: 8px;
-            transition: transform 0.3s ease;
+          .nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+          .nav-link.active {
+            background: rgba(59, 111, 181, 0.1);
+            color: var(--accent-blue);
+            border-right: 3px solid var(--accent-blue);
           }
-          .acc-btn:hover {
-            background: #3B6FB5;
-            border-color: #3B6FB5;
-            transform: scale(1.05);
+          .nav-link svg { width: 20px; height: 20px; }
+
+          .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--glass-border); }
+          .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 20px;
+            color: #ef4444;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.3s;
           }
-          .acc-btn:hover svg {
-            transform: translateX(4px);
+
+          /* MAIN CONTENT AREA */
+          .dash-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 60px 5%;
+            width: calc(100% - var(--sidebar-width));
           }
-        
-          @keyframes accFadeUp {
-            0% { opacity: 0; transform: translateY(30px); filter: blur(4px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+          .content-header { margin-bottom: 50px; }
+          .content-header h1 { font-family: 'Articulat CF Demi Bold'; font-size: 42px; margin: 0 0 10px; }
+          .content-header p { color: rgba(255,255,255,0.4); font-size: 18px; }
+
+          .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            animation: dashFadeUp 0.8s ease backwards;
           }
-          @keyframes pulseGlow {
-            0% { opacity: 0.5; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.1); }
+
+          /* TABS STYLING */
+          .tab-content { display: none; }
+          .tab-content.active { display: block; }
+
+          .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 40px; }
+          .stat-card { padding: 30px; border-radius: 20px; background: rgba(255,255,255,0.02); display: flex; align-items: flex-start; gap: 20px; border: 1px solid var(--glass-border); }
+          .stat-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(59, 111, 181, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-blue); }
+          .stat-val { font-size: 24px; font-weight: 800; display: block; }
+          .stat-label { font-size: 12px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+
+          /* ACTIVITY TABLES */
+          .activity-list { width: 100%; border-collapse: collapse; }
+          .activity-list th { text-align: left; padding: 15px 20px; font-size: 12px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--glass-border); }
+          .activity-list td { padding: 20px; border-bottom: 1px solid var(--glass-border); font-size: 14px; }
+          .activity-list tr:last-child td { border-bottom: none; }
+          
+          .status-badge { padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+          .status-paid, .status-active { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+          .status-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+
+          @keyframes dashFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+          /* RESPONSIVE */
+          @media (max-width: 1024px) {
+            .dash-sidebar { width: 80px; padding: 40px 10px; }
+            .sidebar-profile, .nav-link span, .sidebar-footer span { display: none; }
+            .dash-content { margin-left: 80px; width: calc(100% - 80px); }
+            .nav-link { justify-content: center; padding: 14px 0; }
           }
 
           @media (max-width: 768px) {
-            .account-grid { grid-template-columns: 1fr; }
-            .account-header h1 { font-size: 40px; }
-            .glass-card-acc { padding: 30px 20px; }
+            .dashboard-wrapper { flex-direction: column; }
+            .dash-sidebar {
+              position: fixed; bottom: 0; left: 0; top: auto; width: 100%; height: 70px;
+              flex-direction: row; padding: 0; border-right: none; border-top: 1px solid var(--glass-border);
+              justify-content: space-around; align-items: center;
+            }
+            .nav-links { display: flex; width: 100%; justify-content: space-around; }
+            .nav-item { margin: 0; }
+            .sidebar-footer { display: none; }
+            .dash-content { margin: 0; width: 100%; padding: 40px 20px 100px; }
           }
         </style>
 
-        <main class="account-main">
-          <div class="account-bg-glow"></div>
-          <div class="account-bg-glow"></div>
-          
-          <!-- Welcome Header -->
-          <header class="account-header">
-            <span class="pre-title">Member Portal</span>
-            <h1>Welcome, <%= user.first_name %>.</h1>
-            <p>Manage your ministry involvement, track your giving, and stay connected with your Ambassadors Assembly family.</p>
-          </header>
+        <div class="dashboard-wrapper">
+          <!-- SIDEBAR -->
+          <aside class="dash-sidebar">
+            <div class="sidebar-profile">
+              <div class="avatar"><%= user.first_name[0] %></div>
+              <h3><%= user.first_name %> <%= user.last_name %></h3>
+              <p><%= user.member_id || 'Member' %></p>
+            </div>
 
-          <!-- The Hub Grid -->
-          <div class="account-grid">
+            <ul class="nav-links">
+              <li class="nav-item">
+                <a href="/my-account?tab=overview" class="nav-link <%= activeTab === 'overview' ? 'active' : '' %>">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                  <span>Overview</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/my-account/profile" class="nav-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  <span>Edit Profile</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/my-account?tab=events" class="nav-link <%= activeTab === 'events' ? 'active' : '' %>">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  <span>My Events</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/my-account?tab=giving" class="nav-link <%= activeTab === 'giving' ? 'active' : '' %>">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  <span>My Giving</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/my-account?tab=prayers" class="nav-link <%= activeTab === 'prayers' ? 'active' : '' %>">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  <span>My Prayers</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/departments" class="nav-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                  <span>Departments</span>
+                </a>
+              </li>
+            </ul>
+
+            <div class="sidebar-footer">
+              <a href="/logout" class="logout-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Log Out</span>
+              </a>
+            </div>
+          </aside>
+
+          <!-- CONTENT -->
+          <main class="dash-content">
             
-            <!-- CARD: Profile Summary -->
-            <div class="glass-card-acc">
-              <h3 class="acc-card-title">
-                <div class="acc-icon-box">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </div>
-                Personal Details
-              </h3>
-              <div class="acc-details">
-                <p><span>Name</span> <strong><%= user.first_name %> <%= user.last_name %></strong></p>
-                <p><span>Email</span> <strong><%= user.email %></strong></p>
-                <p><span>Member ID</span> <span class="acc-badge"><%= user.member_id || 'Pending' %></span></p>
+            <% if (activeTab === 'overview') { %>
+              <div class="content-header">
+                <h1>The Hub</h1>
+                <p>Hello, <%= user.first_name %>. Here is what's happening in your journey.</p>
               </div>
-              <a href="/my-account/profile" class="acc-btn">
-                Edit Profile
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-              </a>
-            </div>
 
-            <!-- CARD: Recent Giving -->
-            <div class="glass-card-acc">
-              <h3 class="acc-card-title">
-                <div class="acc-icon-box">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <div class="grid-stats">
+                <div class="stat-card">
+                  <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                  <div>
+                    <span class="stat-val">Up Next</span>
+                    <span class="stat-label">Youth Conference 2026</span>
+                  </div>
                 </div>
-                Recent Giving
-              </h3>
-              <div class="acc-details">
-                <% if (donations && donations.length > 0) { %>
-                  <% donations.forEach(d => { %>
-                    <div class="acc-list-item">
-                      <span><%= d.donation_categories.name %></span>
-                      <strong>£<%= d.amount %></strong>
-                    </div>
-                  <% }) %>
-                <% } else { %>
-                  <p style="border: none; margin-top: 10px; opacity: 0.5;">No recent donations found.</p>
-                <% } %>
-              </div>
-              <a href="/give" class="acc-btn">
-                Give Again
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-              </a>
-            </div>
-
-            <!-- CARD: My Ministries -->
-            <div class="glass-card-acc">
-              <h3 class="acc-card-title">
-                <div class="acc-icon-box">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <div class="stat-card">
+                  <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+                  <div>
+                    <span class="stat-val"><%= user.department_interest || 'None' %></span>
+                    <span class="stat-label">Interest Area</span>
+                  </div>
                 </div>
-                My Ministries
-              </h3>
-              <div class="acc-details">
-                <% if (user.ministry_members && user.ministry_members.length > 0) { %>
-                  <% user.ministry_members.forEach(m => { %>
-                    <div class="acc-list-item">
-                      <span style="display: flex; align-items: center; gap: 10px;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#3B6FB5" stroke="#3B6FB5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        <%= m.ministries.name %>
-                      </span>
-                    </div>
-                  <% }) %>
-                <% } else { %>
-                  <p style="border: none; margin-top: 10px; opacity: 0.5;">You haven't joined a ministry yet.</p>
-                <% } %>
               </div>
-              <a href="/ministries" class="acc-btn">
-                Join a Ministry
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-              </a>
-            </div>
 
-          </div>
-        </main>
+              <div class="glass-card">
+                <h3 style="margin-top:0; margin-bottom:30px; font-family:'Articulat CF Demi Bold';">Recent Giving</h3>
+                <table class="activity-list">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (donations && donations.length > 0) { %>
+                      <% donations.forEach(d => { %>
+                        <tr>
+                          <td><strong><%= d.donation_categories.name %></strong></td>
+                          <td>£<%= d.amount %></td>
+                          <td><span class="status-badge status-paid"><%= d.status %></span></td>
+                          <td><%= new Date(d.created_at).toLocaleDateString() %></td>
+                        </tr>
+                      <% }) %>
+                    <% } else { %>
+                      <tr><td colspan="4" style="text-align:center; opacity:0.4; padding: 40px;">No giving records yet.</td></tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+
+            <% if (activeTab === 'events') { %>
+              <div class="content-header">
+                <h1>My Events</h1>
+                <p>Events you've registered for or marked interest in.</p>
+              </div>
+              <div class="glass-card">
+                <table class="activity-list">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (events && events.length > 0) { %>
+                      <% events.forEach(reg => { %>
+                        <tr>
+                          <td><strong><%= reg.events.title %></strong></td>
+                          <td><%= new Date(reg.events.start_date).toLocaleDateString() %></td>
+                          <td><span class="status-badge status-active">Registered</span></td>
+                        </tr>
+                      <% }) %>
+                    <% } else { %>
+                      <tr><td colspan="3" style="text-align:center; opacity:0.4; padding: 40px;">No event registrations yet.</td></tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+
+            <% if (activeTab === 'prayers') { %>
+              <div class="content-header">
+                <h1>My Prayers</h1>
+                <p>Keep track of your prayer requests and testimonies.</p>
+              </div>
+              <div class="glass-card">
+                 <table class="activity-list">
+                  <thead>
+                    <tr>
+                      <th>Request</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (prayers && prayers.length > 0) { %>
+                      <% prayers.forEach(p => { %>
+                        <tr>
+                          <td><strong><%= p.title %></strong></td>
+                          <td><span class="status-badge status-pending"><%= p.status %></span></td>
+                          <td><%= new Date(p.created_at).toLocaleDateString() %></td>
+                        </tr>
+                      <% }) %>
+                    <% } else { %>
+                      <tr><td colspan="3" style="text-align:center; opacity:0.4; padding: 40px;">No prayer requests yet.</td></tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+
+          </main>
+        </div>
+
         <%- include('../partials/footer') %>
-                </div> <!-- 8. Closing site_content -->
-              </div> <!-- 7. Closing dmLayoutWrapper -->
-            </div> <!-- 6. Closing dmStyle_innerContainer -->
-          </div> <!-- 5. Closing dmStyle_outerContainer -->
-        </div> <!-- 4. Closing runtime-module-container -->
-      </div> <!-- 3. Closing dm-home-page -->
-    </div> <!-- 2. Closing dm_wrapper -->
-  </div> <!-- 1. Closing dmwr -->
-
-  <!-- FOOTER MUST GO OUTSIDE THE DOM WRAPPER OR DUDA CSS WILL BREAK -->
-  </html>
+                </div> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
