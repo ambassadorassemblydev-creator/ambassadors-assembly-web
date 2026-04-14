@@ -11,7 +11,7 @@ const router = express.Router();
 router.use(authMiddleware.protect); 
 
 // Profile Endpoints
-router.post('/update-profile', accountController.updateProfile);
+router.post('/update-profile', accountController.handleUpdateProfile);
 
 // Future API endpoints (Live chat, Event registration, etc.)
 // router.post('/events/register', eventController.register);
