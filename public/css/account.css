@@ -1,0 +1,143 @@
+:root {
+  --sidebar-width: 280px;
+  --accent-blue: #3B6FB5;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.06);
+}
+
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 80px; /* Offset for navbar */
+  background: radial-gradient(circle at 0% 0%, rgba(59, 111, 181, 0.05) 0%, transparent 50%);
+}
+
+/* SIDEBAR */
+.dash-sidebar {
+  width: var(--sidebar-width);
+  height: calc(100vh - 80px);
+  position: fixed;
+  left: 0;
+  top: 80px;
+  padding: 40px 20px;
+  border-right: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  background: rgba(12, 12, 12, 0.6);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-profile {
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 30px;
+}
+.sidebar-profile .avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--accent-blue), #1e293b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+.sidebar-profile h3 { font-size: 18px; margin: 0; font-family: 'Articulat CF Demi Bold'; }
+.sidebar-profile p { font-size: 12px; color: rgba(255,255,255,0.4); margin: 5px 0 0; }
+
+.nav-links { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+.nav-item { margin-bottom: 8px; }
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.nav-link:hover { background: rgba(255,255,255,0.05); color: white; }
+.nav-link.active {
+  background: rgba(59, 111, 181, 0.1);
+  color: var(--accent-blue);
+  border-right: 3px solid var(--accent-blue);
+}
+.nav-link svg { width: 20px; height: 20px; }
+
+.sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--glass-border); }
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 20px;
+  color: #ef4444;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+/* MAIN CONTENT AREA */
+.dash-content {
+  margin-left: var(--sidebar-width);
+  flex-grow: 1;
+  padding: 60px 4%;
+  width: calc(100% - var(--sidebar-width));
+}
+
+.content-header { margin-bottom: 50px; }
+.content-header h1 { font-family: 'Articulat CF Demi Bold'; font-size: 42px; margin: 0 0 10px; }
+.content-header p { color: rgba(255,255,255,0.4); font-size: 18px; }
+
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 40px;
+  backdrop-filter: blur(20px);
+  animation: dashFadeUp 0.8s ease backwards;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  :root { --sidebar-width: 80px; }
+  .nav-link { justify-content: center; padding: 15px; }
+  .nav-link span, .sidebar-profile span, .sidebar-profile p, .sidebar-profile h3, .logout-btn span { display: none; }
+  .sidebar-profile { display: flex; justify-content: center; }
+  .logout-btn { justify-content: center; }
+}
+
+@media (max-width: 768px) {
+  .dashboard-wrapper { flex-direction: column; padding-top: 60px; padding-bottom: 80px; }
+  .dash-sidebar {
+    width: 100%;
+    height: 70px;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    border-right: none;
+    border-top: 1px solid var(--glass-border);
+    flex-direction: row;
+    padding: 0 10px;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .sidebar-profile, .sidebar-footer { display: none; }
+  .nav-links { display: flex; width: 100%; justify-content: space-around; }
+  .nav-item { margin: 0; }
+  .nav-link { padding: 10px; border-right: none !important; }
+  .dash-content { margin-left: 0; width: 100%; padding: 40px 20px; }
+  .content-header h1 { font-size: 32px; }
+}
+
+@keyframes dashFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

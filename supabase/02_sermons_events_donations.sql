@@ -447,3 +447,26 @@ CREATE TABLE giving_statements (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id, statement_year, statement_month)
 );
+-- ============================================================
+-- RPC: ATTENDEE COUNTERS
+-- ============================================================
+
+-- Function to increment event attendees
+CREATE OR REPLACE FUNCTION increment_event_attendees(event_id_param UUID)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE events
+  SET current_attendees = COALESCE(current_attendees, 0) + 1
+  WHERE id = event_id_param;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to decrement event attendees
+CREATE OR REPLACE FUNCTION decrement_event_attendees(event_id_param UUID)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE events
+  SET current_attendees = GREATEST(0, COALESCE(current_attendees, 0) - 1)
+  WHERE id = event_id_param;
+END;
+$$ LANGUAGE plpgsql;

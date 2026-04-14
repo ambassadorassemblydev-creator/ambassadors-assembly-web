@@ -77,6 +77,7 @@ export const accountController = {
       res.render('pages/my-account', {
         pageTitle: 'My Dashboard',
         currentPath: req.path,
+        activePage: 'dashboard',
         user: data.profile,
         donations: data.donations,
         events: data.events,
@@ -97,6 +98,7 @@ export const accountController = {
       res.render('pages/edit-profile', {
         pageTitle: 'Edit Profile | Ambassadors Assembly',
         currentPath: req.path,
+        activePage: 'profile',
         user: profile,
         error: null,
         success: req.query.success || null
@@ -121,6 +123,7 @@ export const accountController = {
         return res.status(400).render('pages/edit-profile', {
           pageTitle: 'Edit Profile',
           currentPath: req.path,
+          activePage: 'profile',
           user: profile,
           error: err.errors[0].message,
           success: null
@@ -136,6 +139,7 @@ export const accountController = {
       res.render('pages/departments', {
         pageTitle: 'Church Departments | Ambassadors Assembly',
         currentPath: req.path,
+        activePage: 'departments',
         departments
       });
     } catch (err) {
