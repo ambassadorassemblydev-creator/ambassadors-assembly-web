@@ -1,0 +1,100 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #050505; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <main class="ministries-page">
+          <!-- AMBIENT BG -->
+          <div class="give-bg">
+            <div class="bg-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1510531704581-5b2870972060?q=80&w=2000&auto=format&fit=crop" alt="Ministries Background" class="bg-img">
+          </div>
+          <section class="min-hero">
+            <div class="hero-content">
+              <span class="gsap-min">Departments of Grace</span>
+              <h1 class="gsap-min">Our Ministries</h1>
+              <p class="gsap-min">Discover the heartbeat of our church through the various arms designed to serve, equip, and empower the body of Christ.</p>
+            </div>
+          </section>
+
+          <section class="min-grid-section">
+            <div class="min-grid">
+              <% if (ministries && ministries.length > 0) { %>
+                <% ministries.forEach((m, i) => { %>
+                  <div class="min-card gsap-min-card" data-index="<%= i %>">
+                    <div class="min-card__img">
+                      <img src="<%= m.cover_image_url %>" alt="<%= m.name %>">
+                      <div class="img-overlay"></div>
+                    </div>
+                    <div class="min-card__body glass-fx">
+                      <h3><%= m.name %></h3>
+                      <p><%= m.description %></p>
+                      <a href="/connect" class="join-link">Get Involved ↗</a>
+                    </div>
+                  </div>
+                <% }) %>
+              <% } %>
+            </div>
+          </section>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <style>
+    .ministries-page { padding-bottom: 120px; }
+    
+    .min-hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6%; background: transparent; position: relative; }
+    .min-hero .hero-content { max-width: 800px; }
+    .min-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+    .min-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; }
+    .min-hero p { font-size: 1.15rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+    .min-grid-section { padding: 0 6%; margin-top: -100px; }
+    .min-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1400px; margin: 0 auto; }
+
+    .min-card { border-radius: 24px; overflow: hidden; position: relative; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .min-card:hover { transform: translateY(-10px); }
+    .min-card__img { height: 500px; position: relative; }
+    .min-card__img img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s; }
+    .min-card:hover .min-card__img img { transform: scale(1.15); }
+    .img-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, #050505 0%, rgba(5,5,5,0) 60%); }
+
+    .min-card__body { position: absolute; bottom: 20px; left: 20px; right: 20px; padding: 30px; border-radius: 20px; }
+    .min-card__body h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
+    .min-card__body p { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.5; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .join-link { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: white; text-decoration: none; }
+
+    .glass-fx { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+
+    /* Ambient BG */
+    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: contrast(1.1) grayscale(0.2); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #050505 0%, rgba(5,5,5,0.8) 100%); }
+
+    @media (max-width: 1100px) { .min-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .min-grid { grid-template-columns: 1fr; } .min-hero { height: 50vh; } }
+  </style>
+
+  <script>
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-min', { y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: 'power3.out' });
+      gsap.from('.gsap-min-card', { 
+        scrollTrigger: { trigger: '.min-grid', start: 'top 80%' },
+        y: 60, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out' 
+      });
+    });
+  </script>
+</body>
+</html>

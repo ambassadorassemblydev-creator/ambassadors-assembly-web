@@ -1,0 +1,274 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="events-grid-page" class="dm-events-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200" id="dm-outer-wrapper">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+                  <%- include('../partials/navbar') %>
+
+                  <style>
+                    :root {
+                      --accent: #f5f0e8;
+                      --accent-muted: rgba(245, 240, 232, 0.4);
+                      --glass: rgba(255, 255, 255, 0.03);
+                      --glass-border: rgba(255, 255, 255, 0.08);
+                    }
+
+                    .events-hero {
+                      padding: 180px 6% 120px;
+                      background: #0e0e0e;
+                      position: relative;
+                      overflow: hidden;
+                    }
+
+                    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+                    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.15; filter: contrast(1.1) grayscale(0.2); }
+                    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, #0e0e0e 0%, rgba(14,14,14,0.7) 100%); }
+
+                    .hero-content {
+                      position: relative;
+                      z-index: 2;
+                      max-width: 1400px;
+                      margin: 0 auto;
+                    }
+
+                    .hero-label {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 0.8rem;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                      color: var(--accent-muted);
+                      margin-bottom: 20px;
+                      display: block;
+                    }
+
+                    .hero-title {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: clamp(3rem, 7vw, 6rem);
+                      font-weight: 900;
+                      line-height: 0.95;
+                      letter-spacing: -0.04em;
+                      color: var(--accent);
+                    }
+
+                    /* Timeline Grid */
+                    .events-grid-section {
+                      padding: 100px 6%;
+                      background: #0e0e0e;
+                      position: relative;
+                    }
+
+                    .events-grid-section::before {
+                      content: '';
+                      position: absolute;
+                      top: 0; left: 50%; width: 1px; height: 100%;
+                      background: linear-gradient(to bottom, var(--glass-border), transparent);
+                      display: none; /* Only show on desktop if we want timeline feel */
+                    }
+
+                    .grid-container {
+                      max-width: 1200px;
+                      margin: 0 auto;
+                      display: grid;
+                      grid-template-columns: repeat(2, 1fr);
+                      gap: 80px 60px;
+                    }
+
+                    .event-item {
+                      text-decoration: none;
+                      display: block;
+                      position: relative;
+                    }
+
+                    /* Parabolic Offset */
+                    .event-item:nth-child(even) { transform: translateY(100px); }
+
+                    .event-card {
+                      background: var(--glass);
+                      backdrop-filter: blur(20px);
+                      -webkit-backdrop-filter: blur(20px);
+                      border: 1px solid var(--glass-border);
+                      border-radius: 30px;
+                      overflow: hidden;
+                      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                    }
+
+                    .event-item:hover .event-card {
+                      transform: scale(1.02);
+                      border-color: rgba(255,255,255,0.2);
+                    }
+
+                    .card-media {
+                      position: relative;
+                      width: 100%;
+                      aspect-ratio: 4/3;
+                      overflow: hidden;
+                    }
+
+                    .card-media img {
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+                    }
+
+                    .event-item:hover .card-media img {
+                      transform: scale(1.1);
+                    }
+
+                    .card-content {
+                      padding: 40px;
+                    }
+
+                    .event-date {
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      margin-bottom: 20px;
+                    }
+
+                    .date-pill {
+                      padding: 4px 12px;
+                      background: var(--accent);
+                      color: #0e0e0e;
+                      border-radius: 6px;
+                      font-size: 0.7rem;
+                      font-weight: 800;
+                      text-transform: uppercase;
+                      letter-spacing: 0.5px;
+                    }
+
+                    .date-text {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 0.85rem;
+                      font-weight: 600;
+                      color: var(--accent-muted);
+                    }
+
+                    .event-title {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 1.8rem;
+                      font-weight: 800;
+                      color: var(--accent);
+                      line-height: 1.2;
+                      margin-bottom: 12px;
+                    }
+
+                    .event-loc {
+                      font-size: 0.9rem;
+                      color: rgba(245, 240, 232, 0.4);
+                      display: flex;
+                      align-items: center;
+                      gap: 6px;
+                    }
+
+                    .event-loc svg { width: 14px; opacity: 0.6; }
+
+                    @media (max-width: 1100px) {
+                      .grid-container { gap: 60px 40px; }
+                      .event-title { font-size: 1.5rem; }
+                    }
+
+                    @media (max-width: 768px) {
+                      .grid-container { grid-template-columns: 1fr; gap: 40px; }
+                      .event-item:nth-child(even) { transform: none; }
+                      .events-hero { padding-top: 140px; }
+                      .hero-title { font-size: 3.5rem; }
+                      .card-content { padding: 30px; }
+                    }
+                  </style>
+
+                  <main>
+                    <!-- AMBIENT BG -->
+                    <div class="give-bg">
+                      <div class="bg-overlay"></div>
+                      <img src="https://images.unsplash.com/photo-1540331547168-8b63109225b7?q=80&w=2000&auto=format&fit=crop" alt="Events Background" class="bg-img">
+                    </div>
+                    
+                    <section class="events-hero" style="background: transparent;">
+                      <div class="hero-content">
+                        <span class="hero-label gsap-reveal">Calendar</span>
+                        <h1 class="hero-title gsap-reveal">Gatherings &<br>Conferences</h1>
+                      </div>
+                    </section>
+
+                    <section class="events-grid-section">
+                      <div class="grid-container">
+                        <% if (events && events.length > 0) { %>
+                          <% events.forEach((evt, i) => { 
+                             const startDate = new Date(evt.start_date);
+                             const dateStr = startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                          %>
+                            <a href="/events/<%= evt.slug %>" class="event-item gsap-event" data-index="<%= i %>">
+                              <div class="event-card">
+                                <div class="card-media">
+                                  <img src="<%= evt.cover_image_url || 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop' %>" 
+                                       alt="<%= evt.title %>" loading="lazy">
+                                </div>
+                                <div class="card-content">
+                                  <div class="event-date">
+                                    <span class="date-pill"><%= startDate.toLocaleDateString('en-US', { month: 'short' }) %> <%= startDate.getDate() %></span>
+                                    <span class="date-text"><%= dateStr %></span>
+                                  </div>
+                                  <h2 class="event-title"><%= evt.title %></h2>
+                                  <p class="event-loc">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <%= evt.location_name || 'Ambassadors Assembly HQ' %>
+                                  </p>
+                                </div>
+                              </div>
+                            </a>
+                          <% }) %>
+                        <% } else { %>
+                          <div class="no-results" style="grid-column: 1 / -1; text-align: center; color: var(--accent-muted); padding: 100px 0;">
+                            <p>No upcoming events currently scheduled. Check back soon!</p>
+                          </div>
+                        <% } %>
+                      </div>
+                    </section>
+                  </main>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <script>
+    window.addEventListener('load', () => {
+      // Hero reveal
+      gsap.from('.gsap-reveal', {
+        y: 60, opacity: 0, duration: 1.2, stagger: 0.2, ease: 'power4.out'
+      });
+
+      // Staggered Event Reveal
+      gsap.from('.gsap-event', {
+        scrollTrigger: {
+          trigger: '.grid-container',
+          start: 'top 80%'
+        },
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: 'power3.out'
+      });
+    });
+  </script>
+</body>
+</html>

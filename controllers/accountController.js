@@ -12,6 +12,18 @@ const updateProfileSchema = z.object({
   bio: z.string().optional(),
 });
 
+const onboardingSchema = z.object({
+  gender: z.string().optional(),
+  dob: z.string().min(1, "Date of birth is required"),
+  marital_status: z.string().min(1, "Marital status is required"),
+  wedding_anniversary: z.string().optional(),
+  phone: z.string().min(1, "Phone number is required"),
+  addressLine1: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  is_baptized: z.boolean().default(false),
+  baptism_date: z.string().optional()
+});
+
 export const accountController = {
   /**
    * GET /my-account
@@ -87,6 +99,67 @@ export const accountController = {
       }
       logger.error(`Profile Update Error: ${err.message}`);
       next(err);
+    }
+  },
+  
+  /**
+   * GET /onboarding
+   */
+  renderOnboarding: async (req, res, next) => {
+    try {
+      res.render('pages/onboarding', {
+        pageTitle: 'Profile Setup | Ambassadors Assembly',
+        currentPath: req.path
+      });
+    } catch (err) {
+      logger.error(`Onboarding Render Error: ${err.message}`);
+      next(new AppError('We encountered an error loading the setup page.', 500));
+    }
+  },
+
+  /**
+   * POST /onboarding
+   */
+  submitOnboarding: async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      
+      // Transform checkbox string to boolean
+      if (req.body.is_baptized === "true" || req.body.is_baptized === "on") req.body.is_baptized = true;
+      else req.body.is_baptized = false;
+
+      const validatedData = onboardingSchema.parse(req.body);
+      
+      // Update profile
+      await accountRepo.updateProfile(userId, {
+        gender: validatedData.gender || null,
+        date_of_birth: validatedData.dob || null,
+        marital_status: validatedData.marital_status || null,
+        wedding_anniversary: validatedData.wedding_anniversary || null,
+        phone: validatedData.phone || null,
+        address: validatedData.addressLine1 || null,
+        city: validatedData.city || null,
+        is_baptized: validatedData.is_baptized,
+        baptism_date: validatedData.baptism_date || null
+      });
+
+      res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
+    } catch (err) {
+      if (err.name === 'ZodError') {
+        // High IQ: If validation fails, re-render the page with an error. 
+        // In a real app we'd pass flash messages or errors to the view.
+        return res.status(400).render('pages/onboarding', {
+          pageTitle: 'Profile Setup | Ambassadors Assembly',
+          currentPath: req.path,
+          error: err.errors[0].message
+        });
+      }
+      logger.error(`Onboarding Error: ${err.message}`);
+      res.status(500).render('pages/onboarding', {
+        pageTitle: 'Profile Setup | Ambassadors Assembly',
+        currentPath: req.path,
+        error: 'An unexpected error occurred. Please try again.'
+      });
     }
   }
 };

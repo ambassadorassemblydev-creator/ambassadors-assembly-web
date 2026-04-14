@@ -73,5 +73,37 @@ export const authMiddleware = {
     req.user = user;
     res.locals.user = user;
     next();
+  },
+
+  // 3. The "Onboarder": Ensures the user has filled out required profile fields
+  requireProfileCompletion: async (req, res, next) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.redirect('/sign-in');
+
+      // Check if profile is complete (e.g. they have at least updated is_baptized or filled marital_status or address)
+      // Since first_name and last_name are usually set on signup, we check for something explicitly asked in onboarding.
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('is_baptized, marital_status')
+        .eq('id', userId)
+        .single();
+        
+      if (error || !profile) {
+        return res.redirect('/onboarding');
+      }
+
+      // If marital_status is null, we assume they haven't onboarded yet.
+      if (!profile.marital_status) {
+        // Only redirect if they are not already on the onboarding page
+        if (req.originalUrl !== '/onboarding' && req.originalUrl !== '/api/onboarding') {
+          return res.redirect('/onboarding');
+        }
+      }
+
+      next();
+    } catch (err) {
+      next();
+    }
   }
 };

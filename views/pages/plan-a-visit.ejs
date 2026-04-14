@@ -1,0 +1,146 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #0e0e0e; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <main class="visit-page">
+          <!-- AMBIENT BG -->
+          <div class="give-bg">
+            <div class="bg-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1543886567-91f1a5fcd232?q=80&w=2000&auto=format&fit=crop" alt="Plan Your Visit Background" class="bg-img">
+          </div>
+          <section class="visit-hero">
+            <div class="hero-content">
+              <span class="gsap-visit">Welcome Home</span>
+              <h1 class="gsap-visit">Plan Your Visit</h1>
+              <p class="gsap-visit">We can't wait to meet you. Here is everything you need to know for your first experience at Ambassadors Assembly.</p>
+            </div>
+          </section>
+
+          <section class="visit-details">
+            <div class="details-grid">
+              
+              <!-- SERVICE TIMES -->
+              <div class="detail-panel glass-fx gsap-up">
+                <h3>Service Times</h3>
+                <div class="time-block">
+                  <span class="day">Sunday</span>
+                  <div class="slots">
+                    <div class="slot"><span>9:00 AM</span> — First Service</div>
+                    <div class="slot"><span>11:30 AM</span> — Second Service</div>
+                    <div class="slot"><span>5:00 PM</span> — Encounter (Monthly)</div>
+                  </div>
+                </div>
+                <div class="time-block">
+                  <span class="day">Wednesday</span>
+                  <div class="slots">
+                    <div class="slot"><span>6:00 PM</span> — Mid-Week Bible Study</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LOCATION -->
+              <div class="detail-panel glass-fx gsap-up">
+                <h3>How to Find Us</h3>
+                <p>123 Ambassadors Drive, Ikeja,<br>Lagos, Nigeria.</p>
+                <div class="map-link">
+                  <a href="https://maps.google.com" target="_blank" class="map-btn">Get Directions ↗</a>
+                </div>
+                <div class="parking-info">
+                  <p><strong>Parking:</strong> Free parking is available in the main lot. Our welcome team will be there to guide you.</p>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- WHAT TO EXPECT -->
+          <section class="expect-section">
+            <div class="expect-header gsap-visit">
+              <h2>What to Expect</h2>
+            </div>
+            
+            <div class="expect-grid">
+              <div class="expect-card gsap-up">
+                <h4>How should I dress?</h4>
+                <p>Come as you are! You'll see everything from suits to jeans. We care more about you than what you're wearing.</p>
+              </div>
+              <div class="expect-card gsap-up">
+                <h4>What about my kids?</h4>
+                <p>Ambassadors Kids provides a fun, safe, and engaging environment for children to learn about Jesus at their level.</p>
+              </div>
+              <div class="expect-card gsap-up">
+                <h4>How long is the service?</h4>
+                <p>Our services typically last about 90 minutes. They involve powerful worship and a deep, practical Word from God.</p>
+              </div>
+            </div>
+          </section>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <style>
+    .visit-page { padding-bottom: 120px; }
+    
+    .visit-hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6%; background: transparent; position: relative; }
+    .visit-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: #3b82f6; margin-bottom: 20px; }
+    .visit-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; }
+    .visit-hero p { font-size: 1.15rem; color: rgba(255,255,255,0.6); max-width: 700px; margin: 0 auto; }
+
+    .visit-details { padding: 0 6%; margin-top: -80px; }
+    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1400px; margin: 0 auto; }
+    .detail-panel { padding: 50px; border-radius: 32px; }
+    .detail-panel h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; color: #f5f0e8; }
+
+    .time-block { margin-bottom: 40px; }
+    .day { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.3); display: block; margin-bottom:15px; }
+    .slots { display: flex; flex-direction: column; gap: 12px; }
+    .slot { font-size: 1.1rem; color: rgba(255,255,255,0.8); }
+    .slot span { font-weight: 800; color: white; margin-right: 10px; }
+
+    .map-btn { display: inline-block; padding: 16px 32px; background: white; color: black; border-radius: 100px; text-decoration: none; font-weight: 800; margin-top: 30px; transition: 0.3s; }
+    .map-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(255,255,255,0.1); }
+    .parking-info { margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); font-size: 0.95rem; }
+
+    .expect-section { padding: 120px 6% 0; }
+    .expect-header { text-align: center; margin-bottom: 80px; }
+    .expect-header h2 { font-size: 3rem; font-weight: 900; }
+
+    .expect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1400px; margin: 0 auto; }
+    .expect-card { padding: 40px; border-radius: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+    .expect-card h4 { font-size: 1.25rem; font-weight: 800; margin-bottom: 15px; color: #3b82f6; }
+    .expect-card p { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    .glass-fx { background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); }
+
+    /* Ambient BG */
+    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: contrast(1.1) grayscale(0.2); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #0e0e0e 0%, rgba(14,14,14,0.8) 100%); }
+
+    @media (max-width: 1000px) { .details-grid { grid-template-columns: 1fr; } .expect-grid { grid-template-columns: 1fr; } }
+  </style>
+
+  <script>
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-visit', { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: 'power3.out' });
+      gsap.from('.gsap-up', { 
+        scrollTrigger: { trigger: '.visit-details', start: 'top 80%' },
+        y: 60, opacity: 0, duration: 1, stagger: 0.15, ease: 'power3.out' 
+      });
+    });
+  </script>
+</body>
+</html>

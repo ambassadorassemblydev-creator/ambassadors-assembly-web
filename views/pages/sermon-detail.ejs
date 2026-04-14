@@ -1,0 +1,274 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="background: #050505; padding: 0px; margin: 0px; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <!-- BG AMBIENCE -->
+  <div class="watch-bg">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+  </div>
+
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <main class="page-container">
+          <div class="sermon-layout">
+            
+            <!-- LEFT: PLAYER & INFO -->
+            <div class="sermon-main">
+              <div class="player-wrapper glass-fx">
+                <% 
+                  const vidUrl = sermon.video_url || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+                  const isYouTube = vidUrl.includes('youtube.com') || vidUrl.includes('youtu.be');
+                %>
+                <% if (isYouTube) { %>
+                  <iframe src="<%= vidUrl %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <% } else { %>
+                  <video src="<%= vidUrl %>" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
+                <% } %>
+              </div>
+
+              <div class="sermon-info">
+                <div class="meta-row">
+                  <% if (sermon.series) { %>
+                    <span class="series-pill"><%= sermon.series.title %></span>
+                  <% } %>
+                  <span class="date-label"><%= new Date(sermon.sermon_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+                </div>
+                
+                <h1 class="sermon-title"><%= sermon.title %></h1>
+                
+                <div class="speaker-row">
+                  <div class="speaker-avatar">
+                    <img src="<%= (sermon.speaker && sermon.speaker.image_url) || 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg' %>" alt="<%= (sermon.speaker && sermon.speaker.name) || 'Speaker' %>">
+                  </div>
+                  <div class="speaker-details">
+                    <span class="speaker-name"><%= (sermon.speaker && sermon.speaker.name) || 'Ambassadors Assembly' %></span>
+                    <span class="speaker-role"><%= (sermon.speaker && sermon.speaker.bio) ? sermon.speaker.bio.substring(0, 50) + '...' : 'Ministry Speaker' %></span>
+                  </div>
+                </div>
+
+                <div class="sermon-description">
+                  <p><%= sermon.description || 'No description available for this message.' %></p>
+                </div>
+
+                <!-- SHARE & ACTIONS -->
+                <div class="action-grid">
+                  <button class="action-btn share" onclick="copyStreamLink()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                    Share Message
+                  </button>
+                  <% if (sermon.notes_pdf_url) { %>
+                    <a href="<%= sermon.notes_pdf_url %>" target="_blank" class="action-btn notes">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      Study Guide
+                    </a>
+                  <% } %>
+                </div>
+              </div>
+
+              <!-- RELATED IN SERIES -->
+              <% if (relatedSermons && relatedSermons.length > 0) { %>
+                <section class="related-section">
+                  <h3 class="section-heading">More from this Series</h3>
+                  <div class="related-grid">
+                    <% relatedSermons.forEach(rel => { %>
+                      <a href="/sermons/<%= rel.slug %>" class="related-card glass-fx">
+                        <div class="rel-img">
+                          <img src="<%= rel.thumbnail_url %>" alt="<%= rel.title %>">
+                        </div>
+                        <div class="rel-info">
+                          <h4><%= rel.title %></h4>
+                          <span><%= new Date(rel.sermon_date).toLocaleDateString() %></span>
+                        </div>
+                      </a>
+                    <% }) %>
+                  </div>
+                </section>
+              <% } %>
+            </div>
+
+            <!-- RIGHT: INTERACTION HUB (CORRELATION) -->
+            <aside class="study-hub glass-fx">
+              <div class="hub-tabs">
+                <div class="hub-tab active" data-target="notes">NOTES</div>
+                <div class="hub-tab" data-target="bible">BIBLE</div>
+              </div>
+
+              <div class="hub-content">
+                <!-- NOTES PANEL -->
+                <div id="tab-notes" class="tab-panel active">
+                  <div class="notes-header">
+                    <h3>Your Study Notes</h3>
+                    <p>Notes taken during the live stream or while watching arrive here automatically.</p>
+                  </div>
+                  <textarea id="personal-notes" placeholder="What is God saying to you through this message?"></textarea>
+                  <div class="notes-footer">
+                    <button class="export-btn" onclick="downloadNotes()">Export to Text</button>
+                  </div>
+                </div>
+
+                <!-- BIBLE PANEL -->
+                <div id="tab-bible" class="tab-panel">
+                  <div class="bible-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V4a2 2 0 0 1 2-2h10l4 4v10a2 2 0 0 1-2 2H6.5a2.5 2.5 0 0 0-2.5 2.5z"/></svg>
+                    <p>Search Scripture references here.</p>
+                    <input type="text" placeholder="John 3:16..." class="bible-search">
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --accent: #3b82f6;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    .page-container { padding-top: 100px; min-height: 100vh; }
+    
+    /* Layout */
+    .sermon-layout { 
+      display: grid; 
+      grid-template-columns: 1fr 420px; 
+      max-width: 1600px; 
+      margin: 0 auto; 
+      padding: 40px; 
+      gap: 40px; 
+    }
+
+    .player-wrapper { 
+      position: relative; 
+      padding-top: 56.25%; 
+      border-radius: 24px; 
+      overflow: hidden; 
+      background: black;
+      margin-bottom: 40px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    }
+    .player-wrapper iframe { position: absolute; top:0; left:0; width:100%; height:100%; }
+
+    .sermon-info { margin-bottom: 60px; }
+    .meta-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+    .series-pill { background: rgba(59, 130, 246, 0.1); color: #60a5fa; padding: 4px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .date-label { color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 500; }
+    
+    .sermon-title { font-family: 'Manrope', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; margin-bottom: 30px; line-height: 1.1; letter-spacing: -0.02em; }
+
+    .speaker-row { display: flex; align-items: center; gap: 15px; padding-bottom: 30px; border-bottom: 1px solid var(--glass-border); margin-bottom: 30px; }
+    .speaker-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: #1a1a1a; }
+    .speaker-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .speaker-name { display: block; font-weight: 700; font-size: 16px; color: white; }
+    .speaker-role { display: block; font-size: 13px; color: rgba(255,255,255,0.4); }
+
+    .sermon-description { color: rgba(255,255,255,0.6); line-height: 1.8; font-size: 17px; margin-bottom: 40px; }
+
+    .action-grid { display: flex; gap: 15px; }
+    .action-btn { 
+      padding: 14px 28px; border-radius: 50px; display: inline-flex; align-items: center; gap: 12px;
+      font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.3s; text-decoration: none;
+      border: 1px solid var(--glass-border); color: white; background: var(--glass);
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+    .action-btn.share { background: white; color: black; border: none; }
+
+    /* Related Section */
+    .related-section { border-top: 1px solid var(--glass-border); padding-top: 60px; }
+    .section-heading { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; }
+    .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .related-card { display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 16px; text-decoration: none; }
+    .rel-img { width: 80px; aspect-ratio: 16/10; border-radius: 8px; overflow: hidden; }
+    .rel-img img { width: 100%; height: 100%; object-fit: cover; }
+    .rel-info h4 { font-size: 14px; color: white; margin: 0 0 4px 0; }
+    .rel-info span { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+    /* Study Hub */
+    .study-hub { 
+      height: calc(100vh - 180px); 
+      position: sticky; top: 140px; 
+      border-radius: 24px; 
+      display: flex; flex-direction: column; 
+    }
+    .hub-tabs { display: flex; border-bottom: 1px solid var(--glass-border); }
+    .hub-tab { flex: 1; padding: 20px; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 2px; cursor: pointer; opacity: 0.4; }
+    .hub-tab.active { opacity: 1; box-shadow: inset 0 -2px 0 white; }
+
+    .hub-content { flex: 1; padding: 30px; overflow-y: auto; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    #personal-notes { 
+      width: 100%; min-height: 400px; background: transparent; border: none; 
+      color: white; font-size: 16px; line-height: 1.6; outline: none; resize: none;
+      margin-top: 20px; font-family: inherit;
+    }
+
+    /* BG Blobs */
+    .watch-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+    .bg-blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.1; }
+    .blob-1 { width: 60vw; height: 60vw; top: -10%; left: -10%; background: #3b82f6; }
+    .blob-2 { width: 40vw; height: 40vw; bottom: -5%; right: -5%; background: #93c5fd; }
+
+    .glass-fx { background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--glass-border); }
+
+    @media (max-width: 1200px) {
+      .sermon-layout { grid-template-columns: 1fr; }
+      .study-hub { height: 600px; position: static; margin-top: 60px; }
+    }
+  </style>
+
+  <%- include('../partials/footer') %>
+
+  <script>
+    const sermonId = '<%= sermon.id %>';
+    const storageKey = `notes_${sermonId}`;
+    
+    // Notes Persistence
+    const notesArea = document.getElementById('personal-notes');
+    if (notesArea) {
+      notesArea.value = localStorage.getItem(storageKey) || '';
+      notesArea.addEventListener('input', (e) => {
+        localStorage.setItem(storageKey, e.target.value);
+      });
+    }
+
+    // Tabs
+    document.querySelectorAll('.hub-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`tab-${tab.dataset.target}`).classList.add('active');
+      });
+    });
+
+    function downloadNotes() {
+      const text = notesArea.value;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Sermon_Notes_${sermonId}.txt`;
+      a.click();
+    }
+
+    function copyStreamLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
+  </script>
+</body>
+</html>

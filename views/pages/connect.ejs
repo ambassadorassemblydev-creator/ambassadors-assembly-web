@@ -1,0 +1,138 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #050505; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <main class="connect-page">
+          <!-- AMBIENT BG -->
+          <div class="give-bg">
+            <div class="bg-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2000&auto=format&fit=crop" alt="Connect Background" class="bg-img">
+          </div>
+          <section class="connect-hero">
+            <div class="hero-content">
+              <span class="gsap-connect">Community</span>
+              <h1 class="gsap-connect">Stay Connected</h1>
+              <p class="gsap-connect">Church is more than a service. It's a family. Discover the many ways you can plant yourself in the house of God and grow with us.</p>
+            </div>
+          </section>
+
+          <section class="connect-options">
+            <div class="options-grid">
+              
+              <div class="option-card glass-fx gsap-up">
+                <div class="option-icon">🙏</div>
+                <h3>Prayer Request</h3>
+                <p>Do you have a burden or a need? Our intercessors are ready to stand with you in faith.</p>
+                <a href="#" class="option-btn">Send Request</a>
+              </div>
+
+              <div class="option-card glass-fx gsap-up">
+                <div class="option-icon">✨</div>
+                <h3>Share Testimony</h3>
+                <p>Has God done something marvelous in your life? Share your story and inspire others.</p>
+                <a href="#" class="option-btn">Share story</a>
+              </div>
+
+              <div class="option-card glass-fx gsap-up">
+                <div class="option-icon">👥</div>
+                <h3>Small Groups</h3>
+                <p>True growth happens in circles, not just rows. Join a small group in your area.</p>
+                <a href="#" class="option-btn">Find a Group</a>
+              </div>
+
+              <div class="option-card glass-fx gsap-up">
+                <div class="option-icon">✉️</div>
+                <h3>Counseling</h3>
+                <p>Speak with a minister or counselor regarding life's challenges or spiritual guidance.</p>
+                <a href="#" class="option-btn">Book session</a>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Socials / Contact -->
+          <section class="social-connect">
+            <div class="social-header gsap-connect">
+              <h2>Follow the Culture</h2>
+              <p>Join our digital community across all platforms.</p>
+            </div>
+            <div class="social-pills">
+              <a href="#" class="social-pill gsap-up">Instagram</a>
+              <a href="#" class="social-pill gsap-up">YouTube</a>
+              <a href="#" class="social-pill gsap-up">Facebook</a>
+              <a href="#" class="social-pill gsap-up">X / Twitter</a>
+            </div>
+          </section>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <style>
+    .connect-page { padding-bottom: 120px; }
+    
+    .connect-hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6%; background: transparent; position: relative; }
+    .connect-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: #f5f0e8; opacity: 0.4; margin-bottom: 20px; }
+    .connect-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; }
+    .connect-hero p { font-size: 1.15rem; color: rgba(255,255,255,0.6); max-width: 700px; margin: 0 auto; }
+
+    .connect-options { padding: 0 6%; margin-top: -60px; }
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+    
+    .option-card { padding: 50px; border-radius: 32px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .option-icon { font-size: 3rem; margin-bottom: 25px; }
+    .option-card h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 15px; }
+    .option-card p { font-size: 0.95rem; color: rgba(255,255,255,0.4); line-height: 1.6; margin-bottom: 30px; max-width: 300px; }
+    
+    .option-btn { 
+      padding: 14px 28px; background: rgba(255,255,255,0.05); color: white; border-radius: 100px; 
+      text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; border: 1px solid rgba(255,255,255,0.08);
+    }
+    .option-btn:hover { background: white; color: black; border-color: white; transform: translateY(-3px); }
+
+    .social-connect { padding: 120px 6% 0; text-align: center; }
+    .social-header { margin-bottom: 60px; }
+    .social-header h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
+    .social-header p { color: rgba(255,255,255,0.4); }
+
+    .social-pills { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+    .social-pill { 
+      padding: 120px 40px; /* Big artistic pills? No, let's stick to sleek. */
+      padding: 20px 40px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); 
+      color: white; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: 0.4s;
+    }
+    .social-pill:hover { background: white; color: black; transform: scale(1.05); }
+
+    .glass-fx { background: rgba(255,255,255,0.02); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.05); }
+
+    /* Ambient BG */
+    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: contrast(1.1) grayscale(0.2); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #050505 0%, rgba(5,5,5,0.8) 100%); }
+
+    @media (max-width: 800px) { .options-grid { grid-template-columns: 1fr; } }
+  </style>
+
+  <script>
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-connect', { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: 'power3.out' });
+      gsap.from('.gsap-up', { 
+        scrollTrigger: { trigger: '.options-grid', start: 'top 80%' },
+        y: 60, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out' 
+      });
+    });
+  </script>
+</body>
+</html>

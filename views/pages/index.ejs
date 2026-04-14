@@ -372,7 +372,7 @@
                                     <img src="<%= sermon.thumbnail_url %>" alt="<%= sermon.title %>" loading="lazy">
                                   </div>
                                   <h3 class="sermon-card__title"><%= sermon.title %></h3>
-                                  <a href="/sermons" class="sermon-card__link">View Sermon <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg></a>
+                                  <a href="/sermons/<%= sermon.slug %>" class="sermon-card__link">View Sermon <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg></a>
                                 </div>
        <% }) %>
     <% } else { %>
@@ -412,7 +412,7 @@
                                   </div>
                                   <p class="event-card-new__tag"><%= evt.event_type.charAt(0).toUpperCase() + evt.event_type.slice(1) %></p>
                                   <h3 class="event-card-new__title"><%= evt.title %></h3>
-                                  <a href="/events" class="event-card-new__link">View Event <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg></a>
+                                  <a href="/events/<%= evt.slug %>" class="event-card-new__link">View Event <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h8"/></svg></a>
                                 </div>
     <% }) %>
     <% } else { %>

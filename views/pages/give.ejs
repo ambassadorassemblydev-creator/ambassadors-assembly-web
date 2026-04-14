@@ -1,0 +1,215 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #0e0e0e; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <main class="give-page">
+          
+          <!-- AMBIENT BG -->
+          <div class="give-bg">
+            <div class="bg-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1510531704581-5b2870972060?q=80&w=2073&auto=format&fit=crop" alt="Worship Background" class="bg-img">
+          </div>
+
+          <div class="give-content">
+            
+            <header class="give-header gsap-up">
+              <span class="give-subtitle">Generosity in Action</span>
+              <h1 class="give-title">Believe in<br>The Harvest</h1>
+              <p class="give-intro">Your partnership enables us to share the gospel of Jesus Christ across nations and transform lives through the power of God.</p>
+            </header>
+
+            <div class="give-grid">
+              
+              <!-- LEFT: THE WHY -->
+              <section class="give-manifesto gsap-up">
+                <div class="manifesto-card glass-fx">
+                  <div class="verse">
+                    <p>"Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver."</p>
+                    <span class="ref">— 2 Corinthians 9:7</span>
+                  </div>
+                  
+                  <div class="impact-stats">
+                    <div class="stat">
+                      <span class="stat-num">100%</span>
+                      <span class="stat-label">Towards Ministry</span>
+                    </div>
+                    <div class="stat">
+                      <span class="stat-num">Global</span>
+                      <span class="stat-label">Impact Reach</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- RIGHT: THE SEED (FORM) -->
+              <aside class="give-form-aside gsap-up">
+                <div class="give-card glass-fx">
+                  <h3>Select Seed Amount</h3>
+                  
+                  <div class="amount-presets">
+                    <button class="preset-btn" data-amt="50">$50</button>
+                    <button class="preset-btn active" data-amt="100">$100</button>
+                    <button class="preset-btn" data-amt="250">$250</button>
+                    <button class="preset-btn" data-amt="500">$500</button>
+                  </div>
+
+                  <div class="custom-amount">
+                    <span class="currency-label">$</span>
+                    <input type="number" id="custom-amt" placeholder="Other Amount" min="1">
+                  </div>
+
+                  <div class="fund-select">
+                    <select id="fund-type">
+                      <option value="tithe">Tithes & Offerings</option>
+                      <option value="missions">Missions & Outreach</option>
+                      <option value="building">Building Fund</option>
+                      <option value="other">Seed for the Future</option>
+                    </select>
+                  </div>
+
+                  <button class="give-submit-btn" onclick="initiateGiving()">Partner Now</button>
+
+                  <div class="security-badges">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <span>Secure encrypted partnership</span>
+                  </div>
+                </div>
+              </aside>
+
+            </div>
+
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <style>
+    :root {
+      --accent: #f5f0e8;
+      --accent-dark: #1a1a1a;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    .give-page { position: relative; min-height: 100vh; overflow-x: hidden; }
+
+    /* Background Immersive */
+    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: contrast(1.1) grayscale(0.2); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, #0e0e0e 30%, rgba(14, 14, 14, 0.6) 80%); }
+
+    /* Content Layout */
+    .give-content { max-width: 1400px; margin: 0 auto; padding: 180px 6% 120px; }
+    
+    .give-header { margin-bottom: 80px; max-width: 800px; }
+    .give-subtitle { display: block; font-family: 'Manrope', sans-serif; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4em; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+    .give-title { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 0.95; line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 30px; }
+    .give-intro { font-size: 1.15rem; line-height: 1.6; color: rgba(255,255,255,0.6); max-width: 600px; }
+
+    .give-grid { display: grid; grid-template-columns: 1fr 440px; gap: 60px; align-items: start; }
+
+    .glass-fx { background: var(--glass); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid var(--glass-border); border-radius: 32px; padding: 50px; }
+
+    /* Manifesto */
+    .verse { font-style: italic; font-size: 1.4rem; line-height: 1.6; margin-bottom: 40px; color: #f5f0e8; position: relative; }
+    .verse::before { content: '"'; position: absolute; left: -25px; top: -10px; font-size: 4rem; opacity: 0.1; font-family: serif; }
+    .ref { display: block; font-size: 0.85rem; font-weight: 700; font-style: normal; margin-top: 15px; opacity: 0.4; text-transform: uppercase; letter-spacing: 1px; }
+
+    .impact-stats { display: flex; gap: 40px; margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--glass-border); }
+    .stat-num { display: block; font-size: 2.5rem; font-weight: 900; color: #f5f0e8; margin-bottom: 5px; }
+    .stat-label { font-size: 0.75rem; text-transform: uppercase; opacity: 0.4; letter-spacing: 1px; font-weight: 700; }
+
+    /* Give Card / Form */
+    .give-card { box-shadow: 0 40px 100px rgba(0,0,0,0.5); }
+    .give-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 30px; text-align: center; }
+
+    .amount-presets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .preset-btn { 
+      padding: 16px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--glass);
+      color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+    }
+    .preset-btn:hover { background: rgba(255,255,255,0.08); }
+    .preset-btn.active { background: white; color: black; border-color: white; }
+
+    .custom-amount { position: relative; margin-bottom: 20px; }
+    .currency-label { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-weight: 700; opacity: 0.4; }
+    #custom-amt { 
+      width: 100%; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px;
+      padding: 16px 16px 16px 40px; color: white; font-size: 1.1rem; outline: none; font-weight: 700;
+      transition: 0.3s;
+    }
+    #custom-amt:focus { border-color: rgba(255,255,255,0.3); }
+
+    .fund-select select {
+      width: 100%; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px;
+      padding: 16px; color: white; font-size: 0.9rem; font-weight: 600; outline: none; margin-bottom: 30px;
+    }
+
+    .give-submit-btn {
+      width: 100%; padding: 20px; border-radius: 100px; background: white; color: black;
+      font-weight: 900; font-size: 1.1rem; border: none; cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+    }
+    .give-submit-btn:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(255,255,255,0.2); }
+
+    .security-badges { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px; opacity: 0.3; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    @media (max-width: 1000px) {
+      .give-grid { grid-template-columns: 1fr; }
+      .give-content { padding-top: 140px; }
+      .give-title { font-size: 3.5rem; }
+      .give-card { order: -1; }
+    }
+  </style>
+
+  <script>
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-up', {
+        y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: 'power3.out'
+      });
+    });
+
+    // Preset logic
+    const presets = document.querySelectorAll('.preset-btn');
+    const customInp = document.getElementById('custom-amt');
+
+    presets.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presets.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        customInp.value = '';
+      });
+    });
+
+    customInp.addEventListener('input', () => {
+      if(customInp.value) {
+        presets.forEach(b => b.classList.remove('active'));
+      }
+    });
+
+    function initiateGiving() {
+      let amount = customInp.value || document.querySelector('.preset-btn.active').dataset.amt;
+      let fund = document.getElementById('fund-type').value;
+      
+      console.log(`[Partnership] Initiating seed of $${amount} for ${fund}`);
+      
+      // High IQ: In a production app, we would call the /api/donations intent endpoint here
+      // and redirect to Stripe/ChurchCenter
+      alert(`Generosity detected! Redirecting to our secure partnership portal for $${amount}...`);
+      window.location.href = `https://ambassadorsassembly.churchcenter.com/giving?amount=${amount}&fund=${fund}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #0a0a0a; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <main class="onboarding-page">
+          <!-- AMBIENT BG -->
+          <div class="give-bg">
+            <div class="bg-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1510531704581-5b2870972060?q=80&w=2000&auto=format&fit=crop" alt="Onboarding Background" class="bg-img">
+          </div>
+          
+          <div class="onboard-container gsap-up">
+            <div class="onboard-card glass-fx">
+              
+              <div class="onboard-header">
+                <img src="/logo.png" alt="Ambassadors Assembly" class="ob-logo" onerror="this.style.display='none'">
+                <h2>Welcome to the Family</h2>
+                <p>Complete your profile to unlock the full potential of your membership and help us serve you better.</p>
+                <% if (typeof error !== 'undefined' && error) { %>
+                  <div class="ob-error">
+                    <%= error %>
+                  </div>
+                <% } %>
+              </div>
+
+              <form action="/onboarding" method="POST" class="ob-form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                
+                <h3 class="section-title">Personal Details</h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Gender <span>*</span></label>
+                    <select name="gender" required>
+                      <option value="" disabled selected>Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Date of Birth <span>*</span></label>
+                    <input type="date" name="dob" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Phone Number <span>*</span></label>
+                    <input type="tel" name="phone" placeholder="+234 ..." required>
+                  </div>
+                  <div class="form-group">
+                    <!-- Placeholder for alignment or extra field -->
+                  </div>
+                </div>
+
+                <h3 class="section-title">Family & Status</h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Marital Status <span>*</span></label>
+                    <select name="marital_status" id="maritalStatus" onchange="toggleAnniversary()" required>
+                      <option value="" disabled selected>Select Status</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                      <option value="Widowed">Widowed</option>
+                    </select>
+                  </div>
+                  <div class="form-group" id="anniversaryGroup" style="display: none;">
+                    <label>Wedding Anniversary</label>
+                    <input type="date" name="wedding_anniversary">
+                  </div>
+                </div>
+
+                <h3 class="section-title">Spiritual Journey</h3>
+                <div class="form-row">
+                  <div class="form-group span-full">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="is_baptized" id="isBaptized" onchange="toggleBaptismDate()">
+                      <span class="custom-check"></span>
+                      I have been baptized by immersion
+                    </label>
+                  </div>
+                  <div class="form-group span-full" id="baptismDateGroup" style="display: none;">
+                    <label>Baptism Date (Approximate is fine)</label>
+                    <input type="date" name="baptism_date">
+                  </div>
+                </div>
+
+                <h3 class="section-title">Location</h3>
+                <div class="form-row">
+                  <div class="form-group span-full">
+                    <label>Home Address <span>*</span></label>
+                    <input type="text" name="addressLine1" placeholder="123 Example St" required>
+                  </div>
+                  <div class="form-group span-full">
+                    <label>City / Region <span>*</span></label>
+                    <input type="text" name="city" placeholder="Lagos, Nigeria" required>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="submit-btn">Complete Setup</button>
+                  <p class="privacy-note">Your data is securely stored and exclusively used by Ambassadors Assembly pastoral logic.</p>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --accent: #3b82f6;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    .onboarding-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 60px 20px; position: relative; }
+
+    /* Ambient BG */
+    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.15; filter: contrast(1.1) grayscale(0.2); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, rgba(14,14,14,0.6) 0%, rgba(14,14,14,0.95) 100%); }
+
+    /* Container */
+    .onboard-container { width: 100%; max-width: 700px; margin: 0 auto; }
+    
+    .glass-fx { background: var(--glass); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid var(--glass-border); border-radius: 32px; padding: 50px; }
+
+    /* Header */
+    .onboard-header { text-align: center; margin-bottom: 40px; }
+    .ob-logo { height: 40px; margin-bottom: 20px; }
+    .onboard-header h2 { font-family: 'Manrope', sans-serif; font-size: 2.5rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 12px; }
+    .onboard-header p { font-size: 1.05rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+    .ob-error { margin-top: 20px; padding: 15px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; color: #ef4444; font-size: 0.9rem; font-weight: 700; }
+
+    /* Form */
+    .section-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin: 40px 0 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; }
+    .section-title:first-of-type { margin-top: 0; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group.span-full { grid-column: 1 / -1; }
+
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+    .form-group label span { color: #ef4444; }
+
+    .form-group input[type="text"],
+    .form-group input[type="tel"],
+    .form-group input[type="date"],
+    .form-group select {
+      width: 100%; background: var(--input-bg); border: 1px solid rgb(50, 50, 50); border-radius: 12px;
+      padding: 16px 20px; color: white; font-size: 1rem; font-family: 'Manrope', sans-serif;
+      outline: none; transition: 0.3s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); }
+    .form-group select option { background: #1a1a1a; color: white; }
+
+    /* Checkbox Custom */
+    .checkbox-label { display: flex; align-items: center; gap: 15px; cursor: pointer; user-select: none; font-size: 1.05rem !important; }
+    .checkbox-label input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+    .custom-check { height: 24px; width: 24px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .checkbox-label:hover input ~ .custom-check { background: rgba(255,255,255,0.2); }
+    .checkbox-label input:checked ~ .custom-check { background: var(--accent); border-color: var(--accent); }
+    .custom-check:after { content: ""; display: none; width: 6px; height: 12px; border: solid #0a0a0a; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 2px; }
+    .checkbox-label input:checked ~ .custom-check:after { display: block; }
+
+    /* Actions */
+    .form-actions { margin-top: 50px; text-align: center; border-top: 1px solid var(--glass-border); padding-top: 40px; }
+    .submit-btn {
+      width: 100%; padding: 20px; background: white; color: black; border-radius: 100px;
+      border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+      box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+    }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,255,255,0.2); }
+    .privacy-note { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 20px; }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .glass-fx { padding: 30px 20px; }
+      .onboard-header h2 { font-size: 2rem; }
+    }
+  </style>
+
+  <script>
+    function toggleAnniversary() {
+      const status = document.getElementById('maritalStatus').value;
+      const group = document.getElementById('anniversaryGroup');
+      if (status === 'Married') {
+        group.style.display = 'block';
+      } else {
+        group.style.display = 'none';
+        group.querySelector('input').value = '';
+      }
+    }
+
+    function toggleBaptismDate() {
+      const isBaptized = document.getElementById('isBaptized').checked;
+      const group = document.getElementById('baptismDateGroup');
+      if (isBaptized) {
+        group.style.display = 'block';
+      } else {
+        group.style.display = 'none';
+        group.querySelector('input').value = '';
+      }
+    }
+
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-up', { y: 40, opacity: 0, duration: 1, ease: 'power3.out' });
+    });
+  </script>
+</body>
+</html>

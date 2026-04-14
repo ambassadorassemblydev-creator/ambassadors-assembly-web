@@ -1,0 +1,287 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="sermons-page" class="dm-sermons-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200" id="dm-outer-wrapper">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+                  <%- include('../partials/navbar') %>
+
+                  <style>
+                    :root {
+                      --accent: #f5f0e8;
+                      --accent-muted: rgba(245, 240, 232, 0.6);
+                      --glass: rgba(255, 255, 255, 0.03);
+                      --glass-border: rgba(255, 255, 255, 0.08);
+                    }
+
+                    .sermons-hero {
+                      padding: 180px 6% 80px;
+                      background: #0e0e0e;
+                      position: relative;
+                      overflow: hidden;
+                    }
+
+                    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+                    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.15; filter: contrast(1.1) grayscale(0.2); }
+                    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, #0e0e0e 0%, rgba(14,14,14,0.7) 100%); }
+
+                    .sermons-hero__content {
+                      position: relative;
+                      z-index: 2;
+                      max-width: 1400px;
+                      margin: 0 auto;
+                    }
+
+                    .hero-label {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 0.8rem;
+                      font-weight: 700;
+                      letter-spacing: 0.3em;
+                      text-transform: uppercase;
+                      color: var(--accent-muted);
+                      margin-bottom: 20px;
+                      display: block;
+                    }
+
+                    .hero-title {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: clamp(3rem, 8vw, 6.5rem);
+                      font-weight: 900;
+                      line-height: 0.95;
+                      letter-spacing: -0.04em;
+                      color: var(--accent);
+                      margin-bottom: 40px;
+                    }
+
+                    /* Filter Bar */
+                    .filter-bar {
+                      display: flex;
+                      gap: 12px;
+                      flex-wrap: wrap;
+                      margin-top: 60px;
+                      padding: 12px;
+                      background: var(--glass);
+                      backdrop-filter: blur(20px);
+                      -webkit-backdrop-filter: blur(20px);
+                      border: 1px solid var(--glass-border);
+                      border-radius: 100px;
+                      width: fit-content;
+                    }
+
+                    .filter-btn {
+                      padding: 12px 28px;
+                      border-radius: 50px;
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 0.75rem;
+                      font-weight: 700;
+                      letter-spacing: 0.1em;
+                      text-transform: uppercase;
+                      color: var(--accent-muted);
+                      background: transparent;
+                      border: 1px solid transparent;
+                      cursor: pointer;
+                      transition: all 0.4s ease;
+                    }
+
+                    .filter-btn:hover {
+                      color: var(--accent);
+                      background: rgba(255, 255, 255, 0.05);
+                    }
+
+                    .filter-btn.active {
+                      background: var(--accent);
+                      color: #0e0e0e;
+                    }
+
+                    /* Sermons Grid */
+                    .sermons-grid-section {
+                      padding: 80px 6%;
+                      background: #0e0e0e;
+                      min-height: 60vh;
+                    }
+
+                    .grid-container {
+                      max-width: 1400px;
+                      margin: 0 auto;
+                      display: grid;
+                      grid-template-columns: repeat(3, 1fr);
+                      gap: 40px;
+                    }
+
+                    .sermon-card {
+                      text-decoration: none;
+                      display: block;
+                      group: hover;
+                    }
+
+                    .card-media {
+                      position: relative;
+                      width: 100%;
+                      aspect-ratio: 16/10;
+                      border-radius: 20px;
+                      overflow: hidden;
+                      margin-bottom: 24px;
+                      background: #1a1a1a;
+                    }
+
+                    .card-media img {
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+                    }
+
+                    .sermon-card:hover .card-media img {
+                      transform: scale(1.1) rotate(1deg);
+                    }
+
+                    .card-overlay {
+                      position: absolute;
+                      top: 0; left: 0; width: 100%; height: 100%;
+                      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+                      opacity: 0;
+                      transition: opacity 0.4s ease;
+                    }
+
+                    .sermon-card:hover .card-overlay {
+                      opacity: 1;
+                    }
+
+                    .card-date {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: var(--accent-muted);
+                      margin-bottom: 12px;
+                      display: block;
+                    }
+
+                    .card-title {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 1.6rem;
+                      font-weight: 800;
+                      color: var(--accent);
+                      line-height: 1.2;
+                      margin-bottom: 8px;
+                      transition: color 0.3s ease;
+                    }
+
+                    .sermon-card:hover .card-title {
+                      color: #3b82f6; /* Subtle brand blue pop */
+                    }
+
+                    .card-series {
+                      font-family: 'Manrope', sans-serif;
+                      font-size: 0.85rem;
+                      font-weight: 500;
+                      color: rgba(245, 240, 232, 0.4);
+                    }
+
+                    @media (max-width: 1100px) {
+                      .grid-container { grid-template-columns: repeat(2, 1fr); }
+                    }
+
+                    @media (max-width: 680px) {
+                      .grid-container { grid-template-columns: 1fr; gap: 60px; }
+                      .hero-title { font-size: 3.5rem; }
+                      .filter-bar { border-radius: 20px; width: 100%; }
+                    }
+                  </style>
+
+                  <main>
+                    <!-- AMBIENT BG -->
+                    <div class="give-bg">
+                      <div class="bg-overlay"></div>
+                      <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2000&auto=format&fit=crop" alt="Sermons Background" class="bg-img">
+                    </div>
+                    
+                    <!-- HERO SECTION -->
+                    <section class="sermons-hero" style="background: transparent;">
+                      <div class="sermons-hero__content">
+                        <span class="hero-label gsap-reveal">Archive</span>
+                        <h1 class="hero-title gsap-reveal">Library of<br>The Word</h1>
+                        
+                        <div class="filter-bar gsap-reveal">
+                          <button class="filter-btn active">All Messages</button>
+                          <button class="filter-btn">Series</button>
+                          <button class="filter-btn">Topics</button>
+                          <button class="filter-btn">Speakers</button>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- GRID SECTION -->
+                    <section class="sermons-grid-section">
+                      <div class="grid-container">
+                        <% if (sermons && sermons.length > 0) { %>
+                          <% sermons.forEach((sermon, i) => { %>
+                            <a href="/sermons/<%= sermon.slug %>" class="sermon-card gsap-card" data-index="<%= i %>">
+                              <div class="card-media">
+                                <img src="<%= sermon.thumbnail_url || 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2073&auto=format&fit=crop' %>" 
+                                     alt="<%= sermon.title %>" loading="lazy">
+                                <div class="card-overlay"></div>
+                              </div>
+                              <span class="card-date"><%= new Date(sermon.sermon_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                              <h2 class="card-title"><%= sermon.title %></h2>
+                              <p class="card-series"><%= (sermon.series && sermon.series.title) ? sermon.series.title : 'Standalone Message' %></p>
+                            </a>
+                          <% }) %>
+                        <% } else { %>
+                          <div class="no-results" style="grid-column: 1 / -1; text-align: center; color: var(--accent-muted); padding: 100px 0;">
+                            <p>No sermons found in the archive yet. Stay tuned!</p>
+                          </div>
+                        <% } %>
+                      </div>
+                    </section>
+                  </main>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <!-- GSAP Motion Logic -->
+  <script>
+    window.addEventListener('load', () => {
+      // Reveal Hero elements
+      gsap.from('.gsap-reveal', {
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.2,
+        ease: 'power4.out'
+      });
+
+      // Staggered Grid Reveal
+      gsap.from('.gsap-card', {
+        scrollTrigger: {
+          trigger: '.grid-container',
+          start: 'top 80%'
+        },
+        y: 80,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: 'power3.out'
+      });
+    });
+  </script>
+</body>
+</html>

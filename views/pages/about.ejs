@@ -1,0 +1,127 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #0e0e0e; color: white;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+        <main class="about-page">
+          <!-- AMBIENT BG -->
+          <div class="give-bg">
+            <div class="bg-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1544427920-c49ccca8a075?q=80&w=2000&auto=format&fit=crop" alt="Church Background" class="bg-img">
+          </div>
+          
+          <!-- VISION HERO -->
+          <section class="about-hero">
+            <div class="hero-content">
+              <span class="gsap-about">The Commission</span>
+              <h1 class="gsap-about">Building a Generating<br>of Ambassadors</h1>
+              <p class="gsap-about">Ambassadors Assembly is more than a church; it's a movement of spirit-filled believers transformed by the Word, empowered by the Spirit, and sent into the world to represent the Kingdom of God.</p>
+            </div>
+          </section>
+
+          <!-- Core Values -->
+          <section class="values-section">
+            <div class="values-grid">
+              <div class="val-card gsap-val">
+                <span class="val-num">01</span>
+                <h3>Biblical Soundness</h3>
+                <p>We are rooted in the uncompromised Word of God, teaching for transformation and spiritual maturity.</p>
+              </div>
+              <div class="val-card gsap-val">
+                <span class="val-num">02</span>
+                <h3>Spiritual Empowerment</h3>
+                <p>We believe in the active power of the Holy Spirit to heal, deliver, and equip every believer for ministry.</p>
+              </div>
+              <div class="val-card gsap-val">
+                <span class="val-num">03</span>
+                <h3>Global Mandate</h3>
+                <p>Our call is global. We raise ambassadors who carry the culture of heaven into every sphere of human influence.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- LEADERSHIP (Cinematic) -->
+          <section class="leadership">
+            <div class="lead-header gsap-about">
+              <h2>Spiritual Leadership</h2>
+              <p>Meet those who labor in the word and doctrine to shepherd this glorious assembly.</p>
+            </div>
+            
+            <div class="lead-grid">
+              <div class="lead-card gsap-val">
+                <div class="lead-img">
+                  <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" alt="Pastor">
+                </div>
+                <div class="lead-info">
+                  <h3>Lead Pastor</h3>
+                  <p>Ambassadors Assembly</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+
+  <style>
+    .about-page { padding-bottom: 120px; }
+    
+    .about-hero { height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6%; background: transparent; position: relative; }
+    .about-hero::before { content: ''; position: absolute; width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%); top: 10%; left: 10%; filter: blur(100px); }
+
+    .about-hero .hero-content { max-width: 1000px; position: relative; z-index: 2; }
+    .about-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: rgba(255,255,255,0.4); margin-bottom: 25px; }
+    .about-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 8vw, 7.5rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 35px; }
+    .about-hero p { font-size: 1.25rem; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 700px; margin: 0 auto; }
+
+    .values-section { padding: 100px 6%; background: #0a0a0a; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1400px; margin: 0 auto; }
+    .val-card { padding: 50px; border-radius: 30px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+    .val-num { display: block; font-size: 0.8rem; font-weight: 900; color: #3b82f6; margin-bottom: 20px; }
+    .val-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; }
+    .val-card p { font-size: 0.95rem; color: rgba(255,255,255,0.4); line-height: 1.6; }
+
+    .leadership { padding: 120px 6%; background: #0e0e0e; }
+    .lead-header { text-align: center; margin-bottom: 80px; }
+    .lead-header h2 { font-size: 3rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .lead-header p { color: rgba(255,255,255,0.5); }
+
+    .lead-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 40px; max-width: 400px; margin: 0 auto; }
+    .lead-card { border-radius: 30px; overflow: hidden; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); text-align: center; padding-bottom: 30px; }
+    .lead-img { aspect-ratio: 1/1; overflow: hidden; margin-bottom: 25px; }
+    .lead-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 0.6s; }
+    .lead-card:hover .lead-img img { filter: grayscale(0); }
+    .lead-info h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 5px; }
+    .lead-info p { font-size: 0.85rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Ambient BG */
+    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: contrast(1.1) grayscale(0.5); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, rgba(14,14,14,0.4) 0%, rgba(14,14,14,0.9) 100%); }
+
+    @media (max-width: 900px) { .values-grid { grid-template-columns: 1fr; } .about-hero h1 { font-size: 4rem; } }
+  </style>
+
+  <script>
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-about', { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: 'power3.out' });
+      gsap.from('.gsap-val', { 
+        scrollTrigger: { trigger: '.values-grid', start: 'top 80%' },
+        y: 60, opacity: 0, duration: 1, stagger: 0.15, ease: 'power3.out' 
+      });
+    });
+  </script>
+</body>
+</html>

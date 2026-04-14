@@ -1,0 +1,65 @@
+import { supabase } from '../config/supabase.js';
+import { logger } from '../config/logger.js';
+
+export const memberRepo = {
+  /**
+   * Search members by name or role.
+   * Joins profiles with church_workers to get their ministry roles.
+   */
+  searchMembers: async (query = '') => {
+    try {
+      // Base query fetching profiles and their associated worker roles
+      let dbQuery = supabase
+        .from('profiles')
+        .select(`
+          id,
+          first_name,
+          last_name,
+          avatar_url,
+          is_baptized,
+          church_workers (
+            position_id,
+            church_positions (
+              title,
+              department
+            )
+          )
+        `);
+
+      // If there's a search term, filter by first_name or last_name
+      if (query && query.trim() !== '') {
+        const searchTerm = `%${query.trim()}%`;
+        dbQuery = dbQuery.or(`first_name.ilike.${searchTerm},last_name.ilike.${searchTerm}`);
+      }
+
+      // Execute query
+      const { data, error } = await dbQuery.order('first_name', { ascending: true });
+
+      if (error) {
+        throw error;
+      }
+
+      // Restructure the data to make it flat for the template
+      return data.map(profile => {
+        const workerRoles = profile.church_workers || [];
+        const roles = workerRoles.map(w => ({
+          title: w.church_positions?.title,
+          department: w.church_positions?.department
+        })).filter(r => r.title);
+
+        return {
+          id: profile.id,
+          first_name: profile.first_name,
+          last_name: profile.last_name,
+          avatar_url: profile.avatar_url || `https://ui-avatars.com/api/?name=${profile.first_name}+${profile.last_name}&background=random`,
+          is_baptized: profile.is_baptized,
+          roles: roles
+        };
+      });
+
+    } catch (error) {
+      logger.error(`Error searching members: ${error.message}`);
+      throw error;
+    }
+  }
+};

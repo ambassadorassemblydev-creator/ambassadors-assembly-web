@@ -13,7 +13,18 @@ const router = express.Router();
 // ==========================================
 router.get('/', pageController.renderHome);
 router.get('/sermons', pageController.renderSermons);
-router.get('/my-account', authMiddleware.protect, accountController.renderDashboard);
+router.get('/sermons/:slug', pageController.renderSermonDetail);
+router.get('/events', pageController.renderEventsArchive);
+router.get('/events/:slug', pageController.renderEventDetail);
+router.get('/give', pageController.renderGive);
+router.get('/ministries', pageController.renderMinistries);
+router.get('/about', pageController.renderAbout);
+router.get('/connect', pageController.renderConnect);
+router.get('/plan-a-visit', pageController.renderPlanVisit);
+router.get('/my-account', authMiddleware.protect, authMiddleware.requireProfileCompletion, accountController.renderDashboard);
+router.get('/directory', authMiddleware.protect, authMiddleware.requireProfileCompletion, pageController.renderDirectory);
+router.get('/onboarding', authMiddleware.protect, accountController.renderOnboarding);
+router.post('/onboarding', authMiddleware.protect, accountController.submitOnboarding);
 router.get('/watch', watchController.renderWatch);
 // ==========================================
 // AUTH VIEWS & API

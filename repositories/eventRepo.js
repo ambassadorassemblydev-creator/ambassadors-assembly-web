@@ -1,19 +1,31 @@
 import { supabase } from '../config/supabase.js';
 
 export const eventRepo = {
-    // Fetch upcoming events for the homepage
-    getUpcomingEvents: async (limit = 7) => {
+    // Fetch upcoming events with full metadata
+    getUpcomingEvents: async (limit = 10) => {
         const { data, error } = await supabase
             .from('events')
-            .select('title, slug, cover_image_url, event_type, start_date')
+            .select('*')
             .eq('status', 'upcoming')
-            .order('start_date', { ascending: true }) // Soonest events first
+            .order('start_date', { ascending: true })
             .limit(limit);
         
         if (error) {
             console.error('[EventRepo] Error fetching upcoming events:', error.message);
-            return []; // Fail gracefully so the homepage doesn't crash
+            return [];
         }
+        return data;
+    },
+
+    // High IQ: Fetch a specific event by its slug including registration details
+    getEventBySlug: async (slug) => {
+        const { data, error } = await supabase
+            .from('events')
+            .select('*')
+            .eq('slug', slug)
+            .maybeSingle();
+
+        if (error) throw error;
         return data;
     }
 };
