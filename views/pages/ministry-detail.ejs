@@ -1,12 +1,19 @@
 <%- include('../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #050505; color: white;">
+<!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
+<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
   
   <%- include('../partials/preloader') %>
   
+  <!-- ========= Site Content ========= -->
   <div id="dm" class="dmwr">
     <div class="dm_wrapper -var5 null ">
-      <div id="site_content">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
 
         <%- include('../partials/navbar') %>
 
@@ -88,9 +95,9 @@
 
         </main>
 
-      </div>
+      <!-- </div>
     </div>
-  </div>
+  </div> -->
 
   <%- include('../partials/footer') %>
 

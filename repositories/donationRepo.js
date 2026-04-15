@@ -24,5 +24,18 @@ export const donationRepo = {
 
         if (error) throw error;
         return data;
+    },
+    
+    // Fetch all active building projects
+    getBuildingProjects: async () => {
+        const { data, error } = await supabase
+            .from('donation_categories')
+            .select('*')
+            .eq('is_active', true)
+            .ilike('slug', 'building-fund-%')
+            .order('sort_order', { ascending: true });
+
+        if (error) throw error;
+        return data;
     }
 };

@@ -51,7 +51,7 @@
 
     :root {
       --color_1: rgba(19, 19, 19, 1);
-      --color_2: rgba(59, 111, 181, 1);
+      --color_2: rgba(34, 197, 94, 1);
       --color_3: rgba(255, 255, 255, 1);
       --color_4: rgba(233, 233, 233, 1);
       --color_5: rgba(234, 246, 255, 1);
@@ -73,7 +73,7 @@
  
     :root {
       --color_1: rgba(19, 19, 19, 1);
-      --color_2: rgba(59, 111, 181, 1);
+      --color_2: rgba(34, 197, 94, 1);
       --color_3: rgba(255, 255, 255, 1);
       --color_4: rgba(233, 233, 233, 1);
       --color_5: rgba(234, 246, 255, 1);
@@ -2327,3 +2327,35 @@
         min-height: 40vh !important;
       }
     }
+
+/* AA GLOBAL PATCH: 2-COLUMN MOBILE GRID */
+@media (max-width: 767px) {
+  /* Generic card containers and grids */
+  .grid-container, 
+  .cards-grid,
+  .leadership-grid,
+  .staff-grid,
+  .sermon-grid,
+  .events-grid,
+  .cinematic-grid,
+  [data-layout-grid],
+  .aa-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  /* Reset any specific column overrides that might break the 2-col flow */
+  .event-item, .staff-card, .sermon-card, .ministry-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  /* Typography scale down for 2-col mobile */
+  .card-title, .event-title, .staff-name {
+    font-size: 1rem !important;
+  }
+}

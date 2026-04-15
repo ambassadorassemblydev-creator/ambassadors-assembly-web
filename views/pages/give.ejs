@@ -1,12 +1,19 @@
 <%- include('../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #0e0e0e; color: white;">
+<!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
+<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
   
   <%- include('../partials/preloader') %>
   
+  <!-- ========= Site Content ========= -->
   <div id="dm" class="dmwr">
     <div class="dm_wrapper -var5 null ">
-      <div id="site_content">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
 
         <%- include('../partials/navbar') %>
 
@@ -89,9 +96,9 @@
           </div>
         </main>
 
-      </div>
+      <!-- </div>
     </div>
-  </div>
+  </div> -->
 
   <%- include('../partials/footer') %>
 
@@ -202,14 +209,40 @@
     function initiateGiving() {
       let amount = customInp.value || document.querySelector('.preset-btn.active').dataset.amt;
       let fund = document.getElementById('fund-type').value;
+      const email = "<%= user ? user.email : '' %>" || prompt('Please enter your email to continue:');
       
-      console.log(`[Partnership] Initiating seed of $${amount} for ${fund}`);
+      if (!email) return;
+      if (!amount || isNaN(amount)) return;
+
+      console.log(`[Partnership] Initiating seed of ₦${amount} for ${fund}`);
       
-      // High IQ: In a production app, we would call the /api/donations intent endpoint here
-      // and redirect to Stripe/ChurchCenter
-      alert(`Generosity detected! Redirecting to our secure partnership portal for $${amount}...`);
-      window.location.href = `https://ambassadorsassembly.churchcenter.com/giving?amount=${amount}&fund=${fund}`;
+      const handler = PaystackPop.setup({
+        key: "<%= paystackPublicKey %>", 
+        email: email,
+        amount: amount * 100, // Kobo
+        currency: "NGN",
+        ref: 'AA-GEN-' + Math.floor((Math.random() * 1000000000) + 1),
+        metadata: {
+          custom_fields: [
+            {
+              display_name: "Fund Type",
+              variable_name: "fund_type",
+              value: fund
+            }
+          ]
+        },
+        callback: function(response) {
+          alert('Seed received with Honor! Reference: ' + response.reference);
+          // High IQ: In a production app, we would notify the server here
+          window.location.href = '/my-account';
+        },
+        onClose: function() {
+          alert('Transaction cancelled.');
+        }
+      });
+      handler.openIframe();
     }
   </script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
 </body>
 </html>

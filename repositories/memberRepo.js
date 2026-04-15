@@ -98,5 +98,24 @@ export const memberRepo = {
       logger.error(`Error fetching staff: ${error.message}`);
       return [];
     }
+  },
+
+  /**
+   * Get all active church departments for filtering
+   */
+  getDepartments: async () => {
+    try {
+      const { data, error } = await supabase
+        .from('church_departments')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      logger.error(`Error fetching departments: ${error.message}`);
+      return [];
+    }
   }
 };

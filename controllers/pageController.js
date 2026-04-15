@@ -55,6 +55,7 @@ export const pageController = {
             res.render('pages/sermons', {
                 pageTitle: 'Sermons | Ambassadors Assembly',
                 currentPath: req.path,
+                preloaderText: 'MESSAGE LIBRARY',
                 sermons: sermons || []
             });
         } catch (error) {
@@ -111,6 +112,7 @@ export const pageController = {
             res.render('pages/events', {
                 pageTitle: 'Events | Ambassadors Assembly',
                 currentPath: req.path,
+                preloaderText: 'GATHERINGS',
                 events: events || []
             });
         } catch (error) {
@@ -149,6 +151,7 @@ export const pageController = {
             res.render('pages/give', {
                 pageTitle: 'Give | Ambassadors Assembly',
                 currentPath: req.path,
+                preloaderText: 'GENEROSITY',
                 donationGoal: null
             });
         } catch (error) {
@@ -201,6 +204,7 @@ export const pageController = {
             res.render('pages/ministries', {
                 pageTitle: 'Ministries | Ambassadors Assembly',
                 currentPath: req.path,
+                preloaderText: 'COMMUNITY',
                 ministries
             });
         } catch (error) {
@@ -216,6 +220,7 @@ export const pageController = {
             res.render('pages/about', {
                 pageTitle: 'About Us | Ambassadors Assembly',
                 currentPath: req.path,
+                preloaderText: 'OUR STORY',
                 staff: staff || []
             });
         } catch (error) {
@@ -229,7 +234,8 @@ export const pageController = {
         try {
             res.render('pages/connect', {
                 pageTitle: 'Connect | Ambassadors Assembly',
-                currentPath: req.path
+                currentPath: req.path,
+                preloaderText: 'JOIN US'
             });
         } catch (error) {
             res.status(500).render('pages/error', { message: 'Error loading page' });
@@ -241,7 +247,8 @@ export const pageController = {
         try {
             res.render('pages/plan-a-visit', {
                 pageTitle: 'Plan Your Visit | Ambassadors Assembly',
-                currentPath: req.path
+                currentPath: req.path,
+                preloaderText: 'VISIT US'
             });
         } catch (error) {
             res.status(500).render('pages/error', { message: 'Error loading page' });
@@ -263,6 +270,65 @@ export const pageController = {
         } catch (error) {
             console.error('[PageController] Error rendering directory:', error.message);
             res.status(500).render('pages/error', { message: 'Error loading directory' });
+        }
+    },
+
+    // Render the Staff Page (Dynamically filtered)
+    renderStaff: async (req, res) => {
+        try {
+            const [staff, departments] = await Promise.all([
+                memberRepo.getStaff(),
+                memberRepo.getDepartments()
+            ]);
+            
+            res.render('pages/staff', {
+                pageTitle: 'Our Staff | Ambassadors Assembly',
+                currentPath: req.path,
+                preloaderText: 'OUR TEAM',
+                staff: staff || [],
+                departments: departments || [],
+                defaultFilter: 'Pastoral' // High IQ: Defaulting to Pastoral as requested
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering staff:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading staff' });
+        }
+    },
+
+    // Render the Fund The Buildings Page (Template for dynamic projects)
+    renderFundTheBuildings: async (req, res) => {
+        try {
+            const projects = await donationRepo.getBuildingProjects();
+            res.render('pages/fund-the-buildings', {
+                pageTitle: 'Fund The Buildings | Ambassadors Assembly',
+                currentPath: req.path,
+                preloaderText: 'THE VISION',
+                projects: projects || []
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering buildings page:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading page' });
+        }
+    },
+
+    // Render Building Project Detail
+    renderBuildingDetail: async (req, res) => {
+        try {
+            const { slug } = req.params;
+            const projects = await donationRepo.getBuildingProjects();
+            const project = projects.find(p => p.slug === slug);
+            
+            if (!project) return res.status(404).render('pages/error', { message: 'Project not found' });
+
+            res.render('pages/building-detail', {
+                pageTitle: `${project.name} | Ambassadors Assembly`,
+                currentPath: req.path,
+                preloaderText: 'VISION DETAIL',
+                project
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering building detail:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading project details' });
         }
     }
 };

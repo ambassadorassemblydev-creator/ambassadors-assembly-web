@@ -41,6 +41,7 @@ export const authMiddleware = {
     }
 
     res.locals.user = user;
+    req.user = user;
     next();
   },
 

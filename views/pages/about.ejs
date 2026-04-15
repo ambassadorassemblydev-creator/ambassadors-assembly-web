@@ -1,247 +1,328 @@
 <%- include('../partials/head') %>
-
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #0e0e0e; color: white;">
+<!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
+<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
   
   <%- include('../partials/preloader') %>
   
+  <!-- ========= Site Content ========= -->
   <div id="dm" class="dmwr">
     <div class="dm_wrapper -var5 null ">
-      <div id="site_content">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+    <%- include('../partials/navbar') %>
 
-        <%- include('../partials/navbar') %>
-
-        <main class="about-page">
-          <!-- AMBIENT BG -->
-          <div class="give-bg">
-            <div class="bg-overlay"></div>
-            <img src="https://images.unsplash.com/photo-1544427920-c49ccca8a075?q=80&w=2000&auto=format&fit=crop" alt="Church Background" class="bg-img">
+    <main>
+      <!-- REVELATION HERO (CINEMATIC) -->
+      <section class="rev-hero" id="rev-hero">
+        <div class="rev-hero__bg">
+          <div class="rev-hero__overlay"></div>
+          <img src="https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=2671&auto=format&fit=crop" alt="Sanctuary" class="rev-hero__img">
+        </div>
+        <div class="rev-hero__content">
+          <h1 class="rev-hero__title" id="rev-text">ABOUT US</h1>
+          <div class="rev-hero__bottom">
+            <span class="rev-hero__scroll-indicator">Scroll to Explore</span>
           </div>
+        </div>
+      </section>
+
+      <!-- EDITORIAL LAYOUT WITH SIDE-NAV -->
+      <div class="editorial-container">
+        
+        <!-- STICKY SIDE-NAV -->
+        <aside class="side-nav" id="side-nav">
+          <div class="side-nav__inner">
+            <div class="side-nav__line">
+              <div class="side-nav__progress" id="nav-progress"></div>
+            </div>
+            <ul class="side-nav__list">
+              <li class="side-nav__item active" data-section="story">
+                <span class="side-nav__num">01</span>
+                <span class="side-nav__label">OUR STORY</span>
+              </li>
+              <li class="side-nav__item" data-section="leadership">
+                <span class="side-nav__num">02</span>
+                <span class="side-nav__label">LEADERSHIP</span>
+              </li>
+              <li class="side-nav__item" data-section="dna">
+                <span class="side-nav__num">03</span>
+                <span class="side-nav__label">OUR DNA</span>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="editorial-content">
           
-          <!-- VISION HERO -->
-          <section class="about-hero">
-            <div class="hero-content">
-              <span class="gsap-about">The Commission</span>
-              <h1 class="gsap-about">Building a Generation<br>of Ambassadors</h1>
-              <p class="gsap-about">Ambassadors Assembly is more than a church; it's a movement of spirit-filled believers transformed by the Word, empowered by the Spirit, and sent into the world to represent the Kingdom of God.</p>
+          <!-- SECTION 1: STORY -->
+          <section id="story" class="ed-section ed-section--story">
+            <div class="section-label">01 / REVELATION</div>
+            <h2 class="ed-title">A Vision Born in <span class="text-green">Excellence</span></h2>
+            <div class="ed-text">
+              <p>In the heart of a generation seeking truth, Ambassadors Assembly emerged as a lighthouse of consecration. What began as a gathering of few has evolved into a global movement of kingdom ambassadors, committed to manifesting the glory of God in every sphere of human endeavor.</p>
+              <p>We are not just a church; we are a specialized training ground for kings and priests, commissioned to restore the authentic image of Christ to a world in transition.</p>
+            </div>
+            <div class="ed-image-wrap">
+              <img src="https://images.unsplash.com/photo-1544427928-c49cdfebf4ad?q=80&w=2000" alt="Church Gathering">
             </div>
           </section>
 
-          <!-- STORY SECTION -->
-          <section class="story-section">
-            <div class="content-container">
-              <div class="story-grid">
-                <div class="story-text gsap-up">
-                  <span class="small-label">Our Story</span>
-                  <h2>A Mandate for the Marketplace</h2>
-                  <p>Born out of a divine encounter, Ambassadors Assembly began as a small gathering of believers hungry for the authentic move of God's spirit. Our mandate is simple: to raise believers who don't just "do church" on Sundays, but who carry the tangible presence of God into their offices, homes, and cities.</p>
-                  <p>Today, we continue to grow as a global family, united by a passion for the Word, the power of prayer, and the pursuit of kingdom excellence in every sphere of life.</p>
-                </div>
-                <div class="story-visual gsap-up">
-                   <div class="visual-wrap">
-                     <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2000&auto=format&fit=crop" alt="Church Vision">
-                     <div class="floating-stat glass-fx">
-                       <strong>10+</strong>
-                       <span>Global Arms</span>
-                     </div>
-                   </div>
-                </div>
-              </div>
-            </div>
-          </section>
- 
-          <!-- LEADERSHIP (Cinematic) -->
-            <div class="lead-header gsap-about">
-              <span class="small-label">The Shepherds</span>
-              <h2>Leadership Directory</h2>
-              <p>Meet those who labor in the word and doctrine to shepherd this glorious assembly.</p>
+          <!-- SECTION 2: LEADERSHIP -->
+          <section id="leadership" class="ed-section ed-section--leadership">
+            <div class="section-label">02 / STEWARDSHIP</div>
+            <h2 class="ed-title">Led by <span class="text-green">Divine Intent</span></h2>
+            <div class="ed-text">
+              <p>Our leadership is defined by servitude and a relentless pursuit of spiritual depth. Led by the Presiding Pastor and a college of consecrated ministers, we ensure that every soul is nurtured, every gift is activated, and every ambassador is deployed for purpose.</p>
             </div>
             
-            <div class="staff-search-box gsap-about">
-              <div class="search-inner glass-fx">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="staff-lookup" placeholder="Search for a leader or role..." onkeyup="filterStaff()">
-              </div>
+            <div class="leadership-grid">
+              <% staff.filter(s => s.department === 'Pastoral' || s.department === 'Leadership').forEach(member => { %>
+                <div class="leader-card glass-fx">
+                  <div class="leader-img">
+                    <img src="<%= member.avatar_url %>" alt="<%= member.first_name %>">
+                  </div>
+                  <div class="leader-info">
+                    <h3><%= member.first_name %> <%= member.last_name %></h3>
+                    <p><%= member.role %></p>
+                  </div>
+                </div>
+              <% }) %>
             </div>
+          </section>
 
-            <div class="lead-grid" id="staff-grid">
-              <% if (typeof staff !== 'undefined' && staff && staff.length > 0) { %>
-                <% staff.forEach((person, i) => { %>
-                  <div class="lead-card gsap-val" data-name="<%= person.first_name %> <%= person.last_name %>" data-role="<%= person.role %>">
-                    <div class="lead-img">
-                      <img src="<%= person.avatar_url %>" alt="<%= person.first_name %>">
-                    </div>
-                    <div class="lead-info">
-                      <h3><%= person.first_name %> <%= person.last_name %></h3>
-                      <p><%= person.role %></p>
-                      <span class="dept"><%= person.department %></span>
-                    </div>
-                  </div>
-                <% }) %>
-              <% } else { %>
-                <!-- Placeholder Leadership -->
-                <div class="lead-card gsap-val" data-name="Lead Pastor" data-role="Presiding Overseer">
-                  <div class="lead-img">
-                    <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" alt="Pastor">
-                  </div>
-                  <div class="lead-info">
-                    <h3>Presiding Pastor</h3>
-                    <p>Ambassadors Assembly</p>
-                  </div>
-                </div>
-
-                <div class="lead-card gsap-val" data-name="Associate Pastor" data-role="Administration">
-                  <div class="lead-img">
-                    <div class="img-placeholder" style="background: var(--glass); height: 100%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.1); font-size: 3rem; font-weight: 900;">AA</div>
-                  </div>
-                  <div class="lead-info">
-                    <h3>Associate Pastor</h3>
-                    <p>Administration & Logic</p>
-                  </div>
-                </div>
-
-                <div class="lead-card gsap-val" data-name="Deacon Board" data-role="Welfare & Service">
-                  <div class="lead-img">
-                    <div class="img-placeholder" style="background: var(--glass); height: 100%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.1); font-size: 3rem; font-weight: 900;">AA</div>
-                  </div>
-                  <div class="lead-info">
-                    <h3>Deaconate Board</h3>
-                    <p>Welfare & Logistics</p>
-                  </div>
-                </div>
-
-                <div class="lead-card gsap-val" data-name="Choir Director" data-role="Worship">
-                  <div class="lead-img">
-                    <div class="img-placeholder" style="background: var(--glass); height: 100%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.1); font-size: 3rem; font-weight: 900;">AA</div>
-                  </div>
-                  <div class="lead-info">
-                    <h3>Head of Worship</h3>
-                    <p>Worship & Creative Arts</p>
-                  </div>
-                </div>
-              <% } %>
-            </div>
-
-          <!-- Core Values -->
-          <section class="values-section">
-             <div class="section-tag gsap-about">Our DNA</div>
-             <h2 class="gsap-about">What Drives Us</h2>
-            <div class="values-grid">
-              <div class="val-card gsap-val">
-                <span class="val-num">01</span>
-                <h3>Biblical Soundness</h3>
-                <p>We are rooted in the uncompromised Word of God, teaching for transformation and spiritual maturity.</p>
+          <!-- SECTION 3: DNA -->
+          <section id="dna" class="ed-section ed-section--dna">
+            <div class="section-label">03 / ESSENCE</div>
+            <h2 class="ed-title">Our <span class="text-green">Holy DNA</span></h2>
+            
+            <div class="dna-list">
+              <div class="dna-item gsap-dna">
+                <span class="dna-label">01 / CONSECRATION</span>
+                <p>We live life as a sacred offering, separated unto God for His specific use.</p>
               </div>
-              <div class="val-card gsap-val">
-                <span class="val-num">02</span>
-                <h3>Spiritual Empowerment</h3>
-                <p>We believe in the active power of the Holy Spirit to heal, deliver, and equip every believer for ministry.</p>
+              <div class="dna-item gsap-dna">
+                <span class="dna-label">02 / EXCELLENCE</span>
+                <p>We believe if it is for the King, it must be world-class. No mediocrity.</p>
               </div>
-              <div class="val-card gsap-val">
-                <span class="val-num">03</span>
-                <h3>Global Mandate</h3>
-                <p>Our call is global. We raise ambassadors who carry the culture of heaven into every sphere of human influence.</p>
+              <div class="dna-item gsap-dna">
+                <span class="dna-label">03 / AMBASSADORSHIP</span>
+                <p>We represent the interest of a foreign government—Heaven—here on earth.</p>
+              </div>
+              <div class="dna-item gsap-dna">
+                <span class="dna-label">04 / REVELATION</span>
+                <p>We do not operate by human wisdom, but by the proceeding word of God.</p>
               </div>
             </div>
           </section>
 
-        </main>
-
+        </div>
       </div>
-    </div>
+    </main>
+
+    <%- include('../partials/footer') %>
   </div>
 
-  <%- include('../partials/footer') %>
-
   <style>
-    .about-page { padding-bottom: 0; }
-    
-    .about-hero { height: 75vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6%; background: transparent; position: relative; }
-    .about-hero .hero-content { max-width: 1000px; position: relative; z-index: 2; }
-    .about-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: #3b82f6; margin-bottom: 25px; }
-    .about-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 8vw, 7.5rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 35px; }
-    .about-hero p { font-size: 1.25rem; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 700px; margin: 0 auto; }
+    /* BRAND COLORS */
+    :root {
+      --aa-green: #15803d;
+      --aa-green-glow: rgba(34, 197, 94, 0.4);
+      --aa-bg: #050505;
+    }
 
-    .story-section { padding: 120px 6%; background: #050505; }
-    .content-container { max-width: 1400px; margin: 0 auto; }
-    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .small-label { display: block; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; color: #3b82f6; margin-bottom: 20px; }
-    .story-text h2 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 30px; letter-spacing: -0.02em; }
-    .story-text p { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.5); margin-bottom: 25px; }
+    .text-green { color: var(--aa-green); }
 
-    .visual-wrap { position: relative; border-radius: 40px; overflow: hidden; height: 600px; }
-    .visual-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .floating-stat { position: absolute; bottom: 40px; right: 40px; padding: 30px 40px; border-radius: 24px; text-align: center; }
-    .floating-stat strong { display: block; font-size: 2.5rem; font-weight: 900; color: white; }
-    .floating-stat span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.6); }
+    /* REVELATION HERO */
+    .rev-hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--aa-bg);
+      z-index: 10;
+    }
 
-    .leadership { padding: 120px 6%; background: #0e0e0e; }
-    .lead-header { text-align: center; margin-bottom: 60px; }
-    .lead-header h2 { font-size: 3.5rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 20px; }
-    .lead-header p { color: rgba(255,255,255,0.5); font-size: 1.1rem; }
+    .rev-hero__bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      transform: scale(1.1);
+    }
+    .rev-hero__img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: blur(10px); }
+    .rev-hero__overlay {
+      position: absolute; top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(to bottom, transparent 60%, var(--aa-bg) 100%);
+      z-index: 1;
+    }
 
-    .staff-search-box { max-width: 600px; margin: 0 auto 80px; }
-    .search-inner { display: flex; padding: 10px; border-radius: 100px; gap: 10px; }
-    .search-inner input { flex: 1; background: transparent; border: none; padding: 0 30px; color: white; font-family: inherit; font-size: 0.95rem; outline: none; }
-    .dir-btn { padding: 14px 25px; background: #3b82f6; color: white; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 0.8rem; transition: 0.3s; }
-    .dir-btn:hover { background: #2563eb; transform: scale(1.05); }
+    .rev-hero__content { position: relative; z-index: 2; text-align: center; }
+    .rev-hero__title {
+      font-size: clamp(4rem, 15vw, 15rem);
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 0.8;
+      color: white;
+      margin: 0;
+      pointer-events: none;
+    }
 
-    .lead-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; max-width: 1400px; margin: 0 auto; }
-    .lead-card { border-radius: 40px; overflow: hidden; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    .lead-card:hover { transform: translateY(-15px); border-color: rgba(59, 130, 246, 0.3); }
-    .lead-img { aspect-ratio: 4/5; overflow: hidden; position: relative; }
-    .lead-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 1s; }
-    .lead-card:hover .lead-img img { filter: grayscale(0); transform: scale(1.05); }
-    .lead-info { padding: 30px; }
-    .lead-info h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
-    .lead-info p { font-size: 0.85rem; color: #3b82f6; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 5px; }
-    .dept { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+    .rev-hero__bottom {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.5;
+    }
+    .rev-hero__scroll-indicator { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 800; }
 
-    .values-section { padding: 120px 6%; background: #050505; text-align: center; }
-    .section-tag { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 4px; color: #3b82f6; margin-bottom: 20px; }
-    .values-section h2 { font-size: 3.5rem; font-weight: 900; margin-bottom: 80px; }
-    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1400px; margin: 0 auto; }
-    .val-card { padding: 60px 50px; border-radius: 40px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); text-align: left; }
-    .val-num { display: block; font-size: 0.8rem; font-weight: 900; color: #3b82f6; margin-bottom: 30px; }
-    .val-card h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; }
-    .val-card p { font-size: 1rem; color: rgba(255,255,255,0.4); line-height: 1.8; }
+    /* EDITORIAL LAYOUT */
+    .editorial-container {
+      position: relative;
+      display: flex;
+      background: var(--aa-bg);
+      padding: 0 6%;
+      z-index: 20; /* Slides over hero */
+      margin-top: -20vh; /* Start reveal early */
+      padding-top: 100px;
+    }
 
-    .glass-fx { background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); }
+    /* SIDE NAV */
+    .side-nav {
+      position: sticky;
+      top: 15vh;
+      width: 250px;
+      height: fit-content;
+      padding-right: 40px;
+    }
+    .side-nav__inner { position: relative; padding-left: 20px; }
+    .side-nav__line {
+      position: absolute; left: 0; top: 0; width: 1px; height: 100%;
+      background: rgba(255,255,255,0.1);
+    }
+    .side-nav__progress {
+      position: absolute; left: -1px; top: 0; width: 3px; height: 0%;
+      background: var(--aa-green);
+      box-shadow: 0 0 10px var(--aa-green-glow);
+    }
+    .side-nav__list { list-style: none; padding: 0; margin: 0; }
+    .side-nav__item {
+      margin-bottom: 40px;
+      cursor: pointer;
+      opacity: 0.3;
+      transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; flex-direction: column;
+    }
+    .side-nav__item.active { opacity: 1; }
+    .side-nav__num { font-size: 0.7rem; font-weight: 900; color: var(--aa-green); margin-bottom: 5px; }
+    .side-nav__label { font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; }
 
-    /* Ambient BG */
-    .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.2; filter: contrast(1.1) grayscale(0.5); }
-    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, transparent 0%, #050505 100%); }
+    /* MAIN CONTENT */
+    .editorial-content { flex: 1; max-width: 900px; }
+    .ed-section { padding-bottom: 150px; }
+    .section-label { font-size: 0.75rem; font-weight: 800; opacity: 0.3; letter-spacing: 4px; margin-bottom: 20px; }
+    .ed-title { font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1; margin-bottom: 40px; letter-spacing: -0.04em; }
+    .ed-text { font-size: 1.25rem; color: rgba(255,255,255,0.6); line-height: 1.6; max-width: 700px; }
+    .ed-text p { margin-bottom: 30px; }
 
-    @media (max-width: 1100px) { 
-        .story-grid { grid-template-columns: 1fr; gap: 60px; } 
-        .values-grid { grid-template-columns: 1fr; } 
+    .ed-image-wrap { margin-top: 60px; border-radius: 40px; overflow: hidden; height: 500px; }
+    .ed-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* LEADERSHIP */
+    .leadership-grid { margin-top: 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+    .leader-card { padding: 30px; border-radius: 30px; }
+    .leader-img { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
+    .leader-img img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
+    .leader-card:hover .leader-img img { transform: scale(1.05); }
+    .leader-info h3 { font-size: 1.2rem; margin-bottom: 5px; }
+    .leader-info p { font-size: 0.75rem; font-weight: 800; color: var(--aa-green); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* DNA */
+    .dna-list { margin-top: 60px; }
+    .dna-item { padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .dna-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--aa-green); margin-bottom: 10px; }
+    .dna-item p { font-size: 1.5rem; font-weight: 500; }
+
+    .glass-fx { background: rgba(255,255,255,0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+
+    @media (max-width: 1000px) {
+      .editorial-container { flex-direction: column; }
+      .side-nav { position: relative; top: 0; width: 100%; margin-bottom: 60px; padding: 0; }
+      .side-nav__list { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
+      .side-nav__item { margin-bottom: 0; min-width: 150px; }
+      .side-nav__line { display: none; }
     }
   </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script>
+    gsap.registerPlugin(ScrollTrigger);
+
     window.addEventListener('load', () => {
-      gsap.from('.gsap-about', { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: 'power3.out' });
-      gsap.from('.gsap-val', { 
-        scrollTrigger: { trigger: '.values-grid', start: 'top 80%' },
-        y: 60, opacity: 0, duration: 1, stagger: 0.15, ease: 'power3.out' 
+      // 1. REVELATION SCROLL EFFECT
+      gsap.to("#rev-text", {
+        scrollTrigger: {
+          trigger: "#rev-hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+          pin: true
+        },
+        y: 200,
+        opacity: 0,
+        scale: 0.8,
+        filter: "blur(20px)"
+      });
+
+      // 2. SIDE NAV PROGRESS
+      gsap.to("#nav-progress", {
+        scrollTrigger: {
+          trigger: ".editorial-content",
+          start: "top 20%",
+          end: "bottom 80%",
+          scrub: true
+        },
+        height: "100%"
+      });
+
+      // 3. SECTION SPY
+      const sections = ['story', 'leadership', 'dna'];
+      sections.forEach(id => {
+        ScrollTrigger.create({
+          trigger: `#${id}`,
+          start: "top 40%",
+          onEnter: () => updateActiveNav(id),
+          onEnterBack: () => updateActiveNav(id)
+        });
+      });
+
+      function updateActiveNav(id) {
+        document.querySelectorAll('.side-nav__item').forEach(el => {
+          el.classList.remove('active');
+          if (el.dataset.section === id) el.classList.add('active');
+        });
+      }
+
+      // 4. DNA ANIMATIONS (ACCELERATED)
+      gsap.from(".gsap-dna", {
+        scrollTrigger: {
+          trigger: "#dna",
+          start: "top 60%"
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out"
       });
     });
-
-    function filterStaff() {
-      const query = document.getElementById('staff-lookup').value.toLowerCase();
-      const cards = document.querySelectorAll('.lead-card');
-      
-      cards.forEach(card => {
-        const name = card.getAttribute('data-name').toLowerCase();
-        const role = card.getAttribute('data-role').toLowerCase();
-        
-        if (name.includes(query) || role.includes(query)) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
   </script>
 </body>
 </html>

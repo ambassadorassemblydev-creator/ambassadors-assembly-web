@@ -36,13 +36,17 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
-// 1. Initialize CSRF Protection Globally
+// 1. Check user session early on every request (Populates req.user for CSRF stability)
+app.use(authMiddleware.checkUser);
+
+// 2. Initialize CSRF Protection Globally
 app.use(doubleCsrfProtection);
 app.use(csrfErrorHandler);
 
-// 2. Pass the CSRF Token to ALL EJS Templates automatically
+// 3. Pass global variables to ALL EJS Templates automatically
 app.use((req, res, next) => {
   res.locals.csrfToken = generateToken(req, res);
+  res.locals.paystackPublicKey = process.env.PAYSTACK_PUBLIC_KEY;
   next();
 });
 
@@ -85,9 +89,6 @@ app.use((req, res, next) => {
 // ==========================================
 // 3. ROUTES
 // ==========================================
-// Check for a logged-in user on EVERY page load
-app.use(authMiddleware.checkUser);
-
 app.use('/', indexRouter);
 
 // Handle unhandled routes (404)
