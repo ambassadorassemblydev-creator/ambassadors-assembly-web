@@ -94,7 +94,20 @@
               <% }) %>
             </div>
           </section>
-
+<style>
+  /* STRIP DUDA'S WHITE BACKGROUNDS & PADDING */
+                    body.dmRoot, #dm, .dm_wrapper, .dmOuter, .dmInner, #site_content, .dmBody, #allWrapper, #dm_content, #dmFlexHeaderContainer, #flex-header {
+                      background-color: transparent !important;
+                      background-image: none !important;
+                    }
+                    #dmFlexHeaderContainer {
+                      position: absolute !important;
+                      top: 0; left: 0; width: 100%; z-index: 1000 !important;
+                    }
+                    #dmFirstContainer, #allWrapper, #dm_content {
+                      margin: 0 !important; padding: 0 !important;
+                    }
+</style>
           <!-- SECTION 3: DNA -->
           <section id="dna" class="ed-section ed-section--dna">
             <div class="section-label">03 / ESSENCE</div>

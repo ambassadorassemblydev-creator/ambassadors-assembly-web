@@ -36,6 +36,17 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
+// ==========================================
+// 2. VIEW ENGINE & ASSETS
+// ==========================================
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Global Template Variables
+app.locals.siteName = 'Ambassadors Assembly';
+app.locals.currentYear = new Date().getFullYear();
+
 // 1. Check user session early on every request (Populates req.user for CSRF stability)
 app.use(authMiddleware.checkUser);
 
@@ -64,16 +75,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// ==========================================
-// 2. VIEW ENGINE & ASSETS
-// ==========================================
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
 
-// Global Template Variables
-app.locals.siteName = 'Ambassadors Assembly';
-app.locals.currentYear = new Date().getFullYear();
 
 // Request Logger (High IQ Filtering)
 app.use((req, res, next) => {

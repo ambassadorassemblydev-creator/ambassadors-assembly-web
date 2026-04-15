@@ -50,10 +50,10 @@
               <div class="aa-ev-card gsap-ev-card" data-category="<%= event.category %>">
                 <a href="/events/<%= event.slug %>" class="aa-ev-card__link">
                   <div class="aa-ev-card__img-wrap">
-                    <img src="<%= event.image_url %>" alt="<%= event.title %>" class="aa-ev-card__img">
+                    <img src="<%= event.cover_image_url %>" alt="<%= event.title %>" class="aa-ev-card__img">
                     <div class="aa-ev-card__date-badge">
-                      <span class="aa-ev-date-day"><%= new Date(event.event_date).getDate() %></span>
-                      <span class="aa-ev-date-mon"><%= new Date(event.event_date).toLocaleString('default', { month: 'short' }).toUpperCase() %></span>
+                      <span class="aa-ev-date-day"><%= new Date(event.start_date).getDate() %></span>
+                      <span class="aa-ev-date-mon"><%= new Date(event.start_date).toLocaleString('default', { month: 'short' }).toUpperCase() %></span>
                     </div>
                   </div>
                   <div class="aa-ev-card__info">
@@ -122,6 +122,8 @@
     .aa-ev-card { position: relative; border-radius: 40px; overflow: hidden; background: rgba(255,255,255,0.02); transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
     .aa-ev-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.05); }
     
+    .aa-ev-card__link { display: block; text-decoration: none; color: inherit; }
+
     .aa-ev-card__img-wrap { position: relative; aspect-ratio: 16/10; overflow: hidden; }
     .aa-ev-card__img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
     .aa-ev-card:hover .aa-ev-card__img { transform: scale(1.05); }
@@ -153,10 +155,16 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script>
-    window.addEventListener('load', () => {
+    const initEventsGsap = () => {
       // Entrance
-      gsap.from(".aa-ev-hero__content > *", { y: 50, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out" });
-      gsap.from(".gsap-ev-card", { scale: 0.9, opacity: 0, duration: 0.6, stagger: 0.05, delay: 0.5 });
+      gsap.fromTo(".aa-ev-hero__content > *", 
+        { y: 50, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out" }
+      );
+      gsap.fromTo(".gsap-ev-card", 
+        { scale: 0.9, opacity: 0 }, 
+        { scale: 1, opacity: 1, duration: 0.6, stagger: 0.05, delay: 0.5 }
+      );
       
       // Filter Logic
       const buttons = document.querySelectorAll('.aa-filter-btn');
@@ -180,7 +188,13 @@
           }});
         });
       });
-    });
+    };
+
+    if (document.readyState === 'complete') {
+      initEventsGsap();
+    } else {
+      window.addEventListener('load', initEventsGsap);
+    }
   </script>
 </body>
 </html>
