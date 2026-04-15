@@ -89,10 +89,10 @@
     /* HERO with Gradient Mask */
     .buildings-hero { position: relative; height: 75vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .hero-bg { position: absolute; top:0; left:0; width:100%; height:100%; z-index: 1; }
-    .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transform: scale(1.1); }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transform: scale(1.1); }
     .hero-overlay { 
       position: absolute; top:0; left:0; width:100%; height:100%; 
-      background: linear-gradient(to bottom, rgba(34, 197, 94, 0.1) 0%, rgba(5,5,5,0.8) 50%, var(--aa-bg) 100%); 
+      background: linear-gradient(to bottom, rgba(34, 197, 94, 0.05) 0%, rgba(5,5,5,0.4) 50%, var(--aa-bg) 100%); 
       z-index: 2; 
     }
     
@@ -119,8 +119,8 @@
     .project-card:hover { transform: translateY(-15px); background: rgba(255,255,255,0.05); border-color: rgba(34, 197, 94, 0.3); }
     
     .project-card__img-wrap { aspect-ratio: 16/10; overflow: hidden; }
-    .project-card__img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1); filter: grayscale(0.2); }
-    .project-card:hover .project-card__img-wrap img { transform: scale(1.1); filter: grayscale(0); }
+    .project-card__img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1); filter: grayscale(0); }
+    .project-card:hover .project-card__img-wrap img { transform: scale(1.1); }
 
     .project-card__content { padding: 40px; }
     .project-card__status { margin-bottom: 15px; }
