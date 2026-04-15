@@ -20,8 +20,8 @@ const updateProfileSchema = z.object({
   department_interest: z.string().optional(),
 });
 
-// Step 1: Personal Details
-const step1Schema = z.object({
+// Combined Onboarding Schema
+const onboardingSchema = z.object({
   gender: z.string().optional(),
   dob: z.string().min(1, "Date of birth is required"),
   marital_status: z.string().min(1, "Marital status is required"),
@@ -29,17 +29,14 @@ const step1Schema = z.object({
   phone: z.string().min(1, "Phone number is required"),
   addressLine1: z.string().min(1, "Address is required"),
   city: z.string().min(1, "City is required"),
-});
-
-// Step 2: Spiritual & Departmental
-const step2Schema = z.object({
-  is_baptized: z.boolean().default(false),
+  is_baptized: z.any().transform(val => val === "true" || val === "on"),
   baptism_date: z.string().optional(),
   salvation_date: z.string().optional(),
   previous_church: z.string().optional(),
   department_interest: z.string().optional(),
   position_interest: z.string().optional(),
   occupation: z.string().optional(),
+  ministry_interests: z.union([z.string(), z.array(z.string())]).optional(),
 });
 
 export const accountController = {
@@ -212,53 +209,53 @@ export const accountController = {
   submitOnboarding: async (req, res, next) => {
     try {
       const userId = req.user.id;
-      const step = parseInt(req.body.step) || 1;
+      const validatedData = onboardingSchema.parse(req.body);
 
-      if (step === 1) {
-        const validatedData = step1Schema.parse(req.body);
-        await accountRepo.updateProfile(userId, {
-          gender: validatedData.gender || null,
-          date_of_birth: validatedData.dob || null,
-          marital_status: validatedData.marital_status || null,
-          wedding_anniversary: validatedData.wedding_anniversary || null,
-          phone: validatedData.phone || null,
-          address: validatedData.addressLine1 || null,
-          city: validatedData.city || null,
-        });
-        return res.redirect('/onboarding?step=2');
-      } 
-      
-      if (step === 2) {
-        req.body.is_baptized = req.body.is_baptized === "true" || req.body.is_baptized === "on";
-        const validatedData = step2Schema.parse(req.body);
-        await accountRepo.updateProfile(userId, {
-          ...validatedData,
-          is_onboarded: true
-        });
-        return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
-      }
-      throw new Error("Invalid step");
+      // Map interests to array if it's a single string
+      const ministryInterests = Array.isArray(validatedData.ministry_interests) 
+        ? validatedData.ministry_interests 
+        : (validatedData.ministry_interests ? [validatedData.ministry_interests] : []);
+
+      await accountRepo.updateProfile(userId, {
+        gender: validatedData.gender || null,
+        date_of_birth: validatedData.dob || null,
+        marital_status: validatedData.marital_status || null,
+        wedding_anniversary: validatedData.wedding_anniversary || null,
+        phone: validatedData.phone || null,
+        address: validatedData.addressLine1 || null,
+        city: validatedData.city || null,
+        is_baptized: validatedData.is_baptized,
+        baptism_date: validatedData.baptism_date || null,
+        salvation_date: validatedData.salvation_date || null,
+        previous_church: validatedData.previous_church || null,
+        department_interest: validatedData.department_interest || null,
+        position_interest: validatedData.position_interest || null,
+        occupation: validatedData.occupation || null,
+        interests: ministryInterests,
+        is_onboarded: true
+      });
+
+      return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
     } catch (err) {
-      const step = parseInt(req.body.step) || 1;
-      let departments = [];
-      let positions = [];
-      let ministries = [];
-      if (step === 2) {
-        [departments, positions, ministries] = await Promise.all([
-          accountRepo.getDepartments(),
-          accountRepo.getPositions(),
-          accountRepo.getMinistries()
-        ]);
-      }
-      const errorMessage = err instanceof z.ZodError ? err.errors[0].message : 'An error occurred.';
+      logger.error(`Onboarding Submission Error: ${err.message}`);
+      
+      const [departments, positions, ministries, profile] = await Promise.all([
+        accountRepo.getDepartments(),
+        accountRepo.getPositions(),
+        accountRepo.getMinistries(),
+        accountRepo.getUserDashboardData(req.user.id)
+      ]);
+
+      const errorMessage = err instanceof z.ZodError ? err.errors[0].message : 'An error occurred during submission.';
+      
       res.status(400).render('pages/onboarding', {
         pageTitle: 'Profile Setup',
         currentPath: req.path,
-        step,
+        step: 1, // Reset to 1 visually on error for simplicity
         departments,
         positions,
         ministries,
-        user: await accountRepo.getUserDashboardData(req.user.id),
+        user: profile,
         error: errorMessage
       });
     }

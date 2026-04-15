@@ -54,9 +54,17 @@ app.use(authMiddleware.checkUser);
 app.use(doubleCsrfProtection);
 app.use(csrfErrorHandler);
 
-// 3. Pass global variables to ALL EJS Templates automatically
+// 3. Pass global variables to ALL EJS Templates (with CSRF stability)
 app.use((req, res, next) => {
-  res.locals.csrfToken = generateToken(req, res);
+  // Only generate a new CSRF token for HTML page requests to prevent
+  // background requests (images, favicon, etc.) from rotating the token prematurely.
+  if (req.accepts('html') && req.method === 'GET') {
+    res.locals.csrfToken = generateToken(req, res);
+  } else {
+    // For non-HTML or POST requests, we just try to read the existing one for re-use if needed
+    // though usually they'll use the one from the hidden field.
+    res.locals.csrfToken = req.body?._csrf || req.headers["x-csrf-token"];
+  }
   res.locals.paystackPublicKey = process.env.PAYSTACK_PUBLIC_KEY;
   next();
 });

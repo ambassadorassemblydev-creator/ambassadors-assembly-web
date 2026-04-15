@@ -32,12 +32,8 @@
               </div>
 
               <div class="onboard-header">
-                <h2><%= step === 1 ? 'Welcome to the Family' : 'Your Spiritual Journey' %></h2>
-                <p>
-                  <%= step === 1 
-                    ? 'Let’s start with some basic details to get your profile ready.' 
-                    : 'Tell us a bit more about your walk with God and how you’d like to serve.' %>
-                </p>
+                <h2 id="onboardTitle">Welcome to the Family</h2>
+                <p id="onboardSub">Let’s start with some basic details to get your profile ready.</p>
                 <% if (typeof error !== 'undefined' && error) { %>
                   <div class="ob-error">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -46,203 +42,196 @@
                 <% } %>
               </div>
 
-              <form action="/onboarding" method="POST" class="ob-form">
+              <form action="/onboarding" method="POST" class="ob-form" id="onboardingForm">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <input type="hidden" name="step" value="<%= step %>">
                 
-                <% if (step === 1) { %>
-                  <!-- STEP 1: PERSONAL DETAILS -->
-                  <div class="form-section">
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label>Gender <span>*</span></label>
-                        <div class="custom-select-wrapper">
-                          <input type="hidden" name="gender" value="<%= user && user.gender ? user.gender : '' %>" required>
-                          <div class="custom-select-trigger"><%= user && user.gender ? user.gender : 'Select Gender' %></div>
-                          <div class="custom-options">
-                            <div class="option" data-value="Male">Male</div>
-                            <div class="option" data-value="Female">Female</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label>Date of Birth <span>*</span></label>
-                        <input type="date" name="dob" value="<%= user && user.date_of_birth ? user.date_of_birth : '' %>" required>
-                      </div>
-                    </div>
-
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label>Phone Number / WhatsApp <span>*</span></label>
-                        <input type="tel" name="phone" placeholder="+234 ..." value="<%= user && user.phone ? user.phone : '' %>" required>
-                      </div>
-                      <div class="form-group">
-                        <label>Marital Status <span>*</span></label>
-                        <div class="custom-select-wrapper">
-                          <input type="hidden" name="marital_status" value="<%= user && user.marital_status ? user.marital_status : '' %>" required onchange="toggleAnniversary()">
-                          <div class="custom-select-trigger"><%= user && user.marital_status ? user.marital_status : 'Select Status' %></div>
-                          <div class="custom-options">
-                            <div class="option" data-value="Single">Single</div>
-                            <div class="option" data-value="Married">Married</div>
-                            <div class="option" data-value="Divorced">Divorced</div>
-                            <div class="option" data-value="Widowed">Widowed</div>
-                          </div>
+                <!-- STEP 1: PERSONAL DETAILS -->
+                <div id="stepSection1" class="form-section">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Gender <span>*</span></label>
+                      <div class="custom-select-wrapper">
+                        <input type="hidden" name="gender" value="<%= user && user.gender ? user.gender : '' %>">
+                        <div class="custom-select-trigger"><%= user && user.gender ? user.gender : 'Select Gender' %></div>
+                        <div class="custom-options">
+                          <div class="option" data-value="Male">Male</div>
+                          <div class="option" data-value="Female">Female</div>
                         </div>
                       </div>
                     </div>
-
-                    <div id="anniversaryGroup" class="form-group" style="display: <%= user && user.marital_status === 'Married' ? 'block' : 'none' %>;">
-                      <label>Wedding Anniversary</label>
-                      <input type="date" name="wedding_anniversary" value="<%= user && user.wedding_anniversary ? user.wedding_anniversary : '' %>">
+                    <div class="form-group">
+                      <label>Date of Birth <span>*</span></label>
+                      <input type="date" name="dob" value="<%= user && user.date_of_birth ? user.date_of_birth : '' %>">
                     </div>
+                  </div>
 
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label>Home Address <span>*</span></label>
-                        <input type="text" name="addressLine1" placeholder="123 Example St" value="<%= user && user.address_line_1 ? user.address_line_1 : '' %>" required>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Phone Number / WhatsApp <span>*</span></label>
+                      <input type="tel" name="phone" placeholder="+234 ..." value="<%= user && user.phone ? user.phone : '' %>">
+                    </div>
+                    <div class="form-group">
+                      <label>Marital Status <span>*</span></label>
+                      <div class="custom-select-wrapper">
+                        <input type="hidden" name="marital_status" value="<%= user && user.marital_status ? user.marital_status : '' %>" onchange="toggleAnniversary()">
+                        <div class="custom-select-trigger"><%= user && user.marital_status ? user.marital_status : 'Select Status' %></div>
+                        <div class="custom-options">
+                          <div class="option" data-value="Single">Single</div>
+                          <div class="option" data-value="Married">Married</div>
+                          <div class="option" data-value="Divorced">Divorced</div>
+                          <div class="option" data-value="Widowed">Widowed</div>
+                        </div>
                       </div>
-                      <div class="form-group">
-                        <label>City / Region <span>*</span></label>
-                        <input type="text" name="city" placeholder="Lagos, Nigeria" value="<%= user && user.city ? user.city : '' %>" required>
-                      </div>
+                    </div>
+                  </div>
+
+                  <div id="anniversaryGroup" class="form-group" style="display: <%= user && user.marital_status === 'Married' ? 'block' : 'none' %>;">
+                    <label>Wedding Anniversary</label>
+                    <input type="date" name="wedding_anniversary" value="<%= user && user.wedding_anniversary ? user.wedding_anniversary : '' %>">
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Home Address <span>*</span></label>
+                      <input type="text" name="addressLine1" placeholder="123 Example St" value="<%= user && user.address_line_1 ? user.address_line_1 : '' %>">
+                    </div>
+                    <div class="form-group">
+                      <label>City / Region <span>*</span></label>
+                      <input type="text" name="city" placeholder="Lagos, Nigeria" value="<%= user && user.city ? user.city : '' %>">
                     </div>
                   </div>
 
                   <div class="form-actions">
-                    <button type="submit" class="submit-btn highlight">Continue to Step 2 
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(2)">Continue to Step 2 
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </button>
                   </div>
+                </div>
 
-                <% } else if (step === 2) { %>
-                  <!-- STEP 2: SPIRITUAL & DEPARTMENTAL -->
-                  <div class="form-section">
-                    
-                    <!-- Baptism -->
-                    <div class="form-group card-group">
-                      <label class="checkbox-label">
-                        <input type="checkbox" name="is_baptized" id="isBaptized" onchange="toggleBaptismDate()" <%= user && user.is_baptized ? 'checked' : '' %>>
-                        <span class="custom-check"></span>
-                        <div class="label-info">
-                          <strong>I have been baptized by immersion</strong>
-                          <p>Water baptism following a decision to follow Christ.</p>
-                        </div>
-                      </label>
-                      <div id="baptismDateGroup" class="sub-group" style="display: <%= user && user.is_baptized ? 'block' : 'none' %>; margin-top: 15px;">
-                        <label>Approximate Baptism Date</label>
-                        <input type="date" name="baptism_date" value="<%= user && user.baptism_date ? user.baptism_date : '' %>">
+                <!-- STEP 2: SPIRITUAL & DEPARTMENTAL -->
+                <div id="stepSection2" class="form-section" style="display: none;">
+                  <!-- Baptism -->
+                  <div class="form-group card-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="is_baptized" id="isBaptized" onchange="toggleBaptismDate()" <%= user && user.is_baptized ? 'checked' : '' %>>
+                      <span class="custom-check"></span>
+                      <div class="label-info">
+                        <strong>I have been baptized by immersion</strong>
+                        <p>Water baptism following a decision to follow Christ.</p>
                       </div>
-                    </div>
-
-                    <div class="form-row">
-                      <div class="form-group">
-                        <label>Salvation Date (Approx)</label>
-                        <input type="date" name="salvation_date" value="<%= user && user.salvation_date ? user.salvation_date : '' %>">
-                      </div>
-                      <div class="form-group">
-                        <label>Previous Church (If any)</label>
-                        <input type="text" name="previous_church" placeholder="Name of previous ministry" value="<%= user && user.previous_church ? user.previous_church : '' %>">
-                      </div>
-                    </div>
-
-                    <!-- Department Interest -->
-                    <div class="form-group">
-                      <label>Area of Interest / Department</label>
-                        <% 
-                          const userDept = user && user.church_workers && user.church_workers.length > 0 
-                            ? user.church_workers[0].church_departments.name 
-                            : (user && user.ministry_members && user.ministry_members.length > 0 ? user.ministry_members[0].ministries.name : null);
-                          
-                          const userRole = user && user.church_workers && user.church_workers.length > 0 
-                            ? user.church_workers[0].church_positions.title
-                            : null;
-                        %>
-                        
-                        <% if (userDept) { %>
-                          <div class="already-in-dept">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            <div>
-                              You are currently part of: <strong><%= userDept %></strong>
-                              <% if (userRole) { %>
-                                <span class="role-badge"><%= userRole %></span>
-                              <% } %>
-                            </div>
-                          </div>
-                        <% } %>
-  
-                        <!-- CUSTOM TILE SELECTION (DEPARTMENTS) -->
-                        <div class="custom-tile-grid">
-                          <input type="hidden" name="department_interest" id="deptInput" value="<%= user && user.department_interest ? user.department_interest : (userDept || '') %>">
-                          <input type="hidden" name="position_interest" id="posInput" value="<%= user && user.position_interest ? user.position_interest : (userRole || '') %>">
-                          
-                          <% departments.forEach(dept => { %>
-                            <div class="dept-tile <%= (user && user.department_interest === dept.name) || userDept === dept.name ? 'selected' : '' %>" 
-                                 onclick="selectDept('<%= dept.name %>', '<%= dept.id %>')"
-                                 data-dept="<%= dept.name %>"
-                                 data-id="<%= dept.id %>">
-                              <div class="tile-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                              </div>
-                              <div class="tile-info">
-                                <strong><%= dept.name %></strong>
-                                <p><%= dept.description || 'Serve in this operational unit.' %></p>
-                              </div>
-                              <div class="selection-indicator">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                              </div>
-                            </div>
-                          <% }) %>
-                        </div>
-  
-                        <!-- DYNAMIC ROLE SELECTION -->
-                        <div id="roleSelectionWrapper" class="role-selector-wrap" style="display: none;">
-                          <label class="sub-label">Choose your specific role/interest:</label>
-                          <div id="roleContainer" class="role-pills">
-                            <% positions.forEach(pos => { %>
-                              <button type="button" 
-                                      class="role-pill" 
-                                      data-dept-id="<%= pos.department_id %>" 
-                                      data-title="<%= pos.title %>"
-                                      onclick="selectRole('<%= pos.title %>')">
-                                <%= pos.title %>
-                              </button>
-                            <% }) %>
-                          </div>
-                        </div>
-                        <p class="field-hint">Select a department and then choose a specific role you are interested in.</p>
-                      </div>
-  
-                      <!-- Ministry Interest -->
-                      <div class="form-group">
-                        <label>Join a Ministry (Interest Groups)</label>
-                        <div class="ministry-grid">
-                          <% ministries.forEach(min => { %>
-                            <div class="min-card <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'joined' : '' %>" onclick="this.classList.toggle('selected')">
-                              <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none">
-                              <strong><%= min.name %></strong>
-                              <p><%= (min.description || '').substring(0, 60) %>...</p>
-                            </div>
-                          <% }) %>
-                        </div>
-                        <p class="field-hint">Select any ministries you would like to participate in.</p>
-                      </div>
-
-                    <div class="form-group">
-                      <label>Occupation / Professional Background</label>
-                      <input type="text" name="occupation" placeholder="e.g. Software Engineer, Doctor, Student" value="<%= user && user.occupation ? user.occupation : '' %>">
+                    </label>
+                    <div id="baptismDateGroup" class="sub-group" style="display: <%= user && user.is_baptized ? 'block' : 'none' %>; margin-top: 15px;">
+                      <label>Approximate Baptism Date</label>
+                      <input type="date" name="baptism_date" value="<%= user && user.baptism_date ? user.baptism_date : '' %>">
                     </div>
                   </div>
 
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Salvation Date (Approx)</label>
+                      <input type="date" name="salvation_date" value="<%= user && user.salvation_date ? user.salvation_date : '' %>">
+                    </div>
+                    <div class="form-group">
+                      <label>Previous Church (If any)</label>
+                      <input type="text" name="previous_church" placeholder="Name of previous ministry" value="<%= user && user.previous_church ? user.previous_church : '' %>">
+                    </div>
+                  </div>
+
+                  <!-- Department Interest -->
+                  <div class="form-group">
+                    <label>Area of Interest / Department</label>
+                    <% 
+                      const userDept = user && user.church_workers && user.church_workers.length > 0 
+                        ? user.church_workers[0].church_departments.name 
+                        : (user && user.ministry_members && user.ministry_members.length > 0 ? user.ministry_members[0].ministries.name : null);
+                      
+                      const userRole = user && user.church_workers && user.church_workers.length > 0 
+                        ? user.church_workers[0].church_positions.title
+                        : null;
+                    %>
+                    
+                    <% if (userDept) { %>
+                      <div class="already-in-dept">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <div>
+                          You are currently part of: <strong><%= userDept %></strong>
+                          <% if (userRole) { %>
+                            <span class="role-badge"><%= userRole %></span>
+                          <% } %>
+                        </div>
+                      </div>
+                    <% } %>
+
+                    <!-- CUSTOM TILE SELECTION (DEPARTMENTS) -->
+                    <div class="custom-tile-grid">
+                      <input type="hidden" name="department_interest" id="deptInput" value="<%= user && user.department_interest ? user.department_interest : (userDept || '') %>">
+                      <input type="hidden" name="position_interest" id="posInput" value="<%= user && user.position_interest ? user.position_interest : (userRole || '') %>">
+                      
+                      <% departments.forEach(dept => { %>
+                        <div class="dept-tile <%= (user && user.department_interest === dept.name) || userDept === dept.name ? 'selected' : '' %>" 
+                             onclick="selectDept('<%= dept.name %>', '<%= dept.id %>')"
+                             data-dept="<%= dept.name %>"
+                             data-id="<%= dept.id %>">
+                          <div class="tile-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                          </div>
+                          <div class="tile-info">
+                            <strong><%= dept.name %></strong>
+                            <p><%= dept.description || 'Serve in this operational unit.' %></p>
+                          </div>
+                          <div class="selection-indicator">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </div>
+
+                    <!-- DYNAMIC ROLE SELECTION -->
+                    <div id="roleSelectionWrapper" class="role-selector-wrap" style="display: none;">
+                      <label class="sub-label">Choose your specific role/interest:</label>
+                      <div id="roleContainer" class="role-pills">
+                        <% positions.forEach(pos => { %>
+                          <button type="button" 
+                                  class="role-pill" 
+                                  data-dept-id="<%= pos.department_id %>" 
+                                  data-title="<%= pos.title %>"
+                                  onclick="selectRole('<%= pos.title %>')">
+                            <%= pos.title %>
+                          </button>
+                        <% }) %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Ministry Interest -->
+                  <div class="form-group">
+                    <label>Join a Ministry (Interest Groups)</label>
+                    <div class="ministry-grid">
+                      <% ministries.forEach(min => { %>
+                        <div class="min-card <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'joined' : '' %>" onclick="toggleMin(this, '<%= min.name %>')">
+                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none">
+                          <strong><%= min.name %></strong>
+                          <p><%= (min.description || '').substring(0, 50) %>...</p>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Occupation / Professional Background</label>
+                    <input type="text" name="occupation" placeholder="e.g. Software Engineer, Doctor, Student" value="<%= user && user.occupation ? user.occupation : '' %>">
+                  </div>
+
                   <div class="form-actions dual">
-                    <a href="/onboarding?step=1" class="back-btn">
+                    <button type="button" onclick="goToStep(1)" class="back-btn">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                       Back to Step 1
-                    </a>
+                    </button>
                     <button type="submit" class="submit-btn highlight">Complete My Profile 
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                     </button>
                   </div>
-                <% } %>
+                </div>
 
               </form>
             </div>
@@ -256,7 +245,7 @@
 
   <style>
     :root {
-      --accent: #3b82f6;
+      --accent: #22c55e;
       --glass: rgba(255, 255, 255, 0.04);
       --glass-border: rgba(255, 255, 255, 0.08);
       --input-bg: rgba(255, 255, 255, 0.05);
@@ -305,7 +294,7 @@
       padding: 18px 22px; color: white; font-size: 1rem; font-family: inherit;
       outline: none; transition: 0.3s;
     }
-    .form-group input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
+    .form-group input:focus { border-color: var(--accent); background: rgba(34, 197, 94, 0.05); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15); }
 
     /* Custom Select */
     .custom-select-wrapper { position: relative; width: 100%; }
@@ -333,9 +322,9 @@
       position: relative; display: flex; gap: 15px; border-left: 4px solid transparent;
     }
     .dept-tile:hover { background: rgba(255,255,255,0.06); transform: translateX(5px); }
-    .dept-tile.selected { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); border-left-color: var(--accent); }
+    .dept-tile.selected { background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); border-left-color: var(--accent); }
     
-    .tile-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
+    .tile-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(34, 197, 94, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
     .tile-info strong { display: block; font-size: 15px; margin-bottom: 4px; }
     .tile-info p { font-size: 11px; opacity: 0.4; margin: 0; line-height: 1.4; }
     
@@ -359,7 +348,7 @@
       padding: 8px 18px; color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s;
     }
     .role-pill:hover { background: rgba(255,255,255,0.08); color: white; }
-    .role-pill.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3); }
+    .role-pill.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3); }
 
     /* Ministry Grid */
     .ministry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
@@ -420,6 +409,45 @@
       group.style.display = status === 'Married' ? 'block' : 'none';
     }
 
+    function goToStep(stepNum) {
+      const s1 = document.getElementById('stepSection1');
+      const s2 = document.getElementById('stepSection2');
+      const indicators = document.querySelectorAll('.step-indicator');
+      const lines = document.querySelectorAll('.step-line');
+      const title = document.getElementById('onboardTitle');
+      const sub = document.getElementById('onboardSub');
+
+      if (stepNum === 2) {
+        // Validation for Step 1
+        const gender = document.querySelector('input[name="gender"]').value;
+        const dob = document.querySelector('input[name="dob"]').value;
+        const phone = document.querySelector('input[name="phone"]').value;
+        const addr = document.querySelector('input[name="addressLine1"]').value;
+        const city = document.querySelector('input[name="city"]').value;
+
+        if (!gender || !dob || !phone || !addr || !city) {
+          alert('Please fill all required fields in Step 1.');
+          return;
+        }
+
+        s1.style.display = 'none';
+        s2.style.display = 'block';
+        indicators[1].classList.add('active');
+        lines[0].classList.add('active');
+        title.innerText = 'Your Spiritual Journey';
+        sub.innerText = 'Tell us a bit more about your walk with God and how you’d like to serve.';
+        window.scrollTo(0, 0);
+      } else {
+        s1.style.display = 'block';
+        s2.style.display = 'none';
+        indicators[1].classList.remove('active');
+        lines[0].classList.remove('active');
+        title.innerText = 'Welcome to the Family';
+        sub.innerText = 'Let’s start with some basic details to get your profile ready.';
+        window.scrollTo(0, 0);
+      }
+    }
+
     function selectDept(deptName, deptId) {
       document.getElementById('deptInput').value = deptName;
       document.querySelectorAll('.dept-tile').forEach(t => t.classList.remove('selected'));
@@ -444,7 +472,9 @@
 
       if (hasRoles) {
         roleWrapper.style.display = 'block';
-        gsap.fromTo(roleWrapper, { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 });
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo(roleWrapper, { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 });
+        }
       } else {
         roleWrapper.style.display = 'none';
       }
@@ -454,18 +484,14 @@
       document.getElementById('posInput').value = roleTitle;
       document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
       const active = document.querySelector(`.role-pill[data-title="${roleTitle}"]`);
-      if (active) active.classList.add('selected'); // Wait, use .active for style
       if (active) active.classList.add('active');
     }
 
-    // Ministry card interaction
-    document.querySelectorAll('.min-card').forEach(card => {
-      card.addEventListener('click', function() {
-        const checkbox = this.querySelector('input[type="checkbox"]');
-        checkbox.checked = !checkbox.checked;
-        this.classList.toggle('selected', checkbox.checked);
-      });
-    });
+    function toggleMin(card, minName) {
+      card.classList.toggle('selected');
+      const checkbox = card.querySelector('input[type="checkbox"]');
+      checkbox.checked = !checkbox.checked;
+    }
 
     // Custom Select Interaction Logic
     document.querySelectorAll('.custom-select-trigger').forEach(trigger => {
