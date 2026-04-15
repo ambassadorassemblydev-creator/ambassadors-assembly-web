@@ -50,7 +50,9 @@
               <div class="aa-ev-card gsap-ev-card" data-category="<%= event.category %>">
                 <a href="/events/<%= event.slug %>" class="aa-ev-card__link">
                   <div class="aa-ev-card__img-wrap">
-                    <img src="<%= event.cover_image_url %>" alt="<%= event.title %>" class="aa-ev-card__img">
+                    <img src="<%= event.cover_image_url && event.cover_image_url.trim() !== '' ? event.cover_image_url : 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200&auto=format&fit=crop' %>" 
+                         onerror="this.src='https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200&auto=format&fit=crop'"
+                         alt="<%= event.title %>" class="aa-ev-card__img">
                     <div class="aa-ev-card__date-badge">
                       <span class="aa-ev-date-day"><%= new Date(event.start_date).getDate() %></span>
                       <span class="aa-ev-date-mon"><%= new Date(event.start_date).toLocaleString('default', { month: 'short' }).toUpperCase() %></span>

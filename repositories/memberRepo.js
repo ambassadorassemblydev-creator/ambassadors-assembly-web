@@ -21,7 +21,9 @@ export const memberRepo = {
             position_id,
             church_positions (
               title,
-              department
+              church_departments (
+                name
+              )
             )
           )
         `);
@@ -42,10 +44,10 @@ export const memberRepo = {
       // Restructure the data to make it flat for the template
       return data.map(profile => {
         const workerRoles = profile.church_workers || [];
-        const roles = workerRoles.map(w => ({
-          title: w.church_positions?.title,
-          department: w.church_positions?.department
-        })).filter(r => r.title);
+          const roles = workerRoles.map(w => ({
+            title: w.church_positions?.title,
+            department: w.church_positions?.church_departments?.name
+          })).filter(r => r.title);
 
         return {
           id: profile.id,
@@ -79,7 +81,9 @@ export const memberRepo = {
           ),
           church_positions (
             title,
-            department
+            church_departments (
+              name
+            )
           )
         `)
         .order('id', { ascending: true });
@@ -92,7 +96,7 @@ export const memberRepo = {
         last_name: w.profiles?.last_name,
         avatar_url: w.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${w.profiles?.first_name}+${w.profiles?.last_name}&background=random`,
         role: w.church_positions?.title,
-        department: w.church_positions?.department
+        department: w.church_positions?.church_departments?.name
       }));
     } catch (error) {
       logger.error(`Error fetching staff: ${error.message}`);

@@ -2,6 +2,7 @@ import { accountRepo } from '../repositories/accountRepo.js';
 import { eventRepo } from '../repositories/eventRepo.js';
 import { AppError } from '../utils/AppError.js';
 import { logger } from '../config/logger.js';
+import { supabaseService } from '../config/supabase.js';
 import { z } from 'zod';
 
 const updateProfileSchema = z.object({
@@ -172,29 +173,19 @@ export const accountController = {
   
   renderOnboarding: async (req, res, next) => {
     try {
-      const step = parseInt(req.query.step) || 1;
       const userId = req.user.id;
 
-      let departments = [];
-      let positions = [];
-      let ministries = [];
-      let profile = null;
-
-      if (step === 2) {
-        [departments, positions, ministries, profile] = await Promise.all([
-          accountRepo.getDepartments(),
-          accountRepo.getPositions(),
-          accountRepo.getMinistries(),
-          accountRepo.getUserDashboardData(userId)
-        ]);
-      } else {
-        profile = await accountRepo.getUserDashboardData(userId);
-      }
+      const [departments, positions, ministries, profile] = await Promise.all([
+        accountRepo.getDepartments(),
+        accountRepo.getPositions(),
+        accountRepo.getMinistries(),
+        accountRepo.getUserDashboardData(userId)
+      ]);
 
       res.render('pages/onboarding', {
         pageTitle: 'Profile Setup',
         currentPath: req.path,
-        step,
+        step: 1, // Start at step 1 visually
         departments,
         positions,
         ministries,
@@ -234,6 +225,29 @@ export const accountController = {
         interests: ministryInterests,
         is_onboarded: true
       });
+
+      // AUTOMATIC STAFF LINKING
+      // If user selected a department and position, link them as a church worker
+      if (validatedData.department_interest && validatedData.position_interest) {
+        try {
+          const [deptData, posData] = await Promise.all([
+             supabaseService.from('church_departments').select('id').eq('name', validatedData.department_interest).single(),
+             supabaseService.from('church_positions').select('id').eq('title', validatedData.position_interest).single()
+          ]);
+
+          if (deptData.data && posData.data) {
+             await supabaseService.from('church_workers').upsert({
+                user_id: userId,
+                department_id: deptData.data.id,
+                position_id: posData.data.id
+             }, { onConflict: 'user_id' });
+             logger.info(`Automated Staff link created/updated for user: ${userId}`);
+          }
+        } catch (linkErr) {
+          logger.warn(`Non-critical error in automatic staff linking: ${linkErr.message}`);
+          // Don't fail the onboarding if linking fails, as it's a side-effect
+        }
+      }
 
       return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
     } catch (err) {

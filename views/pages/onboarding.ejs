@@ -108,96 +108,33 @@
                   </div>
                 </div>
 
-                <!-- STEP 2: SPIRITUAL & DEPARTMENTAL -->
-                <div id="stepSection2" class="form-section" style="display: none;">
-                  <!-- Baptism -->
-                  <div class="form-group card-group">
-                    <label class="checkbox-label">
-                      <input type="checkbox" name="is_baptized" id="isBaptized" onchange="toggleBaptismDate()" <%= user && user.is_baptized ? 'checked' : '' %>>
-                      <span class="custom-check"></span>
-                      <div class="label-info">
-                        <strong>I have been baptized by immersion</strong>
-                        <p>Water baptism following a decision to follow Christ.</p>
-                      </div>
-                    </label>
-                    <div id="baptismDateGroup" class="sub-group" style="display: <%= user && user.is_baptized ? 'block' : 'none' %>; margin-top: 15px;">
-                      <label>Approximate Baptism Date</label>
-                      <input type="date" name="baptism_date" value="<%= user && user.baptism_date ? user.baptism_date : '' %>">
-                    </div>
-                  </div>
-
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>Salvation Date (Approx)</label>
-                      <input type="date" name="salvation_date" value="<%= user && user.salvation_date ? user.salvation_date : '' %>">
-                    </div>
-                    <div class="form-group">
-                      <label>Previous Church (If any)</label>
-                      <input type="text" name="previous_church" placeholder="Name of previous ministry" value="<%= user && user.previous_church ? user.previous_church : '' %>">
-                    </div>
-                  </div>
-
-                  <!-- Department Interest -->
+                  <!-- Area of Interest / Department -->
                   <div class="form-group">
-                    <label>Area of Interest / Department</label>
-                    <% 
-                      const userDept = user && user.church_workers && user.church_workers.length > 0 
-                        ? user.church_workers[0].church_departments.name 
-                        : (user && user.ministry_members && user.ministry_members.length > 0 ? user.ministry_members[0].ministries.name : null);
-                      
-                      const userRole = user && user.church_workers && user.church_workers.length > 0 
-                        ? user.church_workers[0].church_positions.title
-                        : null;
-                    %>
-                    
-                    <% if (userDept) { %>
-                      <div class="already-in-dept">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        <div>
-                          You are currently part of: <strong><%= userDept %></strong>
-                          <% if (userRole) { %>
-                            <span class="role-badge"><%= userRole %></span>
-                          <% } %>
-                        </div>
-                      </div>
-                    <% } %>
-
-                    <!-- CUSTOM TILE SELECTION (DEPARTMENTS) -->
-                    <div class="custom-tile-grid">
-                      <input type="hidden" name="department_interest" id="deptInput" value="<%= user && user.department_interest ? user.department_interest : (userDept || '') %>">
-                      <input type="hidden" name="position_interest" id="posInput" value="<%= user && user.position_interest ? user.position_interest : (userRole || '') %>">
-                      
-                      <% departments.forEach(dept => { %>
-                        <div class="dept-tile <%= (user && user.department_interest === dept.name) || userDept === dept.name ? 'selected' : '' %>" 
-                             onclick="selectDept('<%= dept.name %>', '<%= dept.id %>')"
-                             data-dept="<%= dept.name %>"
-                             data-id="<%= dept.id %>">
-                          <div class="tile-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                          </div>
-                          <div class="tile-info">
+                    <label>Area of Interest / Department <span>*</span></label>
+                    <div class="custom-select-wrapper" id="deptSelectWrapper">
+                      <input type="hidden" name="department_interest" id="deptInput" value="<%= (user && user.department_interest) ? user.department_interest : '' %>">
+                      <div class="custom-select-trigger"><%= (user && user.department_interest) ? user.department_interest : 'Select Department' %></div>
+                      <div class="custom-options">
+                        <% departments.forEach(dept => { %>
+                          <div class="option" data-value="<%= dept.name %>" data-id="<%= dept.id %>">
                             <strong><%= dept.name %></strong>
-                            <p><%= dept.description || 'Serve in this operational unit.' %></p>
                           </div>
-                          <div class="selection-indicator">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                          </div>
-                        </div>
-                      <% }) %>
+                        <% }) %>
+                      </div>
                     </div>
+                  </div>
 
-                    <!-- DYNAMIC ROLE SELECTION -->
-                    <div id="roleSelectionWrapper" class="role-selector-wrap" style="display: none;">
-                      <label class="sub-label">Choose your specific role/interest:</label>
-                      <div id="roleContainer" class="role-pills">
+                  <!-- Dynamic Role Selection -->
+                  <div id="roleSelectionWrapper" class="form-group" style="display: none;">
+                    <label>Position / Role of interest <span>*</span></label>
+                    <div class="custom-select-wrapper" id="posSelectWrapper">
+                      <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
+                      <div class="custom-select-trigger"><%= (user && user.position_interest) ? user.position_interest : 'Select Position' %></div>
+                      <div class="custom-options" id="roleOptions">
                         <% positions.forEach(pos => { %>
-                          <button type="button" 
-                                  class="role-pill" 
-                                  data-dept-id="<%= pos.department_id %>" 
-                                  data-title="<%= pos.title %>"
-                                  onclick="selectRole('<%= pos.title %>')">
+                          <div class="option role-option" data-value="<%= pos.title %>" data-dept-id="<%= pos.department_id %>">
                             <%= pos.title %>
-                          </button>
+                          </div>
                         <% }) %>
                       </div>
                     </div>
@@ -206,12 +143,13 @@
                   <!-- Ministry Interest -->
                   <div class="form-group">
                     <label>Join a Ministry (Interest Groups)</label>
-                    <div class="ministry-grid">
+                    <div class="ministry-pills">
                       <% ministries.forEach(min => { %>
-                        <div class="min-card <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'joined' : '' %>" onclick="toggleMin(this, '<%= min.name %>')">
-                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none">
-                          <strong><%= min.name %></strong>
-                          <p><%= (min.description || '').substring(0, 50) %>...</p>
+                        <div class="min-pill <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'selected' : '' %>" 
+                             onclick="toggleMin(this, '<%= min.name %>')">
+                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'checked' : '' %>>
+                          <span class="pill-title"><%= min.name %></span>
+                          <svg class="check-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                         </div>
                       <% }) %>
                     </div>
@@ -223,9 +161,9 @@
                   </div>
 
                   <div class="form-actions dual">
-                    <button type="button" onclick="goToStep(1)" class="back-btn">
+                    <button type="button" onclick="goToStep(1)" class="back-btn glass-btn">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                      Back to Step 1
+                      Back
                     </button>
                     <button type="submit" class="submit-btn highlight">Complete My Profile 
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -243,6 +181,10 @@
     </div>
   </div>
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
   <style>
     :root {
       --accent: #22c55e;
@@ -250,6 +192,10 @@
       --glass-border: rgba(255, 255, 255, 0.08);
       --input-bg: rgba(255, 255, 255, 0.05);
     }
+
+    /* Flatpickr Customization */
+    .flatpickr-calendar { background: #1a1a1a !important; border: 1px solid var(--glass-border) !important; box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important; border-radius: 16px !important; }
+    .flatpickr-day.selected { background: var(--accent) !important; border-color: var(--accent) !important; }
 
     .onboarding-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 20px; position: relative; }
 
@@ -295,6 +241,72 @@
       outline: none; transition: 0.3s;
     }
     .form-group input:focus { border-color: var(--accent); background: rgba(34, 197, 94, 0.05); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15); }
+
+    /* Custom Select */
+    .custom-select-wrapper { position: relative; width: 100%; }
+    .custom-select-trigger {
+      width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;
+      padding: 18px 22px; color: white; cursor: pointer; transition: 0.3s;
+      display: flex; justify-content: space-between; align-items: center;
+      min-height: 60px;
+    }
+    .custom-select-trigger:after { content: ""; border: solid rgba(255,255,255,0.4); border-width: 0 2px 2px 0; display: inline-block; padding: 3px; transform: rotate(45deg); transition: 0.3s; margin-left: 10px; }
+    .custom-select-wrapper.open .custom-select-trigger:after { transform: rotate(-135deg); }
+    .custom-options {
+      position: absolute; top: 120%; left: 0; right: 0; background: #1a1a1a; border: 1px solid var(--glass-border);
+      border-radius: 16px; z-index: 100; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow-y: auto; max-height: 250px;
+    }
+    .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; transform: translateY(0); }
+    .custom-options .option { padding: 15px 20px; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: 600; }
+    .custom-options .option:hover { background: var(--accent); color: white; }
+    .custom-options .option strong { display: block; }
+
+    /* Ministry Pills */
+    .ministry-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .min-pill {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+      padding: 10px 20px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px;
+    }
+    .min-pill:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+    .min-pill.selected { background: var(--accent); border-color: var(--accent); color: white; }
+    .min-pill .check-icon { opacity: 0; transform: scale(0.5); transition: 0.3s; }
+    .min-pill.selected .check-icon { opacity: 1; transform: scale(1); }
+    .pill-title { font-size: 13px; font-weight: 700; }
+
+    /* Checkbox Custom */
+    .checkbox-label { display: flex; align-items: flex-start; gap: 18px; cursor: pointer; user-select: none; }
+    .checkbox-label input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .custom-check { flex-shrink: 0; height: 26px; width: 26px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.3s; margin-top: 2px; }
+    .checkbox-label:hover input ~ .custom-check { background: rgba(255,255,255,0.2); }
+    .checkbox-label input:checked ~ .custom-check { background: var(--accent); border-color: var(--accent); }
+    .custom-check:after { content: ""; display: none; width: 6px; height: 12px; border: solid white; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); margin-bottom: 3px; }
+    .checkbox-label input:checked ~ .custom-check:after { display: block; }
+
+    .label-info strong { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .label-info p { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin: 0; }
+
+    .card-group { background: rgba(255,255,255,0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); }
+
+    /* Actions */
+    .form-actions { margin-top: 20px; }
+    .form-actions.dual { display: flex; gap: 20px; align-items: center; }
+    
+    .submit-btn {
+      width: 100%; padding: 20px; background: rgba(255,255,255,0.05); color: white; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.1); font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .submit-btn.highlight { background: white; color: black; border: none; box-shadow: 0 10px 40px rgba(255,255,255,0.15); }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .submit-btn.highlight:hover { background: #f0f0f0; box-shadow: 0 20px 50px rgba(255,255,255,0.25); }
+    
+    .back-btn { 
+      background: transparent; border: 1px solid var(--glass-border); padding: 18px 30px; 
+      border-radius: 100px; color: rgba(255,255,255,0.6); font-weight: 700; cursor: pointer; 
+      transition: 0.3s; display: flex; align-items: center; gap: 8px;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
 
     /* Custom Select */
     .custom-select-wrapper { position: relative; width: 100%; }
@@ -401,12 +413,30 @@
   </style>
 
   <script>
+    // Initialize Flatpickr
+    function initDatePicker() {
+      const config = {
+        dateFormat: "Y-m-d",
+        disableMobile: "true", // Use flatpickr UI instead of native on mobile for better UX
+        animate: true,
+        monthSelectorType: "static"
+      };
+      
+      flatpickr('input[type="date"]', config);
+    }
+
     function toggleAnniversary() {
       const input = document.querySelector('input[name="marital_status"]');
       const status = input ? input.value : '';
       const group = document.getElementById('anniversaryGroup');
       if (!group) return;
       group.style.display = status === 'Married' ? 'block' : 'none';
+      
+      // Re-init flatpickr if group becomes visible
+      if (status === 'Married') {
+        const annInput = group.querySelector('input');
+        if (annInput && !annInput._flatpickr) flatpickr(annInput, { dateFormat: "Y-m-d" });
+      }
     }
 
     function goToStep(stepNum) {
@@ -426,7 +456,7 @@
         const city = document.querySelector('input[name="city"]').value;
 
         if (!gender || !dob || !phone || !addr || !city) {
-          alert('Please fill all required fields in Step 1.');
+          alert('Please fill all required fields marked with * in Step 1.');
           return;
         }
 
@@ -436,6 +466,12 @@
         lines[0].classList.add('active');
         title.innerText = 'Your Spiritual Journey';
         sub.innerText = 'Tell us a bit more about your walk with God and how you’d like to serve.';
+        
+        // GSAP entry if available
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo(s2, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" });
+        }
+        
         window.scrollTo(0, 0);
       } else {
         s1.style.display = 'block';
@@ -448,83 +484,77 @@
       }
     }
 
-    function selectDept(deptName, deptId) {
-      document.getElementById('deptInput').value = deptName;
-      document.querySelectorAll('.dept-tile').forEach(t => t.classList.remove('selected'));
-      const active = document.querySelector(`.dept-tile[data-dept="${deptName}"]`);
-      if (active) active.classList.add('selected');
+    // Role Filtering Logic
+    function handleDeptSelection(deptName, deptId) {
+       const roleWrapper = document.getElementById('roleSelectionWrapper');
+       const roleOptions = document.querySelectorAll('.role-option');
+       const posInput = document.getElementById('posInput');
+       const posTrigger = document.querySelector('#posSelectWrapper .custom-select-trigger');
+       
+       // Reset position if department changes
+       posInput.value = "";
+       posTrigger.innerText = "Select Position";
+       
+       let hasRoles = false;
+       roleOptions.forEach(opt => {
+         if (opt.dataset.deptId === deptId) {
+           opt.style.display = 'block';
+           hasRoles = true;
+         } else {
+           opt.style.display = 'none';
+         }
+       });
 
-      // Filter and Show Roles
-      const roleWrapper = document.getElementById('roleSelectionWrapper');
-      const roleContainer = document.getElementById('roleContainer');
-      const pills = roleContainer.querySelectorAll('.role-pill');
-      
-      let hasRoles = false;
-      pills.forEach(pill => {
-        if (pill.dataset.deptId === deptId) {
-          pill.style.display = 'block';
-          hasRoles = true;
-        } else {
-          pill.style.display = 'none';
-          pill.classList.remove('active');
-        }
-      });
-
-      if (hasRoles) {
-        roleWrapper.style.display = 'block';
-        if (typeof gsap !== 'undefined') {
-          gsap.fromTo(roleWrapper, { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 });
-        }
-      } else {
-        roleWrapper.style.display = 'none';
-      }
+       if (hasRoles) {
+         roleWrapper.style.display = 'block';
+         if (typeof gsap !== 'undefined') {
+           gsap.fromTo(roleWrapper, { opacity: 0, height: 0 }, { opacity: 1, height: 'auto', duration: 0.5 });
+         }
+       } else {
+         roleWrapper.style.display = 'none';
+       }
     }
 
-    function selectRole(roleTitle) {
-      document.getElementById('posInput').value = roleTitle;
-      document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
-      const active = document.querySelector(`.role-pill[data-title="${roleTitle}"]`);
-      if (active) active.classList.add('active');
-    }
-
-    function toggleMin(card, minName) {
-      card.classList.toggle('selected');
-      const checkbox = card.querySelector('input[type="checkbox"]');
+    function toggleMin(pill, minName) {
+      pill.classList.toggle('selected');
+      const checkbox = pill.querySelector('input[type="checkbox"]');
       checkbox.checked = !checkbox.checked;
     }
 
-    // Custom Select Interaction Logic
-    document.querySelectorAll('.custom-select-trigger').forEach(trigger => {
-      trigger.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const wrapper = this.parentElement;
+    // Unified Custom Select Logic
+    document.addEventListener('click', (e) => {
+      const isTrigger = e.target.closest('.custom-select-trigger');
+      const isOption = e.target.closest('.option');
+      
+      // Close all if clicking outside
+      if (!isTrigger && !isOption) {
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+        return;
+      }
+
+      if (isTrigger) {
+        const wrapper = isTrigger.parentElement;
         document.querySelectorAll('.custom-select-wrapper').forEach(w => {
           if (w !== wrapper) w.classList.remove('open');
         });
         wrapper.classList.toggle('open');
-      });
-    });
+      }
 
-    document.querySelectorAll('.custom-options .option').forEach(option => {
-      option.addEventListener('click', function() {
-        const val = this.dataset.value;
-        const wrapper = this.closest('.custom-select-wrapper');
+      if (isOption) {
+        const wrapper = isOption.closest('.custom-select-wrapper');
         const trigger = wrapper.querySelector('.custom-select-trigger');
         const input = wrapper.querySelector('input');
+        const val = isOption.dataset.value;
+        const id = isOption.dataset.id;
         
         trigger.innerText = val;
         input.value = val;
         wrapper.classList.remove('open');
         
-        // Trigger onchange manually for marital status toggle
-        if (input.name === 'marital_status') {
-           toggleAnniversary();
-        }
-      });
-    });
-
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+        // Custom hooks
+        if (input.name === 'marital_status') toggleAnniversary();
+        if (input.name === 'department_interest') handleDeptSelection(val, id);
+      }
     });
 
     function toggleBaptismDate() {
@@ -532,14 +562,20 @@
       const group = document.getElementById('baptismDateGroup');
       if (!group) return;
       group.style.display = isBaptized ? 'block' : 'none';
+      
+      if (isBaptized) {
+        const bapInput = group.querySelector('input');
+        if (bapInput && !bapInput._flatpickr) flatpickr(bapInput, { dateFormat: "Y-m-d" });
+      }
     }
 
-    // Auto-refresh layout on load as backup
     window.addEventListener('load', () => {
+      initDatePicker();
       toggleAnniversary();
       toggleBaptismDate();
+      
       if (typeof gsap !== 'undefined') {
-        gsap.from('.gsap-up', { y: 30, opacity: 0, duration: 1, ease: 'expo.out' });
+        gsap.from('.gsap-up', { y: 30, opacity: 0, duration: 1.2, ease: 'expo.out' });
       }
     });
   </script>

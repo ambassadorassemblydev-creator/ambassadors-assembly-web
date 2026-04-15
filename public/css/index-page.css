@@ -23,10 +23,7 @@ html.lenis, html.lenis body {
 
 /* ─── Text Gradient ("Join us Sunday" heading) ─────────────── */
 .text-gradient {
-  color: #3a6db2;
-  background: url('https://irp.cdn-website.com/23c7a45a/dms3rep/multi/gradient+bg-87bdbde3.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+  background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
