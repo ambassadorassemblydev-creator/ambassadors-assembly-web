@@ -100,6 +100,33 @@ export const accountRepo = {
     return data;
   },
 
+  /**
+   * Fetch all church positions for role selection in onboarding
+   */
+  getPositions: async () => {
+    const { data, error } = await supabase
+      .from('church_positions')
+      .select('id, title, department_id')
+      .order('title', { ascending: true });
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Fetch all active ministries for onboarding selection
+   */
+  getMinistries: async () => {
+    const { data, error } = await supabase
+      .from('ministries')
+      .select('id, name, description, slug')
+      .eq('is_active', true)
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+    return data;
+  },
+
   updateProfile: async (userId, updateData) => {
     // Standardize payload
     const payload = {
@@ -124,6 +151,7 @@ export const accountRepo = {
     if (updateData.baptism_date !== undefined) payload.baptism_date = updateData.baptism_date;
     if (updateData.is_onboarded !== undefined) payload.is_onboarded = updateData.is_onboarded;
     if (updateData.department_interest !== undefined) payload.department_interest = updateData.department_interest;
+    if (updateData.position_interest !== undefined) payload.position_interest = updateData.position_interest;
     if (updateData.salvation_date !== undefined) payload.salvation_date = updateData.salvation_date;
     if (updateData.previous_church !== undefined) payload.previous_church = updateData.previous_church;
     if (updateData.occupation !== undefined) payload.occupation = updateData.occupation;

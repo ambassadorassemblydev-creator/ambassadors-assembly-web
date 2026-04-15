@@ -38,6 +38,7 @@ const step2Schema = z.object({
   salvation_date: z.string().optional(),
   previous_church: z.string().optional(),
   department_interest: z.string().optional(),
+  position_interest: z.string().optional(),
   occupation: z.string().optional(),
 });
 
@@ -178,10 +179,15 @@ export const accountController = {
       const userId = req.user.id;
 
       let departments = [];
+      let positions = [];
+      let ministries = [];
       let profile = null;
+
       if (step === 2) {
-        [departments, profile] = await Promise.all([
+        [departments, positions, ministries, profile] = await Promise.all([
           accountRepo.getDepartments(),
+          accountRepo.getPositions(),
+          accountRepo.getMinistries(),
           accountRepo.getUserDashboardData(userId)
         ]);
       } else {
@@ -193,6 +199,8 @@ export const accountController = {
         currentPath: req.path,
         step,
         departments,
+        positions,
+        ministries,
         user: profile,
         error: null
       });
@@ -233,13 +241,23 @@ export const accountController = {
     } catch (err) {
       const step = parseInt(req.body.step) || 1;
       let departments = [];
-      if (step === 2) departments = await accountRepo.getDepartments();
+      let positions = [];
+      let ministries = [];
+      if (step === 2) {
+        [departments, positions, ministries] = await Promise.all([
+          accountRepo.getDepartments(),
+          accountRepo.getPositions(),
+          accountRepo.getMinistries()
+        ]);
+      }
       const errorMessage = err instanceof z.ZodError ? err.errors[0].message : 'An error occurred.';
       res.status(400).render('pages/onboarding', {
         pageTitle: 'Profile Setup',
         currentPath: req.path,
         step,
         departments,
+        positions,
+        ministries,
         user: await accountRepo.getUserDashboardData(req.user.id),
         error: errorMessage
       });

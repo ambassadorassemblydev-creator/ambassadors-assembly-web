@@ -148,42 +148,84 @@
                     <!-- Department Interest -->
                     <div class="form-group">
                       <label>Area of Interest / Department</label>
-                      <% 
-                        const userDept = user && user.church_workers && user.church_workers.length > 0 
-                          ? user.church_workers[0].church_departments.name 
-                          : (user && user.ministry_members && user.ministry_members.length > 0 ? user.ministry_members[0].ministries.name : null);
-                      %>
-                      
-                      <% if (userDept) { %>
-                        <div class="already-in-dept">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                          You are currently part of: <strong><%= userDept %></strong>
-                        </div>
-                      <% } %>
-
-                      <!-- CUSTOM TILE SELECTION -->
-                      <div class="custom-tile-grid">
-                        <input type="hidden" name="department_interest" id="deptInput" value="<%= user && user.department_interest ? user.department_interest : (userDept || '') %>">
+                        <% 
+                          const userDept = user && user.church_workers && user.church_workers.length > 0 
+                            ? user.church_workers[0].church_departments.name 
+                            : (user && user.ministry_members && user.ministry_members.length > 0 ? user.ministry_members[0].ministries.name : null);
+                          
+                          const userRole = user && user.church_workers && user.church_workers.length > 0 
+                            ? user.church_workers[0].church_positions.title
+                            : null;
+                        %>
                         
-                        <% departments.forEach(dept => { %>
-                          <div class="dept-tile <%= (user && user.department_interest === dept.name) || userDept === dept.name ? 'selected' : '' %>" 
-                               onclick="selectDept('<%= dept.name %>')"
-                               data-dept="<%= dept.name %>">
-                            <div class="tile-icon">
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                            </div>
-                            <div class="tile-info">
-                              <strong><%= dept.name %></strong>
-                              <p><%= dept.description || 'Serve in this operational unit.' %></p>
-                            </div>
-                            <div class="selection-indicator">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        <% if (userDept) { %>
+                          <div class="already-in-dept">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <div>
+                              You are currently part of: <strong><%= userDept %></strong>
+                              <% if (userRole) { %>
+                                <span class="role-badge"><%= userRole %></span>
+                              <% } %>
                             </div>
                           </div>
-                        <% }) %>
+                        <% } %>
+  
+                        <!-- CUSTOM TILE SELECTION (DEPARTMENTS) -->
+                        <div class="custom-tile-grid">
+                          <input type="hidden" name="department_interest" id="deptInput" value="<%= user && user.department_interest ? user.department_interest : (userDept || '') %>">
+                          <input type="hidden" name="position_interest" id="posInput" value="<%= user && user.position_interest ? user.position_interest : (userRole || '') %>">
+                          
+                          <% departments.forEach(dept => { %>
+                            <div class="dept-tile <%= (user && user.department_interest === dept.name) || userDept === dept.name ? 'selected' : '' %>" 
+                                 onclick="selectDept('<%= dept.name %>', '<%= dept.id %>')"
+                                 data-dept="<%= dept.name %>"
+                                 data-id="<%= dept.id %>">
+                              <div class="tile-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                              </div>
+                              <div class="tile-info">
+                                <strong><%= dept.name %></strong>
+                                <p><%= dept.description || 'Serve in this operational unit.' %></p>
+                              </div>
+                              <div class="selection-indicator">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                              </div>
+                            </div>
+                          <% }) %>
+                        </div>
+  
+                        <!-- DYNAMIC ROLE SELECTION -->
+                        <div id="roleSelectionWrapper" class="role-selector-wrap" style="display: none;">
+                          <label class="sub-label">Choose your specific role/interest:</label>
+                          <div id="roleContainer" class="role-pills">
+                            <% positions.forEach(pos => { %>
+                              <button type="button" 
+                                      class="role-pill" 
+                                      data-dept-id="<%= pos.department_id %>" 
+                                      data-title="<%= pos.title %>"
+                                      onclick="selectRole('<%= pos.title %>')">
+                                <%= pos.title %>
+                              </button>
+                            <% }) %>
+                          </div>
+                        </div>
+                        <p class="field-hint">Select a department and then choose a specific role you are interested in.</p>
                       </div>
-                      <p class="field-hint">Select a department where you feel led to serve. You can change this later.</p>
-                    </div>
+  
+                      <!-- Ministry Interest -->
+                      <div class="form-group">
+                        <label>Join a Ministry (Interest Groups)</label>
+                        <div class="ministry-grid">
+                          <% ministries.forEach(min => { %>
+                            <div class="min-card <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'joined' : '' %>" onclick="this.classList.toggle('selected')">
+                              <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none">
+                              <strong><%= min.name %></strong>
+                              <p><%= (min.description || '').substring(0, 60) %>...</p>
+                            </div>
+                          <% }) %>
+                        </div>
+                        <p class="field-hint">Select any ministries you would like to participate in.</p>
+                      </div>
 
                     <div class="form-group">
                       <label>Occupation / Professional Background</label>
@@ -304,7 +346,31 @@
 
     /* Card Group Items */
     .card-group { background: rgba(255,255,255,0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); }
-    .already-in-dept { display: flex; align-items: center; gap: 10px; padding: 12px 18px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; color: #93c5fd; font-size: 13px; margin-bottom: 15px; }
+    .already-in-dept { display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 16px; color: #4ade80; font-size: 14px; margin-bottom: 25px; }
+    .role-badge { background: #166534; color: white; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-left: 8px; letter-spacing: 0.5px; }
+
+    /* Role Selector */
+    .role-selector-wrap { margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); animation: slideDown 0.4s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .sub-label { font-size: 0.85rem; font-weight: 800; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block; }
+    .role-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .role-pill { 
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; 
+      padding: 8px 18px; color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s;
+    }
+    .role-pill:hover { background: rgba(255,255,255,0.08); color: white; }
+    .role-pill.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3); }
+
+    /* Ministry Grid */
+    .ministry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
+    .min-card { 
+      background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; 
+      padding: 15px; cursor: pointer; transition: 0.3s;
+    }
+    .min-card:hover { background: rgba(255,255,255,0.05); }
+    .min-card.selected { border-color: #22c55e; background: rgba(34, 197, 94, 0.05); }
+    .min-card strong { display: block; font-size: 14px; margin-bottom: 5px; }
+    .min-card p { font-size: 10px; opacity: 0.4; line-height: 1.4; margin: 0; }
 
     /* Checkbox Custom */
     .checkbox-label { display: flex; align-items: flex-start; gap: 18px; cursor: pointer; user-select: none; }
@@ -354,12 +420,52 @@
       group.style.display = status === 'Married' ? 'block' : 'none';
     }
 
-    function selectDept(deptName) {
+    function selectDept(deptName, deptId) {
       document.getElementById('deptInput').value = deptName;
       document.querySelectorAll('.dept-tile').forEach(t => t.classList.remove('selected'));
       const active = document.querySelector(`.dept-tile[data-dept="${deptName}"]`);
       if (active) active.classList.add('selected');
+
+      // Filter and Show Roles
+      const roleWrapper = document.getElementById('roleSelectionWrapper');
+      const roleContainer = document.getElementById('roleContainer');
+      const pills = roleContainer.querySelectorAll('.role-pill');
+      
+      let hasRoles = false;
+      pills.forEach(pill => {
+        if (pill.dataset.deptId === deptId) {
+          pill.style.display = 'block';
+          hasRoles = true;
+        } else {
+          pill.style.display = 'none';
+          pill.classList.remove('active');
+        }
+      });
+
+      if (hasRoles) {
+        roleWrapper.style.display = 'block';
+        gsap.fromTo(roleWrapper, { y: -10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 });
+      } else {
+        roleWrapper.style.display = 'none';
+      }
     }
+
+    function selectRole(roleTitle) {
+      document.getElementById('posInput').value = roleTitle;
+      document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+      const active = document.querySelector(`.role-pill[data-title="${roleTitle}"]`);
+      if (active) active.classList.add('selected'); // Wait, use .active for style
+      if (active) active.classList.add('active');
+    }
+
+    // Ministry card interaction
+    document.querySelectorAll('.min-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const checkbox = this.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        this.classList.toggle('selected', checkbox.checked);
+      });
+    });
 
     // Custom Select Interaction Logic
     document.querySelectorAll('.custom-select-trigger').forEach(trigger => {
