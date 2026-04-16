@@ -42,6 +42,7 @@ app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // Global Template Variables
 app.locals.siteName = 'Ambassadors Assembly';
@@ -58,13 +59,16 @@ app.use(csrfErrorHandler);
 app.use((req, res, next) => {
   // Only generate a new CSRF token for HTML page requests to prevent
   // background requests (images, favicon, etc.) from rotating the token prematurely.
-  if (req.accepts('html') && req.method === 'GET') {
+  if (req.accepts('html') && req.method === 'GET' && !req.xhr) {
     res.locals.csrfToken = generateToken(req, res);
   } else {
     // For non-HTML or POST requests, we just try to read the existing one for re-use if needed
     // though usually they'll use the one from the hidden field.
     res.locals.csrfToken = req.body?._csrf || req.headers["x-csrf-token"];
   }
+  
+  // High IQ: Set global fallbacks to prevent "is not defined" crashes
+  res.locals.pageTitle = 'Ambassadors Assembly';
   res.locals.paystackPublicKey = process.env.PAYSTACK_PUBLIC_KEY;
   next();
 });

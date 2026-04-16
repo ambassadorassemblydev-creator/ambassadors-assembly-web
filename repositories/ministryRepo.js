@@ -24,12 +24,15 @@ export const ministryRepo = {
             .from('ministries')
             .select(`
                 *,
-                ministry_leads (
-                    profiles (
-                        first_name,
-                        last_name,
-                        avatar_url
-                    )
+                leader:leader_id (
+                    first_name,
+                    last_name,
+                    avatar_url
+                ),
+                co_leader:co_leader_id (
+                    first_name,
+                    last_name,
+                    avatar_url
                 )
             `)
             .eq('slug', slug)
