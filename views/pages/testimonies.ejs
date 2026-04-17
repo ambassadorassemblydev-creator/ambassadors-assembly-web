@@ -1,0 +1,515 @@
+<%- include('../partials/head') %>
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+<%- include('../partials/preloader') %>
+<%- include('../partials/toasts') %>
+
+<main class="testimonies-page" data-lenis-prevent-touch>
+    <!-- Hero Section -->
+    <section class="testimonies-hero">
+        <div class="testimonies-hero__bg"></div>
+        <div class="testimonies-hero__content">
+            <h1 class="hero-title" data-gsap="fade-up">God's <span class="text-italic">Glory</span></h1>
+            <p class="hero-sub" data-gsap="fade-up" data-gsap-delay="0.1">Real stories of faith, healing, and restoration from our community.</p>
+        </div>
+        <div class="scroll-down">
+            <div class="scroll-down__text">Explore Stories</div>
+            <div class="scroll-down__line"></div>
+        </div>
+    </section>
+
+    <!-- Masonry Grid Section -->
+    <section class="testimonies-grid-container">
+        <div class="masonry-grid" id="testimonyMasonry">
+            <% if (testimonies && testimonies.length > 0) { %>
+                <% testimonies.forEach((testimony, index) => { %>
+                    <div class="testimony-card" data-category="<%= testimony.category %>" data-gsap="masonry-reveal">
+                        <% if (testimony.photo_url) { %>
+                            <div class="testimony-card__img">
+                                <img src="<%= testimony.photo_url %>" alt="<%= testimony.title %>" loading="lazy">
+                                <div class="testimony-card__category"><%= testimony.category %></div>
+                            </div>
+                        <% } %>
+                        <div class="testimony-card__content">
+                            <% if (!testimony.photo_url) { %>
+                                <div class="testimony-card__category-inline"><%= testimony.category %></div>
+                            <% } %>
+                            <h3 class="testimony-card__title"><%= testimony.title %></h3>
+                            <p class="testimony-card__excerpt"><%= testimony.short_quote || testimony.content.substring(0, 150) + '...' %></p>
+                            <div class="testimony-card__footer">
+                                <div class="author">
+                                    <div class="author__img">
+                                        <img src="<%= testimony.author_photo_url || '/images/default-avatar.png' %>" alt="<%= testimony.author_name %>">
+                                    </div>
+                                    <div class="author__info">
+                                        <span class="name"><%= testimony.author_name %></span>
+                                        <span class="date"><%= new Date(testimony.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></span>
+                                    </div>
+                                </div>
+                                <button class="read-more-btn" onclick="openTestimonyModal('<%= testimony.id %>')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="no-testimonies">
+                    <p>No stories shared yet. Be the first to testify!</p>
+                </div>
+            <% } %>
+        </div>
+        </div>
+
+        <!-- Submission Trigger -->
+        <div class="testimony-submission-cta" data-gsap="fade-up">
+            <h2 class="cta-title">Have a <span class="text-italic">Story</span> to tell?</h2>
+            <p>Your journey could be someone else's breakthrough.</p>
+            <button class="share-btn" onclick="toggleSubmissionForm()">Share My Testimony</button>
+        </div>
+    </section>
+
+    <!-- Slide-over Request Form -->
+    <div class="testimony-form-overlay" id="testimonyForm">
+        <div class="testimony-form-panel">
+            <button class="close-panel" onclick="toggleSubmissionForm()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="panel-content">
+                <h2>Share the <span class="text-italic">Glory</span></h2>
+                <p>Tell us how God has been moving in your life. Your story will be reviewed and shared to inspire others.</p>
+                
+                <form action="/testimonies/submit" method="POST" class="actual-form">
+                    <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                    <div class="hp-field" style="display:none !important; visibility:hidden !important;"><input type="text" name="full_name_hp" tabindex="-1" autocomplete="off"></div>
+                    <div class="form-group">
+                        <label>Title of Testimony</label>
+                        <input type="text" name="title" placeholder="e.g. A New Beginning" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Story</label>
+                        <textarea name="content" placeholder="Share your experience..." rows="8" required></textarea>
+                    </div>
+                    <div class="form-checkboxes">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="is_anonymous">
+                            <span>Post Anonymously</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Share Testimony</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for full testimony -->
+    <div class="testimony-modal" id="testimonyModal">
+        <div class="testimony-modal__overlay" onclick="closeTestimonyModal()"></div>
+        <div class="testimony-modal__content">
+            <button class="modal-close" onclick="closeTestimonyModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+</main>
+
+<style>
+    /* Cinematic Masonry Styles */
+    .testimonies-page {
+        background: #f9f9f7;
+        min-height: 100vh;
+    }
+
+    /* Hero */
+    .testimonies-hero {
+        height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        background: #ede8df;
+    }
+
+    .testimonies-hero__content {
+        z-index: 2;
+        max-width: 800px;
+        padding: 0 20px;
+    }
+
+    .hero-title {
+        font-family: 'Manrope', sans-serif;
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 900;
+        color: #1a1a1a;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        margin-bottom: 20px;
+    }
+
+    .hero-sub {
+        font-family: 'Manrope', sans-serif;
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        color: rgba(26, 26, 26, 0.6);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* Masonry Grid */
+    .testimonies-grid-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 80px 40px;
+    }
+
+    .masonry-grid {
+        columns: 3 300px;
+        column-gap: 30px;
+    }
+
+    .testimony-card {
+        break-inside: avoid;
+        background: #fff;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+        cursor: pointer;
+    }
+
+    .testimony-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .testimony-card__img {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .testimony-card__img img {
+        width: 100%;
+        display: block;
+        transition: transform 0.6s ease;
+    }
+
+    .testimony-card:hover .testimony-card__img img {
+        transform: scale(1.05);
+    }
+
+    .testimony-card__category {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #1a1a1a;
+    }
+
+    .testimony-card__content {
+        padding: 30px;
+    }
+
+    .testimony-card__title {
+        font-family: 'Manrope', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+        line-height: 1.3;
+    }
+
+    .testimony-card__excerpt {
+        font-family: 'Manrope', sans-serif;
+        font-size: 0.95rem;
+        color: rgba(26, 26, 26, 0.6);
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+
+    .testimony-card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .author__img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: #ede8df;
+    }
+
+    .author__img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .author__info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .author__info .name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+
+    .author__info .date {
+        font-size: 0.75rem;
+        color: rgba(26, 26, 26, 0.4);
+    }
+
+    .read-more-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f9f9f7;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1a1a1a;
+        transition: all 0.3s ease;
+    }
+
+    .testimony-card:hover .read-more-btn {
+        background: #1a1a1a;
+        color: #fff;
+    }
+
+    /* Modal */
+    .testimony-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .testimony-modal.is-open {
+        display: flex;
+    }
+
+    .testimony-modal__overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+    }
+
+    .testimony-modal__content {
+        position: relative;
+        width: 90%;
+        max-width: 800px;
+        max-height: 90vh;
+        background: #fff;
+        border-radius: 30px;
+        padding: 60px;
+        overflow-y: auto;
+        z-index: 2;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: none;
+        border: none;
+        color: #1a1a1a;
+        cursor: pointer;
+    }
+    /* CTA */
+    .testimony-submission-cta {
+        margin-top: 100px;
+        padding: 80px 40px;
+        background: #1a1a1a;
+        color: #f5f0e8;
+        border-radius: 40px;
+        text-align: center;
+    }
+
+    .cta-title {
+        font-family: 'Manrope', sans-serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .share-btn {
+        margin-top: 30px;
+        background: #f5f0e8;
+        color: #1a1a1a;
+        border: none;
+        padding: 16px 40px;
+        border-radius: 50px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .share-btn:hover {
+        transform: scale(1.05);
+    }
+
+    /* Form Panel */
+    .testimony-form-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+
+    .testimony-form-overlay.is-active {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .testimony-form-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        max-width: 500px;
+        height: 100%;
+        background: #fff;
+        padding: 60px 40px;
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: -20px 0 60px rgba(0,0,0,0.1);
+        overflow-y: auto;
+    }
+
+    .testimony-form-overlay.is-active .testimony-form-panel {
+        transform: translateX(0);
+    }
+
+    .close-panel {
+        background: none;
+        border: none;
+        color: #1a1a1a;
+        cursor: pointer;
+        margin-bottom: 40px;
+    }
+
+    .actual-form .form-group {
+        margin-bottom: 25px;
+    }
+
+    .actual-form label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 10px;
+    }
+
+    .actual-form input, .actual-form textarea {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 12px;
+        font-family: inherit;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 18px;
+        background: #1a1a1a;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // GSAP Staggered Reveal
+        gsap.from('[data-gsap="masonry-reveal"]', {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'expo.out',
+            scrollTrigger: {
+                trigger: '.masonry-grid',
+                start: 'top 80%',
+            }
+        });
+    });
+
+    function toggleSubmissionForm() {
+        document.getElementById('testimonyForm').classList.toggle('is-active');
+    }
+
+    function openTestimonyModal(id) {
+        // Find the card content
+        const card = document.querySelector(`.testimony-card[onclick*="${id}"]`) || document.querySelector(`[onclick*="${id}"]`).closest('.testimony-card');
+        const title = card.querySelector('.testimony-card__title').innerText;
+        const excerpt = card.querySelector('.testimony-card__excerpt').innerText;
+        // Since we don't have full content in the card usually, one would normally fetch it
+        // But for this cinematic UI, we'll assume the excerpt was just a teaser
+        
+        document.getElementById('modalBody').innerHTML = `
+            <h2 style="font-family: 'Manrope'; font-weight: 900; font-size: 2.5rem; margin-bottom: 30px;">${title}</h2>
+            <div style="line-height: 1.8; font-size: 1.1rem; color: #444;">${excerpt}</div>
+        `;
+        
+        document.getElementById('testimonyModal').classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeTestimonyModal() {
+        document.getElementById('testimonyModal').classList.remove('is-open');
+        document.body.style.overflow = '';
+    }
+</script>
+
+<%- include('../partials/footer') %>

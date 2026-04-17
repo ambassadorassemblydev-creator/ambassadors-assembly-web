@@ -3,6 +3,7 @@
 <body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background: #050505; color: white;">
   
   <%- include('../partials/preloader') %>
+  <%- include('../partials/toasts') %>
   
   <div id="dm" class="dmwr">
     <div class="dm_wrapper -var5 null ">
@@ -20,20 +21,35 @@
               
               <!-- PROGRESS TRACKER -->
               <div class="progress-tracker">
-                <div class="step-indicator <%= step >= 1 ? 'active' : '' %>">
+                <div class="step-indicator" data-step="1">
                   <span class="step-num">1</span>
-                  <span class="step-label">Personal</span>
+                  <span class="step-label">Avatar</span>
                 </div>
-                <div class="step-line <%= step >= 2 ? 'active' : '' %>"></div>
-                <div class="step-indicator <%= step >= 2 ? 'active' : '' %>">
+                <div class="step-line" data-line="1"></div>
+                <div class="step-indicator" data-step="2">
                   <span class="step-num">2</span>
-                  <span class="step-label">Spiritual</span>
+                  <span class="step-label">Identity</span>
+                </div>
+                <div class="step-line" data-line="2"></div>
+                <div class="step-indicator" data-step="3">
+                  <span class="step-num">3</span>
+                  <span class="step-label">Journey</span>
+                </div>
+                <div class="step-line" data-line="3"></div>
+                <div class="step-indicator" data-step="4">
+                  <span class="step-num">4</span>
+                  <span class="step-label">Gifts</span>
+                </div>
+                <div class="step-line" data-line="4"></div>
+                <div class="step-indicator" data-step="5">
+                  <span class="step-num">5</span>
+                  <span class="step-label">Service</span>
                 </div>
               </div>
 
               <div class="onboard-header">
-                <h2 id="onboardTitle">Welcome to the Family</h2>
-                <p id="onboardSub">Let’s start with some basic details to get your profile ready.</p>
+                <h2 id="onboardTitle">Welcome Home</h2>
+                <p id="onboardSub">Let’s get your digital identity ready for the kingdom.</p>
                 <% if (typeof error !== 'undefined' && error) { %>
                   <div class="ob-error">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -42,118 +58,255 @@
                 <% } %>
               </div>
 
-              <form action="/onboarding" method="POST" class="ob-form" id="onboardingForm">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <form action="/onboarding" method="POST" class="ob-form" id="onboardingForm" enctype="multipart/form-data">
+                <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                <input type="hidden" name="avatar_data" id="avatarDataInput">
+                <input type="hidden" name="current_step" id="currentStepInput" value="1">
                 
-                <!-- STEP 1: PERSONAL DETAILS -->
+                <!-- STEP 1: AVATAR UPLOAD (COMPULSORY) -->
                 <div id="stepSection1" class="form-section">
+                  <div class="avatar-upload-container">
+                    <div class="avatar-preview-box glass-fx" id="avatarPreviewBox">
+                      <div class="placeholder-icon">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                      </div>
+                      <img id="avatarImage" src="" style="display:none; max-width: 100%;">
+                    </div>
+                    
+                    <div class="upload-controls">
+                      <label for="avatarInput" class="upload-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Choose Photo
+                      </label>
+                      <input type="file" id="avatarInput" accept="image/*" style="display:none">
+                      <p class="upload-hint">Upload a clear photo of yourself. This is compulsory for identification.</p>
+                    </div>
+
+                    <div id="cropControl" style="display:none; margin-top: 20px; width: 100%;">
+                       <button type="button" class="submit-btn highlight" onclick="saveCrop()">Confirm Position</button>
+                    </div>
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="button" class="submit-btn highlight" id="btnNext1" disabled onclick="goToStep(2)">Continue
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 2: IDENTITY -->
+                <div id="stepSection2" class="form-section" style="display:none">
                   <div class="form-row">
+                    <div class="form-group">
+                      <label>Primary Title <span>*</span></label>
+                      <div class="custom-select-wrapper">
+                        <input type="hidden" name="title" value="<%= (user && user.title) ? user.title : '' %>">
+                        <div class="custom-select-trigger"><%= (user && user.title) ? user.title : 'Select Title' %></div>
+                        <div class="custom-options">
+                          <div class="option" data-value="Brother">Brother</div>
+                          <div class="option" data-value="Sister">Sister</div>
+                          <div class="option" data-value="Mr">Mr</div>
+                          <div class="option" data-value="Mrs">Mrs</div>
+                          <div class="option" data-value="Pastor">Pastor</div>
+                          <div class="option" data-value="Deacon">Deacon</div>
+                          <div class="option" data-value="Deaconess">Deaconess</div>
+                          <div class="option" data-value="Minister">Minister</div>
+                          <div class="option" data-value="Dr">Dr</div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="form-group">
                       <label>Gender <span>*</span></label>
                       <div class="custom-select-wrapper">
                         <input type="hidden" name="gender" value="<%= user && user.gender ? user.gender : '' %>">
                         <div class="custom-select-trigger"><%= user && user.gender ? user.gender : 'Select Gender' %></div>
                         <div class="custom-options">
-                          <div class="option" data-value="Male">Male</div>
-                          <div class="option" data-value="Female">Female</div>
+                          <div class="option" data-value="male">Male</div>
+                          <div class="option" data-value="female">Female</div>
                         </div>
                       </div>
-                    </div>
-                    <div class="form-group">
-                      <label>Date of Birth <span>*</span></label>
-                      <input type="date" name="dob" value="<%= user && user.date_of_birth ? user.date_of_birth : '' %>">
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-group">
-                      <label>Phone Number / WhatsApp <span>*</span></label>
-                      <input type="tel" name="phone" placeholder="+234 ..." value="<%= user && user.phone ? user.phone : '' %>">
+                      <label>Date of Birth <span>*</span></label>
+                      <input type="date" name="dob" value="<%= user && user.date_of_birth ? user.date_of_birth : '' %>">
                     </div>
                     <div class="form-group">
-                      <label>Marital Status <span>*</span></label>
-                      <div class="custom-select-wrapper">
-                        <input type="hidden" name="marital_status" value="<%= user && user.marital_status ? user.marital_status : '' %>" onchange="toggleAnniversary()">
-                        <div class="custom-select-trigger"><%= user && user.marital_status ? user.marital_status : 'Select Status' %></div>
-                        <div class="custom-options">
-                          <div class="option" data-value="Single">Single</div>
-                          <div class="option" data-value="Married">Married</div>
-                          <div class="option" data-value="Divorced">Divorced</div>
-                          <div class="option" data-value="Widowed">Widowed</div>
-                        </div>
-                      </div>
+                      <label>Phone / WhatsApp <span>*</span></label>
+                      <input type="tel" name="phone" placeholder="+44 ..." value="<%= user && user.phone ? user.phone : '' %>">
                     </div>
-                  </div>
-
-                  <div id="anniversaryGroup" class="form-group" style="display: <%= user && user.marital_status === 'Married' ? 'block' : 'none' %>;">
-                    <label>Wedding Anniversary</label>
-                    <input type="date" name="wedding_anniversary" value="<%= user && user.wedding_anniversary ? user.wedding_anniversary : '' %>">
                   </div>
 
                   <div class="form-row">
                     <div class="form-group">
                       <label>Home Address <span>*</span></label>
-                      <input type="text" name="addressLine1" placeholder="123 Example St" value="<%= user && user.address_line_1 ? user.address_line_1 : '' %>">
+                      <input type="text" name="addressLine1" placeholder="Street Address" value="<%= user && user.address_line_1 ? user.address_line_1 : '' %>">
                     </div>
                     <div class="form-group">
-                      <label>City / Region <span>*</span></label>
-                      <input type="text" name="city" placeholder="Lagos, Nigeria" value="<%= user && user.city ? user.city : '' %>">
+                      <label>City <span>*</span></label>
+                      <input type="text" name="city" placeholder="London, etc." value="<%= user && user.city ? user.city : '' %>">
                     </div>
                   </div>
 
-                  <div class="form-actions">
-                    <button type="button" class="submit-btn highlight" onclick="goToStep(2)">Continue to Step 2 
+                  <div class="card-group" style="margin-bottom: 30px;">
+                    <h4 class="sub-label">Emergency Contact</h4>
+                    <div class="form-row" style="margin-bottom: 0;">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label>Contact Name</label>
+                        <input type="text" name="emergency_contact_name" placeholder="Full Name" value="<%= user && user.emergency_contact_name ? user.emergency_contact_name : '' %>">
+                      </div>
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label>Contact Phone</label>
+                        <input type="tel" name="emergency_contact_phone" placeholder="Phone Number" value="<%= user && user.emergency_contact_phone ? user.emergency_contact_phone : '' %>">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-actions dual">
+                    <button type="button" onclick="goToStep(1)" class="back-btn glass-btn">Back</button>
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(3)">Journey
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </button>
                   </div>
                 </div>
-                
-                <div id="stepSection2" class="form-section" style="display: none;">
-                  <!-- Area of Interest / Department -->
+
+                <!-- STEP 3: JOURNEY -->
+                <div id="stepSection3" class="form-section" style="display:none">
+                   <div class="form-row">
+                    <div class="form-group">
+                      <label>Salvation Date</label>
+                      <input type="date" name="salvation_date" value="<%= user && user.salvation_date ? user.salvation_date : '' %>">
+                      <p class="field-hint">Approximate is fine.</p>
+                    </div>
+                    <div class="form-group">
+                      <label>Are you Baptized? (Water)</label>
+                      <div class="custom-select-wrapper">
+                        <input type="hidden" name="is_baptized" id="isBaptized" value="<%= user && user.is_baptized ? 'true' : 'false' %>">
+                        <div class="custom-select-trigger"><%= user && user.is_baptized ? 'Yes' : 'No' %></div>
+                        <div class="custom-options">
+                          <div class="option" data-value="true">Yes</div>
+                          <div class="option" data-value="false">No</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="baptismDateGroup" class="form-group" style="display: none;">
+                    <label>Baptism Date</label>
+                    <input type="date" name="baptism_date" value="<%= user && user.baptism_date ? user.baptism_date : '' %>">
+                  </div>
+
                   <div class="form-group">
-                    <label>Area of Interest / Department <span>*</span></label>
-                    <div class="custom-select-wrapper" id="deptSelectWrapper">
-                      <input type="hidden" name="department_interest" id="deptInput" value="<%= (user && user.department_interest) ? user.department_interest : '' %>">
-                      <div class="custom-select-trigger"><%= (user && user.department_interest) ? user.department_interest : 'Select Department' %></div>
+                    <label>Previous Church (If any)</label>
+                    <input type="text" name="previous_church" placeholder="Where were you worshipping before?" value="<%= user && user.previous_church ? user.previous_church : '' %>">
+                  </div>
+
+                  <div class="form-group">
+                    <label>How did you hear about Ambassadors Assembly?</label>
+                    <div class="custom-select-wrapper">
+                      <input type="hidden" name="how_did_you_hear" value="<%= user && user.how_did_you_hear ? user.how_did_you_hear : '' %>">
+                      <div class="custom-select-trigger"><%= user && user.how_did_you_hear ? user.how_did_you_hear : 'Select Source' %></div>
                       <div class="custom-options">
-                        <% departments.forEach(dept => { %>
-                          <div class="option" data-value="<%= dept.name %>" data-id="<%= dept.id %>">
-                            <strong><%= dept.name %></strong>
-                          </div>
-                        <% }) %>
+                        <div class="option" data-value="friend_family">Friend / Family</div>
+                        <div class="option" data-value="social_media">Social Media</div>
+                        <div class="option" data-value="website">Website</div>
+                        <div class="option" data-value="outreach">Outreach</div>
+                        <div class="option" data-value="other">Other</div>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Dynamic Role Selection -->
-                  <div id="roleSelectionWrapper" class="form-group" style="display: none;">
-                    <label>Position / Role of interest <span>*</span></label>
-                    <div class="custom-select-wrapper" id="posSelectWrapper">
-                      <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
-                      <div class="custom-select-trigger"><%= (user && user.position_interest) ? user.position_interest : 'Select Position' %></div>
-                      <div class="custom-options" id="roleOptions">
-                        <% positions.forEach(pos => { %>
-                          <div class="option role-option" data-value="<%= pos.title %>" data-dept-id="<%= pos.department_id %>">
-                            <%= pos.title %>
-                          </div>
-                        <% }) %>
-                      </div>
-                    </div>
+                  <div class="form-actions dual">
+                    <button type="button" onclick="goToStep(2)" class="back-btn glass-btn">Back</button>
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(4)">Gifts & Interests
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
                   </div>
+                </div>
 
-                  <!-- Ministry Interest -->
-                  <div class="form-group">
-                    <label>Join a Ministry (Interest Groups)</label>
-                    <div class="ministry-pills">
-                      <% ministries.forEach(min => { %>
-                        <div class="min-pill <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'selected' : '' %>" 
-                             onclick="toggleMin(this, '<%= min.name %>')">
-                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'checked' : '' %>>
-                          <span class="pill-title"><%= min.name %></span>
-                          <svg class="check-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                <!-- STEP 4: GIFTS & PASSIONS -->
+                <div id="stepSection4" class="form-section" style="display:none">
+                   <div class="form-group">
+                    <label>Spiritual Gifts & Natural Skills</label>
+                    <div class="gift-tags-grid" id="giftGrid">
+                      <% ['Teaching', 'Worship', 'Hospitality', 'Media/Tech', 'Intercession', 'Administration', 'Evangelism', 'Graphic Design', 'Musical Instruments', 'Counselling', 'First Aid', 'Cooking'].forEach(gift => { %>
+                        <div class="gift-tag <%= (user && user.spiritual_gifts && user.spiritual_gifts.includes(gift)) ? 'selected' : '' %>" onclick="toggleTag(this, '<%= gift %>')">
+                          <input type="checkbox" name="spiritual_gifts" value="<%= gift %>" style="display:none" <%= (user && user.spiritual_gifts && user.spiritual_gifts.includes(gift)) ? 'checked' : '' %>>
+                          <%= gift %>
                         </div>
                       <% }) %>
                     </div>
+                    <p class="field-hint">Select all that apply to you.</p>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Join a Ministry (Fellowship Groups)</label>
+                    <div class="ministry-grid">
+                      <% ministries.forEach(min => { %>
+                        <div class="min-card <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'selected' : '' %>" 
+                             onclick="toggleMin(this, '<%= min.name %>')">
+                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'checked' : '' %>>
+                          <strong><%= min.name %></strong>
+                          <p><%= min.description ? min.description.substring(0, 40) + '...' : 'Community fellowship' %></p>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+
+                  <div class="form-actions dual">
+                    <button type="button" onclick="goToStep(3)" class="back-btn glass-btn">Back</button>
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(5)">Service Placement
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 5: SERVICE ASSIGNMENT -->
+                <div id="stepSection5" class="form-section" style="display:none">
+                   <div class="form-group">
+                    <label>Where would you like to serve? (Department) <span>*</span></label>
+                    <div class="dept-selection-grid">
+                       <% departments.forEach(dept => { %>
+                        <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
+                             onclick="selectDept(this, '<%= dept.name %>', '<%= dept.id %>')">
+                          <div class="tile-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                          </div>
+                          <div class="tile-info">
+                            <strong><%= dept.name %></strong>
+                            <p><%= dept.description || 'Service unit' %></p>
+                          </div>
+                          <div class="selection-indicator">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </div>
+                    <input type="hidden" name="department_interest" id="deptInput" value="<%= (user && user.department_interest) ? user.department_interest : '' %>">
+                  </div>
+
+                  <div id="roleSelectionWrapper" class="form-group" style="display: none;">
+                    <label>Specific Position of Interest <span>*</span></label>
+                    <div class="role-pills" id="roleOptions">
+                       <% positions.forEach(pos => { %>
+                        <div class="role-pill <%= (user && user.position_interest === pos.title) ? 'active' : '' %>" 
+                             data-dept-id="<%= pos.department_id %>"
+                             onclick="selectRole(this, '<%= pos.title %>')">
+                          <%= pos.title %>
+                        </div>
+                      <% }) %>
+                    </div>
+                    <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Why do you want to serve in this capacity? (Motivation)</label>
+                    <textarea name="motivation" placeholder="Share your heart or specific reasons for choosing this department..." class="glass-input"><%= user && user.motivation ? user.motivation : '' %></textarea>
                   </div>
 
                   <div class="form-group">
@@ -162,11 +315,8 @@
                   </div>
 
                   <div class="form-actions dual">
-                    <button type="button" onclick="goToStep(1)" class="back-btn glass-btn">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                      Back
-                    </button>
-                    <button type="submit" class="submit-btn highlight">Complete My Profile 
+                    <button type="button" onclick="goToStep(4)" class="back-btn glass-btn">Back</button>
+                    <button type="submit" class="submit-btn highlight" id="btnFinal">Complete Onboarding 
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                     </button>
                   </div>
@@ -184,11 +334,13 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
   <style>
     :root {
-      --accent: #22c55e;
+      --accent: rgba(113, 178, 128, 1);
       --glass: rgba(255, 255, 255, 0.04);
       --glass-border: rgba(255, 255, 255, 0.08);
       --input-bg: rgba(255, 255, 255, 0.05);
@@ -217,8 +369,24 @@
     .step-num { width: 36px; height: 36px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
     .step-indicator.active .step-num { background: white; color: black; }
     .step-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
-    .step-line { width: 100px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .step-line { width: 120px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; }
     .step-line.active { background: white; }
+
+    /* Avatar Step specific */
+    .avatar-upload-container { display: flex; flex-direction: column; align-items: center; gap: 30px; margin-bottom: 40px; }
+    .avatar-preview-box { width: 280px; height: 280px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; border: 4px solid var(--accent); background: rgba(0,0,0,0.2); }
+    .placeholder-icon { opacity: 0.2; }
+    .upload-btn { background: var(--accent); color: white; padding: 15px 35px; border-radius: 100px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .upload-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(113, 178, 128, 0.4); }
+    .upload-hint { font-size: 0.85rem; color: rgba(255,255,255,0.4); text-align: center; max-width: 300px; margin-top: 15px; }
+
+    /* Gift Tags */
+    .gift-tags-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
+    .gift-tag { 
+      background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 50px; 
+      padding: 10px 15px; text-align: center; cursor: pointer; transition: 0.3s; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6);
+    }
+    .gift-tag.selected { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 5px 15px rgba(113, 178, 128, 0.2); }
 
     /* Header */
     .onboard-header { text-align: center; margin-bottom: 50px; }
@@ -236,12 +404,13 @@
     .form-group label { display: block; font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 10px; }
     .form-group label span { color: #ef4444; }
 
-    .form-group input {
+    .form-group input, .glass-input {
       width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;
       padding: 18px 22px; color: white; font-size: 1rem; font-family: inherit;
       outline: none; transition: 0.3s;
     }
-    .form-group input:focus { border-color: var(--accent); background: rgba(34, 197, 94, 0.05); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15); }
+    .glass-input { min-height: 120px; resize: none; overflow-y: auto; }
+    .form-group input:focus, .glass-input:focus { border-color: var(--accent); background: rgba(113, 178, 128, 0.05); box-shadow: 0 0 0 4px rgba(113, 178, 128, 0.15); }
 
     /* Custom Select */
     .custom-select-wrapper { position: relative; width: 100%; }
@@ -261,8 +430,72 @@
     .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; transform: translateY(0); }
     .custom-options .option { padding: 15px 20px; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: 600; }
     .custom-options .option:hover { background: var(--accent); color: white; }
-    .custom-options .option strong { display: block; }
 
+    /* Service Visuals */
+    .dept-selection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
+    .dept-tile { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; cursor: pointer; transition: 0.3s; border-left: 4px solid transparent; position: relative; }
+    .dept-tile:hover { background: rgba(255,255,255,0.05); }
+    .dept-tile.selected { border-color: var(--accent); border-left-color: var(--accent); background: rgba(113, 178, 128, 0.05); }
+    
+    .tile-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(113,178,128,0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); margin-bottom: 15px; }
+    .tile-info strong { display: block; font-size: 14px; margin-bottom: 4px; }
+    .tile-info p { font-size: 10px; opacity: 0.4; line-height: 1.4; margin: 0; }
+    .selection-indicator { position: absolute; top: 15px; right: 15px; color: var(--accent); opacity: 0; transform: scale(0.5); transition: 0.3s; }
+    .dept-tile.selected .selection-indicator { opacity: 1; transform: scale(1); }
+
+    .role-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .role-pill { 
+      background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 100px; padding: 10px 20px;
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6); cursor: pointer; transition: 0.3s;
+    }
+    .role-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    .ministry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
+    .min-card { 
+      background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; 
+      padding: 15px; cursor: pointer; transition: 0.3s;
+    }
+    .min-card:hover { background: rgba(255,255,255,0.05); }
+    .min-card.selected { border-color: var(--accent); background: rgba(113, 178, 128, 0.05); }
+    .min-card strong { display: block; font-size: 14px; margin-bottom: 5px; }
+    .min-card p { font-size: 10px; opacity: 0.4; line-height: 1.4; margin: 0; }
+
+    .card-group { background: rgba(255,255,255,0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); }
+    .sub-label { font-size: 0.85rem; font-weight: 800; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: block; }
+
+    /* Actions */
+    .form-actions { margin-top: 20px; }
+    .form-actions.dual { display: flex; gap: 20px; align-items: center; }
+    
+    .submit-btn {
+      width: 100%; padding: 22px; background: rgba(255,255,255,0.05); color: white; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.1); font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .submit-btn.highlight { background: white; color: black; border: none; box-shadow: 0 10px 40px rgba(255,255,255,0.15); }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .submit-btn.highlight:hover { background: #f0f0f0; box-shadow: 0 20px 50px rgba(255,255,255,0.25); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    
+    .back-btn { 
+      background: transparent; border: 1px solid var(--glass-border); padding: 18px 35px; 
+      border-radius: 100px; color: rgba(255,255,255,0.6); font-weight: 700; cursor: pointer; 
+      transition: 0.3s; display: flex; align-items: center; gap: 8px;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
+
+    .field-hint { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px; }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .glass-fx { padding: 40px 20px; border-radius: 0; }
+      .onboarding-page { padding: 0; }
+      .onboard-header h2 { font-size: 2.2rem; }
+      .progress-tracker { gap: 8px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 10px; padding-left: 10px; justify-content: flex-start; }
+      .step-line { min-width: 30px; }
+      .form-actions.dual { flex-direction: column-reverse; }
+    }
+  </style>
     /* Ministry Pills */
     .ministry-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
     .min-pill {
@@ -411,170 +644,172 @@
       .step-line { width: 50px; }
       .form-actions.dual { flex-direction: column-reverse; }
     }
-  </style>
+  </style>  <script>
+    let cropper;
+    const avatarDataInput = document.getElementById('avatarDataInput');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreviewBox = document.getElementById('avatarPreviewBox');
+    const avatarImage = document.getElementById('avatarImage');
+    const btnNext1 = document.getElementById('btnNext1');
+    const cropControl = document.getElementById('cropControl');
 
-  <script>
-    // Initialize Flatpickr
-    function initDatePicker() {
-      const config = {
-        dateFormat: "Y-m-d",
-        disableMobile: "true", // Use flatpickr UI instead of native on mobile for better UX
-        animate: true,
-        monthSelectorType: "static"
-      };
-      
-      flatpickr('input[type="date"]', config);
-    }
-
-    function toggleAnniversary() {
-      const input = document.querySelector('input[name="marital_status"]');
-      const status = input ? input.value : '';
-      const group = document.getElementById('anniversaryGroup');
-      if (!group) return;
-      group.style.display = status === 'Married' ? 'block' : 'none';
-      
-      // Re-init flatpickr if group becomes visible
-      if (status === 'Married') {
-        const annInput = group.querySelector('input');
-        if (annInput && !annInput._flatpickr) flatpickr(annInput, { dateFormat: "Y-m-d" });
+    // Avatar Logic
+    avatarInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          avatarPreviewBox.querySelector('.placeholder-icon').style.display = 'none';
+          avatarImage.src = event.target.result;
+          avatarImage.style.display = 'block';
+          
+          if (cropper) cropper.destroy();
+          cropper = new Cropper(avatarImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 1,
+            responsive: true,
+          });
+          cropControl.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
       }
+    });
+
+    function saveCrop() {
+      if (!cropper) return;
+      const canvas = cropper.getCroppedCanvas({ width: 400, height: 400 });
+      avatarDataInput.value = canvas.toDataURL('image/jpeg', 0.8);
+      
+      // Visual feedback
+      avatarImage.src = avatarDataInput.value;
+      cropper.destroy();
+      cropper = null;
+      cropControl.style.display = 'none';
+      btnNext1.disabled = false;
+      showToast('Avatar locked in!', 'success');
     }
 
-    function goToStep(stepNum) {
-      const s1 = document.getElementById('stepSection1');
-      const s2 = document.getElementById('stepSection2');
+    function goToStep(num) {
+      const sections = document.querySelectorAll('.form-section');
       const indicators = document.querySelectorAll('.step-indicator');
       const lines = document.querySelectorAll('.step-line');
       const title = document.getElementById('onboardTitle');
       const sub = document.getElementById('onboardSub');
+      const currentStepInput = document.getElementById('currentStepInput');
 
-      if (stepNum === 2) {
-        // Validation for Step 1
-        const gender = document.querySelector('input[name="gender"]').value;
-        const dob = document.querySelector('input[name="dob"]').value;
-        const phone = document.querySelector('input[name="phone"]').value;
-        const addr = document.querySelector('input[name="addressLine1"]').value;
-        const city = document.querySelector('input[name="city"]').value;
-
-        if (!gender || !dob || !phone || !addr || !city) {
-          alert('Please fill all required fields marked with * in Step 1.');
-          return;
-        }
-
-        s1.style.display = 'none';
-        s2.style.display = 'block';
-        indicators[1].classList.add('active');
-        lines[0].classList.add('active');
-        title.innerText = 'Your Spiritual Journey';
-        sub.innerText = 'Tell us a bit more about your walk with God and how you’d like to serve.';
-        
-        // GSAP entry if available
-        if (typeof gsap !== 'undefined') {
-          gsap.fromTo(s2, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" });
-        }
-        
-        window.scrollTo(0, 0);
-      } else {
-        s1.style.display = 'block';
-        s2.style.display = 'none';
-        indicators[1].classList.remove('active');
-        lines[0].classList.remove('active');
-        title.innerText = 'Welcome to the Family';
-        sub.innerText = 'Let’s start with some basic details to get your profile ready.';
-        window.scrollTo(0, 0);
+      // Validation
+      if (num > parseInt(currentStepInput.value)) {
+        if (!validateCurrentStep(parseInt(currentStepInput.value))) return;
       }
-    }
 
-    // Role Filtering Logic
-    function handleDeptSelection(deptName, deptId) {
-       const roleWrapper = document.getElementById('roleSelectionWrapper');
-       const roleOptions = document.querySelectorAll('.role-option');
-       const posInput = document.getElementById('posInput');
-       const posTrigger = document.querySelector('#posSelectWrapper .custom-select-trigger');
-       
-       // Reset position if department changes
-       posInput.value = "";
-       posTrigger.innerText = "Select Position";
-       
-       let hasRoles = false;
-       roleOptions.forEach(opt => {
-         if (opt.dataset.deptId === deptId) {
-           opt.style.display = 'block';
-           hasRoles = true;
-         } else {
-           opt.style.display = 'none';
-         }
-       });
-
-       if (hasRoles) {
-         roleWrapper.style.display = 'block';
-         if (typeof gsap !== 'undefined') {
-           gsap.fromTo(roleWrapper, { opacity: 0, height: 0 }, { opacity: 1, height: 'auto', duration: 0.5 });
-         }
-       } else {
-         roleWrapper.style.display = 'none';
-       }
-    }
-
-    function toggleMin(pill, minName) {
-      pill.classList.toggle('selected');
-      const checkbox = pill.querySelector('input[type="checkbox"]');
-      checkbox.checked = !checkbox.checked;
-    }
-
-    // Unified Custom Select Logic
-    document.addEventListener('click', (e) => {
-      const isTrigger = e.target.closest('.custom-select-trigger');
-      const isOption = e.target.closest('.option');
+      sections.forEach((s, idx) => s.style.display = (idx + 1 === num) ? 'block' : 'none');
       
-      // Close all if clicking outside
-      if (!isTrigger && !isOption) {
-        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
-        return;
-      }
+      // Progress UI
+      indicators.forEach((ind, idx) => {
+        if (idx + 1 <= num) ind.classList.add('active');
+        else ind.classList.remove('active');
+      });
+      lines.forEach((line, idx) => {
+        if (idx + 1 < num) line.classList.add('active');
+        else line.classList.remove('active');
+      });
 
-      if (isTrigger) {
-        const wrapper = isTrigger.parentElement;
-        document.querySelectorAll('.custom-select-wrapper').forEach(w => {
-          if (w !== wrapper) w.classList.remove('open');
-        });
+      // Headers
+      const headers = [
+        ['Step 1', 'Kingdom Identity', 'Let’s start with your profile photo.'],
+        ['Step 2', 'Personal Details', 'Basic information to help us know you better.'],
+        ['Step 3', 'Spiritual Journey', 'Tell us about your walk with Christ.'],
+        ['Step 4', 'Gifts & Interests', 'What has God placed in your hands?'],
+        ['Step 5', 'Service Placement', 'Where would you like to serve in the assembly?']
+      ];
+      title.innerText = headers[num-1][1];
+      sub.innerText = headers[num-1][2];
+      currentStepInput.value = num;
+
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo(`#stepSection${num}`, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.6 });
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function validateCurrentStep(step) {
+      if (step === 1) {
+        if (!avatarDataInput.value) { showToast('Profile photo is compulsory.', 'error'); return false; }
+      }
+      if (step === 2) {
+        const required = ['title', 'gender', 'dob', 'phone', 'addressLine1', 'city'];
+        for (let field of required) {
+          if (!document.querySelector(`[name="${field}"]`).value) {
+            showToast(`Please fill in all identity details.`, 'error');
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    function selectDept(tile, name, id) {
+      document.querySelectorAll('.dept-tile').forEach(t => t.classList.remove('selected'));
+      tile.classList.add('selected');
+      document.getElementById('deptInput').value = name;
+      
+      const roleWrapper = document.getElementById('roleSelectionWrapper');
+      const roles = document.querySelectorAll('.role-pill');
+      let count = 0;
+      roles.forEach(r => {
+        if (r.dataset.deptId === id) { r.style.display = 'block'; count++; }
+        else r.style.display = 'none';
+      });
+      roleWrapper.style.display = count > 0 ? 'block' : 'none';
+    }
+
+    function selectRole(pill, title) {
+      document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      document.getElementById('posInput').value = title;
+    }
+
+    function toggleTag(tag, val) {
+      tag.classList.toggle('selected');
+      tag.querySelector('input').checked = tag.classList.contains('selected');
+    }
+
+    function toggleMin(card, name) {
+      card.classList.toggle('selected');
+      card.querySelector('input').checked = card.classList.contains('selected');
+    }
+
+    function initFlatpickr() {
+      flatpickr('input[type="date"]', {
+        dateFormat: "Y-m-d",
+        disableMobile: true,
+        monthSelectorType: 'static'
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.custom-select-trigger');
+      if (trigger) {
+        const wrapper = trigger.parentElement;
         wrapper.classList.toggle('open');
       }
-
-      if (isOption) {
-        const wrapper = isOption.closest('.custom-select-wrapper');
+      const option = e.target.closest('.option');
+      if (option) {
+        const wrapper = option.closest('.custom-select-wrapper');
         const trigger = wrapper.querySelector('.custom-select-trigger');
         const input = wrapper.querySelector('input');
-        const val = isOption.dataset.value;
-        const id = isOption.dataset.id;
-        
-        trigger.innerText = val;
-        input.value = val;
+        trigger.innerText = option.innerText;
+        input.value = option.dataset.value;
         wrapper.classList.remove('open');
-        
-        // Custom hooks
-        if (input.name === 'marital_status') toggleAnniversary();
-        if (input.name === 'department_interest') handleDeptSelection(val, id);
+        if (input.id === 'isBaptized') {
+           document.getElementById('baptismDateGroup').style.display = input.value === 'true' ? 'block' : 'none';
+        }
       }
     });
 
-    function toggleBaptismDate() {
-      const isBaptized = document.getElementById('isBaptized').checked;
-      const group = document.getElementById('baptismDateGroup');
-      if (!group) return;
-      group.style.display = isBaptized ? 'block' : 'none';
-      
-      if (isBaptized) {
-        const bapInput = group.querySelector('input');
-        if (bapInput && !bapInput._flatpickr) flatpickr(bapInput, { dateFormat: "Y-m-d" });
-      }
-    }
-
     window.addEventListener('load', () => {
-      initDatePicker();
-      toggleAnniversary();
-      toggleBaptismDate();
-      
+      initFlatpickr();
       if (typeof gsap !== 'undefined') {
         gsap.from('.gsap-up', { y: 30, opacity: 0, duration: 1.2, ease: 'expo.out' });
       }
@@ -582,3 +817,4 @@
   </script>
 </body>
 </html>
+html>

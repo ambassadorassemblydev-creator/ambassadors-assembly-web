@@ -1,4 +1,5 @@
 <%- include('../partials/head') %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #0c0c0c;">
   
@@ -46,8 +47,16 @@
                 </div>
               </div>
 
+              <!-- GIVING GRAPH -->
+              <div class="glass-card" style="margin-bottom: 30px;">
+                <h3 style="margin-top:0; margin-bottom:20px; font-family:'Articulat CF Demi Bold';">Giving Trends</h3>
+                <div style="height: 300px; width: 100%;">
+                  <canvas id="givingChart"></canvas>
+                </div>
+              </div>
+
               <div class="glass-card">
-                <h3 style="margin-top:0; margin-bottom:30px; font-family:'Articulat CF Demi Bold';">Recent Giving</h3>
+                <h3 style="margin-top:0; margin-bottom:30px; font-family:'Articulat CF Demi Bold';">Recent Giving History</h3>
                 <table class="activity-list">
                   <thead>
                     <tr>
@@ -106,36 +115,88 @@
               </div>
             <% } %>
 
-            <% if (activeTab === 'prayers') { %>
+            <% if (activeTab === 'notes') { %>
               <div class="content-header">
-                <h1>My Prayers</h1>
-                <p>Keep track of your prayer requests and testimonies.</p>
+                <h1>My Notes</h1>
+                <p>Private reflections and notes from previous sermons.</p>
               </div>
-              <div class="glass-card">
-                 <table class="activity-list">
-                  <thead>
-                    <tr>
-                      <th>Request</th>
-                      <th>Status</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% if (prayers && prayers.length > 0) { %>
-                      <% prayers.forEach(p => { %>
-                        <tr>
-                          <td><strong><%= p.title %></strong></td>
-                          <td><span class="status-badge status-pending"><%= p.status %></span></td>
-                          <td><%= new Date(p.created_at).toLocaleDateString() %></td>
-                        </tr>
-                      <% }) %>
-                    <% } else { %>
-                      <tr><td colspan="3" style="text-align:center; opacity:0.4; padding: 40px;">No prayer requests yet.</td></tr>
-                    <% } %>
-                  </tbody>
-                </table>
+              
+              <div class="notes-grid">
+                <% if (notes && notes.length > 0) { %>
+                  <% notes.forEach(n => { %>
+                    <div class="glass-card note-card">
+                      <div class="note-header">
+                        <span class="note-date"><%= new Date(n.created_at).toLocaleDateString() %></span>
+                        <span class="note-tag"><%= n.category || 'General' %></span>
+                      </div>
+                      <div class="note-body">
+                        <%= n.note %>
+                      </div>
+                    </div>
+                  <% }) %>
+                <% } else { %>
+                  <div class="glass-card" style="text-align:center; padding: 60px; opacity: 0.5;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 20px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <p>No notes saved yet. Start taking notes during our live broadcasts!</p>
+                  </div>
+                <% } %>
               </div>
             <% } %>
+
+            <script>
+              // CHART LOGIC
+              <% if (activeTab === 'overview' && fullHistory) { %>
+                const ctx = document.getElementById('givingChart');
+                if (ctx) {
+                  const history = <%- JSON.stringify(fullHistory) %>;
+                  
+                  // Group by month
+                  const months = {};
+                  history.forEach(d => {
+                    const date = new Date(d.created_at);
+                    const key = date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
+                    months[key] = (months[key] || 0) + Number(d.amount);
+                  });
+
+                  new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels: Object.keys(months),
+                      datasets: [{
+                        label: 'Partnership Growth (£)',
+                        data: Object.values(months),
+                        borderColor: 'rgba(113, 178, 128, 1)',
+                        backgroundColor: 'rgba(113, 178, 128, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: 'rgba(113, 178, 128, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: { display: false }
+                      },
+                      scales: {
+                        y: { 
+                          beginAtZero: true, 
+                          grid: { color: 'rgba(255,255,255,0.05)' },
+                          ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 10 } }
+                        },
+                        x: { 
+                          grid: { display: false },
+                          ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 10 } }
+                        }
+                      }
+                    }
+                  });
+                }
+              <% } %>
+            </script>
 
           </main>
         </div>

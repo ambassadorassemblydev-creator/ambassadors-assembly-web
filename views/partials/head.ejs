@@ -7,6 +7,20 @@
   <meta id="view" name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
+  <!-- Sentry Tracking -->
+  <% if (locals.SENTRY_BROWSER_DSN) { %>
+  <script src="https://js.sentry-cdn.com/f0c3f0c3f0c3f0c3f0c3f0c3f0c3f0c3.min.js" crossorigin="anonymous"></script>
+  <script>
+    if (window.Sentry) {
+      Sentry.init({
+        dsn: "<%= SENTRY_BROWSER_DSN %>",
+        integrations: [Sentry.browserTracingIntegration()],
+        tracesSampleRate: 1.0,
+      });
+    }
+  </script>
+  <% } %>
+
   <!-- Favicons (Cloudinary) -->
   <link rel="apple-touch-icon"
     href="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
@@ -108,23 +122,26 @@
   <link rel="stylesheet" href="/css/index-page.css">
 
   <!-- ========= Page Title & SEO ========= -->
-  <title><%= pageTitle %></title>
-  <meta name="description" content="Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria. Join us for worship, community, and the Word.">
+  <title><%= pageTitle || locals.churchSettings?.site_title || 'Ambassadors Assembly' %></title>
+  <meta name="description" content="<%= locals.churchSettings?.site_description || 'Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
+
+  <!-- Meta Optimization -->
+  <% 
+    const optimizedOgImage = (locals.churchSettings?.og_image || 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg').replace('/upload/', '/upload/f_auto,q_auto/');
+  %>
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.ambassadorsassembly.com/">
-  <meta property="og:title" content="Ambassadors Assembly | Join Us on Sunday!">
-  <meta property="og:description" content="Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria. Join us for worship, community, and the Word.">
-  <meta property="og:image"
-    content="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
+  <meta property="og:url" content="https://www.ambassadorsassembly.com<%= currentPath || '' %>">
+  <meta property="og:title" content="<%= pageTitle || locals.churchSettings?.site_title || 'Ambassadors Assembly' %>">
+  <meta property="og:description" content="<%= locals.churchSettings?.site_description || 'Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
+  <meta property="og:image" content="<%= optimizedOgImage %>">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Ambassadors Assembly | Join Us on Sunday!">
-  <meta name="twitter:description" content="Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria. Join us for worship, community, and the Word.">
-  <meta name="twitter:image"
-    content="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= pageTitle || locals.churchSettings?.site_title || 'Ambassadors Assembly' %>">
+  <meta name="twitter:description" content="<%= locals.churchSettings?.site_description || 'Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
+  <meta name="twitter:image" content="<%= optimizedOgImage %>">
 
   <!-- ========= Structured Data (JSON-LD) ========= -->
   <!-- TODO: Replace placeholder data with real Ambassadors Assembly info -->

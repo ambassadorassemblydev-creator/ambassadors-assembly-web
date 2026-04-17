@@ -75,10 +75,9 @@
 
                   <div class="fund-select">
                     <select id="fund-type">
-                      <option value="tithe">Tithes & Offerings</option>
-                      <option value="missions">Missions & Outreach</option>
-                      <option value="building">Building Fund</option>
-                      <option value="other">Seed for the Future</option>
+                      <% categories.forEach(cat => { %>
+                        <option value="<%= cat.id %>"><%= cat.name %></option>
+                      <% }) %>
                     </select>
                   </div>
 
@@ -207,37 +206,77 @@
     });
 
     function initiateGiving() {
+      const payBtn = document.querySelector('.give-submit-btn');
       let amount = customInp.value || document.querySelector('.preset-btn.active').dataset.amt;
       let fund = document.getElementById('fund-type').value;
-      const email = "<%= user ? user.email : '' %>" || prompt('Please enter your email to continue:');
       
-      if (!email) return;
-      if (!amount || isNaN(amount)) return;
+      // Resolve Email from session
+      const email = "<%= locals.user ? locals.user.email : '' %>";
+      
+      if (!amount || isNaN(amount) || amount < 100) {
+        showToast('Please enter a valid seed amount (minimum ₦100)', 'error');
+        return;
+      }
 
-      console.log(`[Partnership] Initiating seed of ₦${amount} for ${fund}`);
+      if (!email) {
+        showToast('Please sign in to partner with us, or use the Building Fund for guest giving.', 'info');
+        setTimeout(() => window.location.href = '/account/login?redirect=/give', 2000);
+        return;
+      }
+
+      // 🛡️ DOUBLE-PAYMENT PROTECTION
+      payBtn.disabled = true;
+      payBtn.textContent = "Opening Secure Checkout...";
       
       const handler = PaystackPop.setup({
         key: "<%= paystackPublicKey %>", 
         email: email,
         amount: amount * 100, // Kobo
         currency: "NGN",
-        ref: 'AA-GEN-' + Math.floor((Math.random() * 1000000000) + 1),
+        ref: 'AA-GEN-' + Math.floor((Math.random() * 1e9) + 1),
         metadata: {
           custom_fields: [
-            {
-              display_name: "Fund Type",
-              variable_name: "fund_type",
-              value: fund
-            }
+            { display_name: "Fund Type", variable_name: "fund_type", value: fund }
           ]
         },
-        callback: function(response) {
-          alert('Seed received with Honor! Reference: ' + response.reference);
-          // High IQ: In a production app, we would notify the server here
-          window.location.href = '/my-account';
+        callback: async function(response) {
+          try {
+            payBtn.textContent = "Verifying Seed...";
+            
+            const verifyRes = await fetch('/api/payments/verify', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': '<%= locals.csrfToken %>'
+               },
+              body: JSON.stringify({
+                reference: response.reference,
+                amount: amount,
+                categoryId: fund,
+                type: 'general_giving',
+                email: email
+              })
+            });
+
+            const result = await verifyRes.json();
+            
+            if (result.success) {
+              showToast('Seed received with Honor! Thank you for your partnership.', 'success');
+              setTimeout(() => window.location.href = '/my-account', 2000);
+            } else {
+              showToast('Verification failed: ' + (result.message || 'Check reference'), 'error');
+              payBtn.disabled = false;
+              payBtn.textContent = "Partner Now";
+            }
+          } catch (err) {
+            console.error('[Giving] Verify Error:', err);
+            showToast('Network error during verification. Reference: ' + response.reference, 'error');
+          }
         },
         onClose: function() {
-          alert('Transaction cancelled.');
+          payBtn.disabled = false;
+          payBtn.textContent = "Partner Now";
+          showToast('Transaction cancelled.', 'info');
         }
       });
       handler.openIframe();

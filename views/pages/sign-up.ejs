@@ -47,11 +47,20 @@
                       align-items: center;
                       justify-content: center;
                       padding: 160px 4% 60px; /* Accounts for absolute navbar */
-                      background-image: url('https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg');
-                      background-size: cover;
-                      background-position: center;
+                      background: var(--aa-conic-grad);
+                      background-size: 200% 200%;
+                      animation: gradientFlow 15s ease infinite;
                       font-family: 'Articulat_CF_Normal', sans-serif;
                       color: #ffffff;
+                      overflow: hidden;
+                    }
+
+                    .auth-section::before {
+                      content: "";
+                      position: absolute;
+                      top: 0; left: 0; width: 100%; height: 100%;
+                      background: radial-gradient(circle at center, transparent 0%, rgba(5,5,5,0.4) 100%);
+                      pointer-events: none;
                     }
 
                     .auth-container {
@@ -150,13 +159,22 @@
 
                     /* BUTTONS */
                     .auth-submit-btn {
-                      width: 100%; padding: 16px; border-radius: 12px;
-                      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-                      color: #ffffff; font-family: 'Articulat CF Demi Bold', sans-serif; font-size: 16px;
-                      cursor: pointer; transition: all 0.3s ease; margin-bottom: 20px;
+                      width: 100%;
+                      padding: 16px;
+                      border-radius: 12px;
+                      background: rgba(113, 178, 128, 0.1);
+                      border: 1px solid rgba(113, 178, 128, 0.3);
+                      color: #ffffff;
+                      font-family: 'Articulat CF Demi Bold', sans-serif;
+                      font-size: 16px;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                      margin-bottom: 20px;
                     }
                     .auth-submit-btn:hover {
-                      background: rgba(255, 255, 255, 0.15); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+                      background: rgba(113, 178, 128, 0.2);
+                      border-color: rgba(113, 178, 128, 0.6);
+                      box-shadow: 0 8px 24px rgba(113, 178, 128, 0.2);
                     }
                     .auth-footer-link {
                       text-align: center; font-size: 14px; color: rgba(255, 255, 255, 0.6);
@@ -206,8 +224,9 @@
                         <div class="error-alert" id="auth-error"></div>
 
                         <form id="sign-up-form">
-                          <!-- CSRF Token Placeholder (We will inject this from Express) -->
-                          <input type="hidden" name="_csrf" id="csrfToken" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+                            <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                            <!-- CSRF Token for JS handlers -->
+                            <input type="hidden" name="_csrf_legacy" id="csrfToken" value="<%= locals.csrfToken %>">
 
                           <div class="input-row">
                             <div class="input-group">

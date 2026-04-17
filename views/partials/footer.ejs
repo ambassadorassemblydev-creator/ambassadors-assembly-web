@@ -65,6 +65,26 @@
                                                 m-font-size-set="true"><strong>watch</strong></a></p>
                                           </div>
                                         </div>
+                                        <div id="widget_prayer_wall" class="flex-element widget-wrapper footer-nav"
+                                          data-auto="flex-element-widget-wrapper" data-widget-type="paragraph">
+                                          <div class="dmNewParagraph" data-element-type="paragraph" data-version="5">
+                                            <p class="m-size-20 t-size-27 size-32 m-text-align-center"><a href="/prayer-wall"
+                                                runtime_url="/prayer-wall" type="page"
+                                                style="color: var(--color_1); text-transform: uppercase; font-weight: bold; text-decoration: none; display: initial;"
+                                                class="m-font-size-20 t-font-size-27 font-size-32"
+                                                m-font-size-set="true"><strong>Prayer Wall</strong></a></p>
+                                          </div>
+                                        </div>
+                                        <div id="widget_testimonies" class="flex-element widget-wrapper footer-nav"
+                                          data-auto="flex-element-widget-wrapper" data-widget-type="paragraph">
+                                          <div class="dmNewParagraph" data-element-type="paragraph" data-version="5">
+                                            <p class="m-size-20 t-size-27 size-32 m-text-align-center"><a href="/testimonies"
+                                                runtime_url="/testimonies" type="page"
+                                                style="color: var(--color_1); text-transform: uppercase; font-weight: bold; text-decoration: none; display: initial;"
+                                                class="m-font-size-20 t-font-size-27 font-size-32"
+                                                m-font-size-set="true"><strong>Testimonies</strong></a></p>
+                                          </div>
+                                        </div>
                                       </div>
                                       <div id="2bfeca5b" class="flex-element group" data-auto="flex-element-group">
                                         <div id="b2269f8b" class="flex-element widget-wrapper footer-nav"
@@ -119,6 +139,17 @@
                                             </p>
                                           </div>
                                         </div>
+                                        <div id="widget_departments" class="flex-element widget-wrapper footer-nav"
+                                          data-auto="flex-element-widget-wrapper" data-widget-type="paragraph">
+                                          <div class="dmNewParagraph" data-element-type="paragraph" data-version="5">
+                                            <p class="m-size-20 t-size-27 size-32 m-text-align-center">
+                                              <a href="/departments" runtime_url="/departments" type="page"
+                                                style="text-decoration: none; font-weight: bold; text-transform: uppercase; color: var(--color_1); display: initial;"
+                                                class="m-font-size-20 t-font-size-27 font-size-32"
+                                                m-font-size-set="true"><strong>Departments</strong></a>
+                                            </p>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                     <div id="widget_b54" class="flex-element widget-wrapper"
@@ -128,36 +159,20 @@
                                         id="1774813324" dmle_extension="social_hub" data-element-type="social_hub"
                                         wr="true" networks="" icon="true" surround="true" adwords="">
                                         <div class="socialHubWrapper">
-                                          <div class="socialHubInnerDiv "> <a
-                                              href="https://www.youtube.com/c/CornerstoneChurchAthens" target="_blank"
-                                              dm_dont_rewrite_url="true" aria-label="youtube"
-                                              onclick="dm_gaq_push_event ; dm_gaq_push_event('socialLink', 'click', 'Youtube')">
-                                              <span
-                                                class="dmSocialYoutube dm-social-icons-youtube oneIcon socialHubIcon style9"
-                                                aria-hidden="true" data-hover-effect="forward"></span>
-                                            </a>
-                                            <a href="https://www.instagram.com/cornerstoneathens/" target="_blank"
-                                              dm_dont_rewrite_url="true" aria-label="instagram"
-                                              onclick="dm_gaq_push_event ; dm_gaq_push_event('socialLink', 'click', 'Instagram')">
-                                              <span
-                                                class="dmSocialInstagram dm-social-icons-instagram oneIcon socialHubIcon style9"
-                                                aria-hidden="true" data-hover-effect="forward"></span>
-                                            </a>
-                                            <a href="https://www.facebook.com/CornerstoneAthens" target="_blank"
-                                              dm_dont_rewrite_url="true" aria-label="facebook"
-                                              onclick="dm_gaq_push_event ; dm_gaq_push_event('socialLink', 'click', 'Facebook')">
-                                              <span
-                                                class="dmSocialFacebook dm-social-icons-facebook oneIcon socialHubIcon style9"
-                                                aria-hidden="true" data-hover-effect="forward"></span>
-                                            </a>
-                                            <a href="https://www.tiktok.com/@cornerstoneathens" target="_blank"
-                                              dm_dont_rewrite_url="true" aria-label="tiktok"
-                                              onclick="dm_gaq_push_event ; dm_gaq_push_event('socialLink', 'click', 'Tiktok')">
-                                              <span
-                                                class="dmSocialTiktok dm-social-icons-tiktok oneIcon socialHubIcon style9"
-                                                aria-hidden="true" data-hover-effect="forward"></span>
-                                            </a>
-                                          </div>
+                                            <div class="socialHubInnerDiv "> 
+                                              <a href="<%= locals.churchSettings?.social_youtube || 'https://www.youtube.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="youtube">
+                                                <span class="dmSocialYoutube dm-social-icons-youtube oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              </a>
+                                              <a href="<%= locals.churchSettings?.social_instagram || 'https://www.instagram.com/ambassadorsassembly/' %>" target="_blank" aria-label="instagram">
+                                                <span class="dmSocialInstagram dm-social-icons-instagram oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              </a>
+                                              <a href="<%= locals.churchSettings?.social_facebook || 'https://www.facebook.com/AmbassadorsAssembly' %>" target="_blank" aria-label="facebook">
+                                                <span class="dmSocialFacebook dm-social-icons-facebook oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              </a>
+                                              <a href="<%= locals.churchSettings?.social_tiktok || 'https://www.tiktok.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="tiktok">
+                                                <span class="dmSocialTiktok dm-social-icons-tiktok oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              </a>
+                                            </div>
                                         </div>
                                       </div>
                                     </div>
@@ -167,7 +182,7 @@
                                       <div class="dmNewParagraph" data-element-type="paragraph" data-version="5"
                                         id="2917856100" >
                                         <p class="text-align-left m-text-align-center"><span
-                                            style="color: var(--color_1); display: unset;">Ambassadors Assembly Address</span></p>
+                                            style="color: var(--color_1); display: unset;"><%= locals.churchSettings?.church_address || 'Ambassadors Assembly Address' %></span></p>
                                       </div>
                                     </div>
                                     <div id="widget_ift" class="flex-element widget-wrapper"
@@ -176,9 +191,9 @@
                                       <div class="dmNewParagraph" data-element-type="paragraph" data-version="5"
                                         id="4179871369" >
                                         <p class="t-size-16 m-size-16 text-align-left m-text-align-center"><a
-                                            href="tel:(706) 549-0000" target="_blank" type="call"
+                                            href="tel:<%= locals.churchSettings?.church_phone || '#' %>" target="_blank" type="call"
                                             style="color: var(--color_1); display: unset;"
-                                            class="m-font-size-16 t-font-size-16">+234 xxxx xxx</a></p>
+                                            class="m-font-size-16 t-font-size-16"><%= locals.churchSettings?.church_phone || 'Call Us' %></a></p>
                                       </div>
                                     </div>
                                   </div>
@@ -613,37 +628,8 @@
           l.href = href;
           document.head.appendChild(l);
         }
-        // ─── Ambassadors Assembly API: load latest sermon into Slide 2 ────────────────────
-        function fetchLatestSermon() {
-          fetch('https://api.cornerstoneathens.cc/youtube/latest?playlistId=PLoC0xI5CrP4mKkZ2Dy_B1rkI4runKUiOa')
-            .then(function (res) {
-              if (!res.ok) throw new Error('Network response was not ok ' + res.status);
-              return res.json();
-            })
-            .then(function (responseData) {
-              var videoId = responseData.videoId;
-              var title = responseData.title;
-              var thumb = responseData.imageUrl;
-              var cleanTitle = (title || '').split('|')[0].trim();
-              var titleEl = element.querySelector('[data-slide2-title]');
-              var watchEl = element.querySelector('[data-slide2-watch]');
-              var slide2 = element.querySelector('[data-slide2]');
-              if (titleEl) titleEl.textContent = cleanTitle;
-              if (watchEl) watchEl.href = 'https://www.youtube.com/watch?v=' + videoId;
-              if (slide2) {
-                slide2.style.backgroundImage = 'url(' + thumb + ')';
-                slide2.style.backgroundSize = 'cover';
-                slide2.style.backgroundRepeat = 'no-repeat';
-                slide2.style.backgroundPosition = 'center center';
-              }
-            })
-            .catch(function (err) {
-              console.error('Error fetching latest sermon:', err);
-              var titleEl = element.querySelector('[data-slide2-title]');
-              if (titleEl) titleEl.textContent = 'Unable to load sermon';
-            });
-        }
-        fetchLatestSermon();
+        // ─── Ambassadors Assembly: Metadata sync handled server-side ────────────────────
+        // (Legacy external fetches removed for security and performance)
         // ─── Hide swiper early if reorder will happen, to prevent slide-1 flash ──
         (function () {
           var wrap = element.querySelector('.hero-swiper-wrap');
@@ -741,8 +727,8 @@
   <svg height="0" width="0" style="position:absolute; z-index: -999;">
     <defs>
       <linearGradient id="icon-gradient" x1="0.5" y1="1" x2="0.5" y2="0">
-        <stop offset="0%" stop-color="#706d6f"></stop>
-        <stop offset="100%" stop-color="#bdbdbd"></stop>
+        <stop offset="0%" stop-color="rgba(19, 78, 94, 1)"></stop>
+        <stop offset="100%" stop-color="rgba(113, 178, 128, 1)"></stop>
       </linearGradient>
     </defs>
   </svg>
@@ -750,8 +736,401 @@
   <!-- App Scripts -->
   <script src="/js/index-page.js" defer></script>
   
+  <!-- Ambassadors AI Floating Chat -->
+  <div id="ambassadors-ai-container">
+    <button id="ai-chat-bubble" class="ai-chat-bubble" aria-label="Chat with Ambassadors AI">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span class="bubble-ping"></span>
+    </button>
+
+    <div id="ai-chat-window" class="ai-chat-window">
+      <div class="ai-chat-header">
+        <div class="header-info">
+          <h3>Ambassadors AI</h3>
+          <span class="status-online">Online</span>
+        </div>
+        <button id="close-ai-chat" class="close-chat">&times;</button>
+      </div>
+      
+      <div id="ai-chat-messages" class="ai-chat-body">
+        <div class="message ai">
+          <div class="msg-content">
+            Greetings, Ambassador! I am the Ambassadors AI. How can I assist your journey with us today?
+          </div>
+        </div>
+        <div class="quick-prompts">
+          <button class="quick-prompt" data-msg="What are the service times?">Service Times</button>
+          <button class="quick-prompt" data-msg="/prayer-wall">Prayer Wall</button>
+          <button class="quick-prompt" data-msg="How can I give?">Giving</button>
+          <button class="quick-prompt" data-msg="Who is the Lead Pastor?">Lead Pastor</button>
+        </div>
+      </div>
+
+      <form id="ai-chat-form" class="ai-chat-footer">
+        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+        <input type="text" id="ai-chat-input" placeholder="Type your message..." autocomplete="off">
+        <button type="submit" id="ai-send-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    #ambassadors-ai-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 9999;
+      font-family: 'Articulatcf-regular', sans-serif;
+    }
+
+    .ai-chat-bubble {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(14, 58, 48, 0.4);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .ai-chat-bubble svg { width: 28px; height: 28px; transition: transform 0.3s ease; }
+    .ai-chat-bubble:hover { transform: scale(1.1) translateY(-5px); }
+    .ai-chat-bubble:hover svg { transform: rotate(15deg); }
+
+    .bubble-ping {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 15px;
+      height: 15px;
+      background: #4ade80;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes ping {
+      75%, 100% { transform: scale(2); opacity: 0; }
+    }
+
+    .ai-chat-window {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 380px;
+      height: 550px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      border: 1px solid rgba(19, 78, 94, 0.1);
+    }
+
+    .ai-chat-window.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .ai-chat-header {
+      padding: 20px 25px;
+      background: #134e5e;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-info h3 { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+    .status-online { font-size: 0.75rem; opacity: 0.8; display: flex; align-items: center; gap: 5px; }
+    .status-online::before { content: ''; width: 8px; height: 8px; background: #4ade80; border-radius: 50%; }
+
+    .close-chat { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+    .close-chat:hover { opacity: 1; }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: #fdfdfb;
+    }
+
+    .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem; line-height: 1.5; }
+    .message.ai { align-self: flex-start; background: #f0f4f3; color: #2c3e50; border-bottom-left-radius: 4px; }
+    .message.user { align-self: flex-end; background: #134e5e; color: white; border-bottom-right-radius: 4px; }
+
+    .typing-indicator { font-style: italic; font-size: 0.8rem; color: #7f8c8d; }
+
+    .quick-prompts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .quick-prompt {
+      background: white;
+      border: 1px solid #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #134e5e;
+    }
+    .quick-prompt:hover { background: #134e5e; color: white; border-color: #134e5e; }
+
+    .ai-chat-footer {
+      padding: 15px 25px;
+      background: white;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      gap: 10px;
+    }
+
+    #ai-chat-input {
+      flex: 1;
+      border: none;
+      background: #f8fafc;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: background 0.2s;
+    }
+    #ai-chat-input:focus { background: #f1f5f9; }
+
+    #ai-send-btn {
+      background: #134e5e;
+      color: white;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    #ai-send-btn:hover { transform: scale(1.05); }
+    #ai-send-btn svg { width: 20px; height: 20px; }
+
+    @media (max-width: 767px) {
+      .ai-chat-window { width: calc(100vw - 40px); height: 500px; right: -10px; }
+      #ambassadors-ai-container { bottom: 20px; right: 20px; }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bubble = document.getElementById('ai-chat-bubble');
+      const windowEl = document.getElementById('ai-chat-window');
+      const closeBtn = document.getElementById('close-ai-chat');
+      const form = document.getElementById('ai-chat-form');
+      const input = document.getElementById('ai-chat-input');
+      const messagesBody = document.getElementById('ai-chat-messages');
+      
+      let chatHistory = [];
+
+      bubble.addEventListener('click', () => {
+        windowEl.classList.toggle('active');
+        if (windowEl.classList.contains('active')) {
+          input.focus();
+        }
+      });
+
+      closeBtn.addEventListener('click', () => {
+        windowEl.classList.remove('active');
+      });
+
+      const addMessage = (text, role) => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${role}`;
+        msgDiv.innerHTML = `<div class="msg-content">${text}</div>`;
+        messagesBody.appendChild(msgDiv);
+        messagesBody.scrollTop = messagesBody.scrollHeight;
+        
+        if (role !== 'typing') {
+          chatHistory.push({ role: role === 'ai' ? 'assistant' : 'user', content: text });
+          if (chatHistory.length > 10) chatHistory.shift();
+        }
+        return msgDiv;
+      };
+
+      const handleQuickPrompt = (e) => {
+          if (e.target.classList.contains('quick-prompt')) {
+              const msg = e.target.getAttribute('data-msg');
+              input.value = msg;
+              form.dispatchEvent(new Event('submit'));
+          }
+      };
+      messagesBody.addEventListener('click', handleQuickPrompt);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        input.value = '';
+        addMessage(text, 'user');
+
+        const typingIndicator = addMessage('Thinking...', 'ai typing-indicator');
+
+        try {
+          const response = await fetch('/api/ai/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, history: chatHistory.filter(m => m.role !== 'typing') })
+          });
+
+          const data = await response.json();
+          typingIndicator.remove();
+          addMessage(data.response, 'ai');
+        } catch (error) {
+          typingIndicator.innerHTML = '<span style="color:red">Connection failed. Please try again.</span>';
+          console.error(error);
+        }
+      });
+    });
+  </script>
+
   <!-- Ambassadors Assembly Global UI -->
+  <%- include('toasts') %>
   <%- include('modals') %>
   <script src="/js/aa-ui.js"></script>
+    <!-- PREMIUM WHATSAPP INTEGRATION -->
+    <div class="whatsapp-float gsap-wa-reveal">
+      <a href="https://wa.me/<%= (locals.churchSettings?.church_phone || '').replace(/[^0-9]/g, '') %>?text=Hello%20Ambassadors%20Assembly,%20I%20would%20like%20to%20connect." target="_blank" class="wa-btn" aria-label="WhatsApp Connect">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.126-.54c1.029.563 2.025.873 3.162.873 3.181 0 5.767-2.586 5.767-5.766 0-3.18-2.586-5.766-5.767-5.766zm3.336 8.356c-.145.41-.741.761-1.024.814-.28.053-.538.113-1.666-.33-1.442-.563-2.37-2.039-2.443-2.14-.072-.1-.59-1.037-.59-2.002 0-.966.526-1.441.713-1.638.188-.197.41-.247.546-.247.137 0 .274.004.393.01.125.004.293-.047.458.35.166.398.571 1.41.62 1.509.049.098.082.213.016.344-.067.131-.1.213-.2.328-.1.115-.213.256-.304.345-.102.102-.213.213-.092.426.121.213.538.892 1.155 1.444.793.71 1.46.93 1.666 1.033.206.102.327.087.449-.053.121-.141.522-.607.662-.814.139-.207.279-.174.47-.102.191.072 1.21.57 1.42.677.21.107.35.16.4.246.05.087.05.503-.095.913zM12 2C6.477 2 2 6.477 2 12c0 1.89.522 3.658 1.428 5.165L2.018 21.5l4.473-1.144C7.942 21.432 9.89 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.838 0-3.555-.523-5.01-1.426l-.359-.22-2.618.669.68-2.54-.241-.384C3.523 15.617 3 14.015 3 12c0-4.962 4.038-9 9-9s9 4.038 9 9-4.038 9-9 9z"/></svg>
+        <span class="wa-tooltip">PRAYER & COUNSEL</span>
+      </a>
+    </div>
+
+    <!-- PUBLIC STATUS BADGE (High IQ: Official Verification) -->
+    <div class="status-float gsap-status-reveal" style="position: fixed; bottom: 30px; left: 30px; z-index: 9998;">
+      <a href="/system-status" class="status-link" aria-label="System Status">
+        <iframe src="https://ambassadors.betteruptime.com/badge?theme=dark" width="250" height="30" frameborder="0" scrolling="no" style="color-scheme: normal; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);"></iframe>
+      </a>
+    </div>
+
+    <style>
+      .whatsapp-float {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+      }
+      .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(10px);
+        padding: 8px 15px;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-decoration: none !important;
+        transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .status-badge:hover {
+        background: rgba(0, 0, 0, 0.8);
+        border-color: rgba(0, 255, 127, 0.4);
+        transform: translateY(-2px);
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #00ff7f;
+        border-radius: 50%;
+        position: relative;
+        box-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
+      }
+      .status-dot::after {
+        content: '';
+        position: absolute;
+        width: 100%; height: 100%;
+        background: inherit;
+        border-radius: inherit;
+        animation: status-pulse 2s infinite;
+      }
+      @keyframes status-pulse {
+        0% { transform: scale(1); opacity: 0.8; }
+        70% { transform: scale(2.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 0; }
+      }
+      .status-text {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      
+      .wa-btn {
+        width: 60px; height: 60px;
+        background: #25D366;
+        color: white;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+        transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      }
+      .wa-btn svg { width: 30px; height: 30px; }
+      .wa-btn:hover { transform: scale(1.1) rotate(5deg); }
+      
+      .wa-tooltip {
+        position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
+        background: white; color: #050505;
+        padding: 8px 15px; border-radius: 10px;
+        font-size: 0.65rem; font-weight: 900; letter-spacing: 1px;
+        white-space: nowrap; opacity: 0; visibility: hidden;
+        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+      .wa-tooltip::after {
+        content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%) rotate(45deg);
+        width: 10px; height: 10px; background: white;
+      }
+      .wa-btn:hover .wa-tooltip { opacity: 1; visibility: visible; right: 75px; }
+
+      @media (max-width: 768px) {
+        .whatsapp-float { bottom: 20px; right: 20px; }
+        .wa-btn { width: 50px; height: 50px; }
+        .wa-btn svg { width: 25px; height: 25px; }
+        .wa-tooltip { display: none; }
+      }
+    </style>
+
+    <script>
+      gsap.from(".gsap-wa-reveal", {
+        scrollTrigger: { trigger: "body", start: "100px top" },
+        scale: 0, opacity: 0, duration: 1, ease: "back.out(1.7)", delay: 2
+      });
+    </script>
+
+    <!-- BETTER STACK ANNOUNCEMENTS (High IQ: Direct-to-User Alerts) -->
+    <script src="https://uptime.betterstack.com/widgets/announcement.js" data-id="244038" async="async" type="text/javascript"></script>
+    <style>
+      .betteruptime-announcement { top: unset !important; bottom: 0 !important; background: white !important; }
+      .betteruptime-announcement__message { color: black !important; font-family: 'Articulatcf-regular', sans-serif; font-weight: 700; }
+    </style>
 </body>
 </html>

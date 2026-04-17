@@ -1,3 +1,5 @@
+import "./instrument.js";
+import * as Sentry from "@sentry/node";
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -13,13 +15,35 @@ import { globalErrorHandler } from './middlewares/errorHandler.js';
 import { AppError } from './utils/AppError.js';
 import indexRouter from './routes/index.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
+import { siteConfigMiddleware } from './middlewares/siteConfigMiddleware.js';
 import { doubleCsrfProtection, generateToken, csrfErrorHandler } from './middlewares/csrfMiddleware.js';
 import { accountController } from './controllers/accountController.js';
+import statusMonitor from 'express-status-monitor';
 
 
 dotenv.config();
 
+// Sentry is already initialized in instrument.js
 const app = express();
+app.use(statusMonitor({
+  title: 'Ambassadors Assembly | System Status',
+  path: '/status',
+  spans: [{
+      interval: 1,            // Every second
+      retention: 60           // Keep 60 data points
+  }, {
+      interval: 5,            // Every 5 seconds
+      retention: 60
+  }],
+  chartVisibility: {
+    cpu: true,
+    mem: true,
+    load: true,
+    responseTime: true,
+    rps: true,
+    statusCodes: true
+  }
+}));
 const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -47,9 +71,11 @@ app.get('/favicon.ico', (req, res) => res.status(204).end());
 // Global Template Variables
 app.locals.siteName = 'Ambassadors Assembly';
 app.locals.currentYear = new Date().getFullYear();
+app.locals.SENTRY_BROWSER_DSN = process.env.SENTRY_BROWSER_DSN || '';
 
 // 1. Check user session early on every request (Populates req.user for CSRF stability)
 app.use(authMiddleware.checkUser);
+app.use(siteConfigMiddleware);
 
 // 2. Initialize CSRF Protection Globally
 app.use(doubleCsrfProtection);
@@ -89,14 +115,54 @@ app.use('/api', limiter);
 
 
 
-// Request Logger (High IQ Filtering)
+// Thick Request Logger (Global Interceptor)
 app.use((req, res, next) => {
-  const noise = ['.js', '.css', '.map', '.json', '.png', '.jpg', '/editor/'];
+  const start = process.hrtime();
+  const noise = ['.js', '.css', '.map', '.json', '.png', '.jpg', '/editor/', 'favicon.ico'];
   const isNoise = noise.some(ext => req.url.includes(ext));
 
-  if (!isNoise) {
-    logger.info(`${req.method} ${req.originalUrl}`);
-  }
+  if (isNoise) return next();
+
+  // Redact sensitive data from logs
+  const redact = (data) => {
+    if (!data) return data;
+    const sensitiveKeys = ['password', 'confirmPassword', 'token', '_csrf'];
+    const redacted = { ...data };
+    sensitiveKeys.forEach(key => {
+      if (redacted[key]) redacted[key] = '[REDACTED]';
+    });
+    return redacted;
+  };
+
+  // Capture completion
+  res.on('finish', () => {
+    const diff = process.hrtime(start);
+    const duration = (diff[0] * 1e3 + diff[1] * 1e-6).toFixed(2);
+    const status = res.statusCode;
+
+    const logData = {
+      method: req.method,
+      url: req.originalUrl,
+      status,
+      duration: `${duration}ms`,
+      ip: req.ip,
+      userAgent: req.get('user-agent'),
+    };
+
+    if (req.method === 'POST') {
+      logData.body = redact(req.body);
+    }
+
+    // Determine log level based on status
+    if (status >= 500) {
+      logger.error(`HTTP FAILURE: ${req.method} ${req.originalUrl}`, logData);
+    } else if (status >= 400) {
+      logger.warn(`HTTP WARNING: ${req.method} ${req.originalUrl}`, logData);
+    } else {
+      logger.info(`HTTP SUCCESS: ${req.method} ${req.originalUrl}`, logData);
+    }
+  });
+
   next();
 });
 
@@ -104,6 +170,11 @@ app.use((req, res, next) => {
 // 3. ROUTES
 // ==========================================
 app.use('/', indexRouter);
+
+// Sentry Debug Route
+app.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("My first Sentry error!");
+});
 
 // Handle unhandled routes (404)
 app.use((req, res, next) => {
@@ -113,6 +184,7 @@ app.use((req, res, next) => {
 // ==========================================
 // 4. GLOBAL ERROR HANDLER
 // ==========================================
+Sentry.setupExpressErrorHandler(app);
 app.use(globalErrorHandler);
 
 // ==========================================

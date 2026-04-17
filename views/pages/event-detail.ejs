@@ -74,7 +74,7 @@
                     <button id="regButton" class="register-btn" onclick="showRegConfirmation()">
                       Register Now
                     </button>
-                    <p id="attendingBadge" class="open-event-badge" style="display:none; color:#22c55e;">You're Attending ✅</p>
+                    <p id="attendingBadge" class="open-event-badge" style="display:none; color:#22c55e;">You're Attending</p>
                   <% } else { %>
                     <div class="open-event-badge">
                       Free Entry • No Registration Required
@@ -284,7 +284,7 @@
 
     function copyLink() {
       navigator.clipboard.writeText(window.location.href);
-      alert('Event link copied!');
+      showToast('Event link copied!', 'success');
     }
 
     function showRegConfirmation() {
@@ -315,13 +315,13 @@
           document.getElementById('regButton').style.display = 'none';
           document.getElementById('attendingBadge').style.display = 'block';
         } else {
-          alert(result.message || 'Error occurred during registration.');
+          showToast(result.message || 'Error occurred during registration.', 'error');
           btn.innerText = 'Confirm & Sign Up';
           btn.disabled = false;
         }
       } catch (err) {
         console.error('Registration failed:', err);
-        alert('Could not complete registration. Please try again.');
+        showToast('Could not complete registration. Please try again.', 'error');
         btn.innerText = 'Confirm & Sign Up';
         btn.disabled = false;
       }

@@ -1,11 +1,41 @@
-import { cache } from '../config/redis.js';
+import { cache, redis } from '../config/redis.js';
+import { supabase } from '../config/supabase.js';
 import { sermonRepo } from '../repositories/sermonRepo.js';
 import { eventRepo } from '../repositories/eventRepo.js';
 import { ministryRepo } from '../repositories/ministryRepo.js';
 import { donationRepo } from '../repositories/donationRepo.js';
 import { memberRepo } from '../repositories/memberRepo.js';
+import { testimonyRepo } from '../repositories/testimonyRepo.js';
+import { prayerRepo } from '../repositories/prayerRepo.js';
+import { auditLogger } from '../utils/auditLogger.js';
 
 export const pageController = {
+
+    // Health Check Endpoint (For Uptime Monitoring)
+    handleHealthCheck: async (req, res) => {
+        const stats = {
+            uptime: Math.floor(process.uptime()),
+            timestamp: new Date().toISOString(),
+            environment: process.env.NODE_ENV || 'production'
+        };
+
+        try {
+            // 1. Check Supabase (DB)
+            const { error: dbError } = await supabase.from('church_settings').select('key').limit(1);
+            if (dbError) throw new Error(`DB Connection Failed: ${dbError.message}`);
+
+            // 2. Check Redis (Cache)
+            if (redis) {
+                const redisStatus = await redis.ping();
+                if (redisStatus !== 'PONG') throw new Error('Redis Connection Failed');
+            }
+
+            return res.status(200).json({ status: 'healthy', ...stats });
+        } catch (error) {
+            console.error('[HealthCheck] Error:', error.message);
+            return res.status(503).json({ status: 'unhealthy', error: error.message, ...stats });
+        }
+    },
     
     // Render the Home Page
     renderHome: async (req, res) => {
@@ -148,11 +178,21 @@ export const pageController = {
     // Render the premium Giving Page
     renderGive: async (req, res) => {
         try {
+            // Fetch all active categories (Tithe, Offering, building fund, etc.)
+            const categories = await donationRepo.getBuildingProjects(); // This fetches building-fund-%
+            
+            // Actually, we want ALL active categories for the general giving page
+            const { data: allCategories } = await supabase
+                .from('donation_categories')
+                .select('*')
+                .eq('is_active', true)
+                .order('sort_order', { ascending: true });
+
             res.render('pages/give', {
                 pageTitle: 'Give | Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'GENEROSITY',
-                donationGoal: null
+                categories: allCategories || []
             });
         } catch (error) {
             console.error('[PageController] Error rendering give page:', error.message);
@@ -190,6 +230,10 @@ export const pageController = {
             if (!ministry) return res.status(404).json({ error: 'Ministry not found' });
 
             await ministryRepo.joinMinistry(ministry.id, userId, notes);
+            
+            // Log for AI / Audit
+            await auditLogger.log(userId, 'join_ministry', `Joined ${ministry.name} Ministry`, { ministry_slug: slug, notes });
+
             res.redirect(`/ministries/${slug}?success=Your interest has been logged.`);
         } catch (error) {
             console.error('[PageController] Error joining ministry:', error.message);
@@ -287,7 +331,7 @@ export const pageController = {
                 preloaderText: 'OUR TEAM',
                 staff: staff || [],
                 departments: departments || [],
-                defaultFilter: 'Pastoral' // High IQ: Defaulting to Pastoral as requested
+                defaultFilter: 'Pastoral'
             });
         } catch (error) {
             console.error('[PageController] Error rendering staff:', error.message);
@@ -330,5 +374,147 @@ export const pageController = {
             console.error('[PageController] Error rendering building detail:', error.message);
             res.status(500).render('pages/error', { message: 'Error loading project details' });
         }
+    },
+
+    // Render cinematic Testimonies Page
+    renderTestimonies: async (req, res) => {
+        try {
+            const testimonies = await testimonyRepo.getApprovedTestimonies();
+            res.render('pages/testimonies', {
+                pageTitle: 'Testimonies | Ambassadors Assembly',
+                currentPath: req.path,
+                preloaderText: 'GLORY TO GOD',
+                testimonies: testimonies || []
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering testimonies:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading testimonies' });
+        }
+    },
+    
+    // Handle Testimony Submission
+    handleTestimonySubmit: async (req, res) => {
+        try {
+            const { title, content, is_anonymous, full_name_hp } = req.body;
+            const userId = req.user?.id;
+
+            // Honeypot Spam Protection
+            if (full_name_hp) {
+                console.warn('[Security] Honeypot triggered for testimony submit.');
+                return res.redirect(`${req.header('Referer') || '/testimonies'}?success=Thank you for sharing your story! It has been submitted for review.`);
+            }
+
+            const testimonyData = {
+                user_id: userId || null,
+                author_name: req.user ? `${req.user.user_metadata?.first_name} ${req.user.user_metadata?.last_name}` : 'Anonymous Member',
+                title,
+                content,
+                is_anonymous: is_anonymous === 'true' || is_anonymous === 'on',
+                status: 'pending',
+                is_approved: false
+            };
+
+            await testimonyRepo.createTestimony(testimonyData);
+            
+            if (userId) {
+                await auditLogger.log(userId, 'submit_testimony', `Shared a new testimony: "${title}"`, { title });
+            }
+
+            const redirectUrl = req.header('Referer') || '/testimonies';
+            res.redirect(`${redirectUrl}?success=Thank you for sharing your story! It has been submitted for review.`);
+        } catch (error) {
+            console.error('[PageController] Error submitting testimony:', error.message);
+            res.redirect(`${req.header('Referer') || '/testimonies'}?error=Something went wrong.`);
+        }
+    },
+
+    // Render interactive Prayer Wall Page
+    renderPrayerWall: async (req, res) => {
+        try {
+            const prayers = await prayerRepo.getPublicPrayers();
+            res.render('pages/prayer-wall', {
+                pageTitle: 'Prayer Wall | Ambassadors Assembly',
+                currentPath: req.path,
+                preloaderText: 'INTERCESSION',
+                prayers: prayers || []
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering prayer wall:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading prayer wall' });
+        }
+    },
+
+    // Handle Prayer Intercession ("I prayed for this")
+    handleIntercede: async (req, res) => {
+        try {
+            const { requestId } = req.body;
+            const userId = req.user?.id;
+
+            if (!userId) return res.status(401).json({ error: 'Please sign in to intercede.' });
+            
+            await prayerRepo.intercede(requestId, userId);
+            
+            // Log for AI
+            await auditLogger.log(userId, 'prayer_intercede', `Interceded for a prayer on the wall`, { requestId });
+
+            return res.json({ success: true, message: 'Your prayer has been recorded. The wall glows brighter!' });
+        } catch (error) {
+            console.error('[PageController] Error interceding:', error.message);
+            return res.status(400).json({ error: error.message });
+        }
+    },
+
+    // Handle Prayer Submission
+    handlePrayerSubmit: async (req, res) => {
+        try {
+            const { title, description, category, is_anonymous, is_public, full_name_hp } = req.body;
+            const userId = req.user?.id;
+
+            // Honeypot Spam Protection
+            if (full_name_hp) {
+                console.warn('[Security] Honeypot triggered for prayer submit.');
+                return res.redirect(`${req.header('Referer') || '/connect'}?success=Your prayer request has been submitted for review.`);
+            }
+
+            const prayerData = {
+                user_id: userId || null,
+                requester_name: req.user ? `${req.user.user_metadata?.first_name} ${req.user.user_metadata?.last_name}` : 'Anonymous Member',
+                title,
+                description,
+                category: category || 'other',
+                is_anonymous: is_anonymous === 'true' || is_anonymous === 'on',
+                is_public: is_public === 'true' || is_public === 'on',
+                status: 'pending',
+                is_approved: false // Requires admin approval
+            };
+
+            await prayerRepo.submitPrayer(prayerData);
+            
+            if (userId) {
+                await auditLogger.log(userId, 'prayer_submit', `Submitted a new prayer request: "${title}"`, { title, category });
+            }
+
+            const redirectUrl = req.header('Referer') || '/connect';
+            res.redirect(`${redirectUrl}?success=Your prayer request has been submitted for review.`);
+        } catch (error) {
+            console.error('[PageController] Error submitting prayer:', error.message);
+            res.redirect(`${req.header('Referer') || '/connect'}?error=Something went wrong.`);
+        }
+    },
+
+    // Render Terms of Service
+    renderTerms: (req, res) => {
+        res.render('pages/legal/terms', {
+            pageTitle: 'Terms of Service | Ambassadors Assembly',
+            currentPath: req.path
+        });
+    },
+
+    // Render Privacy Policy
+    renderPrivacy: (req, res) => {
+        res.render('pages/legal/privacy', {
+            pageTitle: 'Privacy Policy | Ambassadors Assembly',
+            currentPath: req.path
+        });
     }
 };

@@ -95,6 +95,7 @@
                   <div class="chat-controls">
                     <% if (user) { %>
                       <form id="chat-form" class="glass-input-group">
+                        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                         <input type="text" id="chat-input" placeholder="Join the conversation..." autocomplete="off">
                         <button type="submit" id="chat-submit">
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -149,6 +150,8 @@
                     <h3>We'd love to pray for you.</h3>
                     <p>Our intercessors are standing by. Share your request below.</p>
                     <form id="prayer-form" class="prayer-glass-form">
+                      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                      <div class="hp-field" style="display:none !important; visibility:hidden !important;"><input type="text" name="full_name_hp" tabindex="-1" autocomplete="off"></div>
                       <input type="text" id="prayer-title" placeholder="Request Subject" required>
                       <textarea id="prayer-desc" placeholder="What can we pray about?" required></textarea>
                       <label class="anon-check">
@@ -329,14 +332,22 @@
     }
   </style>
 
-  <!-- SCRIPTS -->
+  <!-- WATCH STATE (High IQ: Stabilizing EJS data for JS) -->
+  <div id="watch-state" 
+       data-user='<%- JSON.stringify(locals.user || null) %>'
+       data-content-id='<%= (content && content.id) ? content.id : "general" %>'
+       data-status='<%= content ? content.status : "unknown" %>'
+       data-start-time='<%= content ? content.scheduled_start : "" %>'
+       style="display:none;"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const watchState = document.getElementById('watch-state').dataset;
     const supabaseUrl = '<%= supabaseUrl %>';
     const supabaseAnonKey = '<%= supabaseAnonKey %>';
     const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
-    const currentUser = <%- JSON.stringify(locals.user || null) %>;
-    const contentId = '<%= (content && content.id) ? content.id : "general" %>';
+    const currentUser = JSON.parse(watchState.user);
+    const contentId = watchState.contentId;
 
     // ─── TAB LOGIC ───
     document.querySelectorAll('.hub-tab').forEach(btn => {
@@ -351,7 +362,6 @@
     // ─── CHAT LOGIC ───
     const chatFeed = document.getElementById('chat-messages');
     
-    // Subscribe to realtime comments
     supabaseClient
       .channel('public:sermon_comments')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sermon_comments' }, payload => {
@@ -378,7 +388,7 @@
         if(!val) return;
         input.value = '';
 
-        const name = currentUser ? `${currentUser.first_name || currentUser.user_metadata.first_name}` : 'Guest';
+        const name = currentUser ? (currentUser.first_name || currentUser.user_metadata?.first_name || 'Member') : 'Guest';
         
         await supabaseClient.from('sermon_comments').insert([{
           sermon_id: contentId,
@@ -390,7 +400,7 @@
       });
     }
 
-    // ─── NOTES LOGIC (Persistence) ───
+    // ─── NOTES LOGIC ───
     const notesArea = document.getElementById('personal-notes');
     const storageKey = `notes_${contentId}`;
     if (notesArea) {
@@ -402,7 +412,7 @@
 
     function exportNotes() {
       const notes = notesArea.value;
-      if (!notes.trim()) return alert("Notes are empty!");
+      if (!notes.trim()) return showToast("Notes are empty!");
       const blob = new Blob([notes], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -411,30 +421,29 @@
       a.click();
     }
 
-    // ─── PRAYER LOGIC ───
-    const prayerForm = document.getElementById('prayer-form');
-    if (prayerForm) {
-      prayerForm.addEventListener('submit', async (e) => {
+    // ─── PRAYER Wall Logic ───
+    const watchPrayerForm = document.getElementById('watch-prayer-form');
+    if (watchPrayerForm) {
+      watchPrayerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('prayer-title').value;
-        const desc = document.getElementById('prayer-desc').value;
-        const isAnon = document.getElementById('prayer-anon').checked;
         const statusDiv = document.getElementById('prayer-status');
+        const contentVal = document.getElementById('prayer-content').value;
+        statusDiv.innerHTML = "Sending...";
 
-        statusDiv.innerHTML = "Submitting...";
+        const { error } = await supabaseClient
+          .from('prayer_requests')
+          .insert([{ 
+            user_id: currentUser ? currentUser.id : null, 
+            description: contentVal,
+            title: 'Live Watch Seed',
+            request_type: 'intercession',
+            status: 'pending',
+            requester_name: currentUser ? (currentUser.first_name || currentUser.user_metadata?.first_name || 'Member') : 'Guest Live'
+          }]);
 
-        const { error } = await supabaseClient.from('prayer_requests').insert([{
-          title,
-          description: desc,
-          is_anonymous: isAnon,
-          user_id: currentUser?.id,
-          requester_name: currentUser ? (currentUser.first_name || currentUser.user_metadata.first_name) : 'Guest',
-          status: 'pending'
-        }]);
-
-        if(!error) {
-          statusDiv.innerHTML = "🙏 Request received. We are praying with you.";
-          prayerForm.reset();
+        if (!error) {
+          statusDiv.innerHTML = "Submitted!";
+          watchPrayerForm.reset();
         } else {
           statusDiv.innerHTML = "Error submitting. Please try again.";
         }
@@ -442,8 +451,8 @@
     }
 
     // ─── COUNTDOWN LOGIC ───
-    <% if (content && content.status === 'scheduled') { %>
-      const startTime = new Date('<%= content.scheduled_start %>').getTime();
+    if (watchState.status === 'scheduled' && watchState.startTime) {
+      const startTime = new Date(watchState.startTime).getTime();
       const timer = setInterval(() => {
         const now = new Date().getTime();
         const diff = startTime - now;
@@ -455,14 +464,16 @@
         const h = Math.floor(diff / 3600000);
         const m = Math.floor((diff % 3600000) / 60000);
         const s = Math.floor((diff % 60000) / 1000);
-        document.getElementById('countdown-timer').innerHTML = 
-          `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        const timerEl = document.getElementById('countdown-timer');
+        if (timerEl) {
+          timerEl.innerHTML = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
       }, 1000);
-    <% } %>
+    }
 
     function copyWatchLink() {
       navigator.clipboard.writeText(window.location.href);
-      alert("Invite link copied to clipboard!");
+      showToast("Invite link copied to clipboard!", "success");
     }
   </script>
 

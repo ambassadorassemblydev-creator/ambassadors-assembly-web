@@ -1,0 +1,188 @@
+<%- include('../../partials/head') %>
+
+<body id="dmRoot" class="dmRoot flex-site no-scroll-transition" style="background: #0d0d0d; color: white; margin: 0; overflow: hidden;">
+    <%- include('../../partials/preloader') %>
+
+    <main class="error-page 500-page">
+        <div class="error-container">
+            <!-- Animated Mascot: The Flickering Altar -->
+            <div class="mascot-wrapper">
+                <div class="altar-container">
+                    <div class="altar-base"></div>
+                    <div class="candle">
+                        <div class="flame" id="flame"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="error-content gsap-up">
+                <h1 class="error-code">500</h1>
+                <h2 class="error-title">Divine Interference</h2>
+                <p class="error-text">Our spiritual machinery is undergoing maintenance. The light is flickering, but our engineers are currently relighting the altar. Please stand by, Ambassador.</p>
+                <div class="error-actions">
+                    <a href="/" class="primary-btn">Try Again</a>
+                    <button onclick="window.location.reload()" class="secondary-btn">Relight Altar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .error-page {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(to bottom, #0d0d0d 0%, #1a1a1a 100%);
+        }
+
+        .error-container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* Mascot Styles: The Flickering Altar */
+        .mascot-wrapper {
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .altar-container {
+            width: 150px;
+            height: 100px;
+            position: relative;
+        }
+
+        .altar-base {
+            width: 150px;
+            height: 40px;
+            background: #1a1a1a;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .candle {
+            width: 30px;
+            height: 60px;
+            background: #f5f0e8;
+            position: absolute;
+            bottom: 40px;
+            left: 60px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .flame {
+            width: 15px;
+            height: 25px;
+            background: #ffaa33;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -30px;
+            left: 7.5px;
+            filter: blur(2px);
+            box-shadow: 0 0 20px #ff6600, 0 0 40px rgba(255,102,0,0.3);
+            transform-origin: center bottom;
+        }
+
+        /* Typography */
+        .error-code {
+            font-size: clamp(6rem, 15vw, 10rem);
+            font-weight: 900;
+            margin: 0;
+            line-height: 0.8;
+            letter-spacing: -0.05em;
+            color: #ff6600; /* Warm Ember */
+            opacity: 0.8;
+            text-shadow: 0 0 30px rgba(255,102,0,0.2);
+        }
+
+        .error-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 20px 0 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .error-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 40px;
+        }
+
+        /* Buttons */
+        .error-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .primary-btn {
+            background: white;
+            color: black;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            transition: transform 0.3s ease;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .primary-btn:hover { transform: scale(1.05); }
+        .secondary-btn:hover { background: rgba(255,255,255,0.05); border-color: white; }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Flame Flicker
+            const flicker = () => {
+                gsap.to('#flame', {
+                    scaleY: 0.8 + Math.random() * 0.4,
+                    scaleX: 0.9 + Math.random() * 0.2,
+                    opacity: 0.7 + Math.random() * 0.3,
+                    skewX: -5 + Math.random() * 10,
+                    duration: 0.1,
+                    onComplete: flicker
+                });
+            };
+            flicker();
+
+            // Glow Pulse
+            gsap.to('#flame', {
+                boxShadow: "0 0 30px #ff6600, 0 0 60px rgba(255,102,0,0.5)",
+                duration: 2,
+                repeat: -1,
+                yoyo: true,
+                ease: "power1.inOut"
+            });
+
+            // Content Reveal
+            gsap.from('.error-content > *', {
+                opacity: 0,
+                y: 30,
+                duration: 1,
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+        });
+    </script>
+</body>
+</html>

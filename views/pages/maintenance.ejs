@@ -1,0 +1,140 @@
+<%- include('../partials/head') %>
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+  <div class="maintenance-container">
+    <div class="maintenance-visual">
+      <div class="orb-container">
+        <div class="orb-glow"></div>
+        <div class="orb-core"></div>
+      </div>
+    </div>
+    
+    <div class="maintenance-content">
+      <div class="brand-logo-small gsap-blur">
+        <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" alt="Ambassadors Assembly Logo">
+      </div>
+      
+      <h1 class="gsap-title">CONSECRATING THE <span class="text-green">DIGITAL ALTAR</span></h1>
+      <p class="gsap-text">We are currently perfecting the Ambassadors Assembly platform for a world-class experience. Please join us shortly.</p>
+      
+      <div class="maintenance-meta gsap-meta">
+        <div class="meta-item">
+          <span class="meta-label">STATUS</span>
+          <span class="meta-value">REFINING EXPERIENCE</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">EXPECTED RETURN</span>
+          <span class="meta-value">MOMENTS AWAY</span>
+        </div>
+      </div>
+      
+      <div class="social-links gsap-social">
+        <a href="<%= locals.churchSettings?.social_youtube || '#' %>" aria-label="YouTube">YouTube</a>
+        <a href="<%= locals.churchSettings?.social_instagram || '#' %>" aria-label="Instagram">Instagram</a>
+        <a href="<%= locals.churchSettings?.social_facebook || '#' %>" aria-label="Facebook">Facebook</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --aa-green: rgba(113, 178, 128, 1);
+      --aa-bg: #050505;
+    }
+
+    body.maintenance-page {
+      background: var(--aa-bg);
+      color: white;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .maintenance-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 10;
+      padding: 20px;
+    }
+
+    /* ORB ANIMATION */
+    .maintenance-visual { margin-bottom: 60px; }
+    .orb-container { position: relative; width: 200px; height: 200px; }
+    .orb-glow {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--aa-green);
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: pulse 4s infinite ease-in-out;
+    }
+    .orb-core {
+      position: absolute; top: 50%; left: 50%; width: 40px; height: 40px;
+      background: white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 30px white, 0 0 60px var(--aa-green);
+      animation: float 6s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+      50% { transform: translate(-50%, -50%) translateY(-20px); }
+    }
+
+    /* CONTENT STYLES */
+    .brand-logo-small { width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin: 0 auto 30px; border: 1px solid rgba(255,255,255,0.1); }
+    .brand-logo-small img { width: 100%; height: 100%; object-fit: cover; }
+
+    h1 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 20px; }
+    .text-green { color: var(--aa-green); }
+    p { font-size: 1.1rem; color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto 50px; line-height: 1.6; }
+
+    .maintenance-meta { display: flex; gap: 40px; justify-content: center; margin-bottom: 60px; }
+    .meta-item { display: flex; flex-direction: column; text-align: left; }
+    .meta-label { font-size: 0.65rem; font-weight: 800; opacity: 0.4; letter-spacing: 2px; margin-bottom: 5px; }
+    .meta-value { font-size: 0.9rem; font-weight: 700; color: white; letter-spacing: 1px; }
+
+    .social-links { display: flex; gap: 30px; }
+    .social-links a { color: var(--aa-green); text-decoration: none; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; transition: opacity 0.3s; }
+    .social-links a:hover { opacity: 0.7; }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
+      tl.from(".gsap-blur", { opacity: 0, scale: 0.9, filter: "blur(20px)", duration: 1.5 })
+        .from(".gsap-title", { y: 30, opacity: 0 }, "-=1")
+        .from(".gsap-text", { y: 20, opacity: 0 }, "-=0.8")
+        .from(".gsap-meta", { y: 15, opacity: 0 }, "-=0.6")
+        .from(".gsap-social", { y: 10, opacity: 0 }, "-=0.4");
+    });
+  </script>
+</body>
+</html>

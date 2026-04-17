@@ -2,12 +2,18 @@ import express from 'express';
 import { accountController } from '../controllers/accountController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 
+import { paymentController } from '../controllers/paymentController.js';
+
 const router = express.Router();
 
 /**
  * All routes in this file are prefixed with /api
- * They all require authentication via cookies
  */
+
+// Public API Endpoints
+router.post('/payments/verify', paymentController.verifyPayment);
+
+// Restricted API Endpoints (Require Auth)
 router.use(authMiddleware.protect); 
 
 // Profile Endpoints

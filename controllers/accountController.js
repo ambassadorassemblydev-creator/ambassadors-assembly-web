@@ -1,9 +1,11 @@
 import { accountRepo } from '../repositories/accountRepo.js';
 import { eventRepo } from '../repositories/eventRepo.js';
+import { auditRepo } from '../repositories/auditRepo.js';
 import { AppError } from '../utils/AppError.js';
 import { logger } from '../config/logger.js';
 import { supabaseService } from '../config/supabase.js';
 import { z } from 'zod';
+import { Buffer } from 'node:buffer';
 
 const updateProfileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -30,14 +32,27 @@ const onboardingSchema = z.object({
   phone: z.string().min(1, "Phone number is required"),
   addressLine1: z.string().min(1, "Address is required"),
   city: z.string().min(1, "City is required"),
+  
+  // Journey
   is_baptized: z.any().transform(val => val === "true" || val === "on"),
   baptism_date: z.string().optional(),
   salvation_date: z.string().optional(),
   previous_church: z.string().optional(),
+  how_did_you_hear: z.string().optional(),
+  spiritual_gifts: z.union([z.string(), z.array(z.string())]).optional(),
+  
+  // Service
   department_interest: z.string().optional(),
   position_interest: z.string().optional(),
+  motivation: z.string().optional(),
   occupation: z.string().optional(),
-  ministry_interests: z.union([z.string(), z.array(z.string())]).optional(),
+  
+  // Contact
+  emergency_contact_name: z.string().optional(),
+  emergency_contact_phone: z.string().optional(),
+  
+  // Avatar
+  avatar_data: z.string().optional(), 
 });
 
 export const accountController = {
@@ -54,8 +69,10 @@ export const accountController = {
       let data = {
         profile: await accountRepo.getUserDashboardData(userId),
         donations: [],
+        fullHistory: [],
         events: [],
-        prayers: []
+        prayers: [],
+        notes: []
       };
 
       if (!data.profile) {
@@ -65,6 +82,10 @@ export const accountController = {
       // Load tab-specific data
       if (tab === 'overview' || tab === 'giving') {
         data.donations = await accountRepo.getRecentDonations(userId);
+        data.fullHistory = await accountRepo.getFullDonationHistory(userId);
+      }
+      if (tab === 'overview' || tab === 'notes') {
+        data.notes = await accountRepo.getUserNotes(userId);
       }
       if (tab === 'events') {
         data.events = await accountRepo.getUserEvents(userId);
@@ -79,8 +100,10 @@ export const accountController = {
         activePage: 'dashboard',
         user: data.profile,
         donations: data.donations,
+        fullHistory: data.fullHistory,
         events: data.events,
         prayers: data.prayers,
+        notes: data.notes,
         activeTab: tab,
         isStaff: !!data.profile.church_workers && data.profile.church_workers.length > 0
       });
@@ -202,32 +225,81 @@ export const accountController = {
       const userId = req.user.id;
       const validatedData = onboardingSchema.parse(req.body);
 
-      // Map interests to array if it's a single string
-      const ministryInterests = Array.isArray(validatedData.ministry_interests) 
-        ? validatedData.ministry_interests 
-        : (validatedData.ministry_interests ? [validatedData.ministry_interests] : []);
+      logger.info(`Processing onboarding submission for user: ${userId}`);
 
-      await accountRepo.updateProfile(userId, {
+      // 1. Handle Avatar Upload (if any)
+      let avatarUrl = null;
+      if (validatedData.avatar_data && validatedData.avatar_data.startsWith('data:image')) {
+        try {
+          const base64Data = validatedData.avatar_data.replace(/^data:image\/\w+;base64,/, "");
+          const buffer = Buffer.from(base64Data, 'base64');
+          const fileName = `avatars/${userId}-${Date.now()}.jpg`;
+
+          const { data: uploadData, error: uploadError } = await supabaseService
+            .storage
+            .from('avatars')
+            .upload(fileName, buffer, {
+              contentType: 'image/jpeg',
+              upsert: true
+            });
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabaseService
+            .storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+          
+          avatarUrl = publicUrl;
+        } catch (avatarErr) {
+          logger.error(`Avatar upload failed: ${avatarErr.message}`);
+          // Don't fail onboarding for avatar failure, but log it
+        }
+      }
+
+      // 2. Data Mapping & Standardization
+      const gifts = Array.isArray(validatedData.spiritual_gifts) 
+        ? validatedData.spiritual_gifts 
+        : (validatedData.spiritual_gifts ? [validatedData.spiritual_gifts] : []);
+
+      // Map visitor source to enum values
+      const sourceMap = {
+        'friend_family': 'friend',
+        'social_media': 'social_media',
+        'website': 'website',
+        'outreach': 'other',
+        'other': 'other'
+      };
+      const source = sourceMap[validatedData.how_did_you_hear] || 'other';
+
+      // 3. Update Profile
+      const profileUpdates = {
         gender: validatedData.gender || null,
         date_of_birth: validatedData.dob || null,
         marital_status: validatedData.marital_status || null,
         wedding_anniversary: validatedData.wedding_anniversary || null,
         phone: validatedData.phone || null,
-        address: validatedData.addressLine1 || null,
+        address: validatedData.addressLine1 || null, 
         city: validatedData.city || null,
         is_baptized: validatedData.is_baptized,
         baptism_date: validatedData.baptism_date || null,
         salvation_date: validatedData.salvation_date || null,
         previous_church: validatedData.previous_church || null,
-        department_interest: validatedData.department_interest || null,
-        position_interest: validatedData.position_interest || null,
+        how_did_you_hear: source,
+        spiritual_gifts: gifts,
         occupation: validatedData.occupation || null,
-        interests: ministryInterests,
+        emergency_contact_name: validatedData.emergency_contact_name || null,
+        emergency_contact_phone: validatedData.emergency_contact_phone || null,
         is_onboarded: true
-      });
+      };
 
-      // AUTOMATIC STAFF LINKING
-      // If user selected a department and position, link them as a church worker
+      if (avatarUrl) {
+        profileUpdates.avatar_url = avatarUrl;
+      }
+
+      await accountRepo.updateProfile(userId, profileUpdates);
+
+      // 4. Church Worker & Volunteer Application Logic
       if (validatedData.department_interest && validatedData.position_interest) {
         try {
           const [deptData, posData] = await Promise.all([
@@ -236,18 +308,37 @@ export const accountController = {
           ]);
 
           if (deptData.data && posData.data) {
-             await supabaseService.from('church_workers').upsert({
-                user_id: userId,
-                department_id: deptData.data.id,
-                position_id: posData.data.id
-             }, { onConflict: 'user_id' });
-             logger.info(`Automated Staff link created/updated for user: ${userId}`);
+            // Create a worker record in 'probation' status
+            await supabaseService.from('church_workers').upsert({
+              user_id: userId,
+              department_id: deptData.data.id,
+              position_id: posData.data.id,
+              status: 'probation',
+              skills: gifts,
+              start_date: new Date()
+            }, { onConflict: 'user_id' });
+
+            // Create a formal volunteer application
+            await supabaseService.from('volunteer_applications').insert({
+              user_id: userId,
+              department_id: deptData.data.id,
+              position_id: posData.data.id,
+              applicant_name: req.user.email, 
+              applicant_email: req.user.email,
+              motivation: validatedData.motivation || 'Standard onboarding interest.',
+              skills: gifts,
+              status: 'pending'
+            });
+
+            logger.info(`Service application initiated for user: ${userId} to ${validatedData.department_interest}`);
           }
-        } catch (linkErr) {
-          logger.warn(`Non-critical error in automatic staff linking: ${linkErr.message}`);
-          // Don't fail the onboarding if linking fails, as it's a side-effect
+        } catch (svcErr) {
+          logger.warn(`Non-critical error in service linking: ${svcErr.message}`);
         }
       }
+
+      // 5. Finalize - Audit & Redirect
+      await auditRepo.logAction(userId, 'complete_onboarding', 'profile', userId, {}, profileUpdates);
 
       return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
     } catch (err) {

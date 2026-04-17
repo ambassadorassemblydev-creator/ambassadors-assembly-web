@@ -16,16 +16,17 @@
     <%- include('../partials/navbar') %>
 
     <main>
-      <!-- REVELATION HERO (CINEMATIC) -->
-      <section class="rev-hero" id="rev-hero">
-        <div class="rev-hero__bg">
-          <div class="rev-hero__overlay"></div>
-          <img src="https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=2671&auto=format&fit=crop" alt="Sanctuary" class="rev-hero__img">
+      <!-- CINEMATIC ABOUT HERO (HIGH-IQ OVERHAUL) -->
+      <section class="about-hero" id="about-hero">
+        <div class="about-hero__bg">
+          <div class="about-hero__overlay"></div>
+          <img src="https://images.unsplash.com/photo-1544427928-c49cdfebf4ad?q=80&w=2671&auto=format&fit=crop" alt="Ambassadors Sanctuary" class="about-hero__img">
         </div>
-        <div class="rev-hero__content">
-          <h1 class="rev-hero__title" id="rev-text">ABOUT US</h1>
-          <div class="rev-hero__bottom">
-            <span class="rev-hero__scroll-indicator">Scroll to Explore</span>
+        
+        <div class="about-hero__content">
+          <div class="about-hero__text-wrap">
+            <span class="hero-tag gsap-hero-reveal">BEYOND RELIGION, A KINGDOM ASSIGNMENT</span>
+            <h1 class="hero-title gsap-hero-reveal" id="about-hero-title">OUR IDENTITY</h1>
           </div>
         </div>
       </section>
@@ -68,7 +69,7 @@
               <p>We are not just a church; we are a specialized training ground for kings and priests, commissioned to restore the authentic image of Christ to a world in transition.</p>
             </div>
             <div class="ed-image-wrap">
-              <img src="https://images.unsplash.com/photo-1544427928-c49cdfebf4ad?q=80&w=2000" alt="Church Gathering">
+              <img src="https://images.unsplash.com/photo-1544427928-c49cdfebf4ad?q=80&w=2000" alt="Church Gathering" loading="lazy">
             </div>
           </section>
 
@@ -77,37 +78,32 @@
             <div class="section-label">02 / STEWARDSHIP</div>
             <h2 class="ed-title">Led by <span class="text-green">Divine Intent</span></h2>
             <div class="ed-text">
-              <p>Our leadership is defined by servitude and a relentless pursuit of spiritual depth. Led by the Presiding Pastor and a college of consecrated ministers, we ensure that every soul is nurtured, every gift is activated, and every ambassador is deployed for purpose.</p>
+              <p>Our leadership is defined by servitude and a relentless pursuit of spiritual depth. Led by our Presiding Pastors and a college of consecrated ministers.</p>
             </div>
             
             <div class="leadership-grid">
-              <% staff.filter(s => s.department === 'Pastoral' || s.department === 'Leadership').forEach(member => { %>
+              <% (staff || []).filter(s => s.department === 'Pastoral' || s.department === 'Leadership').forEach(member => { %>
                 <div class="leader-card glass-fx">
                   <div class="leader-img">
-                    <img src="<%= member.avatar_url %>" alt="<%= member.first_name %>">
+                    <% 
+                      let avatarUrl = member.avatar_url;
+                      if (avatarUrl && avatarUrl.includes('cloudinary.com')) {
+                        avatarUrl = avatarUrl.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_fill,g_face/');
+                      }
+                      const fullName = (member.first_name || '') + ' ' + (member.last_name || '');
+                      const fallback = `https://ui-avatars.com/api/?name=${member.first_name || 'AA'}+${member.last_name || ''}&background=134E5E&color=fff`;
+                    %>
+                    <img src="<%= avatarUrl %>" alt="<%= fullName %>" loading="lazy" onerror="this.src='<%= fallback %>'">
                   </div>
                   <div class="leader-info">
-                    <h3><%= member.first_name %> <%= member.last_name %></h3>
+                    <h3><%= (member.first_name || '') + ' ' + (member.last_name || '') %></h3>
                     <p><%= member.role %></p>
                   </div>
                 </div>
               <% }) %>
             </div>
           </section>
-<style>
-  /* STRIP DUDA'S WHITE BACKGROUNDS & PADDING */
-                    body.dmRoot, #dm, .dm_wrapper, .dmOuter, .dmInner, #site_content, .dmBody, #allWrapper, #dm_content, #dmFlexHeaderContainer, #flex-header {
-                      background-color: transparent !important;
-                      background-image: none !important;
-                    }
-                    #dmFlexHeaderContainer {
-                      position: absolute !important;
-                      top: 0; left: 0; width: 100%; z-index: 1000 !important;
-                    }
-                    #dmFirstContainer, #allWrapper, #dm_content {
-                      margin: 0 !important; padding: 0 !important;
-                    }
-</style>
+
           <!-- SECTION 3: DNA -->
           <section id="dna" class="ed-section ed-section--dna">
             <div class="section-label">03 / ESSENCE</div>
@@ -141,135 +137,131 @@
   </div>
 
   <style>
-    /* BRAND COLORS */
     :root {
-      --aa-green: #15803d;
-      --aa-green-glow: rgba(34, 197, 94, 0.4);
+      --aa-green: rgba(113, 178, 128, 1);
+      --aa-green-glow: rgba(113, 178, 128, 0.4);
       --aa-bg: #050505;
+      --aa-acc: #134E5E;
     }
+
+    body.dmRoot { background: var(--aa-bg); color: white; }
 
     .text-green { color: var(--aa-green); }
 
-    /* REVELATION HERO */
-    .rev-hero {
+    /* OVERHAULED HERO STYLE */
+    .about-hero {
       position: relative;
       height: 100vh;
       width: 100%;
-      overflow: hidden;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--aa-bg);
-      z-index: 10;
+      align-items: flex-end; /* Text moved lower */
+      justify-content: flex-start;
+      padding-bottom: 12vh;
+      padding-left: 8%;
+      overflow: hidden;
     }
 
-    .rev-hero__bg {
+    .about-hero__bg {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      transform: scale(1.1);
-    }
-    .rev-hero__img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: blur(10px); }
-    .rev-hero__overlay {
-      position: absolute; top:0; left:0; width:100%; height:100%;
-      background: linear-gradient(to bottom, transparent 60%, var(--aa-bg) 100%);
       z-index: 1;
     }
+    .about-hero__img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      transform: scale(1.1);
+    }
+    .about-hero__overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(to top, var(--aa-bg) 0%, rgba(5,5,5,0.4) 40%, transparent 100%);
+      z-index: 2;
+    }
 
-    .rev-hero__content { position: relative; z-index: 2; text-align: center; }
-    .rev-hero__title {
-      font-size: clamp(4rem, 15vw, 15rem);
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      line-height: 0.8;
+    .about-hero__content {
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end; /* High IQ: Anchoring text low for cinematic feel */
+      padding: 0 8% 12vh 8%;
       color: white;
-      margin: 0;
-      pointer-events: none;
+      z-index: 10;
+      width: 100%;
     }
 
-    .rev-hero__bottom {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0.5;
-    }
-    .rev-hero__scroll-indicator { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 800; }
-
-    /* EDITORIAL LAYOUT */
+    /* EDITORIAL SPACING */
     .editorial-container {
       position: relative;
       display: flex;
       background: var(--aa-bg);
-      padding: 0 6%;
-      z-index: 20; /* Slides over hero */
-      margin-top: -20vh; /* Start reveal early */
-      padding-top: 100px;
+      padding: 0 8%;
+      z-index: 20;
+      margin-top: 15vh; /* Large breathe room */
+      padding-top: 150px;
     }
 
-    /* SIDE NAV */
     .side-nav {
-      position: sticky;
-      top: 15vh;
-      width: 250px;
-      height: fit-content;
-      padding-right: 40px;
+      position: sticky; top: 20vh; width: 220px; height: fit-content;
+      padding-right: 30px;
     }
     .side-nav__inner { position: relative; padding-left: 20px; }
     .side-nav__line {
       position: absolute; left: 0; top: 0; width: 1px; height: 100%;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
     }
     .side-nav__progress {
       position: absolute; left: -1px; top: 0; width: 3px; height: 0%;
       background: var(--aa-green);
-      box-shadow: 0 0 10px var(--aa-green-glow);
+      box-shadow: 0 0 15px var(--aa-green-glow);
     }
-    .side-nav__list { list-style: none; padding: 0; margin: 0; }
     .side-nav__item {
-      margin-bottom: 40px;
-      cursor: pointer;
-      opacity: 0.3;
-      transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex; flex-direction: column;
+      margin-bottom: 50px; cursor: pointer; opacity: 0.2;
+      transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .side-nav__item.active { opacity: 1; }
-    .side-nav__num { font-size: 0.7rem; font-weight: 900; color: var(--aa-green); margin-bottom: 5px; }
+    .side-nav__num { font-size: 0.7rem; font-weight: 900; color: var(--aa-green); margin-bottom: 8px; display: block; }
     .side-nav__label { font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; }
 
-    /* MAIN CONTENT */
-    .editorial-content { flex: 1; max-width: 900px; }
-    .ed-section { padding-bottom: 150px; }
-    .section-label { font-size: 0.75rem; font-weight: 800; opacity: 0.3; letter-spacing: 4px; margin-bottom: 20px; }
-    .ed-title { font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1; margin-bottom: 40px; letter-spacing: -0.04em; }
-    .ed-text { font-size: 1.25rem; color: rgba(255,255,255,0.6); line-height: 1.6; max-width: 700px; }
-    .ed-text p { margin-bottom: 30px; }
+    .editorial-content { flex: 1; max-width: 800px; margin-left: 60px; }
+    .ed-section { padding-bottom: 200px; }
+    .section-label { font-size: 0.7rem; font-weight: 900; opacity: 0.2; letter-spacing: 5px; margin-bottom: 30px; }
+    .ed-title { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 0.95; margin-bottom: 50px; letter-spacing: -0.04em; }
+    .ed-text { font-size: 1.3rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
+    .ed-image-wrap { margin-top: 80px; border-radius: 40px; overflow: hidden; }
 
-    .ed-image-wrap { margin-top: 60px; border-radius: 40px; overflow: hidden; height: 500px; }
-    .ed-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    /* LEADERSHIP GRID (PREMIUM) */
+    .leadership-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 40px; margin-top: 80px;
+    }
+    .leader-card {
+      padding: 0; border-radius: 35px; overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: 0.5s transform cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .leader-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.04); }
+    .leader-img { width: 100%; aspect-ratio: 0.85; overflow: hidden; }
+    .leader-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .leader-card:hover .leader-img img { filter: grayscale(0%); scale: 1.05; }
+    .leader-info { padding: 30px; text-align: left; }
+    .leader-info h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+    .leader-info p { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--aa-green); text-transform: uppercase; }
 
-    /* LEADERSHIP */
-    .leadership-grid { margin-top: 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
-    .leader-card { padding: 30px; border-radius: 30px; }
-    .leader-img { width: 100%; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
-    .leader-img img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
-    .leader-card:hover .leader-img img { transform: scale(1.05); }
-    .leader-info h3 { font-size: 1.2rem; margin-bottom: 5px; }
-    .leader-info p { font-size: 0.75rem; font-weight: 800; color: var(--aa-green); text-transform: uppercase; letter-spacing: 1px; }
+    .dna-list { border-top: 1px solid rgba(255,255,255,0.05); }
+    .dna-item { padding: 60px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .dna-label { font-size: 0.7rem; font-weight: 900; color: var(--aa-green); letter-spacing: 3px; margin-bottom: 15px; display: block; }
+    .dna-item p { font-size: 1.8rem; font-weight: 600; line-height: 1.2; }
 
-    /* DNA */
-    .dna-list { margin-top: 60px; }
-    .dna-item { padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .dna-label { display: block; font-size: 0.7rem; font-weight: 900; color: var(--aa-green); margin-bottom: 10px; }
-    .dna-item p { font-size: 1.5rem; font-weight: 500; }
-
-    .glass-fx { background: rgba(255,255,255,0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-
-    @media (max-width: 1000px) {
-      .editorial-container { flex-direction: column; }
-      .side-nav { position: relative; top: 0; width: 100%; margin-bottom: 60px; padding: 0; }
-      .side-nav__list { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; }
-      .side-nav__item { margin-bottom: 0; min-width: 150px; }
-      .side-nav__line { display: none; }
+    @media (max-width: 1100px) {
+      .editorial-container { flex-direction: column; padding: 0 6%; }
+      .editorial-content { margin-left: 0; margin-top: 80px; }
+      .side-nav { position: relative; top: 0; width: 100%; padding: 0; margin-bottom: 60px; }
+      .side-nav__list { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 20px; }
+      .side-nav__num { margin-bottom: 4px; }
+      .side-nav__progress, .side-nav__line { display: none; }
+      .about-hero { padding-left: 6%; }
     }
   </style>
 
@@ -279,19 +271,21 @@
     gsap.registerPlugin(ScrollTrigger);
 
     window.addEventListener('load', () => {
-      // 1. REVELATION SCROLL EFFECT
-      gsap.to("#rev-text", {
+      // 1. HERO ANIMATION
+      const heroTl = gsap.timeline();
+      heroTl.from(".about-hero__img", { scale: 1.3, duration: 2, ease: "power2.out" })
+            .from(".gsap-hero-reveal", { y: 60, opacity: 0, stagger: 0.15, duration: 1.2, ease: "power4.out" }, "-=1.5");
+
+      // PARALLAX HERO
+      gsap.to(".about-hero__img", {
         scrollTrigger: {
-          trigger: "#rev-hero",
+          trigger: ".about-hero",
           start: "top top",
           end: "bottom top",
-          scrub: true,
-          pin: true
+          scrub: true
         },
-        y: 200,
-        opacity: 0,
-        scale: 0.8,
-        filter: "blur(20px)"
+        y: 100,
+        opacity: 0.3
       });
 
       // 2. SIDE NAV PROGRESS
@@ -323,7 +317,13 @@
         });
       }
 
-      // 4. DNA ANIMATIONS (ACCELERATED)
+      // 4. BATCH LOAD LEADERS
+      ScrollTrigger.batch(".leader-card", {
+        onEnter: batch => gsap.from(batch, { y: 50, opacity: 0, stagger: 0.15, duration: 0.8, ease: "power3.out" }),
+        once: true
+      });
+
+      // 5. DNA ANIMATIONS
       gsap.from(".gsap-dna", {
         scrollTrigger: {
           trigger: "#dna",

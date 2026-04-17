@@ -4,7 +4,7 @@
    ============================================================ */
 .no-scroll-transition { overflow: hidden; position: relative; height: 100vh; }
 .page-transition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: all; }
-.page-transition__bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #ede8df; clip-path: circle(150% at 50% 50%); will-change: clip-path; }
+.page-transition__bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #f9f9f7 0%, #ede8df 40%, rgba(113, 178, 128, 0.4) 100%); clip-path: circle(150% at 50% 50%); will-change: clip-path; }
 .page-transition__text-mask { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; overflow: visible; white-space: nowrap; width: 90vw; max-width: 1100px; text-align: center; height: 120px; }
 .page-transition__text { position: absolute; left: 0; width: 100%; text-align: center; white-space: nowrap; line-height: 1.2; margin: 0; }
 .page-transition__text--brand { font-family: 'Manrope', sans-serif; font-size: clamp(1.4rem, 6vw, 3.5rem); font-weight: 800; color: #1a1a1a; letter-spacing: 0.08em; }

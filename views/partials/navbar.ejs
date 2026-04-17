@@ -68,7 +68,7 @@
     </a>
   <% } else { %>
     <!-- If they are NOT logged in, show Sign In -->
-    <a href="/sign-in" class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/sign-in' ? 'active-link' : '' %>">Sign In</a>
+    <a href="/account/login" class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/account/login' ? 'active-link' : '' %>">Sign In</a>
   <% } %>
 </div>
                 </div>
@@ -91,7 +91,7 @@
   </svg>
 </button>
 <div class="chat-tooltip" id="chat-tooltip">
-  💬 Chat coming soon! We're building something special.
+  Chat coming soon! We're building something special.
 </div>
 <!-- ========= END AI CHAT ICON ========= -->
 
@@ -108,7 +108,7 @@
   </a>
 <% } else { %>
   <!-- Logged Out: Go to Sign In -->
-  <a class="account-fab" id="account-fab" href="/sign-in" aria-label="Sign In">
+  <a class="account-fab" id="account-fab" href="/account/login" aria-label="Sign In">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
       <circle cx="12" cy="7" r="4" />
@@ -154,9 +154,7 @@
     <div class="fs-menu__details" id="fs-menu-details">
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Address:</p>
-        <p class="fs-menu__detail-text">Ambassadors Assembly</p>
-        <p class="fs-menu__detail-text">123 Main St</p>
-        <p class="fs-menu__detail-text">Nigeria 30601</p>
+        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_address || 'Ambassadors Assembly' %></p>
       </div>
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Email:</p>
@@ -164,13 +162,21 @@
       </div>
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Call:</p>
-        <p class="fs-menu__detail-text">+234 803 333 3333</p>
+        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_phone || '+234 000 000 0000' %></p>
       </div>
       <div class="fs-menu__socials">
-        <a href="#" class="fs-menu__social">Youtube</a>
-        <a href="#" class="fs-menu__social">Podcast</a>
-        <a href="#" class="fs-menu__social">Facebook</a>
-        <a href="#" class="fs-menu__social">Instagram</a>
+        <a href="<%= locals.churchSettings?.social_youtube || '#' %>" class="fs-menu__social" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+        </a>
+        <a href="<%= locals.churchSettings?.social_podcast || '#' %>" class="fs-menu__social" aria-label="Podcast">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v1a7 7 0 01-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </a>
+        <a href="<%= locals.churchSettings?.social_facebook || '#' %>" class="fs-menu__social" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </a>
+        <a href="<%= locals.churchSettings?.social_instagram || '#' %>" class="fs-menu__social" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
       </div>
     </div>
   </div>
@@ -179,7 +185,7 @@
 <style>
 /* Active Nav Link Styles */
 .active-link {
-    color: #22c55e !important; /* Green accent color */
+    color: rgba(113, 178, 128, 1) !important; /* Brand Sage Green */
     font-weight: 700;
 }
 .fs-menu__link.active-link {
@@ -189,28 +195,164 @@
 }
 </style>
 <!-- ========= STICKY BOTTOM BAR ========= -->
-<div class="sticky-bar" id="sticky-bar">
+<% if (locals.stickyConfig && stickyConfig.is_active) { %>
+<div class="sticky-bar" id="sticky-bar" style="background: <%= stickyConfig.bg_color || 'rgba(14, 14, 14, 0.85)' %>; color: <%= stickyConfig.text_color || '#f5f0e8' %>">
   <div class="sticky-bar__inner">
+    <!-- Left: Static Times -->
     <div class="sticky-bar__times">
-      <span class="sticky-bar__label">Sunday Services</span>
-      <span class="sticky-bar__time">9AM</span>
-      <span class="sticky-bar__time">11:30AM</span>
-      <span class="sticky-bar__time">5PM (Once a Month)</span>
+      <span class="sticky-bar__label"><%= stickyConfig.label %></span>
+      <% if (stickyConfig.times && Array.isArray(stickyConfig.times)) { %>
+        <% stickyConfig.times.forEach(time => { %>
+          <span class="sticky-bar__time"><%= time %></span>
+        <% }) %>
+      <% } %>
     </div>
+
+    <!-- Center/Right: Scrolling Content or Static -->
+    <div class="sticky-bar__dynamic <%= stickyConfig.is_scrolling ? 'is-scrolling' : '' %>" 
+         style="--scroll-speed: <%= stickyConfig.speed || 15 %>s">
+      <div class="sticky-bar__scroll-track">
+        <span class="sticky-bar__info"><%= stickyConfig.info_text %></span>
+        <% if (stickyConfig.is_scrolling) { %>
+          <!-- Duplicate for seamless scroll -->
+          <span class="sticky-bar__info"><%= stickyConfig.info_text %></span>
+          <span class="sticky-bar__info"><%= stickyConfig.info_text %></span>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Right: CTA -->
     <div class="sticky-bar__watch">
-      <a href="/watch">Watch Online <svg viewBox="0 0 24 24" fill="currentColor">
-          <polygon points="5 3 19 12 5 21 5 3"></polygon>
-        </svg></a>
-    </div>
-    <div class="sticky-bar__right">
-      <span class="sticky-bar__info">What is going on at Ambassadors Assembly — Find out what is going on at AA</span>
-      <!-- <div class="sticky-bar__scroll">
-          Scroll Down
-          <span class="sticky-bar__scroll-dot">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-          </span>
-        </div> -->
+      <a href="<%= stickyConfig.cta_link %>" style="color: <%= stickyConfig.text_color || '#f5f0e8' %>">
+        <%= stickyConfig.cta_text %> 
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      </a>
     </div>
   </div>
 </div>
+
+<style>
+  .sticky-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+  }
+
+  .sticky-bar__inner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 100%;
+  }
+
+  .sticky-bar__times {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sticky-bar__label {
+    opacity: 0.6;
+  }
+
+  .sticky-bar__dynamic {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  .sticky-bar__scroll-track {
+    display: flex;
+    white-space: nowrap;
+    gap: 40px;
+  }
+
+  .sticky-bar__dynamic.is-scrolling .sticky-bar__scroll-track {
+    animation: stickyMarquee var(--scroll-speed, 15s) linear infinite;
+  }
+
+  @keyframes stickyMarquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
+  }
+
+  .sticky-bar__info {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .sticky-bar__watch a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .sticky-bar__watch a:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .sticky-bar__watch svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Mobile Overrides */
+  @media (max-width: 767px) {
+    .sticky-bar {
+      height: 40px;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .sticky-bar__times {
+      display: none; /* Hide times on mobile to save space */
+    }
+
+    .sticky-bar__dynamic {
+      padding: 0 15px;
+    }
+
+    .sticky-bar__info {
+      font-size: 0.75rem;
+    }
+
+    .sticky-bar__watch a span {
+      display: none; /* Hide text if too long, but user said only watch now shows */
+    }
+    
+    .sticky-bar__watch a {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+    }
+  }
+</style>
+
+<% } %>
 <!-- ========= END STICKY BOTTOM BAR ========= -->

@@ -80,7 +80,7 @@
                   <p>Ready to serve? Fill out the form below to express your interest in joining the <%= ministry.name %>.</p>
                   
                   <form action="/ministries/<%= ministry.slug %>/join" method="POST" class="join-form">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                     <div class="form-group">
                       <label>Why do you want to join? (Optional)</label>
                       <textarea name="notes" placeholder="Tell us a bit about your interest or experience..."></textarea>

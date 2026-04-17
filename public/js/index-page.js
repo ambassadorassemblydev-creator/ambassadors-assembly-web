@@ -74,8 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ── Mobile Ministry Swiper ──────────────────────────────────
   const minSwiperEl = document.querySelector('.min-swiper');
   if (minSwiperEl) {
-    const numSlides = minSwiperEl.querySelectorAll('.swiper-slide').length;
-    const minSwiper = new Swiper('.min-swiper', {
+    new Swiper('.min-swiper', {
       loop: false,
       slidesPerView: 1,
       spaceBetween: 20,
@@ -84,6 +83,61 @@ document.addEventListener("DOMContentLoaded", () => {
         prevEl: ".min-nav-prev",
       },
     });
+  }
+
+  // ── Hero Section Swiper ─────────────────────────────────────
+  const heroSwiperEl = document.querySelector('.heroSwiper');
+  if (heroSwiperEl) {
+    const heroWrap = document.querySelector('.hero-swiper-wrap');
+    const startSlide = (heroWrap && heroWrap.getAttribute('data-start-with-slide3') === 'true') ? 2 : 0;
+
+    const heroSwiper = new Swiper('.heroSwiper', {
+      loop: true,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      speed: 1000,
+      initialSlide: startSlide,
+      autoplay: {
+        delay: 6000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.hero-pag',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.hero-next',
+        prevEl: '.hero-prev',
+      },
+      on: {
+        init: function () {
+          heroWrap.style.visibility = 'visible';
+          animateSlide(this.slides[this.activeIndex]);
+        },
+        slideChangeTransitionStart: function () {
+          animateSlide(this.slides[this.activeIndex]);
+        }
+      }
+    });
+
+    function animateSlide(slide) {
+      if (!slide) return;
+      const title = slide.querySelector('.gsap-slide-title');
+      const text = slide.querySelector('.gsap-slide-text');
+      const btns = slide.querySelector('.gsap-slide-btns');
+
+      gsap.fromTo([title, text, btns], {
+        y: 30,
+        opacity: 0
+      }, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        overwrite: true
+      });
+    }
   }
 
   // ── Mobile-specific Scripts ─────────────────────────────────

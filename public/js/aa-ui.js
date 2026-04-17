@@ -58,6 +58,52 @@ window.AA = {
 
 // GLOBAL OVERRIDE (High IQ: Intercepts all legacy alert calls)
 // Note: We keep them as aliases but recommend using window.AA
-window.alert = (msg) => window.AA.alert(msg);
+window.alert = (msg) => {
+    if (typeof showToast === 'function') {
+        showToast(msg, 'info');
+    } else {
+        window.AA.alert(msg); // Fallback
+    }
+};
 window.confirm = (msg) => window.AA.confirm(msg);
-// Prompt is more complex, we'll implement if needed but for now we discourage it for premium UX.
+
+
+// ==========================================
+// 2. GLOBAL DOUBLE-SUBMISSION PREVENTION
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('submit', (e) => {
+        const form = e.target;
+        
+        // Skip if specifically opted out
+        if (form.classList.contains('no-disable')) return;
+
+        // Find the submit button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (!submitBtn) return;
+
+        // Prevent double clicks
+        submitBtn.disabled = true;
+
+        // UI Feedback: Show "Processing..." or a spinner
+        // If it's a simple text button, update text. If it has icons, we add a class.
+        const originalHtml = submitBtn.innerHTML;
+        submitBtn.setAttribute('data-original-html', originalHtml);
+        
+        // Premium Nigerian/South UX: "Conscious Loading"
+        if (submitBtn.innerText.trim().length > 0) {
+            submitBtn.innerHTML = `
+                <span class="loading-container">
+                    <span class="processing-text">Processing...</span>
+                </span>
+            `;
+        } else {
+            // Usually icon-only buttons
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+
+        // Add a global class for styling if needed
+        submitBtn.classList.add('is-submitting');
+    });
+});

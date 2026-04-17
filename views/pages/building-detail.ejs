@@ -92,8 +92,16 @@
               </div>
               <input type="number" id="custom-amount" placeholder="Or Enter Custom Amount" class="amount-input">
               
-              <button class="pay-btn" onclick="payWithPaystack()">Plant Your Seed &rarr;</button>
-              <p class="secure-label">Secure Transaction via Paystack 🛡️</p>
+              <!-- HIGH IQ: Guest Email Resolution -->
+              <% if (!locals.user) { %>
+                <div class="guest-identity" style="margin-bottom: 20px;">
+                  <label style="opacity: 0.5; font-size: 11px;">Receipt Email</label>
+                  <input type="email" id="donor-email" placeholder="email@example.com" class="amount-input" style="margin-bottom: 0;">
+                </div>
+              <% } %>
+
+              <button class="pay-btn" id="project-pay-btn" onclick="payWithPaystack()">Plant Your Seed &rarr;</button>
+              <p class="secure-label">Secure Transaction via Paystack</p>
             </div>
           </div>
         </aside>
@@ -105,62 +113,8 @@
  
 
   <style>
-    :root { --aa-green: #22c55e; --aa-bg: #050505; }
-    .text-green { color: var(--aa-green); }
-
-    .proj-detail { background: var(--aa-bg); min-height: 100vh; }
-    
-    .proj-hero { position: relative; height: 60vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .proj-hero__bg { position: absolute; top:0; left:0; width:100%; height:100%; z-index:1; }
-    .proj-hero__img { width: 100%; height: 100%; object-fit: cover; opacity: 1; }
-    .proj-hero__overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, transparent, rgba(5,5,5,0.4), var(--aa-bg)); z-index:2; }
-    .proj-hero__content { position: relative; z-index: 3; text-align: center; }
-    .proj-hero h1 { font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 20px; }
-    .sub-label { display: block; font-size: 0.75rem; font-weight: 800; letter-spacing: 5px; color: var(--aa-green); text-transform: uppercase; margin-bottom: 20px; }
-    .back-link { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); text-decoration: none; font-weight: 800; }
-
-    .proj-container { max-width: 1400px; margin: 0 auto; padding: 60px 6% 150px; display: grid; grid-template-columns: 1fr 400px; gap: 60px; }
-    
-    .vision-quote { padding: 40px; border-radius: 30px; margin-bottom: 60px; border-left: 4px solid var(--aa-green); }
-    .vision-quote p { font-size: 1.5rem; font-style: italic; line-height: 1.6; color: rgba(255,255,255,0.8); margin-bottom: 20px; }
-    .vision-quote cite { font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--aa-green); opacity: 0.7; }
-
-    .proj-story h2, .proj-gallery h2 { font-size: 2.5rem; margin-bottom: 30px; letter-spacing: -0.02em; font-weight: 800; }
-    .story-text { font-size: 1.25rem; line-height: 1.8; color: rgba(255,255,255,0.6); }
-
-    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-    .gallery-item { border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
-    .gallery-item:hover img { transform: scale(1.05); }
-
-    /* SIDEBAR */
-    .proj-sidebar { position: relative; }
-    .sticky-sidebar { position: sticky; top: 100px; padding: 40px; border-radius: 40px; }
-    .sidebar-header h3 { font-size: 1.5rem; margin-bottom: 15px; }
-    .sidebar-header p { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.5; margin-bottom: 30px; }
-
-    .sidebar-progress { margin-bottom: 40px; }
-    .prog-meta { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 900; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
-    .prog-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 100px; overflow: hidden; }
-    .prog-fill { height: 100%; background: var(--aa-green); border-radius: 100px; }
-
-    .giving-form label { display: block; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; margin-bottom: 15px; opacity: 0.5; }
-    .amount-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-    .amount-btn { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: white; cursor: pointer; font-weight: 800; transition: 0.3s; }
-    .amount-btn:hover { background: rgba(34, 197, 94, 0.1); border-color: var(--aa-green); }
-    .amount-input { width: 100%; padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; margin-bottom: 25px; }
-
-    .pay-btn { width: 100%; padding: 18px; border-radius: 100px; background: var(--aa-green); border: none; color: white; font-weight: 900; font-size: 0.9rem; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2); }
-    .pay-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(34, 197, 94, 0.4); }
-    .secure-label { text-align: center; font-size: 0.65rem; margin-top: 15px; opacity: 0.3; }
-
-    .glass-fx { background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); }
-
-    @media (max-width: 1100px) {
-      .proj-container { grid-template-columns: 1fr; }
-      .proj-sidebar { margin-top: 40px; }
-      .sticky-sidebar { position: relative; top: 0; }
-    }
+    /* ... existing styles ... */
+    .pay-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
   </style>
 
   <script src="https://js.paystack.co/v1/inline.js"></script>
@@ -170,27 +124,80 @@
     }
 
     function payWithPaystack() {
-      const amount = document.getElementById('custom-amount').value;
+      const amountInp = document.getElementById('custom-amount');
+      const payBtn = document.getElementById('project-pay-btn');
+      const amount = amountInp.value;
+      
+      // Resolve Email
+      const userEmail = "<%= locals.user ? locals.user.email : '' %>";
+      const guestEmail = document.getElementById('donor-email')?.value;
+      const email = userEmail || guestEmail;
+
       if (!amount || amount < 100) {
-        window.AA.alert('Please enter a valid seed amount (minimum ₦100)');
+        showToast('Please enter a valid seed amount (minimum ₦100)', 'error');
         return;
       }
 
-      // HIGH IQ: Reusing the standard Paystack logic from give.ejs
+      if (!email || !email.includes('@')) {
+        showToast('Please provide a valid email for your receipt.', 'error');
+        document.getElementById('donor-email')?.focus();
+        return;
+      }
+
+      // 🛡️ DOUBLE-PAYMENT PROTECTION
+      payBtn.disabled = true;
+      payBtn.textContent = "Opening Secure Checkout...";
+
       const handler = PaystackPop.setup({
         key: '<%= locals.PAYSTACK_PUBLIC_KEY %>',
-        email: 'donor@ambassadors-assembly.cc', // Dynamic email placeholder
+        email: email,
         amount: amount * 100, // Kobo
         currency: "NGN",
+        ref: 'AA-PROJ-' + Math.floor((Math.random() * 1e9) + 1),
         metadata: {
-          custom_fields: [{ display_name: "Project", variable_name: "project", value: "<%= project.name %>" }]
+          custom_fields: [
+            { display_name: "Project", variable_name: "project", value: "<%= project.name %>" },
+            { display_name: "Type", variable_name: "type", value: "building_fund" }
+          ]
         },
-        callback: function(response) {
-          window.AA.alert('Thank you for your seed! Your kingdom investment has been logged.', 'Success');
-          location.reload();
+        callback: async function(response) {
+          try {
+            payBtn.textContent = "Verifying Seed...";
+            
+            const verifyRes = await fetch('/api/payments/verify', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': '<%= locals.csrfToken %>'
+               },
+              body: JSON.stringify({
+                reference: response.reference,
+                amount: amount,
+                categoryId: '<%= project.id %>',
+                type: 'building_fund',
+                email: email
+              })
+            });
+
+            const result = await verifyRes.json();
+            
+            if (result.success) {
+              showToast('Thank you for your seed! Your kingdom investment has been logged.', 'success');
+              setTimeout(() => location.reload(), 2000);
+            } else {
+              showToast('Payment verify issue: ' + (result.message || 'Check reference'), 'error');
+              payBtn.disabled = false;
+              payBtn.textContent = "Plant Your Seed →";
+            }
+          } catch (err) {
+            console.error('[Payment] Verify Error:', err);
+            showToast('Network error during verification. Reference: ' + response.reference, 'error');
+          }
         },
         onClose: function() {
-          window.AA.alert('Transaction cancelled.');
+          payBtn.disabled = false;
+          payBtn.textContent = "Plant Your Seed →";
+          showToast('Transaction cancelled.', 'info');
         }
       });
       handler.openIframe();

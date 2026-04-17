@@ -1,0 +1,117 @@
+<%- include('../../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+    <main class="legal-page">
+        <header class="legal-header">
+            <div class="container">
+                <h1 class="gsap-up">Terms of Service</h1>
+                <p class="last-updated gsap-up">Last Updated: April 2026</p>
+            </div>
+        </header>
+
+        <section class="legal-content">
+            <div class="container">
+                <div class="content-wrapper gsap-up">
+                    <h2>1. Acceptance of Terms</h2>
+                    <p>By accessing or using the Ambassadors Assembly platform, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
+
+                    <h2>2. User Conduct</h2>
+                    <p>As an Ambassador, you agree to use the platform in a manner consistent with our community values. This includes respecting fellow members on the Prayer Wall and providing authentic Testimonies.</p>
+
+                    <h2>3. Member Accounts</h2>
+                    <p>You are responsible for maintaining the confidentiality of your account credentials. Unauthorized access or use of your account should be reported to our Technical Services team immediately.</p>
+
+                    <h2>4. Intellectual Property</h2>
+                    <p>All content, including sermons, media, and platform design, is the property of Ambassadors Assembly. Users may not reproduce or distribute this content without prior written consent.</p>
+
+                    <h2>5. Termination</h2>
+                    <p>We reserve the right to suspend or terminate access to the platform for users who violate these terms or engage in conduct detrimental to the community.</p>
+
+                    <h2>6. Disclaimer of Warranties</h2>
+                    <p>The services are provided on an "as is" and "as available" basis without warranties of any kind, either express or implied.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <%- include('../../partials/footer') %>
+
+    <style>
+        .legal-page {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .legal-header {
+            padding: 80px 0 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+
+        .legal-header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .last-updated {
+            font-size: 0.9rem;
+            color: #71b280;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 10px;
+        }
+
+        .legal-content {
+            padding: 80px 0;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .content-wrapper h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin: 40px 0 20px;
+            font-weight: 700;
+        }
+
+        .content-wrapper p {
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.from('.gsap-up', {
+                opacity: 0,
+                y: 30,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+        });
+    </script>
+</body>
+</html>

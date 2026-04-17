@@ -37,10 +37,10 @@
                 <% ministries.forEach((m, i) => { 
                    // Shuffle logic for gradients
                    const gradients = [
-                     'conic-gradient(from 335deg at 51.5% 61.1%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%)',
-                     'conic-gradient(from 45deg at 42.2% 59.8%, rgba(58, 28, 113, 1) 0%, rgba(215, 109, 119, 1) 50%, rgba(255, 175, 123, 1) 100%)'
+                     'conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%)',
+                     'conic-gradient(from 45deg at 42.2% 59.8%, rgba(113, 178, 128, 0.4) 0%, rgba(19, 78, 94, 0.8) 100%)'
                    ];
-                   const bgBase = i % 2 === 0 ? 'rgba(19, 78, 94, 1)' : 'rgba(58, 28, 113, 1)';
+                   const bgBase = 'rgba(19, 78, 94, 1)';
                    const gradient = gradients[i % 2];
                 %>
                   <a href="/ministries/<%= m.slug %>" class="min-card gsap-min-card" data-index="<%= i %>" style="text-decoration: none; color: inherit;">

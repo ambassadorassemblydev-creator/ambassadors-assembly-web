@@ -1,9 +1,128 @@
 <%- include('../partials/head') %>
-<body style="background: #131313; color: white; height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
-  <div style="text-align: center; background: rgba(255,255,255,0.05); padding: 50px; border-radius: 20px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);">
-    <h1 style="font-size: 80px; margin: 0; color: #3B6FB5;"><%= typeof statusCode !== 'undefined' ? statusCode : 'Error' %></h1>
-    <p style="opacity: 0.6;"><%= typeof msg !== 'undefined' ? msg : 'Something went wrong on our end.' %></p>
-    <a href="/" style="display: inline-block; margin-top: 20px; color: white; text-decoration: none; border: 1px solid white; padding: 10px 20px; border-radius: 50px;">Return Home</a>
-  </div>
+
+<body id="dmRoot" class="dmRoot flex-site no-scroll-transition" style="background: #0f0f0f; color: white; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <%- include('../partials/preloader') %>
+
+    <main class="error-page generic-error">
+        <div class="luxury-container">
+            <div class="line-decorator"></div>
+            
+            <div class="error-header">
+                <span class="error-category">System Exception</span>
+                <h1 class="error-code"><%= typeof statusCode !== 'undefined' ? statusCode : 'ERROR' %></h1>
+            </div>
+
+            <div class="error-body">
+                <p class="error-msg"><%= typeof msg !== 'undefined' ? msg : 'An unexpected inconsistency has occurred within the sanctuary servers.' %></p>
+                
+                <% if (process.env.NODE_ENV === 'development' && typeof err !== 'undefined' && err.stack) { %>
+                    <div class="debug-panel">
+                        <pre><%= err.stack %></pre>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="error-footer">
+                <a href="/" class="luxury-link">Return to Sanctuary</a>
+                <div class="support-text">Ambassadors Assembly • Technical Services</div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .luxury-container {
+            max-width: 500px;
+            width: 100%;
+            padding: 60px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            position: relative;
+            text-align: left;
+        }
+
+        .line-decorator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100px;
+            background: linear-gradient(to bottom, #71b280, transparent);
+        }
+
+        .error-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: #71b280;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .error-code {
+            font-size: 5rem;
+            font-weight: 900;
+            margin: 0;
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+
+        .error-msg {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.7);
+            margin: 30px 0 60px;
+            font-family: 'serif';
+            font-style: italic;
+        }
+
+        .luxury-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.85rem;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #71b280;
+            transition: 0.3s;
+        }
+
+        .luxury-link:hover {
+            opacity: 0.7;
+            padding-left: 10px;
+        }
+
+        .error-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .support-text {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .debug-panel {
+            margin: 20px 0;
+            padding: 15px;
+            background: #000;
+            border-radius: 8px;
+            font-size: 10px;
+            overflow-x: auto;
+            color: #71b280;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 600px) {
+            .luxury-container {
+                padding: 40px 25px;
+            }
+        }
+    </style>
 </body>
 </html>

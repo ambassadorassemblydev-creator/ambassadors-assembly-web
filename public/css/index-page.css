@@ -23,11 +23,10 @@ html.lenis, html.lenis body {
 
 /* ─── Text Gradient ("Join us Sunday" heading) ─────────────── */
 .text-gradient {
-  background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+  background: linear-gradient(135deg, rgba(113, 178, 128, 1) 0%, rgba(19, 78, 94, 1) 100%);
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: AppleGaramond-LightItalic;
+  font-family: 'Articulat CF Demi Bold', sans-serif;
   padding-right: 10px;
 }
 
@@ -408,7 +407,7 @@ html.lenis, html.lenis body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #ede8df;
+  background: linear-gradient(135deg, #f5f0e8 0%, #ede8df 40%, #71b280 100%);
   clip-path: circle(150% at 50% 50%);
   will-change: clip-path;
 }
@@ -502,7 +501,7 @@ html.lenis, html.lenis body {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: #ede8df;
+  background: linear-gradient(135deg, #f9f9f7 0%, #ede8df 50%, #71b280 100%);
   overflow: hidden;
   z-index: 1;
 }
@@ -1441,9 +1440,12 @@ html.lenis, html.lenis body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #0e0e0e;
-  clip-path: circle(0% at calc(100% - 80px) 30px);
-  transition: none;
+  background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%));
+  background-size: 200% 200%;
+  animation: gradientFlow 20s ease infinite;
+  z-index: 1;
+  clip-path: circle(0% at calc(100% - 80px) 50px);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Animated gradient blobs on dark background */
@@ -1751,5 +1753,6 @@ html.lenis, html.lenis body {
    ============================================================ */
 
 .fs-menu__link.active-link {
-  color: rgba(184, 159, 122, 1);
+  color: rgba(113, 178, 128, 1); /* Active Sage Green */
+  font-family: 'Articulat CF Demi Bold', sans-serif;
 }

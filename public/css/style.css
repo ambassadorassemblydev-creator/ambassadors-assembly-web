@@ -73,11 +73,12 @@
  
     :root {
       --color_1: rgba(19, 19, 19, 1);
-      --color_2: rgba(34, 197, 94, 1);
+      --color_2: rgba(113, 178, 128, 1); /* Brand Sage Green */
       --color_3: rgba(255, 255, 255, 1);
       --color_4: rgba(233, 233, 233, 1);
       --color_5: rgba(234, 246, 255, 1);
       --max-content-width_1: 1200px;
+      --aa-conic-grad: conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%);
       --hover-transform-zoomout: scale(1.06);
       --hover-transform-float: translateY(-8px);
       --hover-transform-forward: translateX(8px);
@@ -90,6 +91,19 @@
       --hover-transform-opacity: 0.7;
       --hover-scroll-transform: translate3d(0, 0, 0)
     }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; transform: scale(1.1) rotate(0deg); }
+      50% { background-position: 100% 50%; transform: scale(1.2) rotate(5deg); }
+      100% { background-position: 0% 50%; transform: scale(1.1) rotate(0deg); }
+    }
+
+    .animated-conic {
+      background: var(--aa-conic-grad);
+      background-size: 200% 200%;
+      animation: gradientFlow 15s ease infinite;
+    }
+
     [data-layout-grid] {
       display: -ms-grid;
       display: grid;

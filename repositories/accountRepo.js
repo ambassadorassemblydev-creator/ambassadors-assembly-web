@@ -54,6 +54,31 @@ export const accountRepo = {
     if (error) throw error;
     return data;
   },
+
+  // Fetch all donations for historical analysis
+  getFullDonationHistory: async (userId) => {
+    const { data, error } = await supabase
+      .from('donations')
+      .select('amount, created_at, status')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Fetch all notes saved by the user
+  getUserNotes: async (userId) => {
+    const { data, error } = await supabase
+      .from('member_notes')
+      .select('*')
+      .eq('author_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data;
+  },
   
   /**
    * High IQ Self-Healing: Provision a missing profile
@@ -155,6 +180,13 @@ export const accountRepo = {
     if (updateData.salvation_date !== undefined) payload.salvation_date = updateData.salvation_date;
     if (updateData.previous_church !== undefined) payload.previous_church = updateData.previous_church;
     if (updateData.occupation !== undefined) payload.occupation = updateData.occupation;
+    
+    // New Journey & Identity Fields
+    if (updateData.how_did_you_hear !== undefined) payload.how_did_you_hear = updateData.how_did_you_hear;
+    if (updateData.spiritual_gifts !== undefined) payload.spiritual_gifts = updateData.spiritual_gifts;
+    if (updateData.emergency_contact_name !== undefined) payload.emergency_contact_name = updateData.emergency_contact_name;
+    if (updateData.emergency_contact_phone !== undefined) payload.emergency_contact_phone = updateData.emergency_contact_phone;
+    if (updateData.avatar_url !== undefined) payload.avatar_url = updateData.avatar_url;
 
     const { data, error } = await supabaseService
       .from('profiles')

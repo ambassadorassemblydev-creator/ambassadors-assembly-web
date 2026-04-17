@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+        <%- include('../partials/navbar') %>
+
+  <main class="status-main" style="padding-top: 15vh; min-height: 100vh; background: radial-gradient(circle at top, #134e5e1a 0%, #050505 100%);">
+    <div class="container container-large">
+      <div class="status-header text-align-center" style="margin-bottom: 50px;">
+        <h1 class="display-1 gsap-reveal">System <span class="text-gradient">Status</span></h1>
+        <p class="gsap-reveal" style="opacity: 0.7;">Real-time transparency on all Ambassadors Assembly services.</p>
+      </div>
+
+      <div class="status-card glass-fx gsap-reveal" style="border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+        <!-- Better Stack Embed -->
+        <iframe src="https://ambassadors.betteruptime.com" width="100%" height="800" frameborder="0" style="background: #050505;"></iframe>
+      </div>
+
+      <div class="status-footer text-align-center" style="margin-top: 40px; padding-bottom: 80px;">
+        <p style="font-size: 0.8rem; opacity: 0.5;">Powered by Better Stack Monitoring</p>
+      </div>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+
+  <style>
+    .status-card iframe {
+      border: none;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .status-card iframe {
+        height: 600px;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      gsap.from(".gsap-reveal", {
+        y: 30,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power4.out"
+      });
+    });
+  </script>
+</body>
+</html>

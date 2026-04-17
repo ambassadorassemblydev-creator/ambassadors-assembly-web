@@ -38,11 +38,40 @@ router.get('/directory', authMiddleware.protect, authMiddleware.requireProfileCo
 router.get('/onboarding', authMiddleware.protect, accountController.renderOnboarding);
 router.post('/onboarding', authMiddleware.protect, accountController.submitOnboarding);
 router.get('/watch', watchController.renderWatch);
+
+// Testimonies & Prayer Wall
+router.get('/testimonies', pageController.renderTestimonies);
+router.post('/testimonies/submit', pageController.handleTestimonySubmit);
+router.get('/prayer-wall', pageController.renderPrayerWall);
+router.post('/prayer-wall/intercede', authMiddleware.protect, pageController.handleIntercede);
+router.post('/prayer-wall/submit', pageController.handlePrayerSubmit);
+
+// Maintenance Mode (Easily activated via settings)
+router.get('/maintenance', (req, res) => res.render('pages/maintenance'));
+
+// AI Assistant
+import { aiController } from '../controllers/aiController.js';
+router.post('/api/ai/chat', aiController.handleChat);
+
+// Legal Pages
+router.get('/terms-of-service', pageController.renderTerms);
+router.get('/privacy-policy', pageController.renderPrivacy);
+
+// ==========================================
+// MONITORING & HEALTH (For Uptime Bots)
+// ==========================================
+router.get('/api/health', pageController.handleHealthCheck);
+router.get('/system-status', (req, res) => res.render('pages/system-status', { pageTitle: 'System Status | Ambassadors Assembly', currentPath: '/system-status' }));
+
 // ==========================================
 // AUTH VIEWS & API
 // ==========================================
 router.use('/', authRoutes); // <-- ADD THIS
 router.post('/api/events/register', authMiddleware.protect, accountController.handleEventRegistration);
 router.use('/api', apiRoutes); 
+
+router.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("Sentry Debug Error: Ambassadors Assembly Monitoring Test");
+});
 
 export default router;
