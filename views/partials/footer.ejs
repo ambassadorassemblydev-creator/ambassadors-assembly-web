@@ -784,9 +784,9 @@
   <style>
     #ambassadors-ai-container {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 9999;
+      bottom: 30px !important; /* High IQ: Fixed line of sight */
+      right: 30px; /* Symmetry: Moved back to right as WhatsApp is hidden */
+      z-index: 10000; /* High IQ: Synced with Account FAB */
       font-family: 'Articulatcf-regular', sans-serif;
     }
 
@@ -829,7 +829,7 @@
     .ai-chat-window {
       position: absolute;
       bottom: 80px;
-      right: 0;
+      right: 0; /* Align to the right of the container */
       width: 380px;
       height: 550px;
       background: rgba(255, 255, 255, 0.95);
@@ -1024,15 +1024,10 @@
       </a>
     </div>
 
-    <!-- PUBLIC STATUS BADGE (High IQ: Official Verification) -->
-    <div class="status-float gsap-status-reveal" style="position: fixed; bottom: 30px; left: 30px; z-index: 9998;">
-      <a href="/system-status" class="status-link" aria-label="System Status">
-        <iframe src="https://ambassadors.betteruptime.com/badge?theme=dark" width="250" height="30" frameborder="0" scrolling="no" style="color-scheme: normal; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);"></iframe>
-      </a>
-    </div>
 
     <style>
       .whatsapp-float {
+        display: none !important; /* Hidden for now */
         position: fixed;
         bottom: 30px;
         right: 30px;
@@ -1129,7 +1124,7 @@
     <!-- BETTER STACK ANNOUNCEMENTS (High IQ: Direct-to-User Alerts) -->
     <script src="https://uptime.betterstack.com/widgets/announcement.js" data-id="244038" async="async" type="text/javascript"></script>
     <style>
-      .betteruptime-announcement { top: unset !important; bottom: 0 !important; background: white !important; }
+      .betteruptime-announcement { position: relative !important; top: unset !important; bottom: 0 !important; background: white !important; z-index: 50 !important; }
       .betteruptime-announcement__message { color: black !important; font-family: 'Articulatcf-regular', sans-serif; font-weight: 700; }
     </style>
 </body>

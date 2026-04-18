@@ -20,7 +20,7 @@
       <section class="about-hero" id="about-hero">
         <div class="about-hero__bg">
           <div class="about-hero__overlay"></div>
-          <img src="https://images.unsplash.com/photo-1544427928-c49cdfebf4ad?q=80&w=2671&auto=format&fit=crop" alt="Ambassadors Sanctuary" class="about-hero__img">
+          <img src="https://images.unsplash.com/photo-1471306224500-6d0d218be372?q=80&w=2671&auto=format&fit=crop" alt="Ambassadors Sanctuary" class="about-hero__img">
         </div>
         
         <div class="about-hero__content">
@@ -82,7 +82,7 @@
             </div>
             
             <div class="leadership-grid">
-              <% (staff || []).filter(s => s.department === 'Pastoral' || s.department === 'Leadership').forEach(member => { %>
+              <% (staff || []).filter(s => (s.department === 'Pastoral' || s.department === 'Leadership' || s.role?.includes('Pastor'))).forEach(member => { %>
                 <div class="leader-card glass-fx">
                   <div class="leader-img">
                     <% 

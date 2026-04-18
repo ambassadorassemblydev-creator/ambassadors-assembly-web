@@ -83,17 +83,6 @@
 
   <div class="layout-drawer-overlay" id="layout-drawer-overlay"></div>
 </div>
-<!-- ========= AI CHAT ICON ========= -->
-<button class="chat-fab" id="chat-fab" aria-label="Chat with us">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-    stroke-linejoin="round">
-    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-  </svg>
-</button>
-<div class="chat-tooltip" id="chat-tooltip">
-  Chat coming soon! We're building something special.
-</div>
-<!-- ========= END AI CHAT ICON ========= -->
 
 <!-- ========= ACCOUNT ICON ========= -->
 <!-- ========= ACCOUNT ICON ========= -->
@@ -166,16 +155,16 @@
       </div>
       <div class="fs-menu__socials">
         <a href="<%= locals.churchSettings?.social_youtube || '#' %>" class="fs-menu__social" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+          <i class="fa-brands fa-youtube"></i>
         </a>
         <a href="<%= locals.churchSettings?.social_podcast || '#' %>" class="fs-menu__social" aria-label="Podcast">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v1a7 7 0 01-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          <i class="fa-solid fa-podcast"></i>
         </a>
         <a href="<%= locals.churchSettings?.social_facebook || '#' %>" class="fs-menu__social" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          <i class="fa-brands fa-facebook-f"></i>
         </a>
         <a href="<%= locals.churchSettings?.social_instagram || '#' %>" class="fs-menu__social" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          <i class="fa-brands fa-instagram"></i>
         </a>
       </div>
     </div>
@@ -183,6 +172,16 @@
 </div>
 <!-- ========= END FULLSCREEN MENU OVERLAY ========= -->
 <style>
+/* Social Icon Sizing */
+.fs-menu__social {
+    font-size: 20px; /* High IQ: Optimized size */
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+.fs-menu__social:hover {
+    color: var(--aa-green, #71b280);
+    transform: translateY(-3px);
+}
 /* Active Nav Link Styles */
 .active-link {
     color: rgba(113, 178, 128, 1) !important; /* Brand Sage Green */
@@ -192,6 +191,46 @@
     color: #ffffff !important;
     opacity: 1 !important;
     text-decoration: underline; /* Or whatever style looks best in your fullscreen menu */
+}
+
+.account-fab {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 65px;
+    height: 65px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000; /* High IQ: Sync with AI Chat */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: white;
+    bottom: 30px !important; /* Force exact line of sight */
+}
+
+.account-fab:hover {
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(113, 178, 128, 0.5);
+}
+
+.account-fab svg {
+    width: 28px;
+    height: 28px;
+}
+
+@media (max-width: 768px) {
+    .account-fab {
+        width: 55px;
+        height: 55px;
+        bottom: 80px;
+        left: 20px;
+    }
 }
 </style>
 <!-- ========= STICKY BOTTOM BAR ========= -->
@@ -234,16 +273,21 @@
 <style>
   .sticky-bar {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 400px;
+    max-width: 90%;
+    border-radius: 100px;
     z-index: 9999;
     height: 48px;
     display: flex;
     align-items: center;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease;
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
 
   .sticky-bar__inner {
@@ -288,6 +332,9 @@
 
   .sticky-bar__dynamic.is-scrolling .sticky-bar__scroll-track {
     animation: stickyMarquee var(--scroll-speed, 15s) linear infinite;
+  }
+  .sticky-bar__dynamic.is-scrolling:hover .sticky-bar__scroll-track {
+    animation-play-state: paused;
   }
 
   @keyframes stickyMarquee {

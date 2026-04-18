@@ -13,8 +13,8 @@ const router = express.Router();
 // ==========================================
 router.get('/', pageController.renderHome);
 router.get('/sermons', pageController.renderSermons);
-router.get('/account/login', (req, res) => res.render('pages/auth/login', { pageTitle: 'Login | Ambassadors Assembly', currentPath: req.path }));
-router.get('/account/register', (req, res) => res.render('pages/auth/register', { pageTitle: 'Register | Ambassadors Assembly', currentPath: req.path }));
+router.get('/account/login', (req, res) => res.render('pages/sign-in', { pageTitle: 'Login | Ambassadors Assembly', currentPath: req.path }));
+router.get('/account/register', (req, res) => res.render('pages/sign-up', { pageTitle: 'Register | Ambassadors Assembly', currentPath: req.path }));
 
 // Ministry Routes
 router.get('/ministries', pageController.renderMinistries);

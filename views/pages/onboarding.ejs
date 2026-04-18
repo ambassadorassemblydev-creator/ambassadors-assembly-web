@@ -58,7 +58,7 @@
                 <% } %>
               </div>
 
-              <form action="/onboarding" method="POST" class="ob-form" id="onboardingForm" enctype="multipart/form-data">
+              <form action="/onboarding" method="POST" class="ob-form" id="onboardingForm">
                 <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                 <input type="hidden" name="avatar_data" id="avatarDataInput">
                 <input type="hidden" name="current_step" id="currentStepInput" value="1">
@@ -304,6 +304,17 @@
                     <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
                   </div>
 
+                  <!-- NEW: Already serving check -->
+                  <div class="form-group" style="margin-bottom: 35px; background: rgba(34, 197, 94, 0.03); padding: 25px; border-radius: 20px; border: 1px solid rgba(34, 197, 94, 0.1);">
+                    <label class="checkbox-label" style="display: flex; align-items: flex-start; gap: 18px; cursor: pointer;">
+                      <input type="checkbox" name="already_serving" value="true" style="width: 20px; height: 20px; margin-top: 4px; accent-color: #22c55e;">
+                      <div class="label-info">
+                        <strong style="color: #4ade80; font-size: 1.1rem; display: block; margin-bottom: 5px;">I am already serving at Ambassadors Assembly</strong>
+                        <p style="font-size: 0.9rem; opacity: 0.6; line-height: 1.5; margin: 0;">Check this if you are already a Pastor, Worker, or Choir member. This flags your account for verification rather than a new application.</p>
+                      </div>
+                    </label>
+                  </div>
+
                   <div class="form-group">
                     <label>Why do you want to serve in this capacity? (Motivation)</label>
                     <textarea name="motivation" placeholder="Share your heart or specific reasons for choosing this department..." class="glass-input"><%= user && user.motivation ? user.motivation : '' %></textarea>
@@ -496,6 +507,7 @@
       .form-actions.dual { flex-direction: column-reverse; }
     }
   </style>
+ <style>
     /* Ministry Pills */
     .ministry-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
     .min-pill {
@@ -553,8 +565,8 @@
     .custom-select-wrapper.open .custom-select-trigger:after { transform: rotate(-135deg); }
     .custom-options {
       position: absolute; top: 120%; left: 0; right: 0; background: #1a1a1a; border: 1px solid var(--glass-border);
-      border-radius: 12px; z-index: 100; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden;
+      border-radius: 12px; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow-y: auto; max-height: 250px;
     }
     .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; transform: translateY(0); }
     .custom-options .option { padding: 15px 20px; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: 600; }
@@ -644,7 +656,9 @@
       .step-line { width: 50px; }
       .form-actions.dual { flex-direction: column-reverse; }
     }
-  </style>  <script>
+  </style> 
+  
+  <script>
     let cropper;
     const avatarDataInput = document.getElementById('avatarDataInput');
     const avatarInput = document.getElementById('avatarInput');
@@ -817,4 +831,4 @@
   </script>
 </body>
 </html>
-html>
+

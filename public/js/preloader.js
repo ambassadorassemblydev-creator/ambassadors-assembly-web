@@ -150,6 +150,16 @@
       duration: COLLAPSE_SPEED,
       ease: 'power3.inOut',
     });
+
+    // High IQ: Safety Fail-Safe
+    // If for any crazy reason the timeline hangs, force hide after 10s
+    setTimeout(function() {
+        if (overlay.style.display !== 'none') {
+            console.warn('[Preloader] Safety fallback triggered.');
+            document.body.classList.remove('no-scroll-transition');
+            overlay.style.display = 'none';
+        }
+    }, 10000);
   }
 
   // ── EXIT: Link click animation (circle expand) ──────────────

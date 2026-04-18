@@ -26,6 +26,19 @@ export const donationRepo = {
         return data;
     },
 
+    // High IQ: Fetch building fund projects for dynamic rendering
+    getBuildingProjects: async () => {
+        const { data, error } = await supabase
+            .from('donation_categories')
+            .select('*')
+            .eq('is_building_fund', true)
+            .eq('is_active', true)
+            .order('sort_order', { ascending: true });
+
+        if (error) throw error;
+        return data || [];
+    },
+
     // High IQ: Atomically complete a donation and update category progress
     verifyAndCompleteDonation: async (reference, amount, categoryId, userId, email) => {
         // 1. Check if reference already exists to prevent double-counting

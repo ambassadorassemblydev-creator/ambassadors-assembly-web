@@ -25,6 +25,8 @@ const updateProfileSchema = z.object({
 
 // Combined Onboarding Schema
 const onboardingSchema = z.object({
+  // Identity
+  title: z.string().optional(),
   gender: z.string().optional(),
   dob: z.string().min(1, "Date of birth is required"),
   marital_status: z.string().min(1, "Marital status is required"),
@@ -44,6 +46,7 @@ const onboardingSchema = z.object({
   // Service
   department_interest: z.string().optional(),
   position_interest: z.string().optional(),
+  already_serving: z.any().transform(val => val === "true" || val === "on" || val === true).optional(),
   motivation: z.string().optional(),
   occupation: z.string().optional(),
   
@@ -274,6 +277,7 @@ export const accountController = {
 
       // 3. Update Profile
       const profileUpdates = {
+        title: validatedData.title || null,
         gender: validatedData.gender || null,
         date_of_birth: validatedData.dob || null,
         marital_status: validatedData.marital_status || null,
@@ -308,14 +312,17 @@ export const accountController = {
           ]);
 
           if (deptData.data && posData.data) {
-            // Create a worker record in 'probation' status
+            const isAlreadyServing = validatedData.already_serving === true;
+            
+            // Create a worker record - set to 'active' if already serving, else 'probation'
             await supabaseService.from('church_workers').upsert({
               user_id: userId,
               department_id: deptData.data.id,
               position_id: posData.data.id,
-              status: 'probation',
+              status: isAlreadyServing ? 'active' : 'probation',
               skills: gifts,
-              start_date: new Date()
+              start_date: new Date(),
+              notes: isAlreadyServing ? 'User identified as already serving during onboarding.' : null
             }, { onConflict: 'user_id' });
 
             // Create a formal volunteer application
@@ -325,12 +332,14 @@ export const accountController = {
               position_id: posData.data.id,
               applicant_name: req.user.email, 
               applicant_email: req.user.email,
-              motivation: validatedData.motivation || 'Standard onboarding interest.',
+              motivation: isAlreadyServing 
+                ? 'EXISTING MEMBER: ' + (validatedData.motivation || 'Already serving in this capacity.')
+                : (validatedData.motivation || 'Standard onboarding interest.'),
               skills: gifts,
-              status: 'pending'
+              status: isAlreadyServing ? 'approved' : 'pending'
             });
 
-            logger.info(`Service application initiated for user: ${userId} to ${validatedData.department_interest}`);
+            logger.info(`Service entry processed for user: ${userId} to ${validatedData.department_interest} (Existing: ${isAlreadyServing})`);
           }
         } catch (svcErr) {
           logger.warn(`Non-critical error in service linking: ${svcErr.message}`);

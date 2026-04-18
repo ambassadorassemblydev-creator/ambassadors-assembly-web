@@ -70,7 +70,7 @@ Instructions:
 
         try {
             const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
-                model: 'openai/gpt-3.5-turbo', // Or 'anthropic/claude-3-haiku' for speed/cost
+                model: 'google/gemma-4-31b-it:free', 
                 messages: messages,
             }, {
                 headers: {

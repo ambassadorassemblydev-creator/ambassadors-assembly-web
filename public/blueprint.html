@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High IQ Dev Blueprint | The Ultimate Standard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --accent: #22c55e;
+            --text: #f5f0e8;
+            --text-muted: rgba(245, 240, 232, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 6%; }
+
+        /* Hero */
+        header {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-bg {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        h1 { font-size: clamp(3rem, 10vw, 8rem); font-weight: 800; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 20px; }
+        .accent-text { color: var(--accent); }
+        .subtitle { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; }
+
+        /* Section Layout */
+        section { padding: 100px 0; border-top: 1px solid var(--border); }
+        .section-num { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 700; margin-bottom: 20px; display: block; }
+        h2 { font-size: 3rem; margin-bottom: 40px; }
+
+        /* Grid */
+        .step-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .step-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+        .step-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .step-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        .step-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* Steps List */
+        .pathways { margin-top: 60px; }
+        .path-item {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            border-bottom: 1px solid var(--border);
+            transition: 0.3s;
+        }
+        .path-item:hover { background: var(--glass); }
+        .path-idx { font-family: 'JetBrains Mono', monospace; font-weight: 700; opacity: 0.4; }
+        .path-content h4 { font-size: 1.25rem; margin-bottom: 8px; }
+
+        /* Tech Stack Table */
+        .stack-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
+        .stack-table td, .stack-table th { padding: 20px; border-bottom: 1px solid var(--border); text-align: left; }
+        .stack-table th { color: var(--accent); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        footer { padding: 60px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+            h2 { font-size: 2.5rem; }
+            .path-item { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-bg"></div>
+    <header class="container">
+        <span class="section-num">V1.0</span>
+        <h1>HIGH IQ <br><span class="accent-text">BLUEPRINT</span></h1>
+        <p class="subtitle">The definitive architectural standard for developing premium, world-class digital platforms.</p>
+    </header>
+
+    <section class="container">
+        <span class="section-num">PHASE 01</span>
+        <h2>Infrastructure Setup</h2>
+        <div class="step-grid">
+            <div class="step-card">
+                <h3>1. Repository Hub</h3>
+                <p>Initialize a monorepo or standard repo on GitHub. Set up `husky` for pre-commit hooks and `lint-staged` to enforce code quality before it hits the cloud.</p>
+            </div>
+            <div class="step-card">
+                <h3>2. Database Power</h3>
+                <p>Provision a Supabase (Postgres) instance. Use Row Level Security (RLS) from day one. Never leak your master key.</p>
+            </div>
+            <div class="step-card">
+                <h3>3. Cloud Hosting</h3>
+                <p>Connect to Render or Vercel. Automate CD (Continuous Deployment) so every push to `main` is a release.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <span class="section-num">PHASE 02</span>
+        <h2>Security & Monitoring</h2>
+        <div class="pathways">
+            <div class="path-item">
+                <span class="path-idx">01</span>
+                <div class="path-content">
+                    <h4>Sentry Error Tracking</h4>
+                    <p>Integrate Sentry to catch exceptions in real-time. Don't wait for users to report bugs—fix them before they notice.</p>
+                </div>
+            </div>
+            <div class="path-item">
+                <span class="path-idx">02</span>
+                <div class="path-content">
+                    <h4>Helmet & Security Headers</h4>
+                    <p>Use Middleware like `helmet` to secure Express applications. Enforce CSP, XSS protection, and sniff-suppression.</p>
+                </div>
+            </div>
+            <div class="path-item">
+                <span class="path-idx">03</span>
+                <div class="path-content">
+                    <h4>Upstash Redis Throttling</h4>
+                    <p>Implement rate-limiting via Redis. Protect your API routes from brute-force and scraping bots.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <span class="section-num">PHASE 03</span>
+        <h2>High IQ Dev Workflow</h2>
+        <table class="stack-table">
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Action</th>
+                    <th>Tools</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Initialization</strong></td>
+                    <td>Create Render, Supabase, and Sentry Accounts. Link them to GitHub.</td>
+                    <td>GitHub, Render, Supabase</td>
+                </tr>
+                <tr>
+                    <td><strong>Environment</strong></td>
+                    <td>Setup `.env` variables. Sync locally and on the server.</td>
+                    <td>dotenv, Vault</td>
+                </tr>
+                <tr>
+                    <td><strong>Architecture</strong></td>
+                    <td>Implement MVC pattern. Decouple logic into Controllers and Repositories.</td>
+                    <td>Node.js, Express</td>
+                </tr>
+                <tr>
+                    <td><strong>Frontend</strong></td>
+                    <td>Use EJS or React. Style with HSL-based CSS systems for dark mode depth.</td>
+                    <td>EJS, GSAP, CSS</td>
+                </tr>
+                <tr>
+                    <td><strong>Expansion</strong></td>
+                    <td>Add AI layers (OpenRouter) and search logic (pg_vector).</td>
+                    <td>OpenRouter, Gemma 7b</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer class="container">
+        <p>&copy; 2026 Ambassadors Assembly | Crafted for High IQ Development</p>
+    </footer>
+</body>
+</html>
