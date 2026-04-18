@@ -663,17 +663,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (menuTl) menuTl.kill();
     menuTl = gsap.timeline();
 
-    // Phase 1: Circle expansion
+    // Phase 1: Circle expansion (Slightly faster for impact)
     menuTl.fromTo(fsMenuBg,
       { clipPath: 'circle(0% at ' + origin + ')' },
-      { clipPath: 'circle(150% at ' + origin + ')', duration: 0.7, ease: 'power3.inOut' }
+      { clipPath: 'circle(150% at ' + origin + ')', duration: 0.6, ease: 'power3.inOut' }
     );
 
-    // Phase 2: Staggered text cascade
+    // Phase 2: Staggered text cascade (Delayed to allow background to cover screen)
     menuTl.fromTo(fsMenuLinks,
       { y: '110%' },
-      { y: '0%', duration: 0.6, stagger: 0.06, ease: 'power3.out' },
-      '-=0.2'
+      { y: '0%', duration: 0.6, stagger: 0.08, ease: 'power3.out' },
+      '-=0.05' // Synchronized with end of circle growth
     );
 
     // Phase 2b: Right column details fade + slide

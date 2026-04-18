@@ -129,9 +129,22 @@
 
     /* Bottom Filter Bar */
     .bottom-filter-bar { 
-      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
-      z-index: 100; padding: 10px 10px; border-radius: 100px; 
-      max-width: 90vw; overflow-x: auto; scrollbar-width: none;
+      position: fixed; 
+      bottom: 30px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      z-index: 1000; /* High IQ: Ensure it sits above AI bubble if they overlap */
+      padding: 10px 10px; 
+      border-radius: 100px; 
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: max-content;
+      max-width: 90vw; 
+      display: flex;
+      justify-content: center;
+      overflow-x: auto; 
+      scrollbar-width: none;
     }
     .bottom-filter-bar::-webkit-scrollbar { display: none; }
     .filter-controls { display: flex; gap: 5px; white-space: nowrap; }
@@ -163,13 +176,6 @@
       .popup-quote p { font-size: 1.1rem; }
     }
   </style>
-<style>
-    @media (max-width: 800px) {
-      .staff-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-      .popup-content { padding: 40px 20px; }
-      .popup-header h2 { font-size: 2.5rem; }
-      .popup-quote p { font-size: 1.1rem; }
-    }
   </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -190,7 +196,16 @@
         }
       }
 
-      gsap.from('.hero-content h1', { y: 50, opacity: 0, duration: 1.2, ease: 'power4.out' });
+      // Cinematic Entrance (Defensive)
+      if (document.querySelector('.hero-content h1')) {
+          gsap.from('.hero-content h1', { y: 50, opacity: 0, duration: 1.2, ease: 'power4.out' });
+      }
+      if (document.querySelectorAll('.staff-card').length > 0) {
+          gsap.from('.staff-card', { y: 60, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power2.out", delay: 0.2 });
+      }
+      if (document.querySelector('.bottom-filter-bar')) {
+          gsap.from('.bottom-filter-bar', { y: 100, opacity: 0, duration: 1, ease: "back.out(1.7)", delay: 0.5 });
+      }
     });
 
     filterBtns.forEach(btn => {

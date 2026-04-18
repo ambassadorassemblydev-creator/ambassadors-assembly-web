@@ -14,6 +14,7 @@ export const globalErrorHandler = (err, req, res, next) => {
 
     return res.status(404).render('pages/errors/404', {
       pageTitle: 'Page Not Found',
+      currentPath: req.path,
       statusCode: 404,
       msg: "The page you are looking for doesn't exist."
     });
@@ -36,6 +37,7 @@ export const globalErrorHandler = (err, req, res, next) => {
   if (statusTemplates.includes(err.statusCode)) {
       return res.status(err.statusCode).render(`pages/errors/${err.statusCode}`, {
           pageTitle: `${err.statusCode} | Ambassadors Assembly`,
+          currentPath: req.path,
           statusCode: err.statusCode,
           msg: err.message,
           error: process.env.NODE_ENV === 'development' ? err : {}
@@ -45,6 +47,7 @@ export const globalErrorHandler = (err, req, res, next) => {
   // 4. Final Fallback (The Professional Redesign)
   res.status(err.statusCode).render('pages/error', {
     pageTitle: 'Error | Ambassadors Assembly',
+    currentPath: req.path,
     statusCode: err.statusCode,
     msg: process.env.NODE_ENV === 'production' ? 'An internal error occurred.' : err.message,
     err: process.env.NODE_ENV === 'development' ? err : {}

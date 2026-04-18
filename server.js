@@ -25,6 +25,7 @@ dotenv.config();
 
 // Sentry is already initialized in instrument.js
 const app = express();
+app.set('trust proxy', 1); // Support Render's reverse proxy for rate-limiting
 app.use(statusMonitor({
   title: 'Ambassadors Assembly | System Status',
   path: '/status',
@@ -55,9 +56,16 @@ const __dirname = path.dirname(__filename);
 // Set Security HTTP Headers (Top 1% Security)
 app.use(helmet({ contentSecurityPolicy: false })); // Disabled CSP temporarily for Cloudinary/Stripe scripts
 
+// High IQ: Moved currentPath higher to ensure it's defined for early-request errors (e.g. PayloadTooLarge)
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  res.locals.pageTitle = 'Ambassadors Assembly';
+  next();
+});
+
 // Body parser, reading data from body into req.body
-app.use(express.json({ limit: '10kb' })); 
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(express.json({ limit: '10mb' })); 
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // ==========================================
@@ -91,9 +99,6 @@ app.use((req, res, next) => {
     res.locals.csrfToken = req.body?._csrf || req.headers["x-csrf-token"];
   }
   
-  // High IQ: Set global fallbacks to prevent "is not defined" crashes
-  res.locals.pageTitle = 'Ambassadors Assembly';
-  res.locals.currentPath = req.path; // High IQ: Fixes ReferenceError project-wide
   res.locals.paystackPublicKey = process.env.PAYSTACK_PUBLIC_KEY;
   next();
 });
