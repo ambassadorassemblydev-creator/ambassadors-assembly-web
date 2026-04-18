@@ -233,35 +233,35 @@
     }
 }
 </style>
-<!-- ========= STICKY BOTTOM BAR ========= -->
+<!-- ========= STICKY BOTTOM BAR (AA CUSTOM) ========= -->
 <% if (locals.stickyConfig && stickyConfig.is_active) { %>
-<div class="sticky-bar" id="sticky-bar" style="background: <%= stickyConfig.bg_color || 'rgba(14, 14, 14, 0.85)' %>; color: <%= stickyConfig.text_color || '#f5f0e8' %>">
-  <div class="sticky-bar__inner">
+<div class="aa-sticky-bar" id="aa-sticky-bar" style="background: <%= stickyConfig.bg_color || 'rgba(14, 14, 14, 0.85)' %>; color: <%= stickyConfig.text_color || '#f5f0e8' %>">
+  <div class="aa-sticky-bar__inner">
     <!-- Left: Static Times -->
-    <div class="sticky-bar__times">
-      <span class="sticky-bar__label"><%= stickyConfig.label %></span>
+    <div class="aa-sticky-bar__times">
+      <span class="aa-sticky-bar__label"><%= stickyConfig.label %></span>
       <% if (stickyConfig.times && Array.isArray(stickyConfig.times)) { %>
         <% stickyConfig.times.forEach(time => { %>
-          <span class="sticky-bar__time"><%= time %></span>
+          <span class="aa-sticky-bar__time"><%= time %></span>
         <% }) %>
       <% } %>
     </div>
 
     <!-- Center/Right: Scrolling Content or Static -->
-    <div class="sticky-bar__dynamic <%= stickyConfig.is_scrolling ? 'is-scrolling' : '' %>" 
+    <div class="aa-sticky-bar__dynamic <%= stickyConfig.is_scrolling ? 'is-scrolling' : '' %>" 
          style="--scroll-speed: <%= stickyConfig.speed || 15 %>s">
-      <div class="sticky-bar__scroll-track">
-        <span class="sticky-bar__info"><%= stickyConfig.info_text %></span>
+      <div class="aa-sticky-bar__scroll-track">
+        <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
         <% if (stickyConfig.is_scrolling) { %>
           <!-- Duplicate for seamless scroll -->
-          <span class="sticky-bar__info"><%= stickyConfig.info_text %></span>
-          <span class="sticky-bar__info"><%= stickyConfig.info_text %></span>
+          <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
+          <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
         <% } %>
       </div>
     </div>
 
     <!-- Right: CTA -->
-    <div class="sticky-bar__watch">
+    <div class="aa-sticky-bar__watch">
       <a href="<%= stickyConfig.cta_link %>" style="color: <%= stickyConfig.text_color || '#f5f0e8' %>">
         <%= stickyConfig.cta_text %> 
         <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -271,134 +271,102 @@
 </div>
 
 <style>
-  .sticky-bar {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    min-width: 400px;
-    max-width: 90%;
-    border-radius: 100px;
-    z-index: 15000; /* Between Chat and Menu */
-    height: 48px;
-    display: flex;
-    align-items: center;
-    background: rgba(14, 14, 14, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  .aa-sticky-bar {
+    position: fixed !important;
+    bottom: 30px !important; /* Raised for better visual clearance */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    min-width: 500px !important;
+    max-width: 90% !important;
+    border-radius: 100px !important;
+    z-index: 15000 !important;
+    height: 52px !important;
+    display: flex !important;
+    align-items: center !important;
+    background: rgba(14, 14, 14, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(25px) !important;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4) !important;
+    padding: 0 5px !important;
   }
 
-  .sticky-bar__inner {
+  .aa-sticky-bar__inner {
     width: 100%;
-    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 25px;
     height: 100%;
+    gap: 30px;
   }
 
-  .sticky-bar__times {
+  .aa-sticky-bar__times {
     display: flex;
     align-items: center;
     gap: 15px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
   }
 
-  .sticky-bar__label {
-    opacity: 0.6;
-  }
+  .aa-sticky-bar__label { opacity: 0.5; font-weight: 800; }
 
-  .sticky-bar__dynamic {
+  .aa-sticky-bar__dynamic {
     flex: 1;
     overflow: hidden;
     position: relative;
-    padding: 0 40px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    border-right: 1px solid rgba(255,255,255,0.1);
   }
 
-  .sticky-bar__scroll-track {
+  .aa-sticky-bar__scroll-track {
     display: flex;
     white-space: nowrap;
-    gap: 40px;
+    gap: 50px;
   }
 
-  .sticky-bar__dynamic.is-scrolling .sticky-bar__scroll-track {
-    animation: stickyMarquee var(--scroll-speed, 15s) linear infinite;
-  }
-  .sticky-bar__dynamic.is-scrolling:hover .sticky-bar__scroll-track {
-    animation-play-state: paused;
+  .aa-sticky-bar__dynamic.is-scrolling .aa-sticky-bar__scroll-track {
+    animation: aaStickyMarquee var(--scroll-speed, 15s) linear infinite;
   }
 
-  @keyframes stickyMarquee {
+  @keyframes aaStickyMarquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-33.33%); }
   }
 
-  .sticky-bar__info {
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
+  .aa-sticky-bar__info { font-size: 0.8rem; font-weight: 500; }
+
+  .aa-sticky-bar__watch a {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; font-weight: 800; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 8px 16px; border-radius: 100px;
+    transition: all 0.3s ease;
   }
 
-  .sticky-bar__watch a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 6px 12px;
-    border-radius: 4px;
-    transition: background 0.2s ease;
-  }
+  .aa-sticky-bar__watch a:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); }
 
-  .sticky-bar__watch a:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .sticky-bar__watch svg {
-    width: 14px;
-    height: 14px;
-  }
+  .aa-sticky-bar__watch svg { width: 12px; height: 12px; }
 
   /* Mobile Overrides */
   @media (max-width: 767px) {
-    .sticky-bar {
-      height: 40px;
-      padding-bottom: env(safe-area-inset-bottom);
+    .aa-sticky-bar {
+      min-width: 90% !important;
+      bottom: 20px !important;
+      height: 44px !important;
     }
-    
-    .sticky-bar__times {
-      display: none; /* Hide times on mobile to save space */
-    }
-
-    .sticky-bar__dynamic {
-      padding: 0 15px;
-    }
-
-    .sticky-bar__info {
-      font-size: 0.75rem;
-    }
-
-    .sticky-bar__watch a span {
-      display: none; /* Hide text if too long, but user said only watch now shows */
-    }
-    
-    .sticky-bar__watch a {
-      font-size: 0.7rem;
-      padding: 4px 8px;
-    }
+    .aa-sticky-bar__times { display: none; }
+    .aa-sticky-bar__dynamic { border: none; padding: 0 10px; }
+    .aa-sticky-bar__info { font-size: 0.7rem; }
+    .aa-sticky-bar__watch a { font-size: 0.65rem; padding: 6px 12px; }
   }
 </style>
 
