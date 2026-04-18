@@ -30,7 +30,7 @@
                       align-items: center;
                       justify-content: center;
                       padding: 120px 4% 60px; /* Accounts for fixed navbar */
-                      background: var(--aa-conic-grad);
+                      background: rgba(113, 178, 128, 0.6);
                       background-size: 200% 200%;
                       animation: gradientFlow 15s ease infinite;
                       font-family: 'Articulat_CF_Normal', sans-serif;
@@ -439,7 +439,7 @@ body.dmRoot,
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        
+          
         // Clear previous errors & show loading
         errorBox.style.display = "none";
         submitBtn.textContent = "Signing In...";
