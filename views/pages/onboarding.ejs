@@ -90,10 +90,11 @@
                     </div>
                   </div>
 
-                  <div class="form-actions">
-                    <button type="button" class="submit-btn highlight" id="btnNext1" disabled onclick="goToStep(2)">Continue
+                  <div class="form-actions" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                    <button type="button" class="submit-btn highlight" id="btnNext1" onclick="goToStep(2)">Continue to Identity
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </button>
+                    <button type="button" class="back-btn" onclick="goToStep(2)" style="border: none; background: transparent; opacity: 0.5;">Skip photo for now</button>
                   </div>
                 </div>
 
@@ -138,7 +139,27 @@
                     </div>
                     <div class="form-group">
                       <label>Phone / WhatsApp <span>*</span></label>
-                      <input type="tel" name="phone" placeholder="+44 ..." value="<%= user && user.phone ? user.phone : '' %>">
+                      <input type="tel" name="phone" placeholder="+234 ..." value="<%= user && user.phone ? user.phone : '' %>">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Marital Status <span>*</span></label>
+                      <div class="custom-select-wrapper">
+                        <input type="hidden" name="marital_status" id="maritalStatusInput" value="<%= user && user.marital_status ? user.marital_status : '' %>">
+                        <div class="custom-select-trigger"><%= user && user.marital_status ? user.marital_status : 'Select Status' %></div>
+                        <div class="custom-options">
+                          <div class="option" data-value="single">Single</div>
+                          <div class="option" data-value="married">Married</div>
+                          <div class="option" data-value="divorced">Divorced</div>
+                          <div class="option" data-value="widowed">Widowed</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="anniversaryGroup" class="form-group" style="<%= user && user.marital_status === 'Married' ? '' : 'display:none' %>">
+                      <label>Wedding Anniversary</label>
+                      <input type="date" name="wedding_anniversary" value="<%= user && user.wedding_anniversary ? user.wedding_anniversary : '' %>">
                     </div>
                   </div>
 
@@ -247,10 +268,14 @@
                   <div class="form-group">
                     <label>Join a Ministry (Fellowship Groups)</label>
                     <div class="ministry-grid">
-                      <% ministries.forEach(min => { %>
-                        <div class="min-card <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'selected' : '' %>" 
+                      <% ministries.forEach(min => { 
+                        const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
+                          ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
+                          : false;
+                      %>
+                        <div class="min-card <%= isSelected ? 'selected' : '' %>" 
                              onclick="toggleMin(this, '<%= min.name %>')">
-                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= user && user.ministry_members && user.ministry_members.some(m => m.ministries.name === min.name) ? 'checked' : '' %>>
+                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
                           <strong><%= min.name %></strong>
                           <p><%= min.description ? min.description.substring(0, 40) + '...' : 'Community fellowship' %></p>
                         </div>
@@ -306,8 +331,9 @@
 
                   <!-- NEW: Already serving check -->
                   <div class="form-group" style="margin-bottom: 35px; background: rgba(34, 197, 94, 0.03); padding: 25px; border-radius: 20px; border: 1px solid rgba(34, 197, 94, 0.1);">
-                    <label class="checkbox-label" style="display: flex; align-items: flex-start; gap: 18px; cursor: pointer;">
-                      <input type="checkbox" name="already_serving" value="true" style="width: 20px; height: 20px; margin-top: 4px; accent-color: #22c55e;">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="already_serving" value="true">
+                      <div class="custom-check"></div>
                       <div class="label-info">
                         <strong style="color: #4ade80; font-size: 1.1rem; display: block; margin-bottom: 5px;">I am already serving at Ambassadors Assembly</strong>
                         <p style="font-size: 0.9rem; opacity: 0.6; line-height: 1.5; margin: 0;">Check this if you are already a Pastor, Worker, or Choir member. This flags your account for verification rather than a new application.</p>
@@ -325,11 +351,15 @@
                     <input type="text" name="occupation" placeholder="e.g. Software Engineer, Doctor, Student" value="<%= user && user.occupation ? user.occupation : '' %>">
                   </div>
 
-                  <div class="form-actions dual">
-                    <button type="button" onclick="goToStep(4)" class="back-btn glass-btn">Back</button>
-                    <button type="submit" class="submit-btn highlight" id="btnFinal">Complete Onboarding 
+                  <div class="form-actions" style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
+                    <button type="submit" class="submit-btn highlight" id="btnFinal">Complete Onboarding & Join A Team
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                     </button>
+                    
+                    <div style="display: flex; gap: 20px; align-items: center; justify-content: center;">
+                      <button type="button" onclick="goToStep(4)" class="back-btn" style="padding: 0; border: none; background: transparent;">&larr; Back</button>
+                      <button type="submit" class="back-btn" style="border: none; background: transparent; color: var(--accent); opacity: 0.8;">I'll join a team later, just sign me in</button>
+                    </div>
                   </div>
                 </div>
 
@@ -749,7 +779,8 @@
 
     function validateCurrentStep(step) {
       if (step === 1) {
-        if (!avatarDataInput.value) { showToast('Profile photo is compulsory.', 'error'); return false; }
+        // Step 1 (Avatar) is now optional.
+        return true;
       }
       if (step === 2) {
         const required = ['title', 'gender', 'dob', 'phone', 'addressLine1', 'city'];
@@ -758,6 +789,14 @@
             showToast(`Please fill in all identity details.`, 'error');
             return false;
           }
+        }
+      }
+      // Security Check: Ensure CSRF token is still present before major submission
+      if (step === 5) {
+        const csrf = document.querySelector('input[name="_csrf"]');
+        if (!csrf || !csrf.value) {
+          showToast('Security token missing. Please refresh the page.', 'error');
+          return false;
         }
       }
       return true;

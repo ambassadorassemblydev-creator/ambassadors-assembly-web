@@ -1,5 +1,7 @@
 import { supabase } from '../config/supabase.js';
 import { setAuthCookies } from '../utils/authUtils.js';
+import { withRetry } from '../utils/fetchUtils.js';
+import { logger } from '../config/logger.js';
 
 /**
  * High IQ Session Management:
@@ -10,7 +12,10 @@ const refreshUserSession = async (req, res) => {
   if (!refreshToken) return null;
 
   try {
-    const { data, error } = await supabase.auth.refreshSession({ refresh_token: refreshToken });
+    const { data, error } = await withRetry(
+      () => supabase.auth.refreshSession({ refresh_token: refreshToken }),
+      { context: 'RefreshSession', maxRetries: 2 }
+    );
     if (error || !data.session) return null;
 
     // Persist the new tokens to cookies
@@ -29,9 +34,17 @@ export const authMiddleware = {
     let user = null;
 
     if (token && token !== 'loggedout') {
-      const { data, error } = await supabase.auth.getUser(token);
-      if (!error && data.user) {
-        user = data.user;
+      try {
+        const result = await withRetry(
+          () => supabase.auth.getUser(token),
+          { context: 'CheckUser', maxRetries: 2, throwAfterAll: false }
+        );
+        
+        if (result && !result.error && result.data?.user) {
+          user = result.data.user;
+        }
+      } catch (err) {
+        logger.warn(`Auth CheckUser Resilience: ${err.message}`);
       }
     }
 
@@ -51,9 +64,17 @@ export const authMiddleware = {
     let user = null;
 
     if (token && token !== 'loggedout') {
-      const { data, error } = await supabase.auth.getUser(token);
-      if (!error && data.user) {
-        user = data.user;
+      try {
+        const result = await withRetry(
+          () => supabase.auth.getUser(token),
+          { context: 'ProtectUser', maxRetries: 3, throwAfterAll: false }
+        );
+
+        if (result && !result.error && result.data?.user) {
+          user = result.data.user;
+        }
+      } catch (err) {
+        logger.warn(`Auth Protect Resilience: ${err.message}`);
       }
     }
 

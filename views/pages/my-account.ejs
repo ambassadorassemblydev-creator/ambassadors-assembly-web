@@ -19,140 +19,240 @@
         <link rel="stylesheet" href="/css/account.css">
 
         <div class="dashboard-wrapper">
-          <%- include('../partials/account-sidebar') %>
+          <%- include('../partials/account-sidebar', { activePage: 'dashboard', activeTab: activeTab }) %>
 
-          <!-- CONTENT -->
           <main class="dash-content">
-            
-            <% if (activeTab === 'overview') { %>
-              <div class="content-header">
-                <h1>The Hub</h1>
-                <p>Hello, <%= user.first_name %>. Here is what's happening in your journey.</p>
-              </div>
+            <!-- PREMIUM HEADER -->
+            <div class="content-header">
+              <div class="header-badge">SPIRITUAL JOURNEY</div>
+              <h1>The Hub</h1>
+              <p>Welcome home, <%= user.first_name %>. Explore your growth and partnership.</p>
+            </div>
 
+            <!-- OVERVIEW TAB -->
+            <div id="tab-overview" class="tab-pane <%= activeTab === 'overview' ? 'active' : '' %>">
               <div class="grid-stats">
-                <div class="stat-card">
-                  <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
-                  <div>
-                    <span class="stat-val">Up Next</span>
-                    <span class="stat-label">Youth Conference 2026</span>
+                <div class="stat-card" style="animation-delay: 0.1s;">
+                  <div class="stat-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                  <div class="stat-info">
+                    <span class="stat-label">Total Giving</span>
+                    <p class="stat-value">₦<%= stats.totalGiving %></p>
                   </div>
                 </div>
-                <div class="stat-card">
-                  <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-                  <div>
-                    <span class="stat-val"><%= user.department_interest || 'None' %></span>
-                    <span class="stat-label">Interest Area</span>
+                <div class="stat-card" style="animation-delay: 0.2s;">
+                  <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                  <div class="stat-info">
+                    <span class="stat-label">Events</span>
+                    <p class="stat-value"><%= stats.eventCount %></p>
+                  </div>
+                </div>
+                <div class="stat-card" style="animation-delay: 0.3s;">
+                  <div class="stat-icon"><i class="fas fa-pray"></i></div>
+                  <div class="stat-info">
+                    <span class="stat-label">Prayers</span>
+                    <p class="stat-value"><%= stats.prayerCount %></p>
                   </div>
                 </div>
               </div>
 
-              <!-- GIVING GRAPH -->
-              <div class="glass-card" style="margin-bottom: 30px;">
-                <h3 style="margin-top:0; margin-bottom:20px; font-family:'Articulat CF Demi Bold';">Giving Trends</h3>
-                <div style="height: 300px; width: 100%;">
-                  <canvas id="givingChart"></canvas>
-                </div>
-              </div>
-
-              <div class="glass-card">
-                <h3 style="margin-top:0; margin-bottom:30px; font-family:'Articulat CF Demi Bold';">Recent Giving History</h3>
-                <table class="activity-list">
-                  <thead>
-                    <tr>
-                      <th>Category</th>
-                      <th>Amount</th>
-                      <th>Status</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% if (donations && donations.length > 0) { %>
-                      <% donations.forEach(d => { %>
-                        <tr>
-                          <td><strong><%= d.donation_categories.name %></strong></td>
-                          <td>£<%= d.amount %></td>
-                          <td><span class="status-badge status-paid"><%= d.status %></span></td>
-                          <td><%= new Date(d.created_at).toLocaleDateString() %></td>
-                        </tr>
-                      <% }) %>
-                    <% } else { %>
-                      <tr><td colspan="4" style="text-align:center; opacity:0.4; padding: 40px;">No giving records yet.</td></tr>
-                    <% } %>
-                  </tbody>
-                </table>
-              </div>
-            <% } %>
-
-            <% if (activeTab === 'events') { %>
-              <div class="content-header">
-                <h1>My Events</h1>
-                <p>Events you've registered for or marked interest in.</p>
-              </div>
-              <div class="glass-card">
-                <table class="activity-list">
-                  <thead>
-                    <tr>
-                      <th>Event</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% if (events && events.length > 0) { %>
-                      <% events.forEach(reg => { %>
-                        <tr>
-                          <td><strong><%= reg.events.title %></strong></td>
-                          <td><%= new Date(reg.events.start_date).toLocaleDateString() %></td>
-                          <td><span class="status-badge status-active">Registered</span></td>
-                        </tr>
-                      <% }) %>
-                    <% } else { %>
-                      <tr><td colspan="3" style="text-align:center; opacity:0.4; padding: 40px;">No event registrations yet.</td></tr>
-                    <% } %>
-                  </tbody>
-                </table>
-              </div>
-            <% } %>
-
-            <% if (activeTab === 'notes') { %>
-              <div class="content-header">
-                <h1>My Notes</h1>
-                <p>Private reflections and notes from previous sermons.</p>
-              </div>
-              
-              <div class="notes-grid">
-                <% if (notes && notes.length > 0) { %>
-                  <% notes.forEach(n => { %>
-                    <div class="glass-card note-card">
-                      <div class="note-header">
-                        <span class="note-date"><%= new Date(n.created_at).toLocaleDateString() %></span>
-                        <span class="note-tag"><%= n.category || 'General' %></span>
-                      </div>
-                      <div class="note-body">
-                        <%= n.note %>
-                      </div>
+              <div class="dashboard-main-grid">
+                <div class="glass-card chart-section" style="margin-bottom: 30px; animation-delay: 0.4s;">
+                  <div class="card-header">
+                    <h3>Partnership Growth</h3>
+                    <div class="card-actions">
+                      <span class="period-tag">Last 6 Months</span>
                     </div>
-                  <% }) %>
-                <% } else { %>
-                  <div class="glass-card" style="text-align:center; padding: 60px; opacity: 0.5;">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 20px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    <p>No notes saved yet. Start taking notes during our live broadcasts!</p>
                   </div>
-                <% } %>
+                  <div class="chart-container" style="height: 300px; position: relative;">
+                    <canvas id="givingChart"></canvas>
+                  </div>
+                </div>
+
+                <div class="glass-card activity-section" style="animation-delay: 0.5s;">
+                  <div class="card-header">
+                    <h3>Recent Partnership</h3>
+                    <a href="javascript:void(0)" onclick="switchTab('giving')" class="btn-text">Review All</a>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="activity-list">
+                      <thead>
+                        <tr>
+                          <th>Category</th>
+                          <th>Amount</th>
+                          <th>Status</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% if (donations && donations.length > 0) { %>
+                          <% donations.slice(0, 5).forEach((d, idx) => { %>
+                            <tr style="animation: dashFadeIn 0.5s <%= 0.6 + (idx * 0.1) %>s ease both;">
+                              <td><strong><%= d.donation_categories ? d.donation_categories.name : 'General' %></strong></td>
+                              <td>₦<%= Number(d.amount).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                              <td><span class="status-badge status-paid"><%= d.status %></span></td>
+                              <td><%= new Date(d.created_at).toLocaleDateString() %></td>
+                            </tr>
+                          <% }) %>
+                        <% } else { %>
+                          <tr><td colspan="4" class="empty-msg" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.2);">No giving history found yet.</td></tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            <% } %>
+            </div>
+
+            <!-- EVENTS TAB -->
+            <div id="tab-events" class="tab-pane <%= activeTab === 'events' ? 'active' : '' %>">
+              <div class="glass-card">
+                <div class="card-header">
+                  <h3>Event Registrations</h3>
+                  <a href="/events" class="btn-primary-mini">Find Events</a>
+                </div>
+                <div class="table-responsive">
+                  <table class="activity-list">
+                    <thead>
+                      <tr>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (events && events.length > 0) { %>
+                        <% events.forEach(reg => { %>
+                          <tr>
+                            <td><strong><%= reg.events.title %></strong></td>
+                            <td><%= new Date(reg.events.start_date).toLocaleDateString() %></td>
+                            <td><span class="status-badge status-active">Confirmed</span></td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
+                        <tr><td colspan="3" class="empty-msg" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.2);">You have no upcoming events.</td></tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- GIVING TAB (Full History) -->
+            <div id="tab-giving" class="tab-pane <%= activeTab === 'giving' ? 'active' : '' %>">
+               <div class="glass-card">
+                <div class="card-header">
+                  <h3>Detailed History</h3>
+                  <a href="/give" class="btn-primary-mini">New Partnership</a>
+                </div>
+                <div class="table-responsive">
+                  <table class="activity-list">
+                    <thead>
+                      <tr>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (donations && donations.length > 0) { %>
+                        <% donations.forEach(d => { %>
+                          <tr>
+                            <td><strong><%= d.donation_categories ? d.donation_categories.name : 'General' %></strong></td>
+                            <td>₦<%= Number(d.amount).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                            <td><span class="status-badge status-paid"><%= d.status %></span></td>
+                            <td><%= new Date(d.created_at).toLocaleDateString() %></td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
+                        <tr><td colspan="4" class="empty-msg" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.2);">No history found.</td></tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- PRAYERS TAB -->
+            <div id="tab-prayers" class="tab-pane <%= activeTab === 'prayers' ? 'active' : '' %>">
+              <div class="glass-card">
+                <div class="card-header">
+                  <h3>My Prayer Petitions</h3>
+                  <a href="/prayer-requests" class="btn-primary-mini">Send Petition</a>
+                </div>
+                <div class="empty-state">
+                  <i class="fas fa-pray"></i>
+                  <p>Your spiritual petitions will appear here.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- NOTES TAB -->
+            <div id="tab-notes" class="tab-pane <%= activeTab === 'notes' ? 'active' : '' %>">
+               <div class="glass-card">
+                <div class="card-header">
+                  <h3>Sermon Highlights</h3>
+                </div>
+                <div class="empty-state">
+                  <i class="fas fa-sticky-note"></i>
+                  <p>Your notes from live services will be saved here.</p>
+                </div>
+              </div>
+            </div>
+
+            <style>
+              .tab-pane { display: none; animation: dashFadeIn 0.6s ease; }
+              .tab-pane.active { display: block; }
+              @keyframes dashFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+              
+              .btn-primary-mini {
+                background: var(--accent-sage);
+                color: #0c0c0c;
+                padding: 10px 20px;
+                border-radius: 12px;
+                font-size: 11px;
+                font-weight: 800;
+                text-decoration: none;
+                transition: 0.3s;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+              }
+              .btn-primary-mini:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(113, 178, 128, 0.4); }
+              
+              .empty-state { text-align: center; padding: 80px 20px; color: rgba(255,255,255,0.2); }
+              .empty-state i { font-size: 48px; margin-bottom: 24px; color: var(--accent-sage); opacity: 0.4; }
+              .empty-state p { font-size: 15px; font-family: 'Inter', sans-serif; }
+              
+              .dmFooterContainer { display: none !important; }
+            </style>
 
             <script>
-              // CHART LOGIC
-              <% if (activeTab === 'overview' && fullHistory) { %>
+              function switchTab(tab) {
+                document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+                const target = document.getElementById('tab-' + tab);
+                if (target) {
+                  target.classList.add('active');
+                  const url = new URL(window.location);
+                  url.searchParams.set('tab', tab);
+                  window.history.pushState({}, '', url);
+                  
+                  document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if (tab === 'overview' && href === '/my-account') link.classList.add('active');
+                    else if (href.includes('tab=' + tab)) link.classList.add('active');
+                  });
+                }
+              }
+
+              (function() {
                 const ctx = document.getElementById('givingChart');
                 if (ctx) {
-                  const history = <%- JSON.stringify(fullHistory) %>;
-                  
-                  // Group by month
+                  const history = <%- JSON.stringify(donations || []) %>;
+                  if (history.length === 0) return;
+
                   const months = {};
-                  history.forEach(d => {
+                  history.sort((a,b) => new Date(a.created_at) - new Date(b.created_at)).forEach(d => {
                     const date = new Date(d.created_at);
                     const key = date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
                     months[key] = (months[key] || 0) + Number(d.amount);
@@ -163,52 +263,45 @@
                     data: {
                       labels: Object.keys(months),
                       datasets: [{
-                        label: 'Partnership Growth (£)',
+                        label: 'Partnership (£)',
                         data: Object.values(months),
-                        borderColor: 'rgba(113, 178, 128, 1)',
+                        borderColor: '#71b280',
                         backgroundColor: 'rgba(113, 178, 128, 0.1)',
-                        borderWidth: 3,
-                        tension: 0.4,
+                        borderWidth: 4,
+                        tension: 0.45,
                         fill: true,
-                        pointBackgroundColor: 'rgba(113, 178, 128, 1)',
+                        pointBackgroundColor: '#71b280',
                         pointBorderColor: '#fff',
-                        pointHoverRadius: 6
+                        pointHoverRadius: 8,
+                        pointRadius: 4
                       }]
                     },
                     options: {
                       responsive: true,
                       maintainAspectRatio: false,
-                      plugins: {
-                        legend: { display: false }
-                      },
+                      plugins: { legend: { display: false } },
                       scales: {
                         y: { 
                           beginAtZero: true, 
-                          grid: { color: 'rgba(255,255,255,0.05)' },
-                          ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 10 } }
+                          grid: { color: 'rgba(255,255,255,0.03)' },
+                          ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 11, family: 'Inter' } }
                         },
                         x: { 
                           grid: { display: false },
-                          ticks: { color: 'rgba(255,255,255,0.4)', font: { size: 10 } }
+                          ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 11, family: 'Inter' } }
                         }
                       }
                     }
                   });
                 }
-              <% } %>
+              })();
             </script>
-
           </main>
         </div>
 
         <%- include('../partials/footer') %>
-                <!-- </div> 
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
-  </div> -->
+  </div>
 </body>
 </html>

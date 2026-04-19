@@ -38,7 +38,7 @@
             <% staff.forEach((person, i) => { %>
               <div class="staff-card gsap-staff" 
                    data-dept="<%= person.department %>"
-                   onclick="openStaffDetail('<%= person.first_name %> <%= person.last_name %>', '<%= person.role %>', '<%= person.quote || 'Leading with excellence.' %>')">
+                   onclick="openStaffDetail('<%= (person.first_name + ' ' + person.last_name).replace(/'/g, "\\'") %>', '<%= person.role.replace(/'/g, "\\'") %>', '<%= (person.quote || 'Leading with excellence.').replace(/'/g, "\\'") %>')">
                 <div class="staff-img-wrap">
                   <img src="<%= person.avatar_url && person.avatar_url.trim() !== '' ? person.avatar_url : 'https://ui-avatars.com/api/?name=' + person.first_name + '+' + person.last_name + '&background=22c55e&color=fff' %>" 
                        onerror="this.src='https://ui-avatars.com/api/?name=<%= person.first_name %>+<%= person.last_name %>&background=22c55e&color=fff'"
@@ -111,7 +111,7 @@
     .staff-directory { padding: 40px 6% 150px; position: relative; z-index: 5; }
     .directory-container { max-width: 1400px; margin: 0 auto; }
     
-    .staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+    .staff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
     
     .staff-card { 
       background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 30px; 
@@ -175,7 +175,6 @@
       .popup-header h2 { font-size: 2.5rem; }
       .popup-quote p { font-size: 1.1rem; }
     }
-  </style>
   </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>

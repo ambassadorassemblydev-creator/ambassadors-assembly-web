@@ -301,6 +301,13 @@
                         </section>
                       </div>
                     </div>
+                    <div class="footer-baseline">
+                      <div class="baseline-links">
+                        <a href="/terms-of-service">Terms of Service</a>
+                        <a href="/privacy-policy">Privacy Policy</a>
+                      </div>
+                      <p class="copyright">&copy; <%= new Date().getFullYear() %> Ambassadors Assembly. All Rights Reserved.</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -784,7 +791,7 @@
   <style>
     #ambassadors-ai-container {
       position: fixed;
-      bottom: 30px !important; /* High IQ: Fixed line of sight */
+      bottom: 100px !important; /* Raised to clear sticky bar */
       right: 30px; /* Symmetry: Moved back to right as WhatsApp is hidden */
       z-index: 10000; /* High IQ: Synced with Account FAB */
       font-family: 'Articulatcf-regular', sans-serif;
@@ -1114,6 +1121,27 @@
         .wa-btn { width: 50px; height: 50px; }
         .wa-btn svg { width: 25px; height: 25px; }
         .wa-tooltip { display: none; }
+      }
+
+      .footer-baseline {
+        margin-top: 60px;
+        padding: 40px 6%;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+      .baseline-links { display: flex; gap: 30px; }
+      .baseline-links a { 
+        font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        color: rgba(255,255,255,0.3); text-decoration: none; transition: 0.3s;
+      }
+      .baseline-links a:hover { color: var(--aa-green); }
+      .copyright { font-size: 0.75rem; color: rgba(255,255,255,0.2); font-weight: 600; margin: 0; }
+
+      @media (max-width: 600px) {
+        .footer-baseline { flex-direction: column; gap: 20px; text-align: center; }
       }
     </style>
 

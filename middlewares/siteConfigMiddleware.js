@@ -16,7 +16,7 @@ export const siteConfigMiddleware = async (req, res, next) => {
             const [settingsRes, stickyRes, sermonsRes] = await Promise.all([
                 supabase.from('church_settings').select('key, value').eq('is_public', true),
                 supabase.from('announcement_bar').select('*').eq('is_active', true).maybeSingle(),
-                supabase.from('sermons').select('*').eq('status', 'published').order('date', { ascending: false }).limit(3)
+                supabase.from('sermons').select('*').eq('status', 'published').order('sermon_date', { ascending: false }).limit(3)
             ]);
 
             // Convert settings array to key-value object

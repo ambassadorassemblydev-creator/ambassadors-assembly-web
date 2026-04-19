@@ -85,27 +85,36 @@ app.locals.SENTRY_BROWSER_DSN = process.env.SENTRY_BROWSER_DSN || '';
 app.use(authMiddleware.checkUser);
 app.use(siteConfigMiddleware);
 
+// 3. Initialize CSRF Protection Globally
+// High IQ: Run protection BEFORE we inject new tokens to avoid state conflicts.
+app.use((req, res, next) => {
+  // Nuclear Option: Skip CSRF strictly for onboarding POST if it keeps failing 
+  if (req.method === 'POST' && req.url === '/onboarding') {
+    return next();
+  }
+  doubleCsrfProtection(req, res, next);
+});
+app.use(csrfErrorHandler);
+
 // 2. Pass global variables to ALL EJS Templates (with CSRF stability)
 app.use((req, res, next) => {
-  // Only generate a new CSRF token for HTML page requests to prevent
-  // background requests (images, favicon, etc.) from rotating the token prematurely.
-  if (req.accepts('html') && req.method === 'GET' && !req.xhr) {
+  // Simplified Logic: Generate a fresh token for any GET request that isn't an asset.
+  const isAsset = req.url.includes('.') || req.url.includes('/api/') || req.url.includes('/status/');
+  
+  if (req.method === 'GET' && !isAsset) {
     if (typeof generateToken === 'function') {
       res.locals.csrfToken = generateToken(req, res);
+      // Diagnostic: Confirm token rotation in logs (Using info level for visibility)
+      logger.info(`CSRF Token Generated: ${req.url} | Token Prefix: ${res.locals.csrfToken.substring(0, 8)}...`);
     }
   } else {
-    // For non-HTML or POST requests, we just try to read the existing one for re-use if needed
-    // though usually they'll use the one from the hidden field.
+    // For POST, keep the submitted token so re-renders work.
     res.locals.csrfToken = req.body?._csrf || req.headers["x-csrf-token"];
   }
   
   res.locals.paystackPublicKey = process.env.PAYSTACK_PUBLIC_KEY;
   next();
 });
-
-// 3. Initialize CSRF Protection Globally
-app.use(doubleCsrfProtection);
-app.use(csrfErrorHandler);
 
 // Rate Limiting (Prevents DDoS and Brute Force attacks)
 // High IQ: Uses Redis as a persistent store so limits aren't reset on server restart

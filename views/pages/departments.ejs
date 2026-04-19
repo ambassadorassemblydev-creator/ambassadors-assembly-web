@@ -1,6 +1,6 @@
 <%- include('../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #0c0c0c;">
   
   <%- include('../partials/preloader') %>
   
@@ -15,75 +15,157 @@
 
         <%- include('../partials/navbar') %>
 
-  <link rel="stylesheet" href="/css/account.css">
-</head>
-
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
-  
-  <%- include('../partials/preloader') %>
-  
-  <div id="dm" class="dmwr">
-    <div class="dm_wrapper -var5 null ">
-      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
-        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
-          <div id="dmStyle_outerContainer" class="dmOuter">
-            <div id="dmStyle_innerContainer" class="dmInner">
-              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
-                <div id="site_content">
-
-        <%- include('../partials/navbar') %>
+        <link rel="stylesheet" href="/css/account.css">
 
         <div class="dashboard-wrapper">
-          <%- include('../partials/account-sidebar') %>
+          <%- include('../partials/account-sidebar', { activePage: 'departments' }) %>
 
           <main class="dash-content">
-            <div class="glass-card">
-              <header class="content-header">
-                <h1>Church Departments</h1>
-                <p>Our operational units ensure the excellence and smooth running of everything we do. Find where you fit and serve with your talents.</p>
-              </header>
-
-              <style>
-                .depts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-                .dept-card {
-                  background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 24px;
-                  backdrop-filter: blur(20px); transition: 0.4s; display: flex; flex-direction: column; justify-content: space-between;
-                }
-                .dept-card:hover { transform: translateY(-10px); background: rgba(59, 111, 181, 0.05); border-color: rgba(59, 111, 181, 0.3); }
-                .dept-icon { width: 50px; height: 50px; background: rgba(59, 111, 181, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: #3B6FB5; }
-                .dept-name { font-family: 'Articulat CF Demi Bold'; font-size: 24px; margin: 0 0 15px; }
-                .dept-desc { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.6; margin-bottom: 30px; flex-grow: 1; }
-                .interest-btn {
-                  padding: 12px 24px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: white;
-                  border-radius: 50px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;
-                }
-                .interest-btn:hover { background: #3B6FB5; border-color: #3B6FB5; transform: scale(1.05); }
-              </style>
-
-              <div class="depts-grid">
-                <% if (departments && departments.length > 0) { %>
-                  <% departments.forEach(dept => { %>
-                    <div class="dept-card">
-                      <div>
-                        <div class="dept-icon">
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                        </div>
-                        <h2 class="dept-name"><%= dept.name %></h2>
-                        <p class="dept-desc"><%= dept.description || 'Ensuring excellence in church operations and service execution.' %></p>
-                      </div>
-                      <a href="/my-account/profile?success=You can specify your interest in <%= dept.name %> here." class="interest-btn">
-                        Express Interest
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                      </a>
-                    </div>
-                  <% }) %>
-                <% } %>
-              </div>
+            <!-- PREMIUM HEADER -->
+            <div class="content-header">
+              <div class="header-badge">SERVICE & MINISTRY</div>
+              <h1>Church Departments</h1>
+              <p>Find your place of service and contribute your unique talents to the body of Christ.</p>
             </div>
+
+            <div class="depts-grid">
+              <% if (departments && departments.length > 0) { %>
+                <% departments.forEach((dept, index) => { %>
+                  <div class="dept-card" style="animation-delay: <%= index * 0.1 %>s;">
+                    <div class="dept-card-inner">
+                      <div class="dept-icon">
+                        <i class="fas fa-users-cog"></i>
+                      </div>
+                      <h2 class="dept-name"><%= dept.name %></h2>
+                      <p class="dept-desc"><%= dept.description || 'Ensuring excellence in church operations and service execution.' %></p>
+                      
+                      <div class="dept-footer">
+                        <a href="/my-account/profile?success=Apply for <%= dept.name %> in your profile settings." class="interest-btn">
+                          Volunteer Now
+                          <i class="fas fa-arrow-right"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              <% } else { %>
+                <div class="empty-state">
+                  <i class="fas fa-building"></i>
+                  <p>Departments are being organized. Check back soon!</p>
+                </div>
+              <% } %>
+            </div>
+
+            <style>
+              .depts-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                gap: 24px;
+                padding-bottom: 60px;
+              }
+
+              .dept-card {
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 28px;
+                padding: 40px;
+                position: relative;
+                overflow: hidden;
+                transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+                backdrop-filter: blur(15px);
+                animation: dashFadeUp 0.8s ease backwards;
+              }
+
+              .dept-card:hover {
+                background: rgba(113, 178, 128, 0.05);
+                border-color: rgba(113, 178, 128, 0.3);
+                transform: translateY(-10px);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+              }
+
+              .dept-icon {
+                width: 60px;
+                height: 60px;
+                background: rgba(113, 178, 128, 0.1);
+                border-radius: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 30px;
+                color: var(--accent-sage);
+                font-size: 24px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+              }
+
+              .dept-name {
+                font-family: 'Outfit', sans-serif;
+                font-size: 26px;
+                font-weight: 800;
+                color: white;
+                margin: 0 0 16px;
+                letter-spacing: -0.5px;
+              }
+
+              .dept-desc {
+                color: rgba(255,255,255,0.45);
+                font-size: 15px;
+                line-height: 1.7;
+                margin-bottom: 35px;
+                font-family: 'Inter', sans-serif;
+              }
+
+              .dept-footer {
+                margin-top: auto;
+              }
+
+              .interest-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                padding: 14px 28px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: white;
+                border-radius: 100px;
+                text-decoration: none;
+                font-size: 13px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: 0.3s;
+              }
+
+              .interest-btn:hover {
+                background: var(--accent-sage);
+                border-color: var(--accent-sage);
+                color: #0c0c0c;
+                transform: scale(1.05);
+              }
+
+              .interest-btn i {
+                font-size: 12px;
+                transition: transform 0.3s ease;
+              }
+
+              .interest-btn:hover i {
+                transform: translateX(5px);
+              }
+
+              @keyframes dashFadeUp {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+
+              @media (max-width: 768px) {
+                .depts-grid { grid-template-columns: 1fr; }
+                .dept-card { padding: 30px; }
+              }
+              
+              .dmFooterContainer { display: none !important; }
+            </style>
+
           </main>
         </div>
-
-        <%- include('../partials/footer') %>
 
         <%- include('../partials/footer') %>
                 </div>
@@ -95,3 +177,4 @@
     </div>
   </div>
 </body>
+</html>

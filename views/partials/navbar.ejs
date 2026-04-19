@@ -85,10 +85,10 @@
 </div>
 
 <!-- ========= ACCOUNT ICON ========= -->
-<!-- ========= ACCOUNT ICON ========= -->
-<% if (user) { %>
-  <!-- Logged In: Go to Dashboard -->
-  <a class="account-fab" id="account-fab" href="/my-account" aria-label="My Account">
+<% if (typeof currentPath !== 'undefined' && !currentPath.startsWith('/my-account')) { %>
+  <% if (user) { %>
+    <!-- Logged In: Go to Dashboard -->
+    <a class="account-fab" id="account-fab" href="/my-account" aria-label="My Account">
     <!-- You can optionally show their initials here, but let's keep the sleek icon -->
     <svg viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
@@ -103,8 +103,8 @@
       <circle cx="12" cy="7" r="4" />
     </svg>
   </a>
+  <% } %>
 <% } %>
-<!-- ========= END ACCOUNT ICON ========= -->
 <!-- ========= END ACCOUNT ICON ========= -->
 
 <!-- ========= FULLSCREEN MENU OVERLAY ========= -->
@@ -195,7 +195,7 @@
 
 .account-fab {
     position: fixed;
-    bottom: 30px;
+    bottom: 100px;
     left: 30px;
     width: 65px;
     height: 65px;
@@ -210,7 +210,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     color: white;
-    bottom: 30px !important; /* Force exact line of sight */
+    bottom: 100px !important; /* Raised to clear sticky bar */
 }
 
 .account-fab:hover {
@@ -234,7 +234,7 @@
 }
 </style>
 <!-- ========= STICKY BOTTOM BAR (AA CUSTOM) ========= -->
-<% if (locals.stickyConfig && stickyConfig.is_active) { %>
+<% if (locals.stickyConfig && stickyConfig.is_active && typeof currentPath !== 'undefined' && !currentPath.startsWith('/my-account')) { %>
 <div class="aa-sticky-bar" id="aa-sticky-bar" style="background: <%= stickyConfig.bg_color || 'rgba(14, 14, 14, 0.85)' %>; color: <%= stickyConfig.text_color || '#f5f0e8' %>">
   <div class="aa-sticky-bar__inner">
     <!-- Left: Static Times -->
@@ -247,16 +247,12 @@
       <% } %>
     </div>
 
-    <!-- Center/Right: Scrolling Content or Static -->
-    <div class="aa-sticky-bar__dynamic <%= stickyConfig.is_scrolling ? 'is-scrolling' : '' %>" 
+    <!-- Center/Right: Scrolling Content (Always Active if text exists) -->
+    <div class="aa-sticky-bar__dynamic is-scrolling" 
          style="--scroll-speed: <%= stickyConfig.speed || 15 %>s">
       <div class="aa-sticky-bar__scroll-track">
         <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
-        <% if (stickyConfig.is_scrolling) { %>
-          <!-- Duplicate for seamless scroll -->
-          <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
-          <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
-        <% } %>
+        <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
       </div>
     </div>
 
@@ -274,11 +270,11 @@
   .aa-sticky-bar {
     position: fixed !important;
     bottom: 30px !important; /* Raised for better visual clearance */
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: auto !important;
-    min-width: 500px !important;
-    max-width: 90% !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 500px;
+    max-width: 90%;
     border-radius: 100px !important;
     z-index: 15000 !important;
     height: 52px !important;
@@ -287,9 +283,18 @@
     background: rgba(14, 14, 14, 0.9) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(25px) !important;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4) !important;
-    padding: 0 5px !important;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    padding: 0 5px;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Robust hiding class using high specificity to ensure JS control */
+  .aa-sticky-bar.is-hidden {
+    opacity: 0 !important;
+    transform: translateX(-50%) translateY(100px) !important;
+    pointer-events: none !important;
   }
 
   .aa-sticky-bar__inner {
@@ -329,7 +334,8 @@
   .aa-sticky-bar__scroll-track {
     display: flex;
     white-space: nowrap;
-    gap: 50px;
+    gap: 100px;
+    width: max-content; /* CRITICAL: Calculate full content width */
   }
 
   .aa-sticky-bar__dynamic.is-scrolling .aa-sticky-bar__scroll-track {
@@ -338,10 +344,14 @@
 
   @keyframes aaStickyMarquee {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-33.33%); }
+    100% { transform: translateX(-50%); } /* Halfway if we have duplicates */
   }
 
-  .aa-sticky-bar__info { font-size: 0.8rem; font-weight: 500; }
+  .aa-sticky-bar__info { 
+    font-size: 0.8rem; 
+    font-weight: 500;
+    flex-shrink: 0; /* CRITICAL: Prevent shrinking so width matches content for marquee */
+  }
 
   .aa-sticky-bar__watch a {
     display: flex; align-items: center; gap: 8px;
@@ -369,6 +379,31 @@
     .aa-sticky-bar__watch a { font-size: 0.65rem; padding: 6px 12px; }
   }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const stickyBar = document.getElementById('aa-sticky-bar');
+    // Targeted selector for the custom Duda footer container
+    const footer = document.querySelector('#flex-footer') || document.querySelector('.dmFooterContainer');
+    
+    if (stickyBar && footer) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    stickyBar.classList.add('is-hidden');
+                } else {
+                    stickyBar.classList.remove('is-hidden');
+                }
+            });
+        }, { 
+            threshold: 0.05, // Trigger as soon as 5% of footer enters
+            rootMargin: '0px 0px -20px 0px' 
+        });
+        
+        observer.observe(footer);
+    }
+});
+</script>
 
 <% } %>
 <!-- ========= END STICKY BOTTOM BAR ========= -->

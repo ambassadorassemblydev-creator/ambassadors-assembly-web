@@ -48,6 +48,7 @@ export const accountRepo = {
       .from('donations')
       .select('amount, status, created_at, donation_categories(name)')
       .eq('user_id', userId)
+      .eq('status', 'completed')
       .order('created_at', { ascending: false })
       .limit(5);
 
@@ -59,7 +60,7 @@ export const accountRepo = {
   getFullDonationHistory: async (userId) => {
     const { data, error } = await supabase
       .from('donations')
-      .select('amount, created_at, status')
+      .select('amount, created_at, status, donation_categories(name)')
       .eq('user_id', userId)
       .eq('status', 'completed')
       .order('created_at', { ascending: true });

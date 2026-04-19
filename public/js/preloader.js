@@ -220,6 +220,16 @@
     document.addEventListener('click', function (e) {
       var link = e.target.closest('a');
       if (!link) return;
+
+      // High IQ: Only trigger for Nav/Footer/Menu links to avoid utility blockage
+      var isTargeted = link.closest('#aa-nav') || 
+                       link.closest('.fs-menu') || 
+                       link.closest('.footer') || 
+                       link.closest('#flex-footer') ||
+                       link.closest('.dmFooterContainer');
+
+      if (!isTargeted) return;
+
       if (link.hostname !== window.location.hostname) return;
       if ((link.getAttribute('href') || '').indexOf('#') === 0) return;
       if (link.classList.contains(EXCLUDED_CLASS)) return;

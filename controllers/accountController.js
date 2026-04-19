@@ -6,6 +6,7 @@ import { logger } from '../config/logger.js';
 import { supabaseService } from '../config/supabase.js';
 import { z } from 'zod';
 import { Buffer } from 'node:buffer';
+import { withRetry } from '../utils/fetchUtils.js';
 
 const updateProfileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -67,48 +68,42 @@ export const accountController = {
     try {
       const userId = req.user.id;
       const tab = req.query.tab || 'overview';
-      logger.info(`Loading dashboard tab [${tab}] for user: ${userId}`);
+      logger.info(`Loading dashboard (SPA) for user: ${userId}`);
 
-      let data = {
-        profile: await accountRepo.getUserDashboardData(userId),
-        donations: [],
-        fullHistory: [],
-        events: [],
-        prayers: [],
-        notes: []
-      };
+      // Fetch all data in parallel for the SPA experience
+      const [profile, donations, events, prayers, notes] = await Promise.all([
+        accountRepo.getUserDashboardData(userId),
+        accountRepo.getFullDonationHistory(userId),
+        accountRepo.getUserEvents(userId),
+        accountRepo.getUserPrayers(userId),
+        accountRepo.getUserNotes(userId)
+      ]);
 
-      if (!data.profile) {
+      if (!profile) {
         return next(new AppError('Profile missing.', 404));
       }
 
-      // Load tab-specific data
-      if (tab === 'overview' || tab === 'giving') {
-        data.donations = await accountRepo.getRecentDonations(userId);
-        data.fullHistory = await accountRepo.getFullDonationHistory(userId);
-      }
-      if (tab === 'overview' || tab === 'notes') {
-        data.notes = await accountRepo.getUserNotes(userId);
-      }
-      if (tab === 'events') {
-        data.events = await accountRepo.getUserEvents(userId);
-      }
-      if (tab === 'prayers') {
-        data.prayers = await accountRepo.getUserPrayers(userId);
-      }
+      // Calculate localized stats
+      const stats = {
+        totalGiving: donations.reduce((sum, d) => sum + Number(d.amount), 0).toFixed(2),
+        eventCount: events.length,
+        prayerCount: prayers.length,
+        noteCount: notes.length
+      };
 
       res.render('pages/my-account', {
         pageTitle: 'My Dashboard',
         currentPath: req.path,
         activePage: 'dashboard',
-        user: data.profile,
-        donations: data.donations,
-        fullHistory: data.fullHistory,
-        events: data.events,
-        prayers: data.prayers,
-        notes: data.notes,
+        user: profile,
+        donations: donations, // We rename fullHistory to donations for the view
+        fullHistory: donations, 
+        events: events,
+        prayers: prayers,
+        notes: notes,
+        stats: stats,
         activeTab: tab,
-        isStaff: !!data.profile.church_workers && data.profile.church_workers.length > 0
+        isStaff: !!profile.church_workers && profile.church_workers.length > 0
       });
 
     } catch (err) {
@@ -160,12 +155,18 @@ export const accountController = {
 
   renderDepartments: async (req, res, next) => {
     try {
-      const departments = await accountRepo.getDepartments();
+      const userId = req.user.id;
+      const [departments, profile] = await Promise.all([
+        accountRepo.getDepartments(),
+        accountRepo.getUserDashboardData(userId)
+      ]);
+
       res.render('pages/departments', {
         pageTitle: 'Church Departments | Ambassadors Assembly',
         currentPath: req.path,
         activePage: 'departments',
-        departments
+        departments,
+        user: profile
       });
     } catch (err) {
       next(new AppError('Error loading departments.', 500));
@@ -200,18 +201,21 @@ export const accountController = {
   renderOnboarding: async (req, res, next) => {
     try {
       const userId = req.user.id;
+      // Force the browser to NEVER cache this page, ensuring CSRF tokens are always fresh
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      logger.info(`Starting high-resilience onboarding fetch for user: ${userId}`);
 
-      const [departments, positions, ministries, profile] = await Promise.all([
-        accountRepo.getDepartments(),
-        accountRepo.getPositions(),
-        accountRepo.getMinistries(),
-        accountRepo.getUserDashboardData(userId)
-      ]);
+      // Sequential fetching with retries to avoid socket exhaustion (UND_ERR_SOCKET)
+      // Per user request: No fallback—guarantee all data or throw
+      const departments = await withRetry(() => accountRepo.getDepartments(), { context: 'Departments' });
+      const positions = await withRetry(() => accountRepo.getPositions(), { context: 'Positions' });
+      const ministries = await withRetry(() => accountRepo.getMinistries(), { context: 'Ministries' });
+      const profile = await withRetry(() => accountRepo.getUserDashboardData(userId), { context: 'Profile' });
 
       res.render('pages/onboarding', {
         pageTitle: 'Profile Setup',
         currentPath: req.path,
-        step: 1, // Start at step 1 visually
+        step: 1,
         departments,
         positions,
         ministries,
@@ -219,7 +223,8 @@ export const accountController = {
         error: null
       });
     } catch (err) {
-      next(new AppError('Error loading setup page.', 500));
+      logger.error(`Onboarding Critical Failure: ${err.message}`, { stack: err.stack });
+      next(new AppError('We are having trouble connecting to the database. Please refresh the page in a few moments.', 503));
     }
   },
 
@@ -347,7 +352,7 @@ export const accountController = {
       }
 
       // 5. Finalize - Audit & Redirect
-      await auditRepo.logAction(userId, 'complete_onboarding', 'profile', userId, {}, profileUpdates);
+      await auditRepo.logAction(req, 'complete_onboarding', 'profile', userId, {}, profileUpdates);
 
       return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
     } catch (err) {
@@ -360,7 +365,9 @@ export const accountController = {
         accountRepo.getUserDashboardData(req.user.id)
       ]);
 
-      const errorMessage = err instanceof z.ZodError ? err.errors[0].message : 'An error occurred during submission.';
+      const errorMessage = err instanceof z.ZodError 
+        ? (err.issues && err.issues[0] ? err.issues[0].message : err.errors[0]?.message || 'Validation failed')
+        : 'An error occurred during submission.';
       
       res.status(400).render('pages/onboarding', {
         pageTitle: 'Profile Setup',
