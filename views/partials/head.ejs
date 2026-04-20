@@ -118,8 +118,52 @@
   </script>
 
   <!-- ========= Stylesheets ========= -->
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/index-page.css">
+  <link rel="stylesheet" href="/css/vendor/d-css-runtime-flex.min.css" type="text/css">
+  <!-- End of RT CSS Include -->
+  <link rel="stylesheet" href="/css/vendor/widget-styles.css" id="widgetCSS" type="text/css">
+  <!-- Support `img` size attributes -->
+   <!-- Page CSS -->
+  <link rel="stylesheet" href="/css/vendor/home-page.min.css" id="homeCssLink" type="text/css">
+   <!-- Site CSS -->
+  <link rel="stylesheet" href="/css/vendor/site-global.min.css" id="siteGlobalCss" type="text/css">
+  <style>
+    @font-face {
+      font-family: "AppleGaramond-Light";
+      src: url("/fonts/AppleGaramond-Light.ttf");
+      font-weight: 400;
+      font-style: normal;
+    }
+  </style>
+  <!-- RT CSS Include d-css-runtime-flex-->
+ 
+  <style>
+    img[width][height] {
+      height: auto;
+    }
+  </style>
+  <!-- Support showing sticky element on page only -->
+  <style>
+    body[data-page-alias="home"] #dm [data-show-on-page-only="home"] {
+      display: block !important;
+    }
+  </style>
+  <!-- This is populated in Ajax navigation -->
+  <style id="pageAdditionalWidgetsCss" type="text/css">
+  </style>
+ 
+  <style id="customWidgetStyle" type="text/css">
+  </style>
+  <style id="innerPagesStyle" type="text/css">
+  </style>
+  <style id="additionalGlobalCss" type="text/css">
+  </style>
+  
+  <style id="pagestyle" type="text/css">
+  </style>
+  <style id="pagestyleDevice" type="text/css">
+  </style>
+  <link rel="stylesheet" href="/css/style.css?v=1.1">
+  <link rel="stylesheet" href="/css/index-page.css?v=1.1">
 
   <!-- ========= Page Title & SEO ========= -->
   <title><%= pageTitle || locals.churchSettings?.site_title || 'Ambassadors Assembly' %></title>
