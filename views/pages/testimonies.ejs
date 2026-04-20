@@ -1,5 +1,5 @@
 <%- include('../partials/head') %>
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);" data-flex-site="">
   
   <%- include('../partials/preloader') %>
   
@@ -15,17 +15,13 @@
         <%- include('../partials/navbar') %>
 <%- include('../partials/toasts') %>
 
-<main class="testimonies-page" data-lenis-prevent-touch>
+<main class="testimonies-main" data-lenis-prevent-touch>
     <!-- Hero Section -->
     <section class="testimonies-hero">
-        <div class="testimonies-hero__bg"></div>
+        <div class="hero-mask"></div>
         <div class="testimonies-hero__content">
             <h1 class="hero-title" data-gsap="fade-up">God's <span class="text-italic">Glory</span></h1>
             <p class="hero-sub" data-gsap="fade-up" data-gsap-delay="0.1">Real stories of faith, healing, and restoration from our community.</p>
-        </div>
-        <div class="scroll-down">
-            <div class="scroll-down__text">Explore Stories</div>
-            <div class="scroll-down__line"></div>
         </div>
     </section>
 
@@ -34,32 +30,16 @@
         <div class="masonry-grid" id="testimonyMasonry">
             <% if (testimonies && testimonies.length > 0) { %>
                 <% testimonies.forEach((testimony, index) => { %>
-                    <div class="testimony-card" data-category="<%= testimony.category %>" data-gsap="masonry-reveal">
-                        <% if (testimony.photo_url) { %>
-                            <div class="testimony-card__img">
-                                <img src="<%= testimony.photo_url %>" alt="<%= testimony.title %>" loading="lazy">
-                                <div class="testimony-card__category"><%= testimony.category %></div>
+                    <div class="testimony-card" data-category="<%= testimony.category %>" data-gsap="masonry-reveal" onclick="openTestimonyModal('<%= testimony.id %>')">
+                        <div class="quote-icon">“</div>
+                        <p class="testimony-card__excerpt"><%= testimony.short_quote || testimony.content.substring(0, 150) + '...' %></p>
+                        <div class="witness-info">
+                            <div class="author__img">
+                                <img src="<%= testimony.author_photo_url || '/images/default-avatar.png' %>" alt="<%= testimony.author_name %>">
                             </div>
-                        <% } %>
-                        <div class="testimony-card__content">
-                            <% if (!testimony.photo_url) { %>
-                                <div class="testimony-card__category-inline"><%= testimony.category %></div>
-                            <% } %>
-                            <h3 class="testimony-card__title"><%= testimony.title %></h3>
-                            <p class="testimony-card__excerpt"><%= testimony.short_quote || testimony.content.substring(0, 150) + '...' %></p>
-                            <div class="testimony-card__footer">
-                                <div class="author">
-                                    <div class="author__img">
-                                        <img src="<%= testimony.author_photo_url || '/images/default-avatar.png' %>" alt="<%= testimony.author_name %>">
-                                    </div>
-                                    <div class="author__info">
-                                        <span class="name"><%= testimony.author_name %></span>
-                                        <span class="date"><%= new Date(testimony.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></span>
-                                    </div>
-                                </div>
-                                <button class="read-more-btn" onclick="openTestimonyModal('<%= testimony.id %>')">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-                                </button>
+                            <div class="author__info">
+                                <h4 class="name"><%= testimony.author_name %></h4>
+                                <span class="date"><%= testimony.category %></span>
                             </div>
                         </div>
                     </div>
@@ -69,7 +49,6 @@
                     <p>No stories shared yet. Be the first to testify!</p>
                 </div>
             <% } %>
-        </div>
         </div>
 
         <!-- Submission Trigger -->
@@ -125,69 +104,31 @@
     </div>
 </main>
 
-<<style>
-    :root { 
-        --aa-green: #22c55e; 
-        --aa-bg: #050505; 
-        --glass-bg: rgba(255, 255, 255, 0.03);
-        --glass-border: rgba(255, 255, 255, 0.08);
+<style>
+    :root {
+      --aa-green: rgba(113, 178, 128, 1);
     }
     
     .text-green { color: var(--aa-green); }
     .text-italic { font-style: italic; font-family: 'AppleGaramond-LightItalic', serif; }
 
-    /* Cinematic Layout */
-    .testimonies-page {
-        background: var(--aa-bg);
-        color: white;
-        min-height: 100vh;
-    }
+    .testimonies-main { background: var(--color_1); min-height: 100vh; color: #1a1a1a; }
 
-    /* Hero: High Impact */
     .testimonies-hero {
-        height: 70vh;
+        height: 60vh;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        overflow: hidden;
         text-align: center;
-        background: transparent;
     }
 
-    .testimonies-hero__bg {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(circle at center, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
-        z-index: 1;
-    }
+    .hero-mask { position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to bottom, transparent, var(--color_1)); z-index: 2; }
+    .hero-title { font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 950; line-height: 0.85; letter-spacing: -0.05em; margin-bottom: 30px; color: #1a1a1a; }
+    .hero-sub { font-size: 1.25rem; color: rgba(26,26,26,0.6); max-width: 600px; margin: 0 auto; line-height: 1.6; }
 
-    .testimonies-hero__content {
-        z-index: 2;
-        max-width: 900px;
-        padding: 0 6%;
-    }
-
-    .hero-title {
-        font-size: clamp(4rem, 12vw, 8rem);
-        font-weight: 950;
-        line-height: 0.85;
-        letter-spacing: -0.05em;
-        margin-bottom: 30px;
-        text-transform: uppercase;
-    }
-
-    .hero-sub {
-        font-size: 1.25rem;
-        color: rgba(255, 255, 255, 0.5);
-        max-width: 600px;
-        margin: 0 auto;
-        line-height: 1.6;
-    }
-
-    /* Masonry Grid: Glassmorphism */
     .testimonies-grid-container {
-        max-width: 1500px;
+        max-width: 1200px;
         margin: 0 auto;
         padding: 60px 6% 150px;
     }
@@ -197,96 +138,17 @@
         column-gap: 30px;
     }
 
-    .testimony-card {
-        break-inside: avoid;
-        background: var(--glass-bg);
-        backdrop-filter: blur(20px);
-        border: 1px solid var(--glass-border);
-        border-radius: 35px;
-        margin-bottom: 30px;
-        overflow: hidden;
-        transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        cursor: pointer;
+    .testimony-card { 
+      background: #ffffff; border: 1.5px solid rgba(26, 26, 26, 0.1); border-radius: 28px; padding: 40px; 
+      margin-bottom: 25px; transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); cursor: pointer;
     }
-
-    .testimony-card:hover {
-        transform: translateY(-12px) scale(1.02);
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(34, 197, 94, 0.3);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-    }
-
-    .testimony-card__img {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16/10;
-        overflow: hidden;
-    }
-
-    .testimony-card__img img {
-        width: 100%; height: 100%;
-        object-fit: cover;
-        opacity: 0.8;
-        transition: 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .testimony-card:hover .testimony-card__img img {
-        opacity: 1;
-        transform: scale(1.1);
-    }
-
-    .testimony-card__category {
-        position: absolute;
-        top: 20px; right: 20px;
-        background: var(--aa-green);
-        color: white;
-        padding: 6px 14px;
-        border-radius: 50px;
-        font-size: 0.65rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .testimony-card__content {
-        padding: 35px;
-    }
-
-    .testimony-card__title {
-        font-size: 1.7rem;
-        font-weight: 850;
-        margin-bottom: 15px;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
-    }
-
-    .testimony-card__excerpt {
-        font-size: 1rem;
-        color: rgba(255, 255, 255, 0.5);
-        line-height: 1.7;
-        margin-bottom: 30px;
-    }
-
-    .testimony-card__footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 25px;
-        border-top: 1px solid var(--glass-border);
-    }
-
-    .author { display: flex; align-items: center; gap: 15px; }
-    .author__img { 
-        width: 45px; height: 45px; border-radius: 50%; 
-        border: 2px solid var(--aa-green); overflow: hidden; 
-    }
+    .testimony-card:hover { transform: translateY(-10px); border-color: var(--aa-green); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
+    
+    .quote-icon { font-size: 3rem; color: var(--aa-green); opacity: 0.2; margin-bottom: 20px; font-family: serif; }
+    .testimony-card p { font-size: 1.1rem; line-height: 1.7; color: #1a1a1a; margin-bottom: 30px; font-style: italic; }
+    .witness-info { display: flex; align-items: center; gap: 15px; }
+    .author__img { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; }
     .author__img img { width: 100%; height: 100%; object-fit: cover; }
-    .author__info .name { display: block; font-size: 0.9rem; font-weight: 800; }
-    .author__info .date { display: block; font-size: 0.75rem; opacity: 0.4; margin-top: 2px; }
-
-    .read-more-btn {
-        width: 40px; height: 40px; border-radius: 50%;
-        background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
         display: flex; align-items: center; justify-content: center;
         color: white; transition: 0.3s;
     }

@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 
 <!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
-<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);" data-flex-site="">
   
   <%- include('../partials/preloader') %>
   
@@ -29,10 +29,10 @@
             <h1 class="dir-title">Member Directory</h1>
             
             <form action="/directory" method="GET" class="dir-search-form">
-              <div class="search-input-wrapper glass-fx">
+              <div class="search-input-wrapper">
                 <svg viewBox="0 0 24 24" fill="none" class="search-icon"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <input type="text" name="q" placeholder="Search by name..." value="<%= searchQuery || '' %>">
-                <button type="submit" class="search-btn">Find</button>
+                <button type="submit" class="search-btn">Find Member</button>
               </div>
             </form>
           </header>
@@ -41,7 +41,7 @@
             <div class="dir-grid">
               <% if (members && members.length > 0) { %>
                 <% members.forEach((member, i) => { %>
-                  <div class="member-card glass-fx gsap-card" data-index="<%= i %>">
+                  <div class="member-card gsap-card" data-index="<%= i %>">
                     <div class="member-avatar">
                       <img src="<%= member.avatar_url %>" alt="<%= member.first_name %> <%= member.last_name %>" loading="lazy">
                     </div>
@@ -64,7 +64,7 @@
                   </div>
                 <% }) %>
               <% } else { %>
-                <div class="no-results glass-fx">
+                <div class="no-results">
                   <p>No members found matching "<%= searchQuery %>". Try a different name.</p>
                   <a href="/directory" class="clear-btn">Clear Search</a>
                 </div>
@@ -82,66 +82,64 @@
 
   <style>
     :root {
-      --accent: #3b82f6;
-      --glass: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.08);
+      --accent: var(--aa-green);
     }
 
     .directory-page { min-height: 100vh; padding: 180px 6% 120px; position: relative; }
 
     /* Ambient BG */
     .give-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.2; filter: contrast(1.1) grayscale(0.4); }
-    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #0a0a0a 0%, rgba(10,10,10,0.85) 100%); }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.1; filter: contrast(1.1) grayscale(1); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--color_1); }
 
     /* Header */
     .dir-header { text-align: center; max-width: 800px; margin: 0 auto 60px; }
     .dir-badge {
-      display: inline-block; padding: 6px 16px; background: rgba(59, 130, 246, 0.1); 
-      color: #3b82f6; font-size: 0.75rem; font-weight: 800; border-radius: 50px; 
+      display: inline-block; padding: 6px 16px; background: rgba(113, 178, 128, 0.1); 
+      color: var(--aa-green); font-size: 0.75rem; font-weight: 800; border-radius: 50px; 
       text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
     }
-    .dir-title { font-family: 'Manrope', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 40px; }
+    .dir-title { font-family: 'Manrope', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 40px; color: #1a1a1a; }
 
     /* Search Bar */
     .dir-search-form { max-width: 600px; margin: 0 auto; }
     .search-input-wrapper {
-      display: flex; align-items: center; padding: 8px; border-radius: 100px;
+      display: flex; align-items: center; padding: 10px; border-radius: 100px;
+      background: #ffffff; border: 1.5px solid rgba(26, 26, 26, 0.1);
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .search-input-wrapper:focus-within { border-color: rgba(255,255,255,0.2); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-    .search-icon { width: 20px; height: 20px; color: rgba(255,255,255,0.4); margin-left: 20px; }
+    .search-input-wrapper:focus-within { border-color: var(--aa-green); box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+    .search-icon { width: 20px; height: 20px; color: rgba(26,26,26,0.3); margin-left: 20px; }
     
     .search-input-wrapper input {
-      flex: 1; background: transparent; border: none; padding: 15px 20px; color: white;
+      flex: 1; background: transparent; border: none; padding: 15px 20px; color: #1a1a1a;
       font-size: 1.05rem; font-family: 'Manrope', sans-serif; outline: none;
     }
-    .search-input-wrapper input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-input-wrapper input::placeholder { color: rgba(26,26,26,0.3); }
     
     .search-btn {
-      background: white; color: black; border: none; border-radius: 100px;
+      background: #1a1a1a; color: white; border: none; border-radius: 100px;
       padding: 12px 30px; font-weight: 800; font-size: 0.9rem; cursor: pointer;
       transition: 0.3s;
     }
-    .search-btn:hover { background: #f0f0f0; transform: scale(1.02); }
+    .search-btn:hover { background: var(--aa-green); transform: scale(1.02); }
 
     /* Grid */
     .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto; }
 
     /* Card */
-    .glass-fx { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); }
-    
     .member-card {
+      background: #ffffff; border: 1.5px solid rgba(26, 26, 26, 0.1);
       border-radius: 24px; padding: 30px; display: flex; align-items: center; gap: 20px;
       transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .member-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); }
+    .member-card:hover { transform: translateY(-5px); border-color: var(--aa-green); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
 
-    .member-avatar { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: #1a1a1a; }
+    .member-avatar { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: #fafafa; border: 1.5px solid rgba(26, 26, 26, 0.05); }
     .member-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    .member-info h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; color: #f5f0e8; }
-    .member-type { font-size: 0.85rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+    .member-info h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; color: #1a1a1a; }
+    .member-type { font-size: 0.85rem; color: rgba(26, 26, 26, 0.4); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
     .member-roles { display: flex; flex-wrap: wrap; gap: 8px; }
     .role-badge {
@@ -149,10 +147,10 @@
       padding: 4px 10px; border-radius: 6px; background: rgba(59, 130, 246, 0.15); color: #60a5fa;
     }
 
-    .no-results { grid-column: 1 / -1; text-align: center; padding: 80px 20px; border-radius: 24px; }
-    .no-results p { color: rgba(255,255,255,0.5); font-size: 1.1rem; margin-bottom: 20px; }
-    .clear-btn { display: inline-block; padding: 10px 20px; border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; color: white; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
-    .clear-btn:hover { background: white; color: black; }
+    .no-results { grid-column: 1 / -1; text-align: center; padding: 80px 20px; border-radius: 24px; background: #ffffff; border: 1.5px solid rgba(26, 26, 26, 0.1); }
+    .no-results p { color: rgba(26, 26, 26, 0.5); font-size: 1.1rem; margin-bottom: 20px; }
+    .clear-btn { display: inline-block; padding: 10px 20px; border: 1.5px solid rgba(26, 26, 26, 0.2); border-radius: 100px; color: #1a1a1a; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+    .clear-btn:hover { background: #1a1a1a; color: white; }
 
     @media (max-width: 600px) {
       .dir-grid { grid-template-columns: 1fr; }

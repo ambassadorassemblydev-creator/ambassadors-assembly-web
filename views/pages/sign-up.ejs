@@ -47,11 +47,9 @@
                       align-items: center;
                       justify-content: center;
                       padding: 160px 4% 60px; /* Accounts for absolute navbar */
-                       background-image: url('https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg');
-                      background-size: 200% 200%;
-                     /* animation: gradientFlow 15s ease infinite;*/
+                      background-color: var(--color_1);
                       font-family: 'Articulat_CF_Normal', sans-serif;
-                      color: #ffffff;
+                      color: #1a1a1a;
                       overflow: hidden;
                     }
 
@@ -68,13 +66,11 @@
                       flex-direction: row;
                       width: 100%;
                       max-width: 1100px;
-                      background: rgba(19, 19, 19, 0.4);
-                      backdrop-filter: blur(24px);
-                      -webkit-backdrop-filter: blur(24px);
-                      border: 1px solid rgba(255, 255, 255, 0.08);
+                      background: #ffffff;
+                      border: 1.5px solid rgba(26, 26, 26, 0.1);
                       border-radius: 20px;
                       overflow: hidden;
-                      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+                      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
                     }
 
                     /* BRAND SIDE */
@@ -84,8 +80,8 @@
                       display: flex;
                       flex-direction: column;
                       justify-content: space-between;
-                      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
-                      border-right: 1px solid rgba(255, 255, 255, 0.05);
+                      background: #fafafa;
+                      border-right: 1.5px solid rgba(26, 26, 26, 0.05);
                     }
                     .auth-logo-box {
                       background: rgba(255, 255, 255, 0.9);
@@ -100,10 +96,10 @@
                     }
                     .auth-quote p {
                       font-family: 'AppleGaramond-Light', serif;
-                      font-size: 28px; line-height: 1.4; color: rgba(255, 255, 255, 0.9); margin-bottom: 15px;
+                      font-size: 28px; line-height: 1.4; color: #1a1a1a; margin-bottom: 15px;
                     }
                     .auth-quote span {
-                      font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255, 255, 255, 0.5);
+                      font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: rgba(26, 26, 26, 0.45);
                     }
 
                     /* FORM SIDE */
@@ -116,10 +112,10 @@
                     }
                     .auth-form-header h1 {
                       font-family: 'Articulat CF Demi Bold', sans-serif;
-                      font-size: 36px; margin: 0 0 10px 0; color: #ffffff;
+                      font-size: 36px; margin: 0 0 10px 0; color: #1a1a1a;
                     }
                     .auth-form-header p {
-                      font-size: 15px; color: rgba(255, 255, 255, 0.6); margin: 0 0 30px 0;
+                      font-size: 15px; color: rgba(26, 26, 26, 0.5); margin: 0 0 30px 0;
                     }
 
                     /* INPUTS */
@@ -130,20 +126,20 @@
                       position: relative; margin-bottom: 25px; width: 100%;
                     }
                     .input-group input {
-                      width: 100%; padding: 15px 0; font-size: 16px; color: #ffffff;
-                      background: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                      width: 100%; padding: 15px 0; font-size: 16px; color: #1a1a1a;
+                      background: transparent; border: none; border-bottom: 1.5px solid rgba(26, 26, 26, 0.1);
                       outline: none; transition: border-color 0.3s ease; font-family: inherit;
                     }
                     .input-group label {
                       position: absolute; top: 15px; left: 0; font-size: 16px;
-                      color: rgba(255, 255, 255, 0.5); pointer-events: none; transition: 0.3s ease all;
+                      color: rgba(26, 26, 26, 0.45); pointer-events: none; transition: 0.3s ease all;
                     }
                     .input-group input:focus ~ label,
                     .input-group input:not(:placeholder-shown) ~ label {
-                      top: -10px; font-size: 12px; color: #ffffff;
+                      top: -10px; font-size: 12px; color: #1a1a1a;
                     }
                     .input-group input:focus {
-                      border-bottom: 1px solid #ffffff;
+                      border-bottom: 1.5px solid #1a1a1a;
                     }
 
                     /* PASSWORD STRENGTH UI */
@@ -151,10 +147,10 @@
                       display: flex; gap: 5px; margin-top: -15px; margin-bottom: 20px;
                     }
                     .strength-bar {
-                      height: 4px; flex: 1; background: rgba(255, 255, 255, 0.1); border-radius: 2px; transition: 0.3s;
+                      height: 4px; flex: 1; background: rgba(26, 26, 26, 0.05); border-radius: 2px; transition: 0.3s;
                     }
                     .strength-text {
-                      font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 5px; text-align: right; width: 100%;
+                      font-size: 12px; color: rgba(26, 26, 26, 0.45); margin-top: 5px; text-align: right; width: 100%;
                     }
 
                     /* BUTTONS */
@@ -162,25 +158,26 @@
                       width: 100%;
                       padding: 16px;
                       border-radius: 12px;
-                      background: rgba(113, 178, 128, 0.1);
-                      border: 1px solid rgba(113, 178, 128, 0.3);
+                      background: rgba(113, 178, 128, 1);
+                      border: 1.5px solid rgba(113, 178, 128, 0.3);
                       color: #ffffff;
                       font-family: 'Articulat CF Demi Bold', sans-serif;
                       font-size: 16px;
                       cursor: pointer;
                       transition: all 0.3s ease;
                       margin-bottom: 20px;
+                      font-weight: 700;
                     }
                     .auth-submit-btn:hover {
-                      background: rgba(113, 178, 128, 0.2);
-                      border-color: rgba(113, 178, 128, 0.6);
-                      box-shadow: 0 8px 24px rgba(113, 178, 128, 0.2);
+                      background: #1a1a1a;
+                      border-color: #1a1a1a;
+                      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
                     }
                     .auth-footer-link {
-                      text-align: center; font-size: 14px; color: rgba(255, 255, 255, 0.6);
+                      text-align: center; font-size: 14px; color: rgba(26, 26, 26, 0.6);
                     }
                     .auth-footer-link a {
-                      color: #ffffff; text-decoration: none; font-family: 'Articulat CF Demi Bold', sans-serif;
+                      color: var(--aa-green); text-decoration: none; font-family: 'Articulat CF Demi Bold', sans-serif; font-weight: 700;
                     }
                     .error-alert {
                       display: none; background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.3);
@@ -310,10 +307,10 @@
         if (/[^A-Za-z0-9]/.test(val)) strength += 1; // Special char
 
         // Reset
-        bar1.style.background = 'rgba(255, 255, 255, 0.1)';
-        bar2.style.background = 'rgba(255, 255, 255, 0.1)';
-        bar3.style.background = 'rgba(255, 255, 255, 0.1)';
-        pwdText.style.color = 'rgba(255,255,255,0.5)';
+        bar1.style.background = 'rgba(26, 26, 26, 0.05)';
+        bar2.style.background = 'rgba(26, 26, 26, 0.05)';
+        bar3.style.background = 'rgba(26, 26, 26, 0.05)';
+        pwdText.style.color = 'rgba(26, 26, 26, 0.45)';
 
         if (strength === 1) {
           bar1.style.background = '#ff453a'; // Red

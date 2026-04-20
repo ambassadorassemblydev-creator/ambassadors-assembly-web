@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 
 <!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
-<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);" data-flex-site="">
   
   <%- include('../partials/preloader') %>
   
@@ -130,51 +130,52 @@
     .visit-page { padding-bottom: 120px; }
     
     .visit-hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6%; background: transparent; position: relative; }
-    .visit-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: #3b82f6; margin-bottom: 20px; }
-    .visit-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; }
-    .visit-hero p { font-size: 1.15rem; color: rgba(255,255,255,0.6); max-width: 700px; margin: 0 auto; }
+    .visit-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: var(--aa-green); margin-bottom: 20px; }
+    .visit-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 950; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; color: #1a1a1a; }
+    .visit-hero p { font-size: 1.15rem; color: rgba(26,26,26,0.6); max-width: 700px; margin: 0 auto; }
 
     .visit-details { padding: 0 6%; margin-top: -80px; }
     .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1400px; margin: 0 auto; }
     .detail-panel { padding: 50px; border-radius: 32px; }
-    .detail-panel h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; color: #f5f0e8; }
+    .detail-panel h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; color: #1a1a1a; }
 
     .time-block { margin-bottom: 40px; }
-    .day { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.3); display: block; margin-bottom:15px; }
+    .day { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--aa-green); display: block; margin-bottom:15px; }
     .slots { display: flex; flex-direction: column; gap: 12px; }
-    .slot { font-size: 1.1rem; color: rgba(255,255,255,0.8); }
-    .slot span { font-weight: 800; color: white; margin-right: 10px; }
+    .slot { font-size: 1.1rem; color: rgba(26,26,26,0.6); }
+    .slot span { font-weight: 800; color: #1a1a1a; margin-right: 10px; }
 
-    .map-btn { display: inline-block; padding: 16px 32px; background: white; color: black; border-radius: 100px; text-decoration: none; font-weight: 800; margin-top: 30px; transition: 0.3s; }
-    .map-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(255,255,255,0.1); }
-    .parking-info { margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); font-size: 0.95rem; }
+    .map-btn { display: inline-block; padding: 16px 32px; background: #1a1a1a; color: white; border-radius: 100px; text-decoration: none; font-weight: 800; margin-top: 30px; transition: 0.3s; }
+    .map-btn:hover { background: var(--aa-green); transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .parking-info { margin-top: 40px; padding-top: 30px; border-top: 1.5px solid rgba(26,26,26,0.1); color: rgba(26,26,26,0.5); font-size: 0.95rem; }
 
-    .expect-section { padding: 120px 6%; background: #050505; }
+    .expect-section { padding: 120px 6%; background: #ffffff; border-top: 1.5px solid rgba(26,26,26,0.1); }
     .content-container { max-width: 1400px; margin: 0 auto; }
     
     .expect-grid-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: start; }
-    .expect-text h2 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 30px; letter-spacing: -0.02em; }
-    .expect-text p { font-size: 1.1rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 60px; }
+    .expect-text h2 { font-size: 3.5rem; font-weight: 950; line-height: 1.1; margin-bottom: 30px; letter-spacing: -0.02em; color: #1a1a1a; }
+    .expect-text p { font-size: 1.1rem; color: rgba(26,26,26,0.5); line-height: 1.7; margin-bottom: 60px; }
 
     .expect-features { display: flex; flex-direction: column; gap: 40px; }
     .feature-item { display: flex; gap: 25px; }
-    .feature-icon { width: 50px; height: 50px; border-radius: 16px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .feature-icon { width: 50px; height: 50px; border-radius: 16px; background: rgba(113, 178, 128, 0.1); color: var(--aa-green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .feature-icon svg { width: 24px; height: 24px; }
-    .feature-text h4 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
-    .feature-text p { font-size: 0.95rem; color: rgba(255,255,255,0.4); margin-bottom: 0; }
+    .feature-text h4 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; color: #1a1a1a; }
+    .feature-text p { font-size: 0.95rem; color: rgba(26,26,26,0.4); margin-bottom: 0; }
 
     .expect-cards-side { display: flex; flex-direction: column; gap: 30px; }
     .expect-card-premium { padding: 50px; border-radius: 40px; position: relative; overflow: hidden; }
-    .card-tag { position: absolute; top: 30px; right: 40px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.2); }
-    .expect-card-premium h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; color: #3b82f6; }
-    .expect-card-premium p { font-size: 1rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 0; }
+    .card-tag { position: absolute; top: 30px; right: 40px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: rgba(26,26,26,0.2); }
+    .expect-card-premium h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; color: var(--aa-green); }
+    .expect-card-premium p { font-size: 1rem; color: rgba(26,26,26,0.5); line-height: 1.7; margin-bottom: 0; }
 
-    .glass-fx { background: rgba(255,255,255,0.03); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.08); }
+    .glass-fx { background: #ffffff; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 32px; padding: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); }
+    .detail-panel h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; color: #1a1a1a; }
 
     /* Ambient BG */
     .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: contrast(1.1) grayscale(0.2); }
-    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #0e0e0e 0%, rgba(14,14,14,0.8) 100%); }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.1; filter: contrast(1.1) grayscale(1); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--color_1); }
 
     @media (max-width: 1000px) { .details-grid { grid-template-columns: 1fr; } .expect-grid { grid-template-columns: 1fr; } }
   </style>

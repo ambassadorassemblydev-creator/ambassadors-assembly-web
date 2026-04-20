@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #0c0c0c;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);">
   
   <%- include('../partials/preloader') %>
   
@@ -24,9 +24,9 @@
           <main class="dash-content">
             <!-- PREMIUM HEADER -->
             <div class="content-header">
-              <div class="header-badge">SPIRITUAL JOURNEY</div>
-              <h1>The Hub</h1>
-              <p>Welcome home, <%= user.first_name %>. Explore your growth and partnership.</p>
+              <div class="header-badge">MEMBER ECOSYSTEM</div>
+              <h1>Welcome, <%= user.first_name || 'Ambassador' %></h1>
+              <p>Manage your ministry involvement, giving, and profile state from your personalized command center.</p>
             </div>
 
             <!-- OVERVIEW TAB -->
@@ -139,6 +139,27 @@
 
             <!-- GIVING TAB (Full History) -->
             <div id="tab-giving" class="tab-pane <%= activeTab === 'giving' ? 'active' : '' %>">
+              <div class="glass-card">
+                <div class="card-header">
+                  <h3>Personnel Verified</h3>
+                  <a href="/my-account/profile" class="btn-text">Edit Settings &rarr;</a>
+                </div>
+                
+                <div class="profile-summary">
+                  <div class="sum-item">
+                    <label>Full Name</label>
+                    <p><%= user.first_name %> <%= user.last_name %></p>
+                  </div>
+                  <div class="sum-item">
+                    <label>Email Address</label>
+                    <p><%= user.email %></p>
+                  </div>
+                  <div class="sum-item">
+                    <label>Service Department</label>
+                    <p class="text-green"><%= user.department_name || 'General Member' %></p>
+                  </div>
+                </div>
+              </div>
                <div class="glass-card">
                 <div class="card-header">
                   <h3>Detailed History</h3>

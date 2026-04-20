@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 
   <!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
-<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);" data-flex-site="">
   
   <%- include('../partials/preloader') %>
    <!-- BG AMBIENCE -->
@@ -171,18 +171,18 @@
 
   <style>
     :root {
-      --accent: #3B6FB5;
-      --glass: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.1);
+      --accent: rgba(113, 178, 128, 1);
+      --glass: #ffffff;
+      --glass-border: rgba(26, 26, 26, 0.1);
     }
 
-    body { font-family: 'Articulat_CF_Normal', sans-serif; color: white; }
+    body { font-family: 'Articulat_CF_Normal', sans-serif; color: #1a1a1a; }
 
     /* BACKGROUND */
-    .watch-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: #050505; }
-    .bg-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; }
+    .watch-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: var(--color_1); }
+    .bg-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.1; }
     .blob-1 { width: 60vw; height: 60vw; top: -10%; left: -10%; background: var(--accent); }
-    .blob-2 { width: 40vw; height: 40vw; bottom: -5%; right: -5%; background: #5f99e8; }
+    .blob-2 { width: 40vw; height: 40vw; bottom: -5%; right: -5%; background: rgba(113, 178, 128, 0.4); }
 
     /* LAYOUT */
     .watch-container { display: grid; grid-template-columns: 1fr 400px; gap: 0; min-height: 100vh; padding-top: 80px; }
@@ -192,63 +192,62 @@
     .video-container { 
       position: relative; 
       padding-top: 56.25%; 
-      background: black; 
-      border-radius: 20px; 
+      background: #e0dcd5; 
+      border-radius: 0px; 
       overflow: hidden; 
-      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+      border: 1px solid #1a1a1a;
     }
     .video-container iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
-    .glass-fx { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); }
+    .glass-fx { background: #ffffff; border: 1px solid #1a1a1a; }
 
     .content-info { margin-top: 40px; max-width: 900px; }
     .meta-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-    .badge-live { background: #333; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 800; letter-spacing: 1px; }
-    .badge-live.active { background: #ff453a; box-shadow: 0 0 15px rgba(255, 69, 58, 0.3); }
-    .speaker-pill { color: var(--accent); font-weight: 600; font-size: 14px; }
-    .content-info h1 { font-family: 'Articulat CF Demi Bold'; font-size: clamp(32px, 4vw, 48px); margin: 0 0 15px; }
-    .description { color: rgba(255,255,255,0.6); line-height: 1.6; font-size: 18px; }
+    .badge-live { background: #1a1a1a; padding: 4px 12px; border-radius: 0px; font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #ffffff; }
+    .badge-live.active { background: var(--accent); color: #ffffff; }
+    .speaker-pill { color: #1a1a1a; font-weight: 600; font-size: 14px; border-bottom: 2px solid var(--accent); }
+    .content-info h1 { font-family: 'Articulat CF Demi Bold'; font-size: clamp(32px, 4vw, 48px); margin: 0 0 15px; color: #1a1a1a; }
+    .description { color: #4a4a4a; line-height: 1.6; font-size: 18px; }
 
     .quick-actions { display: flex; gap: 15px; margin-top: 40px; }
     .action-btn { 
-      padding: 12px 28px; border-radius: 50px; display: inline-flex; align-items: center; gap: 10px;
-      font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; border: 1px solid var(--glass-border);
-      color: white; background: var(--glass);
+      padding: 12px 28px; border-radius: 0px; display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; border: 1px solid #1a1a1a;
+      color: #1a1a1a; background: #ffffff;
     }
-    .action-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
-    .action-btn.give-primary { background: var(--accent); border-color: var(--accent); box-shadow: 0 10px 20px rgba(59, 111, 181, 0.2); }
-    .action-btn.partner { background: rgba(255,255,255,0.05); }
+    .action-btn:hover { background: #1a1a1a; color: #ffffff; }
+    .action-btn.give-primary { background: var(--accent); border-color: var(--accent); color: #ffffff; }
+    .action-btn.partner { background: #ffffff; }
 
     /* OFFLINE STATES */
     .offline-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
     .offline-card { 
-      padding: 40px; border-radius: 20px; text-align: center; max-width: 80%;
+      padding: 40px; border-radius: 0px; text-align: center; max-width: 80%;
       display: flex; flex-direction: column; align-items: center; gap: 15px;
     }
-    .offline-card h2 { font-size: 24px; margin: 0; color: rgba(255,255,255,0.9); }
-    .offline-card p { font-size: 14px; margin: 0; opacity: 0.6; max-width: 300px; }
+    .offline-card h2 { font-size: 24px; margin: 0; color: #1a1a1a; }
+    .offline-card p { font-size: 14px; margin: 0; opacity: 0.7; color: #1a1a1a; max-width: 300px; }
 
     /* COUNTDOWN */
-    .countdown-overlay { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; text-align: center; background: rgba(0,0,0,0.8); }
+    .countdown-overlay { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdfbf7; }
     .pre-live { font-weight: 800; color: var(--accent); letter-spacing: 3px; font-size: 12px; }
-    #countdown-timer { font-size: 84px; font-family: 'Articulat CF Heavy'; margin: 10px 0; }
+    #countdown-timer { font-size: 84px; font-family: 'Articulat CF Heavy'; margin: 10px 0; color: #1a1a1a; }
 
     /* INTERACTION HUB */
     .interaction-hub { 
       display: flex; flex-direction: column; 
-      border-radius: 24px; overflow: hidden;
+      border-radius: 0px; overflow: hidden;
       margin: 40px 40px 40px 0;
       height: calc(100vh - 160px); position: sticky; top: 80px; 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      transition: margin 0.3s ease;
+      border: 1px solid #1a1a1a;
     }
-    .hub-tabs { display: flex; border-bottom: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); }
+    .hub-tabs { display: flex; border-bottom: 1px solid #1a1a1a; background: #ffffff; }
     .hub-tab { 
-      flex: 1; padding: 20px; border: 0; background: none; color: rgba(255,255,255,0.4); 
+      flex: 1; padding: 20px; border: 0; background: none; color: #1a1a1a; 
       font-size: 10px; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
     }
-    .hub-tab.active { color: white; background: var(--glass); box-shadow: inset 0 -2px 0 var(--accent); }
+    .hub-tab.active { color: #ffffff; background: #1a1a1a; }
 
-    .hub-panels { flex: 1; overflow: hidden; position: relative; }
+    .hub-panels { flex: 1; overflow: hidden; position: relative; background: #ffffff; }
     .hub-panel { 
       position: absolute; top:0; left:0; width:100%; height:100%; 
       display: none; flex-direction: column; padding: 0;
@@ -258,53 +257,51 @@
 
     /* CHAT PANEL */
     .chat-feed { flex: 1; padding: 20px; overflow-y: auto; scroll-behavior: smooth; }
-    .chat-msg { margin-bottom: 15px; font-size: 14px; line-height: 1.4; animation: msgFade 0.3s ease; }
-    @keyframes msgFade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .chat-msg { margin-bottom: 15px; font-size: 14px; line-height: 1.4; }
     .chat-msg .name { font-weight: 800; color: var(--accent); margin-right: 8px; font-size: 12px; }
-    .system-msg { text-align: center; font-size: 12px; color: rgba(255,255,255,0.3); font-style: italic; margin: 20px 0; }
+    .system-msg { text-align: center; font-size: 12px; color: #999; font-style: italic; margin: 20px 0; }
     
-    .chat-controls { padding: 20px; border-top: 1px solid var(--glass-border); }
+    .chat-controls { padding: 20px; border-top: 1px solid #1a1a1a; }
     .glass-input-group { 
-      display: flex; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-      border-radius: 12px; overflow: hidden;
+      display: flex; background: #ffffff; border: 1px solid #1a1a1a;
+      border-radius: 0px; overflow: hidden;
     }
     .glass-input-group input { 
-      flex: 1; background: transparent; border: 0; padding: 15px; color: white; outline: none;
+      flex: 1; background: transparent; border: 0; padding: 15px; color: #1a1a1a; outline: none;
     }
     .glass-input-group button { 
-      background: var(--accent); border: 0; padding: 0 20px; color: white; cursor: pointer; transition: 0.3s;
+      background: #1a1a1a; border: 0; padding: 0 20px; color: #ffffff; cursor: pointer;
     }
-    .auth-box { text-align: center; font-size: 13px; color: rgba(255,255,255,0.5); }
-    .auth-link { color: white; text-decoration: underline; }
+    .auth-box { text-align: center; font-size: 13px; color: #1a1a1a; }
+    .auth-link { color: var(--accent); text-decoration: underline; font-weight: 700; }
 
     /* BIBLE & NOTES */
     .download-notes { 
-      display: block; padding: 15px; border: 1px dashed var(--glass-border); 
-      border-radius: 12px; text-align: center; color: var(--accent); font-weight: 700;
-      margin-bottom: 30px; text-decoration: none; transition: 0.3s;
+      display: block; padding: 15px; border: 1px solid #1a1a1a; 
+      border-radius: 0px; text-align: center; color: #1a1a1a; font-weight: 700;
+      margin-bottom: 30px; text-decoration: none;
     }
-    .download-notes:hover { background: rgba(59, 111, 181, 0.1); }
     #personal-notes { 
-      width: 100%; min-height: 300px; background: rgba(255,255,255,0.03); 
-      border: 1px solid var(--glass-border); border-radius: 12px; color: white;
-      padding: 15px; font-family: inherit; margin-top: 15px; outline: none; font-size: 15px; line-height: 1.5;
+      width: 100%; min-height: 300px; background: #ffffff; 
+      border: 1px solid #1a1a1a; border-radius: 0px; color: #1a1a1a;
+      padding: 15px; font-family: inherit; margin-top: 15px; outline: none; font-size: 15px;
     }
     .save-notes-btn { 
-      width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border:0;
-      background: var(--glass); color: white; font-weight: 600; cursor: pointer;
+      width: 100%; padding: 12px; margin-top: 15px; border-radius: 0px; border:1px solid #1a1a1a;
+      background: #ffffff; color: #1a1a1a; font-weight: 600; cursor: pointer;
     }
-    .bible-text { line-height: 1.8; color: rgba(255,255,255,0.7); font-size: 17px; }
+    .bible-text { line-height: 1.8; color: #1a1a1a; font-size: 17px; }
 
     /* PRAYER PANEL */
     .prayer-glass-form { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
     .prayer-glass-form input, .prayer-glass-form textarea {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-      padding: 15px; border-radius: 10px; color: white; font-family: inherit; outline: none;
+      background: #ffffff; border: 1px solid #1a1a1a;
+      padding: 15px; border-radius: 0px; color: #1a1a1a; font-family: inherit; outline: none;
     }
-    .anon-check { font-size: 13px; display: flex; align-items: center; gap: 10px; opacity: 0.7; }
+    .anon-check { font-size: 13px; display: flex; align-items: center; gap: 10px; color: #1a1a1a; }
     .submit-prayer-btn { 
-      background: var(--accent); color: white; border:0; padding: 15px; 
-      border-radius: 50px; font-weight: 700; cursor: pointer; margin-top: 10px;
+      background: #1a1a1a; color: #ffffff; border:0; padding: 15px; 
+      border-radius: 0px; font-weight: 700; cursor: pointer; margin-top: 10px;
     }
     #prayer-status { margin-top: 15px; font-size: 14px; text-align: center; color: var(--accent); }
 

@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 
 <!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
-<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);" data-flex-site="">
   
   <%- include('../partials/preloader') %>
   
@@ -91,43 +91,43 @@
     .connect-page { padding-bottom: 120px; }
     
     .connect-hero { height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 6%; background: transparent; position: relative; }
-    .connect-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: #f5f0e8; opacity: 0.4; margin-bottom: 20px; }
-    .connect-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; }
-    .connect-hero p { font-size: 1.15rem; color: rgba(255,255,255,0.6); max-width: 700px; margin: 0 auto; }
+    .connect-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: var(--aa-green); margin-bottom: 20px; }
+    .connect-hero h1 { font-family: 'Manrope', sans-serif; font-size: clamp(3rem, 7vw, 6rem); font-weight: 950; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; color: #1a1a1a; }
+    .connect-hero p { font-size: 1.15rem; color: rgba(26,26,26,0.6); max-width: 700px; margin: 0 auto; }
 
     .connect-options { padding: 0 6%; margin-top: -60px; }
     .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
     
-    .option-card { padding: 50px; border-radius: 32px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-    .option-icon { font-size: 3rem; margin-bottom: 25px; }
-    .option-card h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 15px; }
-    .option-card p { font-size: 0.95rem; color: rgba(255,255,255,0.4); line-height: 1.6; margin-bottom: 30px; max-width: 300px; }
+    .option-card { padding: 50px; border-radius: 32px; text-align: center; display: flex; flex-direction: column; align-items: center; background: #ffffff; border: 1.5px solid rgba(26, 26, 26, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.03); transition: 0.5s; }
+    .option-card:hover { transform: translateY(-10px); border-color: var(--aa-green); box-shadow: 0 40px 80px rgba(0,0,0,0.06); }
+    .option-icon { font-size: 3rem; margin-bottom: 25px; color: var(--aa-green); }
+    .option-card h3 { font-size: 1.6rem; font-weight: 900; margin-bottom: 15px; color: #1a1a1a; }
+    .option-card p { font-size: 0.95rem; color: rgba(26,26,26,0.5); line-height: 1.6; margin-bottom: 30px; max-width: 300px; }
     
     .option-btn { 
-      padding: 14px 28px; background: rgba(255,255,255,0.05); color: white; border-radius: 100px; 
-      text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; border: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 28px; background: #fafafa; color: #1a1a1a; border-radius: 100px; 
+      text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; border: 1.5px solid rgba(26, 26, 26, 0.1);
     }
-    .option-btn:hover { background: white; color: black; border-color: white; transform: translateY(-3px); }
+    .option-btn:hover { background: var(--aa-green); color: white; border-color: var(--aa-green); transform: translateY(-3px); }
 
     .social-connect { padding: 120px 6% 0; text-align: center; }
     .social-header { margin-bottom: 60px; }
-    .social-header h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
-    .social-header p { color: rgba(255,255,255,0.4); }
+    .social-header h2 { font-size: 2.5rem; font-weight: 950; margin-bottom: 15px; color: #1a1a1a; }
+    .social-header p { color: rgba(26, 26, 26, 0.5); }
 
     .social-pills { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
     .social-pill { 
-      padding: 120px 40px; /* Big artistic pills? No, let's stick to sleek. */
-      padding: 20px 40px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); 
-      color: white; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: 0.4s;
+      padding: 20px 40px; border-radius: 100px; border: 1.5px solid rgba(26, 26, 26, 0.1); 
+      color: #1a1a1a; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: 0.4s;
     }
-    .social-pill:hover { background: white; color: black; transform: scale(1.05); }
+    .social-pill:hover { background: #1a1a1a; color: white; transform: scale(1.05); }
 
     .glass-fx { background: rgba(255,255,255,0.02); backdrop-filter: blur(40px); border: 1px solid rgba(255,255,255,0.05); }
 
     /* Ambient BG */
     .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: contrast(1.1) grayscale(0.2); }
-    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #050505 0%, rgba(5,5,5,0.8) 100%); }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.1; filter: contrast(1.1) grayscale(1); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--color_1); }
 
     @media (max-width: 800px) { .options-grid { grid-template-columns: 1fr; } }
   </style>

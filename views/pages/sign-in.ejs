@@ -30,11 +30,9 @@
                       align-items: center;
                       justify-content: center;
                       padding: 120px 4% 60px; /* Accounts for fixed navbar */
-                       background-image: url('https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg');
-                      background-size: 200% 200%;
-                     /* animation: gradientFlow 15s ease infinite;*/
+                      background-color: var(--color_1);
                       font-family: 'Articulat_CF_Normal', sans-serif;
-                      color: #ffffff;
+                      color: #1a1a1a;
                       overflow: hidden;
                     }
 
@@ -52,13 +50,11 @@
                       flex-direction: row;
                       width: 100%;
                       max-width: 1100px;
-                      background: rgba(19, 19, 19, 0.4);
-                      backdrop-filter: blur(24px);
-                      -webkit-backdrop-filter: blur(24px);
-                      border: 1px solid rgba(255, 255, 255, 0.08);
+                      background: #ffffff;
+                      border: 1.5px solid rgba(26, 26, 26, 0.1);
                       border-radius: 20px;
                       overflow: hidden;
-                      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+                      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
                     }
 
                     /* Left Side: Testimonial & Branding */
@@ -68,8 +64,8 @@
                       display: flex;
                       flex-direction: column;
                       justify-content: space-between;
-                      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
-                      border-right: 1px solid rgba(255, 255, 255, 0.05);
+                      background: #fafafa;
+                      border-right: 1.5px solid rgba(26, 26, 26, 0.05);
                     }
 
                     .auth-logo-box {
@@ -91,7 +87,7 @@
                       font-family: 'AppleGaramond-Light', serif;
                       font-size: 28px;
                       line-height: 1.4;
-                      color: rgba(255, 255, 255, 0.9);
+                      color: #1a1a1a;
                       margin-bottom: 15px;
                     }
 
@@ -99,7 +95,7 @@
                       font-size: 14px;
                       text-transform: uppercase;
                       letter-spacing: 2px;
-                      color: rgba(255, 255, 255, 0.5);
+                      color: rgba(26, 26, 26, 0.45);
                     }
 
                     /* Right Side: The Form */
@@ -115,12 +111,12 @@
                       font-family: 'Articulat CF Demi Bold', sans-serif;
                       font-size: 36px;
                       margin: 0 0 10px 0;
-                      color: #ffffff;
+                      color: #1a1a1a;
                     }
 
                     .auth-form-header p {
                       font-size: 15px;
-                      color: rgba(255, 255, 255, 0.6);
+                      color: rgba(26, 26, 26, 0.5);
                       margin: 0 0 40px 0;
                     }
 
@@ -134,10 +130,10 @@
                       width: 100%;
                       padding: 15px 0;
                       font-size: 16px;
-                      color: #ffffff;
+                      color: #1a1a1a;
                       background: transparent;
                       border: none;
-                      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                      border-bottom: 1.5px solid rgba(26, 26, 26, 0.1);
                       outline: none;
                       transition: border-color 0.3s ease;
                       font-family: inherit;
@@ -148,7 +144,7 @@
                       top: 15px;
                       left: 0;
                       font-size: 16px;
-                      color: rgba(255, 255, 255, 0.5);
+                      color: rgba(26, 26, 26, 0.4);
                       pointer-events: none;
                       transition: 0.3s ease all;
                     }
@@ -158,11 +154,11 @@
                     .input-group input:not(:placeholder-shown) ~ label {
                       top: -10px;
                       font-size: 12px;
-                      color: #ffffff;
+                      color: #1a1a1a;
                     }
 
                     .input-group input:focus {
-                      border-bottom: 1px solid #ffffff;
+                      border-bottom: 1.5px solid #1a1a1a;
                     }
 
                     /* Form Actions */
@@ -175,20 +171,20 @@
                     }
 
                     .form-actions a {
-                      color: rgba(255, 255, 255, 0.6);
+                      color: rgba(26, 26, 26, 0.6);
                       text-decoration: none;
                       transition: color 0.3s;
                     }
 
                     .form-actions a:hover {
-                      color: #ffffff;
+                      color: #1a1a1a;
                     }
 
                     .checkbox-wrapper {
                       display: flex;
                       align-items: center;
                       gap: 8px;
-                      color: rgba(255, 255, 255, 0.6);
+                      color: rgba(26, 26, 26, 0.6);
                     }
 
                     /* Submit Button */
@@ -196,32 +192,34 @@
                       width: 100%;
                       padding: 16px;
                       border-radius: 12px;
-                      background: rgba(113, 178, 128, 0.1);
-                      border: 1px solid rgba(113, 178, 128, 0.3);
+                      background: rgba(113, 178, 128, 1);
+                      border: 1.5px solid rgba(113, 178, 128, 0.3);
                       color: #ffffff;
                       font-family: 'Articulat CF Demi Bold', sans-serif;
                       font-size: 16px;
                       cursor: pointer;
                       transition: all 0.3s ease;
+                      font-weight: 700;
                     }
 
                     .auth-submit-btn:hover {
-                      background: rgba(113, 178, 128, 0.2);
-                      border-color: rgba(113, 178, 128, 0.6);
-                      box-shadow: 0 8px 24px rgba(113, 178, 128, 0.2);
+                      background: #1a1a1a;
+                      border-color: #1a1a1a;
+                      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
                     }
 
                     .auth-footer-link {
                       text-align: center;
                       margin-top: 30px;
                       font-size: 14px;
-                      color: rgba(255, 255, 255, 0.6);
+                      color: rgba(26, 26, 26, 0.6);
                     }
 
                     .auth-footer-link a {
-                      color: #ffffff;
+                      color: var(--aa-green);
                       text-decoration: none;
                       font-family: 'Articulat CF Demi Bold', sans-serif;
+                      font-weight: 700;
                     }
 
                     /* Error Message Box */
@@ -374,15 +372,15 @@ body.dmRoot,
     opacity: 0; transition: opacity 0.3s ease;
   }
   .modal-content {
-    background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #ffffff; border: 1.5px solid rgba(26, 26, 26, 0.1);
     border-radius: 20px; padding: 40px; width: 90%; max-width: 450px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5); transform: translateY(20px);
-    transition: transform 0.3s ease; position: relative; color: white; font-family: 'Articulat_CF_Normal', sans-serif;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.1); transform: translateY(20px);
+    transition: transform 0.3s ease; position: relative; color: #1a1a1a; font-family: 'Articulat_CF_Normal', sans-serif;
   }
   .modal-close {
-    position: absolute; top: 20px; right: 20px; cursor: pointer; color: rgba(255,255,255,0.5);
+    position: absolute; top: 20px; right: 20px; cursor: pointer; color: rgba(26,26,26,0.3);
   }
-  .modal-close:hover { color: white; }
+  .modal-close:hover { color: #1a1a1a; }
   .modal-overlay.active { display: flex; opacity: 1; }
   .modal-overlay.active .modal-content { transform: translateY(0); }
 </style>
@@ -390,8 +388,8 @@ body.dmRoot,
 <div class="modal-overlay" id="forgot-pwd-modal">
   <div class="modal-content">
     <div class="modal-close" id="close-modal">✕</div>
-    <h2 style="font-family: 'Articulat CF Demi Bold'; margin-top:0;">Reset Password</h2>
-    <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 25px;">Enter your email and we'll send you a secure reset link.</p>
+    <h2 style="font-family: 'Articulat CF Demi Bold'; margin-top:0; color: #1a1a1a;">Reset Password</h2>
+    <p style="color: rgba(26,26,26,0.5); font-size: 14px; margin-bottom: 25px;">Enter your email and we'll send you a secure reset link.</p>
     
     <div class="error-alert" id="reset-error"></div>
     <div class="error-alert" id="reset-success" style="background: rgba(50,215,75,0.1); color: #32d74b; border-color: #32d74b;"></div>

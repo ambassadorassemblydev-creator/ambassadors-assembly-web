@@ -79,6 +79,8 @@
       --color_5: rgba(19, 19, 19, 1);
       --max-content-width_1: 1200px;
       --aa-conic-grad: conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%);
+      --glass-bg: rgba(255, 255, 255, 0.4);
+      --glass-border: rgba(26, 26, 26, 0.12);
       --hover-transform-zoomout: scale(1.06);
       --hover-transform-float: translateY(-8px);
       --hover-transform-forward: translateX(8px);
@@ -90,6 +92,11 @@
       --hover-transform-rotate: rotate(7deg);
       --hover-transform-opacity: 0.7;
       --hover-scroll-transform: translate3d(0, 0, 0)
+    }
+
+    .dmRoot {
+      color: #1a1a1a !important;
+      background-color: var(--color_1) !important;
     }
 
     .dmBody, .dmOuter, #dm_content {

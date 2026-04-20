@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 
 <!-- MAINTAINING EXACT DUDA NESTING STRUCTURE -->
-<body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);">
   
   <%- include('../partials/preloader') %>
   
@@ -25,8 +25,8 @@
         </div>
         <div class="hero-content">
           <span class="sub-label">The Hands & Feet</span>
-          <h1>Our Glorious<br><span class="text-green">Team</span></h1>
-          <p>The consecrated individuals who labor tirelessly to ensure the vision of Ambassadors Assembly reaches the ends of the earth.</p>
+          <h1 class="hero-title">Our Glorious<br><span class="text-green">Team</span></h1>
+          <p class="hero-sub">The consecrated individuals who labor tirelessly to ensure the vision of Ambassadors Assembly reaches the ends of the earth.</p>
         </div>
       </section>
 
@@ -35,19 +35,15 @@
         <div class="directory-container">
           
           <div class="staff-grid" id="staff-grid">
-            <% staff.forEach((person, i) => { %>
-              <div class="staff-card gsap-staff" 
-                   data-dept="<%= person.department %>"
-                   onclick="openStaffDetail('<%= (person.first_name + ' ' + person.last_name).replace(/'/g, "\\'") %>', '<%= person.role.replace(/'/g, "\\'") %>', '<%= (person.quote || 'Leading with excellence.').replace(/'/g, "\\'") %>')">
-                <div class="staff-img-wrap">
-                  <img src="<%= person.avatar_url && person.avatar_url.trim() !== '' ? person.avatar_url : 'https://ui-avatars.com/api/?name=' + person.first_name + '+' + person.last_name + '&background=22c55e&color=fff' %>" 
-                       onerror="this.src='https://ui-avatars.com/api/?name=<%= person.first_name %>+<%= person.last_name %>&background=22c55e&color=fff'"
-                       alt="<%= person.first_name %>">
+            <% staff.forEach((s, i) => { %>
+              <div class="staff-card gsap-reveal" data-dept="<%= s.department %>">
+                <div class="staff-card__img">
+                    <img src="<%= s.avatar_url || '/images/default-avatar.png' %>" alt="<%= s.first_name %>" loading="lazy">
                 </div>
-                <div class="staff-info">
-                  <h3><%= person.first_name %> <%= person.last_name %></h3>
-                  <p class="text-green"><%= person.role %></p>
-                  <span class="staff-dept"><%= person.department %></span>
+                <div class="staff-card__content">
+                    <h3 class="staff-name"><%= s.first_name %> <%= s.last_name %></h3>
+                    <span class="staff-role"><%= s.role %></span>
+                    <div class="staff-dept-badge"><%= s.department %></div>
                 </div>
               </div>
             <% }) %>
@@ -57,14 +53,14 @@
       </section>
 
       <!-- BOTTOM FILTER BAR -->
-      <nav class="bottom-filter-bar glass-fx">
-        <div class="filter-controls">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <% departments.forEach(dept => { %>
-            <button class="filter-btn" data-filter="<%= dept.name %>"><%= dept.name %></button>
-          <% }) %>
-        </div>
-      </nav>
+      <div class="filter-controls-wrap">
+          <div class="bottom-filter-bar filter-bar">
+              <button class="filter-btn active" data-filter="all">All Leadership</button>
+              <% departments.forEach(dept => { %>
+                  <button class="filter-btn" data-filter="<%= dept.name %>"><%= dept.name %></button>
+              <% }) %>
+          </div>
+      </div>
 
       <!-- DETAIL POPUP (CINEMATIC) -->
       <div class="staff-popup" id="staff-popup">
@@ -89,43 +85,76 @@
   
 
   <style>
-    :root { --aa-green: #22c55e; --aa-bg: #050505; }
+    :root { 
+        --aa-green: #22c55e; 
+        --aa-bg: var(--color_1);
+    }
     .text-green { color: var(--aa-green); }
 
-    .staff-page { position: relative; min-height: 100vh; background: var(--aa-bg); }
+    .staff-page {
+        background: var(--aa-bg);
+        color: #1a1a1a;
+        min-height: 100vh;
+    }
     
     .staff-hero { position: relative; height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
     .hero-bg { position: absolute; top:0; left:0; width:100%; height:100%; z-index: 1; }
     .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transform: scale(1.1); }
     .hero-overlay { 
       position: absolute; top:0; left:0; width:100%; height:100%; 
-      background: linear-gradient(to bottom, rgba(34, 197, 94, 0.15) 0%, rgba(5,5,5,0.8) 60%, var(--aa-bg) 100%); 
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(255,255,255,0.8) 60%, var(--aa-bg) 100%); 
       z-index: 2; 
     }
 
     .hero-content { position: relative; z-index: 3; padding: 0 6%; }
     .sub-label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: var(--aa-green); margin-bottom: 20px; }
-    .staff-hero h1 { font-size: clamp(3rem, 7vw, 6rem); line-height: 0.9; font-weight: 900; margin-bottom: 20px; letter-spacing: -0.04em; }
-    .staff-hero p { max-width: 600px; font-size: 1.15rem; color: rgba(255,255,255,0.5); margin: 0 auto; }
+    .hero-title {
+        font-size: clamp(3.5rem, 10vw, 7rem);
+        font-weight: 950;
+        line-height: 0.85;
+        letter-spacing: -0.05em;
+        margin-bottom: 30px;
+        color: #1a1a1a;
+    }
+    .hero-sub {
+        font-size: 1.25rem;
+        color: rgba(26, 26, 26, 0.5);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
 
     .staff-directory { padding: 40px 6% 150px; position: relative; z-index: 5; }
     .directory-container { max-width: 1400px; margin: 0 auto; }
     
     .staff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
     
-    .staff-card { 
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 30px; 
-      overflow: hidden; cursor: pointer; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    .staff-card {
+        background: #ffffff;
+        border: 1.5px solid rgba(26, 26, 26, 0.1);
+        border-radius: 40px;
+        overflow: hidden;
+        transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        cursor: pointer;
+        position: relative;
     }
-    .staff-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.05); border-color: rgba(34, 197, 94, 0.3); }
+    .staff-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        border-color: var(--aa-green);
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08);
+    }
     
-    .staff-img-wrap { aspect-ratio: 1; overflow: hidden; }
-    .staff-img-wrap img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 1s; }
-    .staff-card:hover .staff-img-wrap img { filter: grayscale(0); transform: scale(1.05); }
+    .staff-card__img { aspect-ratio: 1; overflow: hidden; }
+    .staff-card__img img {
+        width: 100%; height: 100%; object-fit: cover;
+        opacity: 0.9;
+        transition: 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .staff-card:hover .staff-card__img img { opacity: 1; transform: scale(1.1); }
 
-    .staff-info { padding: 25px; text-align: center; }
-    .staff-info h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 5px; }
-    .staff-dept { display: block; font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+    .staff-card__content { padding: 35px; text-align: center; }
+    .staff-name { font-size: 1.5rem; font-weight: 850; margin-bottom: 5px; color: #1a1a1a; }
+    .staff-role { font-size: 0.85rem; color: var(--aa-green); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
     /* Bottom Filter Bar */
     .bottom-filter-bar { 
@@ -133,12 +162,12 @@
       bottom: 30px; 
       left: 50%; 
       transform: translateX(-50%); 
-      z-index: 1000; /* High IQ: Ensure it sits above AI bubble if they overlap */
+      z-index: 1000;
       padding: 10px 10px; 
       border-radius: 100px; 
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.1);
       width: max-content;
       max-width: 90vw; 
       display: flex;
@@ -150,9 +179,9 @@
     .filter-controls { display: flex; gap: 5px; white-space: nowrap; }
     .filter-btn { 
       padding: 12px 25px; border-radius: 100px; background: transparent; border: none; 
-      color: rgba(255,255,255,0.5); font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.3s;
+      color: #1a1a1a; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.3s;
     }
-    .filter-btn:hover { color: white; }
+    .filter-btn:hover { color: var(--aa-green); }
     .filter-btn.active { background: var(--aa-green); color: white; }
 
     /* Popup */
@@ -161,8 +190,6 @@
       z-index: 2000; visibility: hidden; opacity: 0;
       display: flex; align-items: center; justify-content: center; padding: 6%;
     }
-    .popup-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
-    .popup-content { position: relative; z-index: 2; width: 100%; max-width: 700px; padding: 60px; border-radius: 40px; text-align: center; }
     .close-popup { position: absolute; top: 30px; right: 30px; background: transparent; border: none; font-size: 2rem; color: white; cursor: pointer; line-height: 1; }
     .popup-header h2 { font-size: 4rem; line-height: 0.95; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 40px; }
     .popup-quote p { font-size: 1.5rem; line-height: 1.6; font-style: italic; color: rgba(255,255,255,0.7); }

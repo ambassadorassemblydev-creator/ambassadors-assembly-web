@@ -139,12 +139,10 @@
   <style>
     :root {
       --aa-green: rgba(113, 178, 128, 1);
-      --aa-green-glow: rgba(113, 178, 128, 0.4);
-      --aa-bg: #050505;
-      --aa-acc: #134E5E;
+      --aa-green-glow: rgba(113, 178, 128, 0.2);
     }
 
-    body.dmRoot { background: var(--aa-bg); color: white; }
+    body.dmRoot { background: var(--color_1); color: #1a1a1a; }
 
     .text-green { color: var(--aa-green); }
 
@@ -174,7 +172,7 @@
     }
     .about-hero__overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(to top, var(--aa-bg) 0%, rgba(5,5,5,0.4) 40%, transparent 100%);
+      background: linear-gradient(to top, var(--color_1) 0%, rgba(245, 240, 232, 0.4) 40%, transparent 100%);
       z-index: 2;
     }
 
@@ -185,7 +183,7 @@
       flex-direction: column;
       justify-content: flex-end; /* High IQ: Anchoring text low for cinematic feel */
       padding: 0 8% 12vh 8%;
-      color: white;
+      color: #1a1a1a;
       z-index: 10;
       width: 100%;
     }
@@ -194,7 +192,7 @@
     .editorial-container {
       position: relative;
       display: flex;
-      background: var(--aa-bg);
+      background: var(--color_1);
       padding: 0 8%;
       z-index: 20;
       margin-top: 15vh; /* Large breathe room */
@@ -208,7 +206,7 @@
     .side-nav__inner { position: relative; padding-left: 20px; }
     .side-nav__line {
       position: absolute; left: 0; top: 0; width: 1px; height: 100%;
-      background: rgba(255,255,255,0.05);
+      background: rgba(26,26,26,0.1);
     }
     .side-nav__progress {
       position: absolute; left: -1px; top: 0; width: 3px; height: 0%;
@@ -216,18 +214,18 @@
       box-shadow: 0 0 15px var(--aa-green-glow);
     }
     .side-nav__item {
-      margin-bottom: 50px; cursor: pointer; opacity: 0.2;
+      margin-bottom: 50px; cursor: pointer; opacity: 0.4;
       transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .side-nav__item.active { opacity: 1; }
+    .side-nav__item.active { opacity: 1; color: #1a1a1a; }
     .side-nav__num { font-size: 0.7rem; font-weight: 900; color: var(--aa-green); margin-bottom: 8px; display: block; }
     .side-nav__label { font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; }
 
     .editorial-content { flex: 1; max-width: 800px; margin-left: 60px; }
     .ed-section { padding-bottom: 200px; }
     .section-label { font-size: 0.7rem; font-weight: 900; opacity: 0.2; letter-spacing: 5px; margin-bottom: 30px; }
-    .ed-title { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 0.95; margin-bottom: 50px; letter-spacing: -0.04em; }
-    .ed-text { font-size: 1.3rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
+    .ed-title { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 0.95; margin-bottom: 50px; letter-spacing: -0.04em; color: #1a1a1a; }
+    .ed-text { font-size: 1.3rem; color: rgba(26,26,26,0.7); line-height: 1.7; }
     .ed-image-wrap { margin-top: 80px; border-radius: 40px; overflow: hidden; }
 
     /* LEADERSHIP GRID (PREMIUM) */
@@ -237,22 +235,23 @@
     }
     .leader-card {
       padding: 0; border-radius: 35px; overflow: hidden;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: #ffffff;
+      border: 1.5px solid rgba(26,26,26,0.1);
       transition: 0.5s transform cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     }
-    .leader-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.04); }
+    .leader-card:hover { transform: translateY(-10px); background: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
     .leader-img { width: 100%; aspect-ratio: 0.85; overflow: hidden; }
     .leader-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
     .leader-card:hover .leader-img img { filter: grayscale(0%); scale: 1.05; }
     .leader-info { padding: 30px; text-align: left; }
-    .leader-info h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+    .leader-info h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; color: #1a1a1a; }
     .leader-info p { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--aa-green); text-transform: uppercase; }
 
-    .dna-list { border-top: 1px solid rgba(255,255,255,0.05); }
-    .dna-item { padding: 60px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .dna-list { border-top: 1.5px solid rgba(26,26,26,0.1); }
+    .dna-item { padding: 60px 0; border-bottom: 1.5px solid rgba(26,26,26,0.1); }
     .dna-label { font-size: 0.7rem; font-weight: 900; color: var(--aa-green); letter-spacing: 3px; margin-bottom: 15px; display: block; }
-    .dna-item p { font-size: 1.8rem; font-weight: 600; line-height: 1.2; }
+    .dna-item p { font-size: 1.8rem; font-weight: 600; line-height: 1.2; color: #1a1a1a; }
 
     @media (max-width: 1100px) {
       .editorial-container { flex-direction: column; padding: 0 6%; }

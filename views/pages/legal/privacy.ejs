@@ -1,6 +1,6 @@
 <%- include('../../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #131313;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);">
   
   <%- include('../../partials/preloader') %>
   
@@ -25,7 +25,7 @@
 
         <section class="legal-content">
             <div class="container">
-                <div class="content-wrapper gsap-up">
+                <div class="content-wrapper content-sections gsap-up">
                     <h2>1. Data Collection</h2>
                     <p>We collect information that you provide to us directly through your account registration, profile updates, and participation in community features such as the Prayer Wall and Testimonies.</p>
 
@@ -64,16 +64,11 @@
 
         .legal-header {
             padding: 80px 0 40px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
             text-align: center;
         }
 
-        .legal-header h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 900;
-            margin: 0;
-            letter-spacing: -0.02em;
-        }
+        .legal-header h1 { font-size: 3.5rem; font-weight: 950; letter-spacing: -0.04em; margin-bottom: 20px; color: #1a1a1a; }
+        .legal-header p { color: rgba(26, 26, 26, 0.5); font-size: 1.1rem; }
 
         .last-updated {
             font-size: 0.9rem;
@@ -84,21 +79,18 @@
         }
 
         .legal-content {
-            padding: 80px 0;
-            line-height: 1.8;
-            color: rgba(255,255,255,0.7);
+            background: #ffffff;
+            border: 1.5px solid rgba(26, 26, 26, 0.1);
+            border-radius: 40px;
+            padding: 60px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.05);
+            color: #1a1a1a;
+            margin-bottom: 100px;
         }
 
-        .content-wrapper h2 {
-            color: white;
-            font-size: 1.5rem;
-            margin: 40px 0 20px;
-            font-weight: 700;
-        }
-
-        .content-wrapper p {
-            margin-bottom: 20px;
-        }
+        .content-sections h2 { font-size: 1.5rem; font-weight: 800; color: #1a1a1a; margin-top: 40px; margin-bottom: 15px; }
+        .content-sections p { line-height: 1.8; color: rgba(26, 26, 26, 0.6); margin-bottom: 20px; }
+        .content-sections ul { padding-left: 20px; color: rgba(26, 26, 26, 0.6); margin-bottom: 25px; }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

@@ -1,6 +1,6 @@
 <%- include('../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #0c0c0c;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);">
   
   <%- include('../partials/preloader') %>
   
@@ -65,22 +65,20 @@
               }
 
               .dept-card {
-                background: rgba(255, 255, 255, 0.03);
-                border: 1px solid rgba(255, 255, 255, 0.05);
+                background: #ffffff;
+                border: 1.5px solid rgba(26, 26, 26, 0.1);
                 border-radius: 28px;
                 padding: 40px;
                 position: relative;
                 overflow: hidden;
                 transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-                backdrop-filter: blur(15px);
                 animation: dashFadeUp 0.8s ease backwards;
               }
 
               .dept-card:hover {
-                background: rgba(113, 178, 128, 0.05);
-                border-color: rgba(113, 178, 128, 0.3);
+                border-color: var(--accent-sage);
                 transform: translateY(-10px);
-                box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+                box-shadow: 0 25px 50px rgba(0,0,0,0.05);
               }
 
               .dept-icon {
@@ -101,13 +99,13 @@
                 font-family: 'Outfit', sans-serif;
                 font-size: 26px;
                 font-weight: 800;
-                color: white;
+                color: #1a1a1a;
                 margin: 0 0 16px;
                 letter-spacing: -0.5px;
               }
 
               .dept-desc {
-                color: rgba(255,255,255,0.45);
+                color: rgba(26, 26, 26, 0.5);
                 font-size: 15px;
                 line-height: 1.7;
                 margin-bottom: 35px;
@@ -123,9 +121,9 @@
                 align-items: center;
                 gap: 12px;
                 padding: 14px 28px;
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                color: white;
+                background: #fafafa;
+                border: 1.5px solid rgba(26, 26, 26, 0.1);
+                color: #1a1a1a;
                 border-radius: 100px;
                 text-decoration: none;
                 font-size: 13px;
