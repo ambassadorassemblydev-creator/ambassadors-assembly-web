@@ -50,11 +50,11 @@
   
 
     :root {
-      --color_1: rgba(19, 19, 19, 1);
+      --color_1: #f5f0e8;
       --color_2: rgba(34, 197, 94, 1);
-      --color_3: rgba(255, 255, 255, 1);
-      --color_4: rgba(233, 233, 233, 1);
-      --color_5: rgba(234, 246, 255, 1);
+      --color_3: rgba(19, 19, 19, 1);
+      --color_4: rgba(19, 19, 19, 1);
+      --color_5: rgba(19, 19, 19, 1);
       --max-content-width_1: 1200px;
     }
   
@@ -72,11 +72,11 @@
     }
  
     :root {
-      --color_1: rgba(19, 19, 19, 1);
+      --color_1: #f5f0e8;
       --color_2: rgba(113, 178, 128, 1); /* Brand Sage Green */
-      --color_3: rgba(255, 255, 255, 1);
-      --color_4: rgba(233, 233, 233, 1);
-      --color_5: rgba(234, 246, 255, 1);
+      --color_3: rgba(19, 19, 19, 1);
+      --color_4: rgba(19, 19, 19, 1);
+      --color_5: rgba(19, 19, 19, 1);
       --max-content-width_1: 1200px;
       --aa-conic-grad: conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%);
       --hover-transform-zoomout: scale(1.06);
@@ -90,6 +90,10 @@
       --hover-transform-rotate: rotate(7deg);
       --hover-transform-opacity: 0.7;
       --hover-scroll-transform: translate3d(0, 0, 0)
+    }
+
+    .dmBody, .dmOuter, #dm_content {
+      background: var(--color_1) !important;
     }
 
     @keyframes gradientFlow {
@@ -604,7 +608,8 @@
     .widget-bb326d .swiper-slide {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(180deg, transparent 70%, #161616 100%)
+      background-color: #1a1a1a;
+      border-radius: 40px;
     }
     .widget-bb326d .slide-1 {
       width: 100%;
@@ -631,12 +636,14 @@
       z-index: 0
     }
     .widget-bb326d .slide-1 .hero-title {
-      color: var(--color_3, #fff);
+      color: #ffffff;
       font-size: 72px;
-      margin: 0
+      margin: 0;
+      text-shadow: 0px 4px 20px rgba(0,0,0,0.5);
     }
     .widget-bb326d .slide-1 .hero-text {
-      color: rgba(255, 255, 255, .75)
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0px 2px 10px rgba(0,0,0,0.5);
     }
     .widget-bb326d .video-container::after {
       content: "";
@@ -645,7 +652,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      background: linear-gradient(180deg, transparent 70%, #161616 100%)
+      background: linear-gradient(180deg, transparent 50%, rgba(15,15,15,0.9) 100%);
     }
     .widget-bb326d .hero-video {
       width: 100%;
@@ -657,7 +664,8 @@
     .widget-bb326d .slide-3 .hero-title {
       font-size: 42px;
       margin: 0;
-      color: var(--color_3, #fff)
+      color: #ffffff;
+      text-shadow: 0px 4px 20px rgba(0,0,0,0.5);
     }
     .widget-bb326d .slide-2 {
       width: 100%;
@@ -672,7 +680,12 @@
     }
     .widget-bb326d .slide-2::after {
       content: "";
-      background: linear-gradient(180deg, hsla(0, 0%, 9%, .2) 60%, #161616 100%)
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(180deg, rgba(0,0,0, 0.1) 40%, rgba(15,15,15,0.9) 100%);
     }
     .widget-bb326d .slide-2 .button-con,
     .widget-bb326d .slide-2-text {
@@ -680,7 +693,8 @@
       z-index: 1
     }
     .widget-bb326d .slide-2 .hero-text {
-      color: var(--color_3, #fff)
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0px 2px 10px rgba(0,0,0,0.5);
     }
     .widget-bb326d .slide-3-mobile-bg,
     .widget-bb326d .slide-3-mobile-bg::after,
@@ -704,8 +718,13 @@
     }
     .widget-bb326d .slide-3::after {
       content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
       z-index: 0;
-      background: linear-gradient(180deg, hsla(0, 0%, 9%, .2) 60%, #161616 100%)
+      background: linear-gradient(180deg, rgba(0,0,0, 0.1) 40%, rgba(15,15,15,0.9) 100%);
     }
     .widget-bb326d .slide-3-mobile-bg {
       display: none;
@@ -721,7 +740,7 @@
     }
     .widget-bb326d .slide-3-mobile-bg::after {
       content: "";
-      background: linear-gradient(180deg, transparent 35%, #161616 95%)
+      background: linear-gradient(180deg, transparent 35%, rgb(226, 226, 204) 95%)
     }
     .widget-bb326d .glass-button,
     .widget-bb326d .sec-button {
@@ -732,7 +751,8 @@
       display: flex
     }
     .widget-bb326d .slide-3 .hero-text {
-      color: var(--color_3, #fff)
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0px 2px 10px rgba(0,0,0,0.5);
     }
     .widget-bb326d .button-con {
       display: flex;
@@ -744,20 +764,27 @@
     }
     .widget-bb326d .sec-button {
       width: auto;
-      color: var(--color_3);
+      color: #ffffff;
       align-items: center;
       justify-content: center
     }
     .widget-bb326d .sec-button svg {
-      fill: var(--color_3);
+      fill: #ffffff;
       width: 15px;
       height: 15px;
       margin-left: 5px
     }
     .widget-bb326d .glass-button a,
     .widget-bb326d .sec-button a {
-      color: #fff !important;
+      color: #ffffff !important;
       text-decoration: none
+    }
+    .widget-bb326d .glass-button {
+      border: 1px solid rgba(113, 178, 128, 0.5);
+      background: rgba(113, 178, 128, 0.15);
+    }
+    .widget-bb326d .glass-button::before {
+      background: linear-gradient(90deg, transparent 30%, rgba(113, 178, 128, 0.6), transparent);
     }
     .widget-bb326d .mobile-hero {
       display: none
@@ -1013,37 +1040,12 @@
       overflow: hidden
     }
     .glass {
-      background: rgba(255, 255, 255, .05);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(113, 178, 128, 1);
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, .1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, .1), inset 0 1px 0 rgba(255, 255, 255, .1), inset 0 -1px 0 rgba(255, 255, 255, .1), inset 0 0 .3px .5px rgba(255, 255, 255, .1);
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       position: relative;
       overflow: hidden
-    }
-    .glass:after,
-    .glass:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0
-    }
-    .glass:before {
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .4), transparent 40%)
-    }
-    .glass:after {
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-      padding: 1px;
-      background: linear-gradient(174deg, transparent 90%, rgba(255, 255, 255, .5) 100%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude
     }
     #dm .dmInner .glass-icon .svg * {
       fill: url(#icon-gradient) !important
@@ -1052,18 +1054,23 @@
       display: flex;
       width: 200px;
       height: 50px;
-      color: var(--color_3);
+      color: #1a1a1a;
       text-decoration: none;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, .05);
+      background: rgba(113, 178, 128, 0.15);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-radius: 15px;
-      border: 1px solid rgba(255, 255, 255, .1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, .1), inset 0 1px 0 rgba(255, 255, 255, .05), inset 0 -1px 0 rgba(255, 255, 255, .05), inset 0 0 1px 1px rgba(255, 255, 255, .05);
+      border: 1px solid rgba(113, 178, 128, 0.4);
+      box-shadow: 0 8px 32px rgba(113, 178, 128, 0.1), inset 0 1px 0 rgba(113, 178, 128, 0.2), inset 0 -1px 0 rgba(113, 178, 128, 0.1);
       position: relative;
-      overflow: hidden
+      overflow: hidden;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .glass-button:hover {
+      background: rgba(113, 178, 128, 0.25);
     }
     .glass-button:after,
     .glass-button:before {
@@ -1075,46 +1082,21 @@
     .glass-button:before {
       right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, .4), transparent)
+      background: linear-gradient(90deg, transparent 30%, rgba(113, 178, 128, 0.6), transparent)
     }
     .glass-button:after {
       width: 100%;
       height: 100%;
       border-radius: 12px;
-      background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .15) 0, transparent 70%);
+      background: radial-gradient(circle at 30% 20%, rgba(113, 178, 128, 0.2) 0, transparent 70%);
       mix-blend-mode: overlay
     }
     .glass-card {
-      background: rgba(255, 255, 255, .05);
+      background: rgba(113, 178, 128, 1);
       border-radius: 20px;
       position: relative;
-      box-shadow: inset 12px 12px 50px 0 rgba(255, 255, 255, .075), 0 4px 15px rgba(0, 0, 0, .7);
-      border: 1px solid rgba(225, 225, 225, .1)
-    }
-    .glass-card:after,
-    .glass-card:before {
-      content: '';
-      position: absolute;
-      top: 0
-    }
-    .glass-card:after {
-      left: 50%;
-      width: calc(100% - 40px);
-      height: 1px;
-      transform: translateX(-50%);
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .4) 20%, transparent, transparent 80%, rgba(255, 255, 255, .4) 90%, transparent)
-    }
-    .glass-card:before {
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-      padding: 1px;
-      background: linear-gradient(170deg, transparent 90%, rgba(255, 255, 255, .4) 100%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: none;
     }
     .dmBody [data-layout-grid]>.flex-element.group {
       padding-bottom: var(--section-padding-bottom);
@@ -1234,7 +1216,7 @@
       }
     }
     .footer-bg {
-      background: url(https://irp.cdn-website.com/23c7a45a/dms3rep/multi/footer-bg-c9a372bf.png?dm-skip-opt=true) !important
+      background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%)) !important;
     }
     @media all {
       #\33 0306300,
@@ -1786,7 +1768,7 @@
         max-height: 100%;
         row-gap: 24px;
         column-gap: 4%;
-        background-image: url(https://lirp.cdn-website.com/23c7a45a/dms3rep/multi/opt/mobile-footer-bg-1920w.png);
+        background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%));
         height: auto;
         order: 1;
         min-width: 32px;

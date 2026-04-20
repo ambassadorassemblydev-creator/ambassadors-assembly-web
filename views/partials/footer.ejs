@@ -353,47 +353,7 @@
       font-style: normal;
     }
   </style>
-  <style>
-    @font-face {
-      font-family: "AppleGaramond-Light";
-      src: url("/fonts/AppleGaramond-Light.ttf");
-      font-weight: 400;
-      font-style: normal;
-    }
-  </style>
-  <!-- RT CSS Include d-css-runtime-flex-->
-  <link rel="stylesheet" href="/css/vendor/d-css-runtime-flex.min.css" type="text/css">
-  <!-- End of RT CSS Include -->
-  <link rel="stylesheet" href="/css/vendor/widget-styles.css" id="widgetCSS" type="text/css">
-  <!-- Support `img` size attributes -->
-  <style>
-    img[width][height] {
-      height: auto;
-    }
-  </style>
-  <!-- Support showing sticky element on page only -->
-  <style>
-    body[data-page-alias="home"] #dm [data-show-on-page-only="home"] {
-      display: block !important;
-    }
-  </style>
-  <!-- This is populated in Ajax navigation -->
-  <style id="pageAdditionalWidgetsCss" type="text/css">
-  </style>
-  <!-- Site CSS -->
-  <link rel="stylesheet" href="/css/vendor/site-global.min.css" id="siteGlobalCss" type="text/css">
-  <style id="customWidgetStyle" type="text/css">
-  </style>
-  <style id="innerPagesStyle" type="text/css">
-  </style>
-  <style id="additionalGlobalCss" type="text/css">
-  </style>
-  <!-- Page CSS -->
-  <link rel="stylesheet" href="/css/vendor/home-page.min.css" id="homeCssLink" type="text/css">
-  <style id="pagestyle" type="text/css">
-  </style>
-  <style id="pagestyleDevice" type="text/css">
-  </style>
+  
   <!-- Flex Sections CSS -->
   <style id="globalFontSizeStyle" type="text/css">
     @media (min-width: 1025px) {
@@ -521,97 +481,7 @@
   </script>
   <script>
     window.customWidgetsFunctions["d5c0c8fad21f4820bc13d4fe48e88a9e~2"] = function (element, data, api) {
-      window.dmAPI.runOnReady('widget-d5c0c8', () => {
-        // Load GSAP core + common plugins, then initialize animations
-        function loadScript(src) {
-          return new Promise((resolve, reject) => {
-            if (document.querySelector(`script[src="${src}"]`)) {
-              resolve();
-              return;
-            }
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-          });
-        }
-        const GSAP_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5';
-        loadScript(`${GSAP_CDN}/gsap.min.js`)
-          .then(() => Promise.all([
-            loadScript(`${GSAP_CDN}/ScrollTrigger.min.js`),
-            loadScript(`${GSAP_CDN}/ScrollToPlugin.min.js`),
-            loadScript(`${GSAP_CDN}/TextPlugin.min.js`),
-            loadScript(`${GSAP_CDN}/Draggable.min.js`),
-          ]))
-          .then(() => {
-            // Register plugins
-            gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin, Draggable);
-            // ─────────────────────────────────────────
-            // Your GSAP animation code starts here
-            // ─────────────────────────────────────────
-            const eventCards = document.querySelectorAll(".event-card");
-            eventCards.forEach((card) => {
-              const startPos = card.dataset.start
-              const x = card.dataset.x;
-              const y = card.dataset.y;
-              const rotate = card.dataset.rotate;
-              const eventsComplete = () => {
-                gsap.set(card, {
-                  y: y,
-                  x: x,
-                  rotate: rotate,
-                })
-              }
-              const eventsTl = gsap.timeline({ scrollTrigger: '.event-cards', onComplete: eventsComplete });
-              gsap.set(card, {
-                y: 100,
-                x: startPos,
-                rotate: -12,
-              })
-              eventsTl.to(card, {
-                rotate: 0,
-                y: 0,
-                ease: "sine",
-                duration: .75,
-              })
-              eventsTl.to(card, {
-                opacity: 1,
-                duration: .5,
-              })
-              eventsTl.to(card, {
-                x: x,
-                y: y,
-                rotate: rotate,
-                ease: "sine",
-              }, ">=-.5")
-              if (window.innerWidth > 767) {
-                card.addEventListener("mouseenter", () => {
-                  gsap.to(card, {
-                    y: parseFloat(y) - 25,
-                    rotate: 0,
-                    duration: 0.3,
-                    ease: "sine",
-                  });
-                });
-                card.addEventListener("mouseleave", () => {
-                  gsap.to(card, {
-                    y: y,
-                    rotate: rotate,
-                    duration: 0.3,
-                    ease: "sine",
-                  });
-                });
-              };
-            })
-            // ─────────────────────────────────────────
-            // Your GSAP animation code ends here
-            // ─────────────────────────────────────────
-          })
-          .catch((err) => {
-            console.error('Failed to load GSAP scripts:', err);
-          });
-      });
+      // GSAP logic moved to index-page.js
     };
   </script>
   <script>
@@ -1135,10 +1005,10 @@
       .baseline-links { display: flex; gap: 30px; }
       .baseline-links a { 
         font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-        color: rgba(255,255,255,0.3); text-decoration: none; transition: 0.3s;
+        color: green; text-decoration: none; transition: 0.3s;
       }
       .baseline-links a:hover { color: var(--aa-green); }
-      .copyright { font-size: 0.75rem; color: rgba(255,255,255,0.2); font-weight: 600; margin: 0; }
+      .copyright { font-size: 0.75rem; color: green; font-weight: 600; margin: 0; }
 
       @media (max-width: 600px) {
         .footer-baseline { flex-direction: column; gap: 20px; text-align: center; }

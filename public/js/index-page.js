@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
             split.chars,
             {
               duration: 0.5,
-              color: "#ffffff",
+              color: "#000",
               stagger: 0.2,
             },
             0.1
@@ -408,6 +408,79 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener('resize', function (event) {
     ScrollTrigger.refresh();
   });
+
+  // ============================================================
+  // EVENT CARDS — Fan out animation
+  // ============================================================
+  const eventCards = document.querySelectorAll(".event-card");
+  if (eventCards.length > 0) {
+    eventCards.forEach((card) => {
+      const startPos = card.dataset.start || "0";
+      const x = card.dataset.x || "0";
+      const y = card.dataset.y || "0";
+      const rotate = card.dataset.rotate || "0";
+      
+      const eventsComplete = () => {
+        gsap.set(card, {
+          y: y,
+          x: x,
+          rotate: rotate,
+        });
+      };
+      
+      const eventsTl = gsap.timeline({ 
+        scrollTrigger: {
+          trigger: '.event-cards',
+          start: "top 80%"
+        }, 
+        onComplete: eventsComplete 
+      });
+      
+      gsap.set(card, {
+        y: 100,
+        x: startPos,
+        rotate: -12,
+      });
+      
+      eventsTl.to(card, {
+        rotate: 0,
+        y: 0,
+        ease: "sine",
+        duration: 0.75,
+      });
+      
+      eventsTl.to(card, {
+        opacity: 1,
+        duration: 0.5,
+      });
+      
+      eventsTl.to(card, {
+        x: x,
+        y: y,
+        rotate: rotate,
+        ease: "sine",
+      }, ">=-0.5");
+      
+      if (window.innerWidth > 767) {
+        card.addEventListener("mouseenter", () => {
+          gsap.to(card, {
+            y: parseFloat(y) - 25,
+            rotate: 0,
+            duration: 0.3,
+            ease: "sine",
+          });
+        });
+        card.addEventListener("mouseleave", () => {
+          gsap.to(card, {
+            y: y,
+            rotate: rotate,
+            duration: 0.3,
+            ease: "sine",
+          });
+        });
+      }
+    });
+  }
 
   // ============================================================
   // LOVE IN ACTION — Scroll-Scrubbed Parallax + Circle Collapse
