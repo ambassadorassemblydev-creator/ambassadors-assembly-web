@@ -28,7 +28,7 @@ html.lenis, html.lenis body {
 
 /* ─── Text Gradient ("Join us Sunday" heading) ─────────────── */
 .text-gradient {
-  background: linear-gradient(135deg, rgba(113, 178, 128, 1) 0%, rgba(19, 78, 94, 1) 100%);
+  background: linear-gradient(135deg, #25D366 0%, rgba(19, 78, 94, 1) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: 'Articulat CF Demi Bold', sans-serif;
@@ -257,7 +257,7 @@ html.lenis, html.lenis body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #f5f0e8 0%, #ede8df 40%, #71b280 100%);
+  background: linear-gradient(135deg, #f5f0e8 0%, #ede8df 40%, #25D366 100%);
   clip-path: circle(150% at 50% 50%);
   will-change: clip-path;
 }
@@ -351,7 +351,7 @@ html.lenis, html.lenis body {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #f9f9f7 0%, #ede8df 50%, #71b280 100%);
+  background: linear-gradient(135deg, #f9f9f7 0%, #ede8df 50%, #25D366 100%);
   overflow: hidden;
   z-index: 1;
 }
@@ -1046,7 +1046,7 @@ html.lenis, html.lenis body {
 }
 
 .newsletter-form__input:focus {
-  border-color: rgba(113, 178, 128, 1);
+  border-color: #25D366;
 }
 
 .newsletter-form__btn {
@@ -1298,7 +1298,7 @@ html.lenis, html.lenis body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, rgba(113, 178, 128, 1) 100%));
+  background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #25D366 100%));
   background-size: 200% 200%;
   animation: gradientFlow 20s ease infinite;
   z-index: 1;
@@ -1611,6 +1611,6 @@ html.lenis, html.lenis body {
    ============================================================ */
 
 .fs-menu__link.active-link {
-  color: rgba(113, 178, 128, 1); /* Active Sage Green */
+  color: #25D366; /* Active Brand Green */
   font-family: 'Articulat CF Demi Bold', sans-serif;
 }
