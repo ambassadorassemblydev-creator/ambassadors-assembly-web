@@ -36,7 +36,20 @@ export const pageController = {
             return res.status(503).json({ status: 'unhealthy', error: error.message, ...stats });
         }
     },
-    
+    // Render FAQ Page
+    renderFaq: async (req, res) => {
+        try {
+            res.render('pages/faq', {
+                pageTitle: 'FAQ | Ambassadors Assembly',
+                currentPath: req.path,
+                preloaderText: 'QUESTIONS'
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering FAQ:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading FAQ page' });
+        }
+    },
+
     // Render the Home Page
     renderHome: async (req, res) => {
         try {
@@ -320,17 +333,21 @@ export const pageController = {
     // Render the Staff Page (Dynamically filtered)
     renderStaff: async (req, res) => {
         try {
-            const [staff, departments] = await Promise.all([
+            const [staff, departments, ministries, projects] = await Promise.all([
                 memberRepo.getStaff(),
-                memberRepo.getDepartments()
+                memberRepo.getDepartments(),
+                ministryRepo.getFeaturedMinistries(20),
+                donationRepo.getBuildingProjects()
             ]);
             
             res.render('pages/staff', {
-                pageTitle: 'Our Staff | Ambassadors Assembly',
+                pageTitle: 'Our Team | Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'OUR TEAM',
                 staff: staff || [],
                 departments: departments || [],
+                ministries: ministries || [],
+                projects: projects || [],
                 defaultFilter: 'Pastoral'
             });
         } catch (error) {

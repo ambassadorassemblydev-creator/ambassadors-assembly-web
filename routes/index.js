@@ -27,6 +27,7 @@ router.get('/give', pageController.renderGive);
 router.get('/about', pageController.renderAbout);
 router.get('/connect', pageController.renderConnect);
 router.get('/plan-a-visit', pageController.renderPlanVisit);
+router.get('/faq', pageController.renderFaq);
 router.get('/fund-the-buildings', pageController.renderFundTheBuildings);
 router.get('/fund-the-buildings/:slug', pageController.renderBuildingDetail);
 router.get('/staff', pageController.renderStaff);

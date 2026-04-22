@@ -1,0 +1,188 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper">
+      <div dmwrapped="true" id="faq-page" class="dm-home-page">
+        <div id="dmStyle_outerContainer" class="dmOuter">
+          <div id="dmStyle_innerContainer" class="dmInner">
+            <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+              <div id="site_content">
+                <%- include('../partials/navbar') %>
+
+                <main class="faq-page">
+                  <section class="faq-hero">
+                    <div class="hero-bg">
+                      <div class="hero-overlay"></div>
+                    </div>
+                    <div class="hero-content">
+                      <span class="sub-label">Got Questions?</span>
+                      <h1 class="hero-title">Frequently Asked <span class="text-green">Questions</span></h1>
+                    </div>
+                  </section>
+
+                  <section class="faq-content">
+                    <div class="faq-container">
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">What time are your services? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>We have two services on Sundays: First Service at 8:00 AM and Second Service at 10:00 AM. We also hold a Mid-Week Bible Study on Wednesdays at 6:00 PM.</p>
+                        </div>
+                      </div>
+
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">Where are you located? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>We are located at 123 Ambassadors Drive, Ikeja, Lagos, Nigeria. You can find a detailed map and directions on our Plan Your Visit page.</p>
+                        </div>
+                      </div>
+
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">Is there a dress code? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>We encourage you to come as you are. Whether you prefer dressing up in your Sunday best or dressing more casually, you are welcome here. We believe God looks at the heart, not the outward appearance.</p>
+                        </div>
+                      </div>
+
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">Do you have programs for children? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>Yes, we have a vibrant Children's Ministry that runs concurrently with our main services. Your children will be taught the Word of God in a safe, fun, and engaging environment tailored to their age group.</p>
+                        </div>
+                      </div>
+
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">How can I join a ministry or serve? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>We would love for you to get involved! You can explore our various ministries on the Ministries page and sign up there, or you can create an account and complete the Volunteer Application in your dashboard.</p>
+                        </div>
+                      </div>
+
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">How do I request prayer? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>You can submit a prayer request through our Prayer Wall on the website. Our intercessory team and the church family will partner with you in prayer.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </main>
+
+                <%- include('../partials/footer') %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    :root { 
+        --aa-green: #25D366; 
+        --aa-bg: var(--color_1);
+    }
+    .text-green { color: var(--aa-green); }
+
+    .faq-page {
+        background: var(--aa-bg);
+        color: #1a1a1a;
+        min-height: 100vh;
+    }
+    
+    .faq-hero { position: relative; height: 40vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; margin-top: 100px; }
+    
+    .hero-content { position: relative; z-index: 3; padding: 0 6%; }
+    .sub-label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 5px; color: var(--aa-green); margin-bottom: 20px; }
+    .hero-title {
+        font-size: clamp(3rem, 8vw, 5rem);
+        font-weight: 950;
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+        color: #1a1a1a;
+    }
+
+    .faq-content { padding: 40px 6% 150px; }
+    .faq-container { max-width: 800px; margin: 0 auto; }
+    
+    .faq-item {
+        background: #ffffff;
+        border: 1.5px solid rgba(26, 26, 26, 0.1);
+        border-radius: 20px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+    }
+    
+    .faq-question {
+        width: 100%;
+        text-align: left;
+        padding: 25px 30px;
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .faq-question:focus { outline: none; }
+    
+    .faq-question .icon {
+        font-size: 1.5rem;
+        color: var(--aa-green);
+        transition: transform 0.3s ease;
+    }
+    
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        padding: 0 30px;
+    }
+    
+    .faq-answer p {
+        padding-bottom: 25px;
+        color: rgba(26, 26, 26, 0.7);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .faq-item.active { border-color: var(--aa-green); }
+    .faq-item.active .icon { transform: rotate(45deg); }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                });
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                }
+            });
+        });
+    });
+  </script>
+</body>
+</html>

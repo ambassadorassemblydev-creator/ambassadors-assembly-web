@@ -20,6 +20,7 @@
     <section class="testimonies-hero">
         <div class="hero-mask"></div>
         <div class="testimonies-hero__content">
+            
             <h1 class="hero-title" data-gsap="fade-up">God's <span class="text-italic">Glory</span></h1>
             <p class="hero-sub" data-gsap="fade-up" data-gsap-delay="0.1">Real stories of faith, healing, and restoration from our community.</p>
         </div>
@@ -149,13 +150,19 @@
     .witness-info { display: flex; align-items: center; gap: 15px; }
     .author__img { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; }
     .author__img img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .read-more-btn {
+        position: absolute; bottom: 30px; right: 30px;
+        width: 40px; height: 40px; border-radius: 50%;
+        background: transparent; border: 1.5px solid rgba(26,26,26,0.1);
         display: flex; align-items: center; justify-content: center;
-        color: white; transition: 0.3s;
+        color: #1a1a1a; transition: 0.3s;
     }
 
     .testimony-card:hover .read-more-btn {
         background: var(--aa-green);
         border-color: var(--aa-green);
+        color: white;
         transform: rotate(45deg);
     }
 
@@ -163,48 +170,137 @@
     .testimony-submission-cta {
         margin-top: 100px;
         padding: 100px 6%;
-        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(5,5,5,0.8) 100%);
-        border: 1px solid var(--glass-border);
+        background: linear-gradient(135deg, rgba(23, 106, 96, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+        border: 1px solid rgba(23, 106, 96, 0.2);
         border-radius: 50px;
         text-align: center;
+        box-shadow: 0 20px 40px rgba(23, 106, 96, 0.05);
     }
 
     .share-btn {
         margin-top: 40px;
-        background: var(--aa-green);
+        background: linear-gradient(135deg, var(--aa-green) 0%, #115048 100%);
         color: white;
         padding: 20px 50px;
+        border: none;
         border-radius: 100px;
         font-weight: 900;
         text-transform: uppercase;
         letter-spacing: 2px;
+        cursor: pointer;
         transition: 0.4s;
+        box-shadow: 0 10px 25px rgba(23, 106, 96, 0.3);
     }
 
     .share-btn:hover {
         transform: scale(1.05) translateY(-5px);
-        box-shadow: 0 15px 30px rgba(34, 197, 94, 0.3);
+        box-shadow: 0 15px 35px rgba(23, 106, 96, 0.4);
     }
 
     /* Modal Styling */
     .testimony-modal__content {
-        background: #0f0f0f;
-        color: white;
-        border: 1px solid var(--glass-border);
+        background: #ffffff;
+        color: #1a1a1a;
+        border: 1px solid rgba(23, 106, 96, 0.2);
+        box-shadow: 0 25px 50px rgba(23, 106, 96, 0.1);
+        padding: 40px;
+        border-radius: 24px;
+        max-width: 800px;
+        width: 90%;
+        position: relative;
     }
-    .modal-close { color: white; opacity: 0.5; }
+    .modal-close { color: #1a1a1a; opacity: 0.5; position: absolute; top: 20px; right: 20px; cursor: pointer; background: transparent; border: none; }
+    .modal-close:hover { opacity: 1; color: var(--aa-green); }
+
+    .testimony-form-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+        display: flex;
+        justify-content: flex-end;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .testimony-form-overlay.is-active {
+        opacity: 1;
+        visibility: visible;
+    }
 
     /* Floating Panel */
     .testimony-form-panel {
-        background: #0f0f0f;
-        color: white;
-        border-left: 1px solid var(--glass-border);
+        background: #ffffff;
+        color: #1a1a1a;
+        width: 100%;
+        max-width: 500px;
+        height: 100%;
+        border-left: 1px solid rgba(23, 106, 96, 0.2);
+        box-shadow: -10px 0 30px rgba(23, 106, 96, 0.05);
+        padding: 50px 40px;
+        position: relative;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        overflow-y: auto;
     }
+
+    .testimony-form-overlay.is-active .testimony-form-panel {
+        transform: translateX(0);
+    }
+
     .actual-form input, .actual-form textarea {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid var(--glass-border);
-        color: white;
+        background: rgba(26,26,26,0.03);
+        border: 1px solid rgba(26,26,26,0.1);
+        color: #1a1a1a;
+        border-radius: 12px;
+        padding: 15px;
+        width: 100%;
+        margin-top: 5px;
+        font-family: inherit;
     }
+    .actual-form input:focus, .actual-form textarea:focus {
+        border-color: var(--aa-green);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(23, 106, 96, 0.1);
+    }
+    .form-group { margin-bottom: 25px; text-align: left; }
+    .form-group label { font-weight: 700; font-size: 0.95rem; color: #1a1a1a; display: block; margin-bottom: 8px; }
+    .checkbox-label { display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; color: #1a1a1a; }
+    .submit-btn {
+        width: 100%;
+        background: linear-gradient(135deg, var(--color_2) 0%, #115048 100%);
+        color: white;
+        padding: 18px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 20px rgba(23, 106, 96, 0.2);
+        margin-top: 30px;
+    }
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 25px rgba(23, 106, 96, 0.3);
+    }
+    .close-panel { position: absolute; top: 25px; right: 25px; background: transparent; border: none; cursor: pointer; color: #1a1a1a; font-size: 2rem; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: background 0.3s; }
+    .close-panel:hover { background: rgba(23, 106, 96, 0.1); color: var(--color_2); }
+
+    /* Modal Overlay */
+    .testimony-modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; visibility: hidden; z-index: 10000;
+        transition: 0.3s;
+    }
+    .testimony-modal.is-open { opacity: 1; visibility: visible; }
+    .testimony-modal__overlay { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.8); cursor: pointer; }
 
     @media (max-width: 900px) {
         .masonry-grid { columns: 2; }

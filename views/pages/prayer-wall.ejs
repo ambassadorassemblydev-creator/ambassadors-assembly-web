@@ -166,19 +166,21 @@
     }
 
     .submit-prayer-btn {
-        background: var(--aa-green);
-        color: #ffffff;
-        border: none;
-        padding: 14px 34px;
+        background: linear-gradient(135deg, var(--color_2) 0%, #1eac52 100%) !important;
+        color: #ffffff !important;
+        border: none !important;
+        padding: 18px 45px;
         border-radius: 50px;
-        font-weight: 700;
+        font-weight: 800;
+        font-size: 1.1rem;
         cursor: pointer;
-        transition: transform 0.3s ease, background 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
     }
 
     .submit-prayer-btn:hover {
-        transform: scale(1.05);
-        background: #1a1a1a;
+        transform: scale(1.05) translateY(-3px);
+        box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
     }
 
     /* Grid */
@@ -396,11 +398,15 @@
     async function intercede(id) {
         const btn = document.querySelector(`#prayer-${id} .intercede-btn`);
         const countSpan = btn.querySelector('.count');
+        const csrfToken = document.querySelector('input[name="_csrf"]').value;
         
         try {
             const response = await fetch('/prayer-wall/intercede', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-csrf-token': csrfToken
+                },
                 body: JSON.stringify({ requestId: id })
             });
 

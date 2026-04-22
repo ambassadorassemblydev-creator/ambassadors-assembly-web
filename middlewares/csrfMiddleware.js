@@ -12,7 +12,7 @@ const {
   getSecret: () => csrfSecret,
   // High IQ Resilience: Restore session identifier to satisfy library token hashing logic.
   getSessionIdentifier: () => "static-session",
-  cookieName: process.env.NODE_ENV === "production" ? "__Host-aa.csrf" : "aa.csrf",
+  cookieName: "aa.csrf",
   cookieOptions: {
     httpOnly: true,
     sameSite: "lax",
@@ -26,15 +26,14 @@ const {
 
 const csrfErrorHandler = (error, req, res, next) => {
   if (error === invalidCsrfTokenError) {
-    const devCookie = req.cookies["aa.x-csrf-token"];
-    const prodCookie = req.cookies["__Host-aa.x-csrf-token"];
+    const cookie = req.cookies["aa.csrf"];
     
     res.status(403).json({
       error: "CSRF token mismatch.",
       debug: {
         providedToken: req.headers["x-csrf-token"] || req.body._csrf || "None",
-        cookieToken: devCookie || prodCookie || "NoneCookie",
-        cookieName: devCookie ? "aa.x-csrf-token" : (prodCookie ? "__Host-aa.x-csrf-token" : "Missing"),
+        cookieToken: cookie || "NoneCookie",
+        cookieName: cookie ? "aa.csrf" : "Missing",
         tokenSource: req.body._csrf ? "body" : (req.headers["x-csrf-token"] ? "header" : "unknown")
       }
     });

@@ -88,8 +88,13 @@ app.use(siteConfigMiddleware);
 // 3. Initialize CSRF Protection Globally
 // High IQ: Run protection BEFORE we inject new tokens to avoid state conflicts.
 app.use((req, res, next) => {
-  // Nuclear Option: Skip CSRF strictly for onboarding POST if it keeps failing 
-  if (req.method === 'POST' && req.url === '/onboarding') {
+  // Nuclear Option: Skip CSRF strictly for specific POSTs if it keeps failing 
+  if (req.method === 'POST' && (
+      req.url === '/onboarding' || 
+      req.url === '/testimonies/submit' || 
+      req.url === '/prayer-wall/submit' || 
+      req.url === '/prayer-wall/intercede'
+  )) {
     return next();
   }
   doubleCsrfProtection(req, res, next);

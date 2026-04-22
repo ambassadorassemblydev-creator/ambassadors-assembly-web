@@ -51,7 +51,7 @@
 
     :root {
       --color_1: #ffffff;
-      --color_2: rgba(34, 197, 94, 1);
+      --color_2: rgba(23, 106, 96, 1);
       --color_3: rgba(19, 19, 19, 1);
       --color_4: rgba(19, 19, 19, 1);
       --color_5: rgba(19, 19, 19, 1);
@@ -72,14 +72,14 @@
     }
  
     :root {
-      --color_1: #ffffff;
-      --color_2: #25D366; /* Brand Green */
+      --color_1: #f7faf8; /* Faint touch of green */
+      --color_2: #176a60; /* Brand Green */
       --color_3: rgba(19, 19, 19, 1);
       --color_4: rgba(19, 19, 19, 1);
       --color_5: rgba(19, 19, 19, 1);
       --max-content-width_1: 1200px;
-      --aa-conic-grad: conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #25D366 100%);
-      --glass-bg: #25D366;
+      --aa-conic-grad: conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #176a60 100%);
+      --glass-bg: #176a60;
       --glass-border: rgba(255, 255, 255, 0.2);
       --hover-transform-zoomout: scale(1.06);
       --hover-transform-float: translateY(-8px);
@@ -1047,7 +1047,7 @@
       overflow: hidden
     }
     .glass {
-      background: #25D366;
+      background: #176a60;
       border-radius: 20px;
       border: none;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -1065,7 +1065,7 @@
       text-decoration: none;
       align-items: center;
       justify-content: center;
-      background: #25D366;
+      background: #176a60;
       border-radius: 15px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 8px 32px rgba(37, 211, 102, 0.2);
@@ -1076,7 +1076,7 @@
     }
     .glass-button:hover {
       background: #1a1a1a;
-      color: #25D366;
+      color: #176a60;
     }
     .glass-button:after,
     .glass-button:before {
@@ -1098,7 +1098,7 @@
       mix-blend-mode: overlay
     }
     .glass-card {
-      background: #25D366;
+      background: #176a60;
       border-radius: 20px;
       position: relative;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -1222,7 +1222,7 @@
       }
     }
     .footer-bg {
-      background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #25D366 100%)) !important;
+      background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #176a60 100%)) !important;
     }
     @media all {
       #\33 0306300,
@@ -1774,7 +1774,7 @@
         max-height: 100%;
         row-gap: 24px;
         column-gap: 4%;
-        background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #25D366 100%));
+        background: var(--aa-conic-grad, conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #176a60 100%));
         height: auto;
         order: 1;
         min-width: 32px;

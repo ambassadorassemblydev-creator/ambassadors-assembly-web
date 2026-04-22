@@ -362,19 +362,15 @@ export const accountController = {
       }
 
       // 5. Assign correct role — never leave user as 'guest' after onboarding
+      // NOTE: Picking a department during onboarding is an *interest*, not an approval.
+      // Everyone gets 'member' after onboarding. Admin promotes to 'worker' after reviewing
+      // the volunteer_application record in the Approvals Center.
       try {
-        const pastoralTitles = ['Pastor', 'Bishop', 'Apostle', 'Prophet', 'Evangelist'];
-        const leaderTitles = ['Elder', 'Deacon', 'Deaconess', 'Minister'];
         const title = validatedData.title || '';
 
-        let targetRoleName = 'member'; // Minimum role after any onboarding
-
-        if (validatedData.department_interest && validatedData.position_interest) {
-          targetRoleName = 'worker'; // Has chosen a service department
-        }
+        let targetRoleName = 'member'; // All new users become 'member' after onboarding
 
         // Pastoral/leader titles need admin approval — already handled by approval_status
-        // No more hacking the bio field
         if (needsApproval) {
           logger.info(`User ${userId} (${titleStr}) flagged for admin approval during onboarding.`);
         }

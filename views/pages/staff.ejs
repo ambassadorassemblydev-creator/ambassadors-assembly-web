@@ -21,7 +21,7 @@
       <section class="staff-hero">
         <div class="hero-bg">
           <div class="hero-overlay"></div>
-          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop" alt="Staff Background" class="hero-img">
+          <img src="/images/emerald-hero-bg.png" alt="Staff Background" class="hero-img">
         </div>
         <div class="hero-content">
           <span class="sub-label">The Hands & Feet</span>
@@ -36,7 +36,7 @@
           
           <div class="staff-grid" id="staff-grid">
             <% staff.forEach((s, i) => { %>
-              <div class="staff-card gsap-reveal" data-dept="<%= s.department %>">
+              <div class="staff-card gsap-reveal" data-dept="<%= s.department %>" onclick="openStaffDetail(`<%= s.first_name %> <%= s.last_name %>`, `<%= s.role %>`, `Leading the <%= s.department %> with excellence and consecration to ensure the kingdom's mandate is fulfilled.`)">
                 <div class="staff-card__img">
                     <img src="<%= s.avatar_url || '/images/default-avatar.png' %>" alt="<%= s.first_name %>" loading="lazy">
                 </div>
@@ -62,6 +62,85 @@
           </div>
       </div>
 
+      <!-- MINISTRIES / DEPARTMENTS SECTION -->
+      <section class="team-extra-section" style="padding: 80px 6%;">
+        <div class="directory-container">
+          <div style="margin-bottom: 40px; text-align: center;">
+            <span class="sub-label">Get Involved</span>
+            <h2 style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 15px; color: #1a1a1a;">Ministries & Departments</h2>
+            <p style="color: rgba(26,26,26,0.6); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">Discover active ministries and join a community where you can serve with purpose.</p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <% if (ministries && ministries.length > 0) { %>
+              <% ministries.forEach(m => { %>
+                <div style="background: #ffffff; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 24px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+                  <h3 style="font-size: 1.5rem; font-weight: 800; color: #1a1a1a; margin-bottom: 10px;"><%= m.name %></h3>
+                  <p style="font-size: 0.95rem; color: rgba(26,26,26,0.7); line-height: 1.5; margin-bottom: 20px;"><%= m.description || 'A vibrant community of believers serving together.' %></p>
+                  <p style="font-size: 0.8rem; font-weight: 700; color: var(--aa-green); text-transform: uppercase; letter-spacing: 1px;"><%= m.meeting_time ? `Meets: ${m.meeting_time}` : 'Contact for meeting times' %></p>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>Check back soon for our active ministries list.</p>
+            <% } %>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHURCH PROJECTS / OUTREACH SECTION -->
+      <section class="team-extra-section" style="padding: 80px 6%; background: rgba(113, 178, 128, 0.05); border-top: 1.5px solid rgba(26,26,26,0.1); border-bottom: 1.5px solid rgba(26,26,26,0.1);">
+        <div class="directory-container">
+          <div style="margin-bottom: 40px; text-align: center;">
+            <span class="sub-label">Impact Stories</span>
+            <h2 style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 15px; color: #1a1a1a;">Church Projects & Outreach</h2>
+            <p style="color: rgba(26,26,26,0.6); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">See the vision behind our ongoing initiatives and testimonies of lives transformed.</p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <% if (projects && projects.length > 0) { %>
+              <% projects.forEach(p => { %>
+                <div style="background: #ffffff; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+                  <div style="aspect-ratio: 16/9; overflow: hidden; background: #f0f0f0;">
+                    <img src="<%= p.image_url || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070' %>" alt="<%= p.name %>" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                  </div>
+                  <div style="padding: 30px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; color: #1a1a1a; margin-bottom: 10px;"><%= p.name %></h3>
+                    <p style="font-size: 0.95rem; color: rgba(26,26,26,0.7); line-height: 1.5;"><%= p.description || 'Impacting our community through dedicated outreach and foundational projects.' %></p>
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>No ongoing projects right now. Check back soon.</p>
+            <% } %>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES & PROGRAMS SECTION -->
+      <section class="team-extra-section" style="padding: 80px 6%;">
+        <div class="directory-container" style="text-align: center;">
+          <span class="sub-label">Join Us</span>
+          <h2 style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 50px; color: #1a1a1a;">Services & Programs</h2>
+          
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+            <div style="background: #1a1a1a; color: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; text-align: left;">
+              <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; color: var(--aa-green);">Sunday Services</h3>
+              <ul style="list-style: none; padding: 0; margin: 0; font-size: 1.1rem; line-height: 2;">
+                <li style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 10px;"><strong>First Service:</strong> 8:00 AM</li>
+                <li><strong>Second Service:</strong> 10:00 AM</li>
+              </ul>
+            </div>
+            <div style="background: #1a1a1a; color: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; text-align: left;">
+              <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; color: var(--aa-green);">Midweek Services</h3>
+              <ul style="list-style: none; padding: 0; margin: 0; font-size: 1.1rem; line-height: 2;">
+                <li style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 10px;"><strong>Wednesday Bible Study:</strong> 6:00 PM</li>
+                <li><strong>Monthly Encounter:</strong> Sundays at 5:00 PM</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- DETAIL POPUP (CINEMATIC) -->
       <div class="staff-popup" id="staff-popup">
         <div class="popup-overlay" onclick="closeStaffDetail()"></div>
@@ -86,7 +165,7 @@
 
   <style>
     :root { 
-        --aa-green: #25D366; 
+        --aa-green: #176a60; 
         --aa-bg: var(--color_1);
     }
     .text-green { color: var(--aa-green); }
