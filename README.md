@@ -109,4 +109,8 @@ Monitoring dashboard is exposed at `http://localhost:3000/status`.
 
 ---
 
-> _**Maintainer Note**: All logic commits must pass ESLint configuration before PR merge. Treat the `middlewares` directory strictly as pure functions passing context via `res.locals` to prevent execution context leaks._
+> _**Maintainer Note**: All logic commits must pass ESLint configuration before PR merge. Treat the `middlewares` directory strictly as pure functions passing context via `res.locals` to prevent execution context leaks._ <br>
+
+<div align="center">
+  <sub>Built with ❤️ by the Carix Studio.</sub>
+</div>

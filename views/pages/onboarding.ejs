@@ -107,15 +107,19 @@
                         <input type="hidden" name="title" value="<%= (user && user.title) ? user.title : '' %>">
                         <div class="custom-select-trigger"><%= (user && user.title) ? user.title : 'Select Title' %></div>
                         <div class="custom-options">
-                          <div class="option" data-value="Brother">Brother</div>
-                          <div class="option" data-value="Sister">Sister</div>
                           <div class="option" data-value="Mr">Mr</div>
                           <div class="option" data-value="Mrs">Mrs</div>
+                          <div class="option" data-value="Ms">Ms</div>
+                          <div class="option" data-value="Dr">Dr</div>
                           <div class="option" data-value="Pastor">Pastor</div>
+                          <div class="option" data-value="Elder">Elder</div>
+                          <div class="option" data-value="Bishop">Bishop</div>
+                          <div class="option" data-value="Apostle">Apostle</div>
+                          <div class="option" data-value="Prophet">Prophet</div>
+                          <div class="option" data-value="Evangelist">Evangelist</div>
                           <div class="option" data-value="Deacon">Deacon</div>
                           <div class="option" data-value="Deaconess">Deaconess</div>
                           <div class="option" data-value="Minister">Minister</div>
-                          <div class="option" data-value="Dr">Dr</div>
                         </div>
                       </div>
                     </div>
@@ -157,7 +161,7 @@
                         </div>
                       </div>
                     </div>
-                    <div id="anniversaryGroup" class="form-group" style="<%= user && user.marital_status === 'Married' ? '' : 'display:none' %>">
+                    <div id="anniversaryGroup" class="form-group" style="<%= user && user.marital_status === 'married' ? '' : 'display:none' %>">
                       <label>Wedding Anniversary</label>
                       <input type="date" name="wedding_anniversary" value="<%= user && user.wedding_anniversary ? user.wedding_anniversary : '' %>">
                     </div>

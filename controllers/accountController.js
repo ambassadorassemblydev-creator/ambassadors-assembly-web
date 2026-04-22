@@ -70,13 +70,14 @@ export const accountController = {
       const tab = req.query.tab || 'overview';
       logger.info(`Loading dashboard (SPA) for user: ${userId}`);
 
-      // Fetch all data in parallel for the SPA experience
-      const [profile, donations, events, prayers, notes] = await Promise.all([
+      // Fetch all data in parallel — departments now included for integrated sidebar
+      const [profile, donations, events, prayers, notes, departments] = await Promise.all([
         accountRepo.getUserDashboardData(userId),
         accountRepo.getFullDonationHistory(userId),
         accountRepo.getUserEvents(userId),
         accountRepo.getUserPrayers(userId),
-        accountRepo.getUserNotes(userId)
+        accountRepo.getUserNotes(userId),
+        accountRepo.getDepartments()
       ]);
 
       if (!profile) {
@@ -92,16 +93,17 @@ export const accountController = {
       };
 
       res.render('pages/my-account', {
-        pageTitle: 'My Dashboard',
+        pageTitle: 'My Dashboard | Ambassadors Assembly',
         currentPath: req.path,
         activePage: 'dashboard',
         user: profile,
-        donations: donations, // We rename fullHistory to donations for the view
-        fullHistory: donations, 
-        events: events,
-        prayers: prayers,
-        notes: notes,
-        stats: stats,
+        donations,
+        fullHistory: donations,
+        events,
+        prayers,
+        notes,
+        stats,
+        departments: departments || [],
         activeTab: tab,
         isStaff: !!profile.church_workers && profile.church_workers.length > 0
       });
@@ -281,6 +283,12 @@ export const accountController = {
       const source = sourceMap[validatedData.how_did_you_hear] || 'other';
 
       // 3. Update Profile
+      const isAlreadyServing = validatedData.already_serving === 'true' || validatedData.already_serving === true;
+      const pastoralTitles = ['Pastor', 'Bishop', 'Apostle', 'Prophet', 'Evangelist'];
+      const leaderTitles = ['Elder', 'Deacon', 'Deaconess', 'Minister'];
+      const titleStr = validatedData.title || '';
+      const needsApproval = pastoralTitles.includes(titleStr) || leaderTitles.includes(titleStr) || isAlreadyServing;
+
       const profileUpdates = {
         title: validatedData.title || null,
         gender: validatedData.gender || null,
@@ -288,7 +296,7 @@ export const accountController = {
         marital_status: validatedData.marital_status || null,
         wedding_anniversary: validatedData.wedding_anniversary || null,
         phone: validatedData.phone || null,
-        address: validatedData.addressLine1 || null, 
+        address_line_1: validatedData.addressLine1 || null, 
         city: validatedData.city || null,
         is_baptized: validatedData.is_baptized,
         baptism_date: validatedData.baptism_date || null,
@@ -299,7 +307,11 @@ export const accountController = {
         occupation: validatedData.occupation || null,
         emergency_contact_name: validatedData.emergency_contact_name || null,
         emergency_contact_phone: validatedData.emergency_contact_phone || null,
-        is_onboarded: true
+        is_onboarded: true,
+        already_serving: isAlreadyServing,
+        approval_status: needsApproval ? 'pending' : 'none',
+        role_claim: needsApproval ? (titleStr || (isAlreadyServing ? 'worker' : null)) : null,
+        department_claim: validatedData.department_interest || null,
       };
 
       if (avatarUrl) {
@@ -317,8 +329,6 @@ export const accountController = {
           ]);
 
           if (deptData.data && posData.data) {
-            const isAlreadyServing = validatedData.already_serving === true;
-            
             // Create a worker record - set to 'active' if already serving, else 'probation'
             await supabaseService.from('church_workers').upsert({
               user_id: userId,
@@ -351,7 +361,53 @@ export const accountController = {
         }
       }
 
-      // 5. Finalize - Audit & Redirect
+      // 5. Assign correct role — never leave user as 'guest' after onboarding
+      try {
+        const pastoralTitles = ['Pastor', 'Bishop', 'Apostle', 'Prophet', 'Evangelist'];
+        const leaderTitles = ['Elder', 'Deacon', 'Deaconess', 'Minister'];
+        const title = validatedData.title || '';
+
+        let targetRoleName = 'member'; // Minimum role after any onboarding
+
+        if (validatedData.department_interest && validatedData.position_interest) {
+          targetRoleName = 'worker'; // Has chosen a service department
+        }
+
+        // Pastoral/leader titles need admin approval — already handled by approval_status
+        // No more hacking the bio field
+        if (needsApproval) {
+          logger.info(`User ${userId} (${titleStr}) flagged for admin approval during onboarding.`);
+        }
+
+        // Get the target role
+        const { data: roleData } = await supabaseService
+          .from('roles')
+          .select('id')
+          .eq('name', targetRoleName)
+          .single();
+
+        if (roleData) {
+          // Deactivate any existing guest/lower role
+          await supabaseService.from('user_roles')
+            .update({ is_active: false, updated_at: new Date() })
+            .eq('user_id', userId)
+            .eq('is_active', true);
+
+          // Upsert new role
+          await supabaseService.from('user_roles').upsert({
+            user_id: userId,
+            role_id: roleData.id,
+            is_active: true,
+            assigned_at: new Date()
+          }, { onConflict: 'user_id,role_id' });
+
+          logger.info(`Role '${targetRoleName}' assigned to user ${userId} after onboarding`);
+        }
+      } catch (roleErr) {
+        logger.warn(`Non-critical role assignment error during onboarding: ${roleErr.message}`);
+      }
+
+      // 6. Finalize - Audit & Redirect
       await auditRepo.logAction(req, 'complete_onboarding', 'profile', userId, {}, profileUpdates);
 
       return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');

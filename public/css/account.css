@@ -1,3 +1,6 @@
+:root {
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 72px;
   --accent-sage: rgba(113, 178, 128, 1);
   --accent-teal: rgba(19, 78, 94, 1);
   --glass-bg: #ffffff;

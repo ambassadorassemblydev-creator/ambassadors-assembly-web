@@ -1,328 +1,1260 @@
 <%- include('../partials/head') %>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* ============================================================
+   AMBASSADORS ASSEMBLY — MY ACCOUNT DASHBOARD
+   Complete Premium Revamp | Green & White Design System
+   ============================================================ */
+.aa-dash * { box-sizing: border-box; }
+.aa-dash {
+  --g:    #4a8c5a;
+  --g-lt: #71b280;
+  --g-pl: #e8f5ec;
+  --g-up: #f3faf5;
+  --wh:   #ffffff;
+  --dk:   #1a1a1a;
+  --tx:   #2d3748;
+  --mu:   rgba(45,55,72,.55);
+  --bdr:  rgba(0,0,0,.07);
+  --sw:   280px;
+  --nh:   80px;
+  display: flex;
+  min-height: 100vh;
+  padding-top: var(--nh);
+  background: var(--g-up);
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: var(--color_1);">
-  
-  <%- include('../partials/preloader') %>
-  
-  <div id="dm" class="dmwr">
-    <div class="dm_wrapper -var5 null ">
-      <div dmwrapped="true" id="1901957768" class="dm-home-page" themewaschanged="true">
-        <div dmtemplateid="FlexHeader" data-responsive-name="FlexLayout" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 hamburger-reverse dmPageBody d-page-1716942098 inputs-css-clean dmDHeader" id="dm-outer-wrapper" data-page-class="1716942098" data-soch="true" data-background-parallax-selector=".dmHomeSection1, .dmSectionParallex">
-          <div id="dmStyle_outerContainer" class="dmOuter">
-            <div id="dmStyle_innerContainer" class="dmInner">
-              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
-                <div id="site_content">
+/* ──────────────────── SIDEBAR ──────────────────── */
+.aas-bar {
+  width: var(--sw);
+  height: calc(100vh - var(--nh));
+  position: fixed;
+  left: 0; top: var(--nh);
+  background: var(--wh);
+  border-right: 1.5px solid var(--bdr);
+  display: flex; flex-direction: column;
+  overflow-y: auto; overflow-x: hidden;
+  z-index: 999;
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+  scrollbar-width: none;
+}
+.aas-bar::-webkit-scrollbar { display: none; }
 
-        <%- include('../partials/navbar') %>
+.aas-profile {
+  padding: 24px 20px;
+  border-bottom: 1.5px solid var(--bdr);
+  background: linear-gradient(150deg, var(--g-up) 0%, var(--wh) 100%);
+}
+.aas-av-wrap { position: relative; width: 68px; height: 68px; margin-bottom: 14px; }
+.aas-av {
+  width: 68px; height: 68px; border-radius: 18px;
+  object-fit: cover;
+  border: 2.5px solid var(--g-lt);
+  box-shadow: 0 6px 20px rgba(113,178,128,.25);
+}
+.aas-av-init {
+  width: 68px; height: 68px; border-radius: 18px;
+  background: linear-gradient(135deg, var(--g), var(--g-lt));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 800; color: #fff;
+  box-shadow: 0 6px 20px rgba(74,140,90,.3);
+  letter-spacing: -1px;
+}
+.aas-av-worker {
+  position: absolute; bottom: -5px; right: -5px;
+  background: #fbbf24; color: #000;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.aas-name {
+  font-size: 15px; font-weight: 800; color: var(--dk);
+  margin: 0 0 6px; font-family: 'Outfit', sans-serif;
+  line-height: 1.25;
+}
+.aas-role-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 11px;
+  background: var(--g-pl); color: var(--g);
+  border-radius: 100px; font-size: 9.5px;
+  font-weight: 800; text-transform: uppercase;
+  letter-spacing: .8px; margin-bottom: 5px;
+}
+.aas-dept-line {
+  font-size: 11px; color: var(--mu); font-weight: 600;
+  display: flex; align-items: center; gap: 5px;
+  margin-top: 3px;
+}
+.aas-mid {
+  font-size: 9.5px; color: var(--mu); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;
+}
 
-        <link rel="stylesheet" href="/css/account.css">
+/* Nav */
+.aas-nav { padding: 12px 10px; flex: 1; }
+.aas-nav-lbl {
+  font-size: 8.5px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--mu);
+  padding: 8px 12px 4px; display: block;
+}
+.aas-lnk {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 13px; border-radius: 12px;
+  color: var(--mu); text-decoration: none;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none; background: none;
+  width: 100%; text-align: left;
+  transition: all .2s ease; margin-bottom: 2px;
+}
+.aas-lnk:hover { background: var(--g-pl); color: var(--g); }
+.aas-lnk.active {
+  background: var(--g); color: #fff;
+  box-shadow: 0 4px 14px rgba(74,140,90,.3);
+}
+.aas-lnk i { opacity: .7; width: 16px; text-align: center; flex-shrink: 0; }
+.aas-lnk.active i { opacity: 1; }
+.aas-sep { height: 1px; background: var(--bdr); margin: 8px 10px; }
 
-        <div class="dashboard-wrapper">
-          <%- include('../partials/account-sidebar', { activePage: 'dashboard', activeTab: activeTab }) %>
+.aas-foot {
+  padding: 12px 10px 18px;
+  border-top: 1.5px solid var(--bdr);
+}
+.aas-logout {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 13px; border-radius: 12px;
+  color: #ef4444; text-decoration: none;
+  font-size: 13px; font-weight: 600;
+  transition: .2s; width: 100%;
+  background: none; border: none; cursor: pointer;
+}
+.aas-logout:hover { background: #fff5f5; }
 
-          <main class="dash-content">
-            <!-- PREMIUM HEADER -->
-            <div class="content-header">
-              <div class="header-badge">MEMBER ECOSYSTEM</div>
-              <h1>Welcome, <%= user.first_name || 'Ambassador' %></h1>
-              <p>Manage your ministry involvement, giving, and profile state from your personalized command center.</p>
+/* ──────────────────── OVERLAY ──────────────────── */
+.aas-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.52);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+  opacity: 0; transition: opacity .3s ease;
+}
+.aas-overlay.on { opacity: 1; }
+
+/* ──────────────────── MAIN ──────────────────── */
+.aas-main {
+  flex: 1;
+  margin-left: var(--sw);
+  padding: 40px;
+  min-height: 100vh;
+  transition: margin .35s ease;
+}
+
+/* Mobile top bar */
+.aas-mob-bar {
+  display: none; align-items: center;
+  gap: 14px; margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--bdr);
+}
+.aas-ham {
+  width: 44px; height: 44px;
+  border: 1.5px solid rgba(0,0,0,.1); border-radius: 12px;
+  background: var(--wh); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; color: var(--dk); transition: .2s; flex-shrink: 0;
+}
+.aas-ham:hover { border-color: var(--g-lt); color: var(--g); }
+.aas-mob-hello { font-size: 15px; font-weight: 700; color: var(--dk); }
+
+/* ──────────────────── TABS ──────────────────── */
+.aas-tab { display: none; }
+.aas-tab.on  { display: block; animation: aas-in .45s ease both; }
+@keyframes aas-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ──────────────────── HERO WELCOME ──────────────────── */
+.aas-hero {
+  background: linear-gradient(135deg, var(--g) 0%, #5fa46e 55%, #87c79a 100%);
+  border-radius: 26px; padding: 38px 40px;
+  color: #fff; margin-bottom: 26px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(74,140,90,.28);
+}
+.aas-hero::before {
+  content: ''; position: absolute;
+  top: -70px; right: -70px;
+  width: 260px; height: 260px;
+  background: rgba(255,255,255,.09); border-radius: 50%;
+}
+.aas-hero::after {
+  content: ''; position: absolute;
+  bottom: -50px; left: -50px;
+  width: 180px; height: 180px;
+  background: rgba(0,0,0,.06); border-radius: 50%;
+}
+.aas-hero-inner { position: relative; z-index: 1; }
+.aas-hero-eye {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.18); padding: 5px 13px;
+  border-radius: 100px; font-size: 9.5px;
+  font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; margin-bottom: 16px;
+}
+.aas-hero-title {
+  font-size: 34px; font-weight: 900; margin: 0 0 10px;
+  font-family: 'Outfit', sans-serif; line-height: 1.15;
+}
+.aas-hero-sub {
+  font-size: 14px; opacity: .85; margin: 0 0 22px;
+  max-width: 420px; line-height: 1.65;
+}
+.aas-hero-tags { display: flex; flex-wrap: wrap; gap: 9px; }
+.aas-hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.14); padding: 5px 13px;
+  border-radius: 100px; font-size: 11.5px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* ──────────────────── STAT CARDS ──────────────────── */
+.aas-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px; margin-bottom: 24px;
+}
+.aas-stat {
+  background: var(--wh); border-radius: 20px; padding: 20px;
+  border: 1.5px solid rgba(0,0,0,.06);
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+  transition: all .3s cubic-bezier(.165,.84,.44,1);
+  position: relative; overflow: hidden;
+}
+.aas-stat::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--g), var(--g-lt));
+  opacity: 0; transition: opacity .3s;
+}
+.aas-stat:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.07); }
+.aas-stat:hover::before { opacity: 1; }
+.aas-stat-ic {
+  width: 44px; height: 44px; border-radius: 13px;
+  background: var(--g-pl); color: var(--g);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 13px;
+}
+.aas-stat-lbl {
+  font-size: 9.5px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.2px; color: rgba(45,55,72,.4); margin-bottom: 2px;
+}
+.aas-stat-val {
+  font-size: 26px; font-weight: 800; color: var(--dk);
+  font-family: 'Outfit', sans-serif; line-height: 1;
+}
+
+/* ──────────────────── QUICK ACTIONS ──────────────────── */
+.aas-qa {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 13px; margin-bottom: 24px;
+}
+.aas-qa-btn {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 9px; padding: 18px 12px;
+  border-radius: 18px; background: var(--wh);
+  border: 1.5px solid rgba(0,0,0,.06);
+  cursor: pointer; text-decoration: none;
+  color: var(--tx); transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,.03);
+}
+.aas-qa-btn:hover {
+  border-color: var(--g-lt); background: var(--g-up);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(113,178,128,.14);
+  color: var(--g);
+}
+.aas-qa-ic {
+  width: 42px; height: 42px; border-radius: 13px;
+  background: var(--g-pl); color: var(--g);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; transition: .3s;
+}
+.aas-qa-btn:hover .aas-qa-ic { background: var(--g); color: #fff; }
+.aas-qa-lbl { font-size: 11px; font-weight: 700; text-align: center; }
+
+/* ──────────────────── CARDS ──────────────────── */
+.aas-card {
+  background: var(--wh); border-radius: 22px; padding: 26px;
+  border: 1.5px solid rgba(0,0,0,.06);
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+  margin-bottom: 22px;
+}
+.aas-card-row {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 18px;
+}
+.aas-card-title {
+  font-size: 15.5px; font-weight: 800; color: var(--dk);
+  margin: 0; font-family: 'Outfit', sans-serif;
+}
+.aas-eyebrow {
+  font-size: 9px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--g);
+  background: var(--g-pl); padding: 3px 9px;
+  border-radius: 6px; display: inline-block; margin-bottom: 5px;
+}
+
+/* Buttons */
+.btn-g { background: var(--g); color: #fff; display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: .2s; }
+.btn-g:hover { background: var(--g-lt); color: #fff; }
+.btn-o { background: transparent; color: var(--g); border: 1.5px solid var(--g); display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; transition: .2s; }
+.btn-o:hover { background: var(--g-pl); }
+
+/* Two-column */
+.aas-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+/* Event items */
+.aas-ev-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 0; border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.aas-ev-item:last-child { border-bottom: none; padding-bottom: 0; }
+.aas-ev-date {
+  width: 50px; height: 50px; border-radius: 14px;
+  background: var(--g-pl); color: var(--g);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; font-family: 'Outfit', sans-serif;
+}
+.ev-d { font-size: 18px; font-weight: 800; line-height: 1; }
+.ev-m { font-size: 8.5px; font-weight: 700; text-transform: uppercase; }
+.aas-ev-info h4 { font-size: 13.5px; font-weight: 700; color: var(--dk); margin: 0 0 3px; }
+.aas-ev-info p  { font-size: 11.5px; color: var(--mu); margin: 0; }
+
+/* Giving rows */
+.aas-give-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: 13.5px;
+}
+.aas-give-row:last-child { border-bottom: none; }
+.give-amt { font-weight: 800; color: var(--g); font-family: 'Outfit', sans-serif; font-size: 15px; }
+.give-dt  { font-size: 10.5px; color: var(--mu); font-weight: 600; margin-top: 3px; }
+.give-cat {
+  font-size: 11px; background: var(--g-pl); color: var(--g);
+  padding: 3px 9px; border-radius: 100px; font-weight: 700;
+}
+
+/* Prayer items */
+.aas-pray-item {
+  padding: 16px; border: 1.5px solid rgba(0,0,0,.06);
+  border-radius: 15px; margin-bottom: 11px; transition: .3s;
+}
+.aas-pray-item:hover { border-color: rgba(113,178,128,.3); }
+.aas-pray-item h4 { font-size: 13.5px; font-weight: 700; color: var(--dk); margin: 0 0 5px; }
+.aas-pray-item p  { font-size: 12.5px; color: var(--mu); margin: 0 0 9px; line-height: 1.5; }
+.pray-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.pray-badge { font-size: 9.5px; font-weight: 700; padding: 3px 9px; border-radius: 100px; text-transform: uppercase; letter-spacing: .5px; }
+.pb-pend { background: #fef3c7; color: #92400e; }
+.pb-ok   { background: var(--g-pl); color: var(--g); }
+
+/* Note cards */
+.aas-note { padding: 16px; border: 1.5px solid rgba(0,0,0,.06); border-radius: 15px; margin-bottom: 11px; position: relative; overflow: hidden; transition: .3s; }
+.aas-note::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--g); border-radius: 4px 0 0 4px; }
+.aas-note:hover { border-color: rgba(113,178,128,.3); }
+.aas-note h4 { font-size: 13.5px; font-weight: 700; color: var(--dk); margin: 0 0 5px; }
+.aas-note p  { font-size: 12.5px; color: var(--mu); margin: 0; line-height: 1.5; }
+.note-dt { font-size: 10px; color: var(--mu); font-weight: 600; margin-top: 9px; text-transform: uppercase; letter-spacing: .5px; }
+
+/* Ministry cards */
+.aas-min-card {
+  display: flex; gap: 16px; padding: 18px;
+  border: 1.5px solid rgba(0,0,0,.06);
+  border-radius: 17px; margin-bottom: 13px;
+  transition: .3s; background: var(--wh);
+}
+.aas-min-card:hover { border-color: rgba(113,178,128,.3); transform: translateY(-2px); }
+.aas-min-ic { width: 50px; height: 50px; border-radius: 14px; background: var(--g-pl); color: var(--g); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.aas-min-info { flex: 1; }
+.aas-min-info h3 { font-size: 14.5px; font-weight: 800; color: var(--dk); margin: 0 0 4px; }
+.aas-min-info p  { font-size: 12.5px; color: var(--mu); margin: 0 0 9px; }
+.min-role-tag { font-size: 9.5px; font-weight: 700; background: var(--g-pl); color: var(--g); padding: 3px 9px; border-radius: 100px; text-transform: uppercase; }
+
+/* Department grid */
+.aas-dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.aas-dept-card {
+  background: var(--wh); border: 1.5px solid rgba(0,0,0,.06);
+  border-radius: 22px; padding: 26px;
+  display: flex; flex-direction: column;
+  transition: all .4s cubic-bezier(.165,.84,.44,1);
+  animation: aas-up .6s ease backwards;
+}
+.aas-dept-card:hover {
+  border-color: var(--g-lt);
+  transform: translateY(-6px);
+  box-shadow: 0 22px 55px rgba(113,178,128,.12);
+}
+@keyframes aas-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.dept-ic { width: 50px; height: 50px; border-radius: 14px; background: var(--g-pl); color: var(--g); display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
+.dept-nm { font-size: 17px; font-weight: 800; color: var(--dk); margin: 0 0 9px; font-family: 'Outfit', sans-serif; }
+.dept-ds { font-size: 12.5px; color: var(--mu); line-height: 1.6; flex: 1; margin-bottom: 18px; }
+.dept-apply {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; background: var(--g-up);
+  border: 1.5px solid rgba(113,178,128,.3); color: var(--g);
+  border-radius: 100px; font-size: 11.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .7px;
+  text-decoration: none; transition: .3s; align-self: flex-start;
+}
+.dept-apply:hover { background: var(--g); color: #fff; border-color: var(--g); }
+
+/* Profile form */
+.pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.pf-g { display: flex; flex-direction: column; gap: 6px; }
+.pf-g.full { grid-column: 1/-1; }
+.pf-lbl { font-size: 10.5px; font-weight: 700; color: var(--mu); text-transform: uppercase; letter-spacing: .8px; }
+.pf-inp, .pf-sel, .pf-txt {
+  background: var(--g-up); border: 1.5px solid rgba(0,0,0,.07);
+  border-radius: 12px; padding: 11px 15px;
+  font-size: 13.5px; color: var(--dk);
+  transition: .2s; outline: none; font-family: 'Inter', sans-serif; width: 100%;
+}
+.pf-inp:focus, .pf-sel:focus, .pf-txt:focus {
+  border-color: var(--g); background: var(--wh);
+  box-shadow: 0 0 0 3px rgba(113,178,128,.12);
+}
+.pf-inp[readonly] { opacity: .5; cursor: not-allowed; }
+.pf-txt { resize: vertical; min-height: 90px; }
+.pf-hint { font-size: 10.5px; color: var(--mu); }
+
+/* Page headers */
+.aas-ph { margin-bottom: 26px; }
+.aas-ph h1 {
+  font-size: 30px; font-weight: 900; color: var(--dk);
+  margin: 5px 0 7px; font-family: 'Outfit', sans-serif;
+  letter-spacing: -.5px;
+}
+.aas-ph p { font-size: 13.5px; color: var(--mu); margin: 0; }
+
+/* Empty states */
+.aas-empty { text-align: center; padding: 50px 20px; color: var(--mu); }
+.aas-empty i { font-size: 36px; opacity: .25; margin-bottom: 12px; display: block; }
+.aas-empty p { font-size: 13.5px; margin-bottom: 4px; }
+.aas-empty a { color: var(--g); font-weight: 700; }
+
+/* Worker service card */
+.aas-worker-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px; background: var(--g-up);
+  border: 1.5px solid rgba(113,178,128,.2);
+  border-radius: 16px;
+}
+.aas-worker-ic { width: 50px; height: 50px; border-radius: 14px; background: var(--g); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
+
+/* ──────────────────── RESPONSIVE ──────────────────── */
+@media (max-width: 1100px) {
+  .aas-stats { grid-template-columns: repeat(2, 1fr); }
+  .aas-qa    { grid-template-columns: repeat(2, 1fr); }
+  .aas-2col  { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .aas-bar {
+    transform: translateX(-100%);
+    height: 100vh; top: 0;
+    padding-top: 80px; z-index: 1001;
+  }
+  .aas-bar.open { transform: translateX(0); }
+  .aas-overlay  { display: block; }
+  .aas-main     { margin-left: 0; padding: 20px; }
+  .aas-mob-bar  { display: flex; }
+  .aas-hero     { padding: 26px 22px; }
+  .aas-hero-title { font-size: 26px; }
+  .aas-stats    { gap: 11px; }
+  .aas-stat     { padding: 15px; }
+  .aas-stat-val { font-size: 22px; }
+  .aas-dept-grid { grid-template-columns: 1fr; }
+  .pf-grid { grid-template-columns: 1fr; }
+  .pf-g.full { grid-column: 1; }
+}
+@media (max-width: 480px) {
+  .aas-stats { grid-template-columns: 1fr 1fr; }
+  .aas-qa    { grid-template-columns: 1fr 1fr; }
+  .aas-2col  { grid-template-columns: 1fr; }
+}
+</style>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding:0;margin:0;background:var(--color_1);">
+<%- include('../partials/preloader') %>
+<div id="dm" class="dmwr">
+  <div class="dm_wrapper -var5 null">
+    <div dmwrapped="true" id="1901957768" class="dm-home-page">
+      <div class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200 dmPageBody dmDHeader" id="dm-outer-wrapper">
+        <div class="dmOuter"><div class="dmInner"><div class="dmLayoutWrapper dmStandardDesktop">
+          <div id="site_content">
+            <%- include('../partials/navbar') %>
+
+<%
+  // ── Helper vars ──
+  const hasWorker = user && user.church_workers && user.church_workers.length > 0;
+  const w = hasWorker ? user.church_workers[0] : null;
+
+  let displayRole = 'Member';
+  if (hasWorker) {
+    displayRole = (w.church_positions && w.church_positions.title) ? w.church_positions.title : 'Church Worker';
+  }
+
+  function getDeptIcon(name) {
+    if (!name) return 'fa-users-cog';
+    const n = name.toLowerCase();
+    if (n.includes('media') || n.includes('communication')) return 'fa-video';
+    if (n.includes('music') || n.includes('choir') || n.includes('praise') || n.includes('worship')) return 'fa-music';
+    if (n.includes('usher') || n.includes('protocol') || n.includes('hospitality')) return 'fa-door-open';
+    if (n.includes('children') || n.includes('kids')) return 'fa-child';
+    if (n.includes('youth') || n.includes('teen') || n.includes('young')) return 'fa-graduation-cap';
+    if (n.includes('prayer') || n.includes('intercession')) return 'fa-praying-hands';
+    if (n.includes('technical') || n.includes('sound') || n.includes('audio') || n.includes('tech')) return 'fa-tools';
+    if (n.includes('security') || n.includes('safety')) return 'fa-shield-alt';
+    if (n.includes('finance') || n.includes('treasury') || n.includes('account')) return 'fa-coins';
+    if (n.includes('sanit') || n.includes('clean')) return 'fa-broom';
+    if (n.includes('decor') || n.includes('art') || n.includes('creative')) return 'fa-paint-brush';
+    if (n.includes('evangel') || n.includes('outreach') || n.includes('mission')) return 'fa-bullhorn';
+    if (n.includes('welfare') || n.includes('care')) return 'fa-hands-helping';
+    if (n.includes('health') || n.includes('medical') || n.includes('first aid')) return 'fa-first-aid';
+    if (n.includes('transport') || n.includes('driver') || n.includes('logistics')) return 'fa-bus';
+    if (n.includes('admin') || n.includes('secretary')) return 'fa-briefcase';
+    return 'fa-users-cog';
+  }
+%>
+
+<!-- Mobile overlay -->
+<div class="aas-overlay" id="aasOverlay"></div>
+
+<div class="aa-dash">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--                  SIDEBAR                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <aside class="aas-bar" id="aasSidebar">
+
+    <!-- Profile section -->
+    <div class="aas-profile">
+      <div class="aas-av-wrap">
+        <% if (user.avatar_url) { %>
+          <img src="<%= user.avatar_url %>" alt="<%= user.first_name %>" class="aas-av">
+        <% } else { %>
+          <div class="aas-av-init">
+            <%= user.first_name ? user.first_name[0].toUpperCase() : 'A' %><%= user.last_name ? user.last_name[0].toUpperCase() : 'A' %>
+          </div>
+        <% } %>
+        <% if (hasWorker) { %>
+          <div class="aas-av-worker" title="Church Worker">⭐</div>
+        <% } %>
+      </div>
+
+      <div class="aas-name">
+        <%= user.title ? user.title + ' ' : '' %><%= user.first_name %> <%= user.last_name %>
+      </div>
+      <div class="aas-role-pill">
+        <i class="fas fa-shield-alt" style="font-size:8px;"></i>
+        <%= displayRole %>
+      </div>
+      <% if (hasWorker && w.church_departments) { %>
+        <div class="aas-dept-line">
+          <i class="fas fa-building" style="font-size:9px;"></i>
+          <%= w.church_departments.name %>
+        </div>
+      <% } %>
+      <div class="aas-mid"># <%= user.member_id || 'AA-' + user.id.substring(0,6).toUpperCase() %></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="aas-nav">
+      <span class="aas-nav-lbl">My Dashboard</span>
+      <button class="aas-lnk active" onclick="aasTab('overview',this)">
+        <i class="fas fa-th-large"></i> Overview
+      </button>
+      <button class="aas-lnk" onclick="aasTab('events',this)">
+        <i class="fas fa-calendar-alt"></i> My Events
+      </button>
+      <button class="aas-lnk" onclick="aasTab('giving',this)">
+        <i class="fas fa-hand-holding-heart"></i> Partnership
+      </button>
+      <button class="aas-lnk" onclick="aasTab('prayers',this)">
+        <i class="fas fa-praying-hands"></i> Prayer Requests
+      </button>
+      <button class="aas-lnk" onclick="aasTab('notes',this)">
+        <i class="fas fa-sticky-note"></i> My Notes
+      </button>
+
+      <div class="aas-sep"></div>
+      <span class="aas-nav-lbl">Church Life</span>
+      <button class="aas-lnk" onclick="aasTab('ministry',this)">
+        <i class="fas fa-users"></i> Ministries
+      </button>
+      <button class="aas-lnk" onclick="aasTab('departments',this)">
+        <i class="fas fa-sitemap"></i> Departments
+      </button>
+
+      <div class="aas-sep"></div>
+      <span class="aas-nav-lbl">Account</span>
+      <button class="aas-lnk" onclick="aasTab('profile',this)">
+        <i class="fas fa-user-circle"></i> My Profile
+      </button>
+    </nav>
+
+    <!-- Footer -->
+    <div class="aas-foot">
+      <a href="/auth/logout" class="aas-logout">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--                MAIN CONTENT                -->
+  <!-- ═══════════════════════════════════════════ -->
+  <main class="aas-main">
+
+    <!-- Mobile top bar -->
+    <div class="aas-mob-bar">
+      <button class="aas-ham" id="aasHam"><i class="fas fa-bars"></i></button>
+      <span class="aas-mob-hello"><%= user.title ? user.title + ' ' : '' %><%= user.first_name %></span>
+    </div>
+
+    <!-- ───────── TAB: OVERVIEW ───────── -->
+    <div class="aas-tab on" id="aas-overview">
+
+      <!-- Hero -->
+      <div class="aas-hero">
+        <div class="aas-hero-inner">
+          <div class="aas-hero-eye"><i class="fas fa-church"></i> Ambassadors Assembly</div>
+          <h1 class="aas-hero-title">
+            Welcome back,<br>
+            <%= user.title ? user.title + ' ' : '' %><%= user.first_name %> <%= user.last_name %>
+          </h1>
+          <p class="aas-hero-sub">
+            <% if (hasWorker) { %>
+              Thank you for your faithful service. Your dedication to the <%= w.church_departments ? w.church_departments.name : 'team' %> inspires the entire assembly.
+            <% } else { %>
+              We're glad you're here. Everything you need — your giving, prayers, notes, and church life — all in one place.
+            <% } %>
+          </p>
+          <div class="aas-hero-tags">
+            <span class="aas-hero-tag">
+              <i class="fas fa-id-card"></i>
+              <%= user.member_id || 'AA-' + user.id.substring(0,6).toUpperCase() %>
+            </span>
+            <% if (user.created_at) { %>
+            <span class="aas-hero-tag">
+              <i class="fas fa-calendar-check"></i>
+              Member since <%= new Date(user.created_at).getFullYear() %>
+            </span>
+            <% } %>
+            <% if (hasWorker && w.church_departments) { %>
+            <span class="aas-hero-tag">
+              <i class="fas fa-briefcase"></i>
+              <%= w.church_departments.name %>
+            </span>
+            <% } %>
+            <span class="aas-hero-tag">
+              <i class="fas fa-shield-alt"></i>
+              <%= displayRole %>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="aas-stats">
+        <div class="aas-stat">
+          <div class="aas-stat-ic"><i class="fas fa-hand-holding-heart"></i></div>
+          <div class="aas-stat-lbl">Total Giving</div>
+          <div class="aas-stat-val">₦<%= parseFloat(stats.totalGiving || 0).toLocaleString() %></div>
+        </div>
+        <div class="aas-stat">
+          <div class="aas-stat-ic"><i class="fas fa-calendar-check"></i></div>
+          <div class="aas-stat-lbl">Events Registered</div>
+          <div class="aas-stat-val"><%= stats.eventCount %></div>
+        </div>
+        <div class="aas-stat">
+          <div class="aas-stat-ic"><i class="fas fa-praying-hands"></i></div>
+          <div class="aas-stat-lbl">Prayer Requests</div>
+          <div class="aas-stat-val"><%= stats.prayerCount %></div>
+        </div>
+        <div class="aas-stat">
+          <div class="aas-stat-ic"><i class="fas fa-sticky-note"></i></div>
+          <div class="aas-stat-lbl">Sermon Notes</div>
+          <div class="aas-stat-val"><%= stats.noteCount %></div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="aas-qa">
+        <a href="/give" class="aas-qa-btn">
+          <div class="aas-qa-ic"><i class="fas fa-hand-holding-usd"></i></div>
+          <span class="aas-qa-lbl">Give Online</span>
+        </a>
+        <button class="aas-qa-btn" onclick="aasTabById('events')">
+          <div class="aas-qa-ic"><i class="fas fa-calendar-alt"></i></div>
+          <span class="aas-qa-lbl">View Events</span>
+        </button>
+        <a href="/prayer-wall" class="aas-qa-btn">
+          <div class="aas-qa-ic"><i class="fas fa-hands"></i></div>
+          <span class="aas-qa-lbl">Prayer Wall</span>
+        </a>
+        <button class="aas-qa-btn" onclick="aasTabById('departments')">
+          <div class="aas-qa-ic"><i class="fas fa-users-cog"></i></div>
+          <span class="aas-qa-lbl">Serve in Dept.</span>
+        </button>
+      </div>
+
+      <!-- Two-col: upcoming events + recent giving -->
+      <div class="aas-2col">
+        <!-- Upcoming events -->
+        <div class="aas-card">
+          <div class="aas-card-row">
+            <h3 class="aas-card-title">Upcoming Events</h3>
+            <button class="btn-o" onclick="aasTabById('events')">View All</button>
+          </div>
+          <%
+            const upcoming = (events || [])
+              .filter(e => e.events && new Date(e.events.start_date) >= new Date())
+              .slice(0, 4);
+          %>
+          <% if (upcoming.length > 0) { %>
+            <% upcoming.forEach(reg => { const ev = reg.events; %>
+              <div class="aas-ev-item">
+                <div class="aas-ev-date">
+                  <span class="ev-d"><%= new Date(ev.start_date).getDate() %></span>
+                  <span class="ev-m"><%= new Date(ev.start_date).toLocaleDateString('en-US',{month:'short'}) %></span>
+                </div>
+                <div class="aas-ev-info">
+                  <h4><%= ev.title %></h4>
+                  <p><i class="fas fa-map-marker-alt" style="font-size:10px;margin-right:4px;"></i><%= ev.location_name || 'Ambassadors Assembly' %></p>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="aas-empty" style="padding:24px 0;">
+              <i class="fas fa-calendar"></i>
+              <p>No upcoming events. <a href="/events">Browse events</a></p>
             </div>
-
-            <!-- OVERVIEW TAB -->
-            <div id="tab-overview" class="tab-pane <%= activeTab === 'overview' ? 'active' : '' %>">
-              <div class="grid-stats">
-                <div class="stat-card" style="animation-delay: 0.1s;">
-                  <div class="stat-icon"><i class="fas fa-hand-holding-heart"></i></div>
-                  <div class="stat-info">
-                    <span class="stat-label">Total Giving</span>
-                    <p class="stat-value">₦<%= stats.totalGiving %></p>
-                  </div>
-                </div>
-                <div class="stat-card" style="animation-delay: 0.2s;">
-                  <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
-                  <div class="stat-info">
-                    <span class="stat-label">Events</span>
-                    <p class="stat-value"><%= stats.eventCount %></p>
-                  </div>
-                </div>
-                <div class="stat-card" style="animation-delay: 0.3s;">
-                  <div class="stat-icon"><i class="fas fa-pray"></i></div>
-                  <div class="stat-info">
-                    <span class="stat-label">Prayers</span>
-                    <p class="stat-value"><%= stats.prayerCount %></p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="dashboard-main-grid">
-                <div class="glass-card chart-section" style="margin-bottom: 30px; animation-delay: 0.4s;">
-                  <div class="card-header">
-                    <h3>Partnership Growth</h3>
-                    <div class="card-actions">
-                      <span class="period-tag">Last 6 Months</span>
-                    </div>
-                  </div>
-                  <div class="chart-container" style="height: 300px; position: relative;">
-                    <canvas id="givingChart"></canvas>
-                  </div>
-                </div>
-
-                <div class="glass-card activity-section" style="animation-delay: 0.5s;">
-                  <div class="card-header">
-                    <h3>Recent Partnership</h3>
-                    <a href="javascript:void(0)" onclick="switchTab('giving')" class="btn-text">Review All</a>
-                  </div>
-                  <div class="table-responsive">
-                    <table class="activity-list">
-                      <thead>
-                        <tr>
-                          <th>Category</th>
-                          <th>Amount</th>
-                          <th>Status</th>
-                          <th>Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% if (donations && donations.length > 0) { %>
-                          <% donations.slice(0, 5).forEach((d, idx) => { %>
-                            <tr style="animation: dashFadeIn 0.5s <%= 0.6 + (idx * 0.1) %>s ease both;">
-                              <td><strong><%= d.donation_categories ? d.donation_categories.name : 'General' %></strong></td>
-                              <td>₦<%= Number(d.amount).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
-                              <td><span class="status-badge status-paid"><%= d.status %></span></td>
-                              <td><%= new Date(d.created_at).toLocaleDateString() %></td>
-                            </tr>
-                          <% }) %>
-                        <% } else { %>
-                          <tr><td colspan="4" class="empty-msg" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.2);">No giving history found yet.</td></tr>
-                        <% } %>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- EVENTS TAB -->
-            <div id="tab-events" class="tab-pane <%= activeTab === 'events' ? 'active' : '' %>">
-              <div class="glass-card">
-                <div class="card-header">
-                  <h3>Event Registrations</h3>
-                  <a href="/events" class="btn-primary-mini">Find Events</a>
-                </div>
-                <div class="table-responsive">
-                  <table class="activity-list">
-                    <thead>
-                      <tr>
-                        <th>Event Name</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% if (events && events.length > 0) { %>
-                        <% events.forEach(reg => { %>
-                          <tr>
-                            <td><strong><%= reg.events.title %></strong></td>
-                            <td><%= new Date(reg.events.start_date).toLocaleDateString() %></td>
-                            <td><span class="status-badge status-active">Confirmed</span></td>
-                          </tr>
-                        <% }) %>
-                      <% } else { %>
-                        <tr><td colspan="3" class="empty-msg" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.2);">You have no upcoming events.</td></tr>
-                      <% } %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- GIVING TAB (Full History) -->
-            <div id="tab-giving" class="tab-pane <%= activeTab === 'giving' ? 'active' : '' %>">
-              <div class="glass-card">
-                <div class="card-header">
-                  <h3>Personnel Verified</h3>
-                  <a href="/my-account/profile" class="btn-text">Edit Settings &rarr;</a>
-                </div>
-                
-                <div class="profile-summary">
-                  <div class="sum-item">
-                    <label>Full Name</label>
-                    <p><%= user.first_name %> <%= user.last_name %></p>
-                  </div>
-                  <div class="sum-item">
-                    <label>Email Address</label>
-                    <p><%= user.email %></p>
-                  </div>
-                  <div class="sum-item">
-                    <label>Service Department</label>
-                    <p class="text-green"><%= user.department_name || 'General Member' %></p>
-                  </div>
-                </div>
-              </div>
-               <div class="glass-card">
-                <div class="card-header">
-                  <h3>Detailed History</h3>
-                  <a href="/give" class="btn-primary-mini">New Partnership</a>
-                </div>
-                <div class="table-responsive">
-                  <table class="activity-list">
-                    <thead>
-                      <tr>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% if (donations && donations.length > 0) { %>
-                        <% donations.forEach(d => { %>
-                          <tr>
-                            <td><strong><%= d.donation_categories ? d.donation_categories.name : 'General' %></strong></td>
-                            <td>₦<%= Number(d.amount).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
-                            <td><span class="status-badge status-paid"><%= d.status %></span></td>
-                            <td><%= new Date(d.created_at).toLocaleDateString() %></td>
-                          </tr>
-                        <% }) %>
-                      <% } else { %>
-                        <tr><td colspan="4" class="empty-msg" style="text-align: center; padding: 40px; color: rgba(255,255,255,0.2);">No history found.</td></tr>
-                      <% } %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- PRAYERS TAB -->
-            <div id="tab-prayers" class="tab-pane <%= activeTab === 'prayers' ? 'active' : '' %>">
-              <div class="glass-card">
-                <div class="card-header">
-                  <h3>My Prayer Petitions</h3>
-                  <a href="/prayer-requests" class="btn-primary-mini">Send Petition</a>
-                </div>
-                <div class="empty-state">
-                  <i class="fas fa-pray"></i>
-                  <p>Your spiritual petitions will appear here.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- NOTES TAB -->
-            <div id="tab-notes" class="tab-pane <%= activeTab === 'notes' ? 'active' : '' %>">
-               <div class="glass-card">
-                <div class="card-header">
-                  <h3>Sermon Highlights</h3>
-                </div>
-                <div class="empty-state">
-                  <i class="fas fa-sticky-note"></i>
-                  <p>Your notes from live services will be saved here.</p>
-                </div>
-              </div>
-            </div>
-
-            <style>
-              .tab-pane { display: none; animation: dashFadeIn 0.6s ease; }
-              .tab-pane.active { display: block; }
-              @keyframes dashFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-              
-              .btn-primary-mini {
-                background: var(--accent-sage);
-                color: #0c0c0c;
-                padding: 10px 20px;
-                border-radius: 12px;
-                font-size: 11px;
-                font-weight: 800;
-                text-decoration: none;
-                transition: 0.3s;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-              }
-              .btn-primary-mini:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(113, 178, 128, 0.4); }
-              
-              .empty-state { text-align: center; padding: 80px 20px; color: rgba(255,255,255,0.2); }
-              .empty-state i { font-size: 48px; margin-bottom: 24px; color: var(--accent-sage); opacity: 0.4; }
-              .empty-state p { font-size: 15px; font-family: 'Inter', sans-serif; }
-              
-              .dmFooterContainer { display: none !important; }
-            </style>
-
-            <script>
-              function switchTab(tab) {
-                document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-                const target = document.getElementById('tab-' + tab);
-                if (target) {
-                  target.classList.add('active');
-                  const url = new URL(window.location);
-                  url.searchParams.set('tab', tab);
-                  window.history.pushState({}, '', url);
-                  
-                  document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                    const href = link.getAttribute('href');
-                    if (tab === 'overview' && href === '/my-account') link.classList.add('active');
-                    else if (href.includes('tab=' + tab)) link.classList.add('active');
-                  });
-                }
-              }
-
-              (function() {
-                const ctx = document.getElementById('givingChart');
-                if (ctx) {
-                  const history = <%- JSON.stringify(donations || []) %>;
-                  if (history.length === 0) return;
-
-                  const months = {};
-                  history.sort((a,b) => new Date(a.created_at) - new Date(b.created_at)).forEach(d => {
-                    const date = new Date(d.created_at);
-                    const key = date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
-                    months[key] = (months[key] || 0) + Number(d.amount);
-                  });
-
-                  new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                      labels: Object.keys(months),
-                      datasets: [{
-                        label: 'Partnership (£)',
-                        data: Object.values(months),
-                        borderColor: '#71b280',
-                        backgroundColor: 'rgba(113, 178, 128, 0.1)',
-                        borderWidth: 4,
-                        tension: 0.45,
-                        fill: true,
-                        pointBackgroundColor: '#71b280',
-                        pointBorderColor: '#fff',
-                        pointHoverRadius: 8,
-                        pointRadius: 4
-                      }]
-                    },
-                    options: {
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: { legend: { display: false } },
-                      scales: {
-                        y: { 
-                          beginAtZero: true, 
-                          grid: { color: 'rgba(255,255,255,0.03)' },
-                          ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 11, family: 'Inter' } }
-                        },
-                        x: { 
-                          grid: { display: false },
-                          ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 11, family: 'Inter' } }
-                        }
-                      }
-                    }
-                  });
-                }
-              })();
-            </script>
-          </main>
+          <% } %>
         </div>
 
-        <%- include('../partials/footer') %>
+        <!-- Recent giving -->
+        <div class="aas-card">
+          <div class="aas-card-row">
+            <h3 class="aas-card-title">Recent Partnership</h3>
+            <button class="btn-o" onclick="aasTabById('giving')">Full History</button>
+          </div>
+          <% const recentGiving = [...(donations || [])].reverse().slice(0, 5); %>
+          <% if (recentGiving.length > 0) { %>
+            <% recentGiving.forEach(d => { %>
+              <div class="aas-give-row">
+                <div>
+                  <span class="give-cat"><%= d.donation_categories ? d.donation_categories.name : 'General Offering' %></span>
+                  <div class="give-dt"><%= new Date(d.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) %></div>
+                </div>
+                <span class="give-amt">₦<%= Number(d.amount).toLocaleString() %></span>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="aas-empty" style="padding:24px 0;">
+              <i class="fas fa-heart"></i>
+              <p>No records. <a href="/give">Partner with us</a></p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Worker service detail (if church worker) -->
+      <% if (hasWorker) { %>
+      <div class="aas-card">
+        <div class="aas-card-row">
+          <div>
+            <div class="aas-eyebrow">Service Placement</div>
+            <h3 class="aas-card-title">My Ministry Role</h3>
+          </div>
+        </div>
+        <% user.church_workers.forEach(cw => { %>
+        <div class="aas-worker-card">
+          <div class="aas-worker-ic"><i class="fas fa-briefcase"></i></div>
+          <div>
+            <div style="font-weight:800;color:var(--dk);font-size:15px;">
+              <%= cw.church_positions ? cw.church_positions.title : 'Worker' %>
+            </div>
+            <div style="font-size:13px;color:var(--mu);margin-top:2px;">
+              <%= cw.church_departments ? cw.church_departments.name : 'Department' %>
+            </div>
+            <div style="margin-top:9px;">
+              <span style="font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;background:<%= cw.status === 'active' ? 'var(--g-pl)' : '#fef3c7' %>;color:<%= cw.status === 'active' ? 'var(--g)' : '#92400e' %>;">
+                <%= cw.status || 'pending' %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+
+    </div><!-- /overview -->
+
+
+    <!-- ───────── TAB: EVENTS ───────── -->
+    <div class="aas-tab" id="aas-events">
+      <div class="aas-ph">
+        <div class="aas-eyebrow">My Calendar</div>
+        <h1>Registered Events</h1>
+        <p>All events you have registered for at Ambassadors Assembly.</p>
+      </div>
+
+      <% if (events && events.length > 0) { %>
+        <% events.forEach(reg => { const ev = reg.events; if (!ev) return; const isPast = new Date(ev.start_date) < new Date(); %>
+          <div class="aas-card" style="display:flex;align-items:center;gap:20px;padding:20px 26px;margin-bottom:13px;">
+            <div class="aas-ev-date" style="width:58px;height:58px;border-radius:16px;">
+              <span class="ev-d" style="font-size:21px;"><%= new Date(ev.start_date).getDate() %></span>
+              <span class="ev-m"><%= new Date(ev.start_date).toLocaleDateString('en-US',{month:'short',year:'numeric'}) %></span>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:800;color:var(--dk);margin-bottom:4px;"><%= ev.title %></div>
+              <div style="font-size:11.5px;color:var(--mu);display:flex;gap:14px;flex-wrap:wrap;">
+                <span><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i><%= ev.location_name || 'Ambassadors Assembly' %></span>
+                <span><i class="fas fa-clock" style="margin-right:4px;"></i><%= new Date(ev.start_date).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) %></span>
+              </div>
+            </div>
+            <span style="font-size:9.5px;font-weight:700;padding:5px 13px;border-radius:100px;text-transform:uppercase;flex-shrink:0;background:<%= isPast ? '#f3f4f6' : 'var(--g-pl)' %>;color:<%= isPast ? '#6b7280' : 'var(--g)' %>;">
+              <%= isPast ? '✓ Attended' : 'Upcoming' %>
+            </span>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="aas-card"><div class="aas-empty">
+          <i class="fas fa-calendar-times"></i>
+          <p>No events registered yet.</p>
+          <a href="/events" class="btn-g" style="margin-top:14px;display:inline-flex;">Browse Events <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
+        </div></div>
+      <% } %>
+
+      <div style="text-align:center;margin-top:20px;">
+        <a href="/events" class="btn-o" style="font-size:13.5px;padding:11px 26px;">
+          <i class="fas fa-calendar-alt"></i> Explore All Events
+        </a>
+      </div>
+    </div><!-- /events -->
+
+
+    <!-- ───────── TAB: GIVING ───────── -->
+    <div class="aas-tab" id="aas-giving">
+      <div class="aas-ph">
+        <div class="aas-eyebrow">Generosity & Faithfulness</div>
+        <h1>Partnership History</h1>
+        <p>Your complete record of giving and financial partnership with the church.</p>
+      </div>
+
+      <!-- Big total card -->
+      <div class="aas-card" style="background:linear-gradient(135deg,var(--g) 0%,var(--g-lt) 100%);color:#fff;margin-bottom:22px;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;opacity:.8;margin-bottom:7px;">Total Partnership (All Time)</div>
+        <div style="font-size:40px;font-weight:900;font-family:'Outfit',sans-serif;margin-bottom:4px;">₦<%= parseFloat(stats.totalGiving || 0).toLocaleString() %></div>
+        <div style="opacity:.75;font-size:12.5px;"><%= (donations||[]).length %> contributions recorded</div>
+      </div>
+
+      <% if (donations && donations.length > 0) { %>
+        <div class="aas-card">
+          <div class="aas-card-row">
+            <h3 class="aas-card-title">All Contributions</h3>
+          </div>
+          <% [...donations].reverse().forEach(d => { %>
+            <div class="aas-give-row">
+              <div>
+                <div style="font-size:13.5px;font-weight:600;color:var(--dk);">
+                  <%= d.donation_categories ? d.donation_categories.name : 'General Offering' %>
+                </div>
+                <div class="give-dt"><%= new Date(d.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}) %></div>
+              </div>
+              <span class="give-amt">₦<%= Number(d.amount).toLocaleString() %></span>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="aas-card"><div class="aas-empty">
+          <i class="fas fa-hand-holding-heart"></i>
+          <p>No giving records found. Start your journey of generosity today.</p>
+          <a href="/give" class="btn-g" style="margin-top:14px;display:inline-flex;">Give Now <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
+        </div></div>
+      <% } %>
+
+      <div style="text-align:center;margin-top:20px;">
+        <a href="/give" class="btn-g" style="font-size:13.5px;padding:11px 26px;">
+          <i class="fas fa-heart"></i> Partner With Us
+        </a>
+      </div>
+    </div><!-- /giving -->
+
+
+    <!-- ───────── TAB: PRAYERS ───────── -->
+    <div class="aas-tab" id="aas-prayers">
+      <div class="aas-ph">
+        <div class="aas-eyebrow">Intercession & Faith</div>
+        <h1>My Prayer Requests</h1>
+        <p>Your prayer requests submitted to the Ambassadors Assembly prayer team.</p>
+      </div>
+
+      <% if (prayers && prayers.length > 0) { %>
+        <% prayers.forEach(p => { %>
+          <div class="aas-pray-item">
+            <h4><%= p.title %></h4>
+            <p><%= p.description ? p.description.substring(0,200) + (p.description.length > 200 ? '…' : '') : 'No description provided.' %></p>
+            <div class="pray-meta">
+              <span class="pray-badge <%= p.is_approved ? 'pb-ok' : 'pb-pend' %>">
+                <%= p.is_approved ? '✓ Approved' : '⏳ Pending Review' %>
+              </span>
+              <span class="pray-badge" style="background:#f3f4f6;color:#6b7280;">
+                <%= new Date(p.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) %>
+              </span>
+              <% if (p.prayer_count > 0) { %>
+              <span class="pray-badge" style="background:#ede9fe;color:#6d28d9;">
+                <i class="fas fa-hands"></i> <%= p.prayer_count %> Interceding
+              </span>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="aas-card"><div class="aas-empty">
+          <i class="fas fa-praying-hands"></i>
+          <p>No prayer requests submitted yet. The prayer team is ready to stand with you.</p>
+          <a href="/prayer-wall" class="btn-g" style="margin-top:14px;display:inline-flex;">Submit Prayer <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
+        </div></div>
+      <% } %>
+
+      <div style="text-align:center;margin-top:20px;">
+        <a href="/prayer-wall" class="btn-o" style="font-size:13.5px;padding:11px 26px;">
+          <i class="fas fa-hands"></i> Visit Prayer Wall
+        </a>
+      </div>
+    </div><!-- /prayers -->
+
+
+    <!-- ───────── TAB: NOTES ───────── -->
+    <div class="aas-tab" id="aas-notes">
+      <div class="aas-ph">
+        <div class="aas-eyebrow">Sermon Notes & Journal</div>
+        <h1>My Notes</h1>
+        <p>Personal sermon notes and spiritual journal entries captured through the app.</p>
+      </div>
+
+      <% if (notes && notes.length > 0) { %>
+        <% notes.forEach(n => { %>
+          <div class="aas-note">
+            <h4><%= n.title || 'Sermon Note' %></h4>
+            <p><%= n.content ? n.content.substring(0,220) + (n.content.length > 220 ? '…' : '') : '' %></p>
+            <div class="note-dt"><%= new Date(n.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}) %></div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="aas-card"><div class="aas-empty">
+          <i class="fas fa-sticky-note"></i>
+          <p>No notes yet. Start capturing insights from sermons and spiritual moments.</p>
+        </div></div>
+      <% } %>
+    </div><!-- /notes -->
+
+
+    <!-- ───────── TAB: MINISTRY ───────── -->
+    <div class="aas-tab" id="aas-ministry">
+      <div class="aas-ph">
+        <div class="aas-eyebrow">Spiritual Community</div>
+        <h1>My Ministries</h1>
+        <p>
+          Ministries are spiritual fellowship groups — prayer teams, youth groups, evangelism teams, etc.
+          <br><small style="color:rgba(45,55,72,.4);">Note: These are different from Departments (operational service units).</small>
+        </p>
+      </div>
+
+      <% if (user.ministry_members && user.ministry_members.length > 0) { %>
+        <% user.ministry_members.forEach(mm => { const m = mm.ministries; if (!m) return; %>
+          <div class="aas-min-card">
+            <div class="aas-min-ic"><i class="fas fa-users"></i></div>
+            <div class="aas-min-info">
+              <h3><%= m.name %></h3>
+              <p><%= m.description || 'A ministry of Ambassadors Assembly.' %></p>
+              <span class="min-role-tag"><%= mm.role || 'Member' %></span>
+            </div>
+            <a href="/ministries/<%= m.slug %>" class="btn-o" style="align-self:flex-start;">View</a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="aas-card"><div class="aas-empty">
+          <i class="fas fa-users"></i>
+          <p>You haven't joined any ministry groups yet.</p>
+          <a href="/ministries" class="btn-g" style="margin-top:14px;display:inline-flex;">Explore Ministries <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
+        </div></div>
+      <% } %>
+
+      <div style="text-align:center;margin-top:20px;">
+        <a href="/ministries" class="btn-o" style="font-size:13.5px;padding:11px 26px;">
+          <i class="fas fa-compass"></i> Explore All Ministries
+        </a>
+      </div>
+    </div><!-- /ministry -->
+
+
+    <!-- ───────── TAB: DEPARTMENTS ───────── -->
+    <div class="aas-tab" id="aas-departments">
+      <div class="aas-ph">
+        <div class="aas-eyebrow">Service & Operations</div>
+        <h1>Church Departments</h1>
+        <p>
+          Departments are the operational units where church workers serve. Find your place of service and volunteer to join a department.
+          <br><small style="color:rgba(45,55,72,.4);">These are different from Ministries (spiritual fellowship groups).</small>
+        </p>
+      </div>
+
+      <% if (departments && departments.length > 0) { %>
+        <div class="aas-dept-grid">
+          <% departments.forEach((dept, idx) => { %>
+            <div class="aas-dept-card" style="animation-delay:<%= idx * 0.06 %>s;">
+              <div class="dept-ic">
+                <i class="fas <%= getDeptIcon(dept.name) %>"></i>
+              </div>
+              <h2 class="dept-nm"><%= dept.name %></h2>
+              <p class="dept-ds"><%= dept.description || 'Serving the house of God with excellence and dedication.' %></p>
+              <% if (hasWorker && w.church_departments && w.church_departments.id === dept.id) { %>
+                <span style="background:var(--g-pl);color:var(--g);padding:9px 18px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;display:inline-flex;align-items:center;gap:7px;">
+                  <i class="fas fa-check-circle"></i> My Department
+                </span>
+              <% } else { %>
+                <a href="/my-account?tab=profile&interest=<%= encodeURIComponent(dept.name) %>" class="dept-apply">
+                  <i class="fas fa-arrow-right"></i> Show Interest
+                </a>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="aas-card"><div class="aas-empty">
+          <i class="fas fa-building"></i>
+          <p>Departments are being organized. Check back soon!</p>
+        </div></div>
+      <% } %>
+    </div><!-- /departments -->
+
+
+    <!-- ───────── TAB: PROFILE ───────── -->
+    <div class="aas-tab" id="aas-profile">
+      <div class="aas-ph">
+        <div class="aas-eyebrow">Personal Information</div>
+        <h1>My Profile</h1>
+        <p>Update your personal details and view your church information.</p>
+      </div>
+
+      <div class="aas-card">
+        <form action="/my-account/profile" method="POST">
+          <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+
+          <!-- Avatar + name strip -->
+          <div style="display:flex;align-items:center;gap:18px;margin-bottom:26px;padding-bottom:24px;border-bottom:1.5px solid rgba(0,0,0,.06);">
+            <% if (user.avatar_url) { %>
+              <img src="<%= user.avatar_url %>" style="width:76px;height:76px;border-radius:20px;object-fit:cover;border:2px solid rgba(113,178,128,.4);">
+            <% } else { %>
+              <div style="width:76px;height:76px;border-radius:20px;background:linear-gradient(135deg,#4a8c5a,#71b280);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;flex-shrink:0;">
+                <%= user.first_name ? user.first_name[0].toUpperCase() : 'A' %><%= user.last_name ? user.last_name[0].toUpperCase() : 'A' %>
+              </div>
+            <% } %>
+            <div>
+              <div style="font-size:17px;font-weight:800;color:var(--dk);">
+                <%= user.title ? user.title + ' ' : '' %><%= user.first_name %> <%= user.last_name %>
+              </div>
+              <div style="font-size:12px;color:var(--mu);margin-top:4px;">
+                <%= user.member_id || 'AA-' + user.id.substring(0,6).toUpperCase() %> &bull; Member since <%= user.created_at ? new Date(user.created_at).getFullYear() : '—' %>
+              </div>
+              <div style="margin-top:9px;">
+                <span style="background:var(--g-pl);color:var(--g);font-size:9.5px;font-weight:700;padding:4px 10px;border-radius:100px;text-transform:uppercase;"><%= displayRole %></span>
+              </div>
+            </div>
+          </div>
+
+          <h4 style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--mu);margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+            <i class="fas fa-user" style="color:var(--g);"></i> Personal Details
+          </h4>
+
+          <div class="pf-grid">
+            <div class="pf-g">
+              <label class="pf-lbl">First Name</label>
+              <input type="text" name="firstName" class="pf-inp" value="<%= user.first_name %>" required>
+            </div>
+            <div class="pf-g">
+              <label class="pf-lbl">Last Name</label>
+              <input type="text" name="lastName" class="pf-inp" value="<%= user.last_name %>" required>
+            </div>
+            <div class="pf-g">
+              <label class="pf-lbl">Phone Number</label>
+              <input type="tel" name="phone" class="pf-inp" value="<%= user.phone || '' %>">
+            </div>
+            <div class="pf-g">
+              <label class="pf-lbl">City</label>
+              <input type="text" name="city" class="pf-inp" value="<%= user.city || '' %>">
+            </div>
+            <div class="pf-g full">
+              <label class="pf-lbl">Home Address</label>
+              <input type="text" name="addressLine1" class="pf-inp" value="<%= user.address_line_1 || '' %>">
+            </div>
+            <div class="pf-g full">
+              <label class="pf-lbl">Short Bio</label>
+              <textarea name="bio" class="pf-txt" rows="3"><%= user.bio || '' %></textarea>
+            </div>
+            <div class="pf-g">
+              <label class="pf-lbl">Occupation</label>
+              <input type="text" name="occupation" class="pf-inp" value="<%= user.occupation || '' %>">
+            </div>
+            <div class="pf-g">
+              <label class="pf-lbl">Email (read-only)</label>
+              <input type="email" class="pf-inp" value="<%= user.email %>" readonly>
+              <span class="pf-hint">Contact admin to change your email.</span>
+            </div>
+          </div>
+
+          <div style="margin-top:26px;display:flex;gap:13px;align-items:center;">
+            <button type="submit" class="btn-g" style="font-size:13.5px;padding:12px 28px;">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+            <span style="font-size:12px;color:var(--mu);">All changes are saved immediately.</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- Spiritual info (read-only) -->
+      <div class="aas-card">
+        <h3 class="aas-card-title" style="margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+          <i class="fas fa-dove" style="color:var(--g);"></i> Spiritual Journey
+        </h3>
+        <div class="pf-grid">
+          <div class="pf-g">
+            <label class="pf-lbl">Baptism Status</label>
+            <div class="pf-inp" style="display:flex;align-items:center;gap:8px;">
+              <% if (user.is_baptized) { %>
+                <i class="fas fa-check-circle" style="color:var(--g);"></i> Baptized
+                <% if (user.baptism_date) { %>(<%= new Date(user.baptism_date).toLocaleDateString() %>)<% } %>
+              <% } else { %>
+                <i class="fas fa-circle" style="color:#cbd5e0;"></i> Not recorded
+              <% } %>
+            </div>
+          </div>
+          <div class="pf-g">
+            <label class="pf-lbl">Salvation Date</label>
+            <div class="pf-inp">
+              <%= user.salvation_date ? new Date(user.salvation_date).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}) : 'Not recorded' %>
+            </div>
+          </div>
+          <div class="pf-g full">
+            <label class="pf-lbl">Spiritual Gifts</label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:5px;">
+              <% if (user.spiritual_gifts && user.spiritual_gifts.length > 0) { %>
+                <% user.spiritual_gifts.forEach(g => { %>
+                  <span style="background:var(--g-pl);color:var(--g);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:700;"><%= g %></span>
+                <% }) %>
+              <% } else { %>
+                <span style="color:var(--mu);font-size:13px;">Not recorded during onboarding.</span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /profile -->
+
+  </main><!-- /aas-main -->
+</div><!-- /aa-dash -->
+
+<!-- Toast handler -->
+<div id="__toast" data-err="<%= locals.error || '' %>" data-ok="<%= locals.success || locals.successMessage || '' %>" style="display:none;"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Tab switching ──
+  window.aasTab = function(id, btn) {
+    document.querySelectorAll('.aas-tab').forEach(t => t.classList.remove('on'));
+    document.querySelectorAll('.aas-lnk').forEach(l => l.classList.remove('active'));
+    const panel = document.getElementById('aas-' + id);
+    if (panel) panel.classList.add('on');
+    if (btn) btn.classList.add('active');
+    history.replaceState(null, '', '/my-account?tab=' + id);
+    closeSidebar();
+    document.querySelector('.aas-main').scrollTo(0, 0);
+  };
+
+  window.aasTabById = function(id) {
+    const btn = document.querySelector(`.aas-lnk[onclick*="'${id}'"]`);
+    aasTab(id, btn);
+  };
+
+  // ── Mobile sidebar ──
+  const sidebar = document.getElementById('aasSidebar');
+  const overlay = document.getElementById('aasOverlay');
+  const ham     = document.getElementById('aasHam');
+
+  function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('on');
+    document.body.style.overflow = '';
+  }
+  function openSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.add('open');
+    if (overlay) overlay.classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }
+  if (ham) ham.addEventListener('click', openSidebar);
+  if (overlay) overlay.addEventListener('click', closeSidebar);
+
+  // ── Restore tab from URL ──
+  const urlTab = new URLSearchParams(location.search).get('tab') || '<%= activeTab %>';
+  if (urlTab && urlTab !== 'overview') aasTabById(urlTab);
+
+  // ── Toast messages ──
+  const td = document.getElementById('__toast');
+  if (td) {
+    const err = td.dataset.err;
+    const ok  = td.dataset.ok;
+    if (ok && ok.trim()) {
+      showGreenToast(ok);
+    } else if (err && err.trim()) {
+      showRedToast(err);
+    }
+  }
+
+  function showGreenToast(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#4a8c5a;color:#fff;padding:14px 22px;border-radius:14px;font-size:13.5px;font-weight:700;z-index:9999;box-shadow:0 12px 40px rgba(74,140,90,.4);display:flex;align-items:center;gap:10px;max-width:320px;animation:aas-in .4s ease;';
+    t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 5000);
+  }
+
+  function showRedToast(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#dc2626;color:#fff;padding:14px 22px;border-radius:14px;font-size:13.5px;font-weight:700;z-index:9999;box-shadow:0 12px 40px rgba(220,38,38,.3);display:flex;align-items:center;gap:10px;max-width:320px;animation:aas-in .4s ease;';
+    t.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${msg}`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 6000);
+  }
+})();
+</script>
+
+<%- include('../partials/footer') %>
+
+          </div>
+        </div></div></div>
       </div>
     </div>
   </div>
+</div>
 </body>
 </html>

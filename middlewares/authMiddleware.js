@@ -88,7 +88,7 @@ export const authMiddleware = {
       if (req.originalUrl.startsWith('/api')) {
         return res.status(401).json({ status: 'fail', message: 'Unauthorized. Please check your credentials.' });
       }
-      return res.status(401).redirect('/sign-in');
+      return res.status(401).redirect('/account/login');
     }
 
     // Allow them to pass
