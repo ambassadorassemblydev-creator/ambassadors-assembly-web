@@ -21,7 +21,7 @@
           <!-- AMBIENT BG -->
           <div class="give-bg">
             <div class="bg-overlay"></div>
-            <img src="https://images.unsplash.com/photo-1510531704581-5b2870972060?q=80&w=2000&auto=format&fit=crop" alt="Ministries Background" class="bg-img">
+            <img src="/images/emerald-hero-bg.png" alt="Ministries Background" class="bg-img">
           </div>
           <section class="min-hero">
             <div class="hero-content">
@@ -37,8 +37,10 @@
                 <% ministries.forEach((m, i) => { 
                    // Shuffle logic for gradients
                    const gradients = [
-                     'conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #25D366 100%)',
-                     'conic-gradient(from 45deg at 42.2% 59.8%, rgba(113, 178, 128, 0.4) 0%, rgba(19, 78, 94, 0.8) 100%)'
+                     'conic-gradient(from 180deg at 48.6% 41%, rgba(19, 78, 94, 1) 0%, #176a60 100%)',
+                     'conic-gradient(from 0deg at 50% 50%, rgba(19, 78, 94, 1) 0%, #176a60 100%)',
+                     'radial-gradient(circle at top right, #176a60 0%, transparent 80%)',
+                     'linear-gradient(135deg, rgba(19, 78, 94, 1) 0%, #176a60 100%)'
                    ];
                    const bgBase = 'rgba(19, 78, 94, 1)';
                    const gradient = gradients[i % 2];

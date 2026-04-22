@@ -19,6 +19,8 @@
 <main class="prayer-page">
     <!-- Hero / Intro -->
     <section class="prayer-hero">
+        <img src="/images/emerald-hero-bg.png" alt="Hero Background" class="hero-img">
+        <div class="hero-mask"></div>
         <div class="prayer-hero__content">
             <h1 class="hero-title" data-gsap="fade-up">Light of <span class="text-italic">Hope</span></h1>
             <p class="hero-sub" data-gsap="fade-up" data-gsap-delay="0.1">A wall of intercession. Submit your requests and join others in prayer.</p>
@@ -146,6 +148,9 @@
         overflow: hidden;
         background: var(--color_1);
     }
+    
+    .hero-img { position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity: 0.6; z-index: 1; }
+    .hero-mask { position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to bottom, transparent, var(--color_1)); z-index: 2; }
 
     .prayer-hero__content {
         z-index: 5;
