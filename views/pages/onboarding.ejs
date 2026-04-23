@@ -1,6 +1,6 @@
 <%- include('../partials/head') %>
 
-<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; background-image: url('https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg'); color: #1a1a1a;">
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site no-scroll-transition" style="padding: 0px; margin: 0px; color: #1a1a1a;">
   
   <%- include('../partials/preloader') %>
   <%- include('../partials/toasts') %>
@@ -10,11 +10,6 @@
       <div id="site_content">
 
         <main class="onboarding-page">
-          <!-- AMBIENT BG -->
-          <div class="give-bg">
-            <!-- <div class="bg-overlay"></div> -->
-            <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg" alt="Onboarding Background" class="bg-img">
-          </div>
           
           <div class="onboard-container gsap-up">
             <div class="onboard-card glass-fx">
@@ -422,28 +417,18 @@
   }
 
   /* AMBIENT BG */
-  .give-bg { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    z-index: -1; 
-    pointer-events: none; 
-  }
-  
-  .bg-img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    opacity: 1;
-    filter: contrast(1.1); 
-  }
-  
-  /* Remove the old overlay CSS - you commented it out in HTML */
-  .bg-overlay { 
-    display: none;
-  }
+main.onboarding-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 
     /* Container */
