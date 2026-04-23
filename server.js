@@ -11,7 +11,7 @@ import { RedisStore as RateLimitRedisStore } from 'rate-limit-redis';
 
 import { redis } from './config/redis.js';
 import session from 'express-session';
-import RedisStore from "connect-redis";
+import { RedisStore } from "connect-redis";
 
 
 
