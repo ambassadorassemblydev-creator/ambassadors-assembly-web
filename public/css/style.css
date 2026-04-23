@@ -99,6 +99,18 @@
       background-color: var(--color_1) !important;
     }
 
+  
+
+    /* Baseline Revert (Original State) */
+    .footer-baseline {
+      background-color: white !important;
+      color: #176a60 !important;
+      border-top: 1px solid rgba(23, 106, 96, 0.1) !important;
+    }
+    .footer-baseline *, .footer-baseline a {
+      color: #176a60 !important;
+    }
+    
     .dmBody, .dmOuter, #dm_content {
       background: var(--color_1) !important;
     }
@@ -1700,7 +1712,7 @@
         width: 50%;
         max-height: 100%;
         row-gap: 24px;
-        background-color: var(--color_3);
+        background-color: transparent;
         background-image: none;
         order: 0
       }

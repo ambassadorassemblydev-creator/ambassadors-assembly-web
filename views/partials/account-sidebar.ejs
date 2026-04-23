@@ -25,7 +25,10 @@
       <% if (user.church_workers && user.church_workers.length > 0) { %>
         <div class="role-stack">
           <% user.church_workers.forEach(worker => { %>
-            <span class="role-tag"><%= worker.church_positions.title %> • <%= worker.church_departments.name %></span>
+            <span class="role-tag">
+              <%= (worker.church_positions && worker.church_positions.title) || 'Worker' %> 
+              <%= (worker.church_departments && worker.church_departments.name) ? ' • ' + worker.church_departments.name : '' %>
+            </span>
           <% }) %>
         </div>
       <% } else { %>

@@ -441,10 +441,12 @@
                                               { title: 'Integrity', img: '/images/values/our_values_integrity_1776914230541.png', desc: 'Walking in honesty' },
                                               { title: 'Excellence', img: '/images/values/our_values_excellence_1776914244492.png', desc: 'Reflecting God’s glory' },
                                               { title: 'Community', img: '/images/values/our_values_community_1776914256252.png', desc: 'Fostering love' },
-                                              { title: 'Faith', img: '/images/values/our_values_faith_1776914270104.png', desc: 'Trusting God’s Word' }
+                                              { title: 'Faith', img: '/images/values/our_values_faith_1776914270104.png', desc: 'Trusting God’s Word' },
+                                              { title: 'Leadership', img: '/images/values/our_values_leadership_1776916107476.png', desc: 'Impacting generations' }
                                             ];
                                             values.forEach((val, i) => { 
                                               const offsets = [
+                                                { x: "-160%", y: "12%", r: -8, s: -20 },
                                                 { x: "-80%", y: "3%", r: -4, s: -10 },
                                                 { x: "0", y: "0", r: 0, s: 0 },
                                                 { x: "80%", y: "3%", r: 4, s: 10 },
@@ -585,5 +587,12 @@
                           </div>
                           <!-- ========= END LOVE IN ACTION ========= -->
                         <%- include('../partials/footer') %>
+                        <script>
+                          function handleImageLoadError(img) {
+                            console.warn('Image failed to load:', img.src);
+                            img.onerror = null;
+                            img.src = 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1000'; // Default fallback
+                          }
+                        </script>
                         </body>
                         </html>
