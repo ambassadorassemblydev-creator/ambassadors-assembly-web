@@ -79,12 +79,12 @@ app.use(helmet({
   contentSecurityPolicy: {
     useDefaults: true,
     directives: {
-      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://checkout.paystack.com", "https://js.sentry-cdn.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.multiscreensite.com"],
-      "style-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://unpkg.com"],
-      "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://irp.cdn-website.com", "https://images.unsplash.com", "https://api.dicebear.com", "https://*.cloudinary.com", "https://*.multiscreensite.com"],
-      "connect-src": ["'self'", "https://api.paystack.co", "https://vitals.vercel-insights.com", "*.sentry.io", "https://rtc.multiscreensite.com", "https://*.multiscreensite.com", "https://cdn.jsdelivr.net", "https://sourcemaps-lambda.dwhitelabel.com"],
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://checkout.paystack.com", "https://js.sentry-cdn.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.multiscreensite.com", "https://code.jquery.com"],
+      "style-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com"],
+      "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://irp.cdn-website.com", "https://images.unsplash.com", "https://api.dicebear.com", "https://*.cloudinary.com", "https://*.multiscreensite.com", "https://*.betterstack.com", "https://*.betteruptime.com"],
+      "connect-src": ["'self'", "https://api.paystack.co", "https://vitals.vercel-insights.com", "*.sentry.io", "https://rtc.multiscreensite.com", "https://*.multiscreensite.com", "https://cdn.jsdelivr.net", "https://sourcemaps-lambda.dwhitelabel.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com"],
       "frame-src": ["'self'", "https://ambassadors.betteruptime.com", "https://*.betterstack.com", "https://checkout.paystack.com", "https://www.youtube.com", "https://player.vimeo.com"],
-      "font-src": ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:"],
+      "font-src": ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:", "https://*.multiscreensite.com", "https://*.betterstack.com", "https://*.betteruptime.com"],
       "media-src": ["'self'", "https://res.cloudinary.com", "https://*.cloudinary.com"],
       "script-src-attr": ["'unsafe-inline'"],
       "object-src": ["'none'"],

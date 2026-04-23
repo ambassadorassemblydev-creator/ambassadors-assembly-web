@@ -5,7 +5,15 @@
   <meta charset="utf-8">
   <!-- ========= Meta Tags ========= -->
   <meta id="view" name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <script>
+    function handleImageLoadError(img) {
+      img.onerror = null; // Prevent infinite loop
+      img.src = 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg';
+      img.classList.add('image-fallback');
+    }
+  </script>
 
   <!-- Sentry Tracking -->
   <% if (locals.SENTRY_BROWSER_DSN) { %>
@@ -303,7 +311,9 @@
   </script>
 
   <!-- ========= Third-Party Libraries ========= -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+
   <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
