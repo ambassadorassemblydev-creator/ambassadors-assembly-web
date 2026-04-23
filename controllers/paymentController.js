@@ -51,5 +51,53 @@ export const paymentController = {
                 message: 'Error verifying payment. Please contact support with your reference.' 
             });
         }
+    },
+
+    /**
+     * Webhook handler for Paystack (High IQ)
+     * This handles asynchronous events like successful card charges.
+     */
+    handleWebhook: async (req, res) => {
+        try {
+            const secret = process.env.PAYSTACK_SECRET_KEY;
+            const hash = req.headers['x-paystack-signature'];
+
+            if (!secret || !hash) {
+                return res.status(401).send('No secret or signature');
+            }
+
+            // Verify signature
+            const crypto = await import('crypto');
+            const expectedHash = crypto.createHmac('sha512', secret)
+                .update(JSON.stringify(req.body))
+                .digest('hex');
+
+            if (hash !== expectedHash) {
+                return res.status(401).send('Invalid signature');
+            }
+
+            const event = req.body;
+            console.info(`[Paystack Webhook] Event received: ${event.event}`);
+
+            if (event.event === 'charge.success') {
+                const { reference, amount, metadata, customer } = event.data;
+                const categoryId = metadata?.categoryId;
+                const userId = metadata?.userId;
+                
+                await donationRepo.verifyAndCompleteDonation(
+                    reference, 
+                    amount / 100, 
+                    categoryId, 
+                    userId, 
+                    customer.email
+                );
+            }
+
+            res.sendStatus(200);
+        } catch (error) {
+            console.error('[PaymentController] Webhook Error:', error.message);
+            res.sendStatus(500);
+        }
     }
 };
+

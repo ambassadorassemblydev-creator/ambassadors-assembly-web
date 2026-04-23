@@ -50,11 +50,8 @@
                                                   <div class="slide-content">
                                                     <h1 class="hero-title gsap-slide-title">Making Jesus <span style="color: #25D366;">Known</span></h1>
                                                     <p class="hero-text mobile-hero gsap-slide-text">Join Us Sunday!</p>
-                                                    <p class="hero-text desktop-hero gsap-slide-text">Our mission is
-                                                      simple: to love God and love people, grow in our relationship with
-                                                      Him and with each other, and help every person discover their
-                                                      purpose in God's kingdom. We would be so honored to walk with you
-                                                      as you get connected and become part of our church family.</p>
+                                                    <p class="hero-text desktop-hero gsap-slide-text">Our vision is
+                                                      simple: To raise men for the ever-increasing Kingdom work, transforming lives and reforming homes through sound biblical teaching and problem solving.</p>
                                                     <div class="button-con gsap-slide-btns">
                                                       <div class="glass-button"> <a value="about" type="page"
                                                           href="/about"
@@ -87,8 +84,8 @@
                                                 %>
                                                 <div class="swiper-slide slide-2" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= latestSermon.thumbnail_url %>'); background-size: cover; background-position: center;">
                                                   <div class="slide-2-text">
-                                                    <h2 class="hero-title gsap-slide-title" style="color: #1a1a1a;"><%= latestSermon.title %></h2>
-                                                    <p class="hero-text gsap-slide-text" style="color: rgba(26,26,26,0.7);">Watch the latest sermon</p>
+                                                    <h2 class="hero-title gsap-slide-title" style="color: whitesmoke;"><%= latestSermon.title %></h2>
+                                                    <p class="hero-text gsap-slide-text" style="color: whitesmoke">Watch the latest sermon</p>
                                                   </div>
                                                   <div class="button-con gsap-slide-btns"> <a
                                                       class="glass-button slide2-watch-btn" 
@@ -177,7 +174,7 @@
                                           data-version="5" id="865141559" >
                                           <p class="m-size-40 t-size-60 size-72" style="line-height: 1.15;"><span
                                               style="display: initial; color: #25D366;"
-                                              class="font-size-72 t-font-size-60 m-font-size-40">Ambassadors Assembly exist to share Christ with those who don't know Him and lead those who do into a growing relationship with Him.</span></p>
+                                              class="font-size-72 t-font-size-60 m-font-size-40">Welcome to Living Faith Foundation - The Ambassadors' Assembly A church committed to raising men for the ever-increasing Kingdom work, transforming lives, restoring destinies, and reaching the world through the power of the Holy Spirit.</span></p>
                                         </div>
                                       </div>
                                     </div>
@@ -211,16 +208,13 @@
                                         data-auto="flex-element-widget-wrapper" data-widget-type="paragraph"
                                         data-external-id="1951729674"
                                         style="translate: none; rotate: none; scale: none; transform: translate(0px, 25px); opacity: 0;">
-                                        <div class="dmNewParagraph" data-element-type="paragraph" data-version="5"
-                                          id="1951729674" > 
                                           <p class="text-align-center"><span class=""
                                               style="color: #1a1a1a; display: unset;"><span
                                                 style="color: #1a1a1a; display: unset;">Join us this
-                                                Sunday at Ambassadors Assembly! We have two incredible worship
-                                                experiences at 8 AM and 10 AM designed to help you encounter God and
-                                                connect with others.</span>
-                                            <!-- </span><span style="display: unset;">Traducción al español disponible
-                                              durante nuestro servicio de las 11 AM.</span></p> -->
+                                                Sunday at Ambassadors Assembly! Our worship
+                                                experience at 8:15 AM is designed to help you encounter God and
+                                                connect with others. Join us also on Wednesdays at 6:00 PM for Mid-week Service.</span>
+                                            </span></p>
                                         </div>
                                       </div>
                                       <div id="group_kqi" class="flex-element group" data-auto="flex-element-group">
@@ -233,11 +227,8 @@
                                             data-widget-id="f99e8ecbb02d43cab2f6f81f8cffcf13" data-widget-version="8"
                                            >
                                             <a class="glass-button"
-                                              value="https://ambassadorsassembly.churchcenter.com/people/forms/754494"
-                                              label="" type="url"
-                                              href="https://ambassadorsassembly.churchcenter.com/people/forms/754494"
-                                              raw_url="https://ambassadorsassembly.churchcenter.com/people/forms/754494"
-                                              target="_blank">8:00 am</a>
+                                              href="/plan-a-visit"
+                                              target="_blank">Sunday 8:15 am</a>
                                           </div>
                                         </div>
                                         <div id="4b98a721" class="flex-element widget-wrapper"
@@ -249,11 +240,8 @@
                                             data-widget-id="f99e8ecbb02d43cab2f6f81f8cffcf13" data-widget-version="8"
                                            >
                                             <a class="glass-button"
-                                              value="https://ambassadorsassembly.churchcenter.com/people/forms/754494"
-                                              label="" type="url"
-                                              href="https://ambassadorsassembly.churchcenter.com/people/forms/754494"
-                                              raw_url="https://ambassadorsassembly.churchcenter.com/people/forms/754494"
-                                              target="_blank">10:00 am</a>
+                                              href="/plan-a-visit"
+                                              target="_blank">Wednesday 6:00 pm</a>
                                           </div>
                                         </div>
                                       </div>
@@ -272,7 +260,7 @@
                                             ];
                                           %>
                                           <div class="ministry-container">
-                                            <% ministries.forEach((ministry, i) => { %>
+                                            <% ministries.slice(0, 5).forEach((ministry, i) => { %>
                                               <% if (i === 2) { %>
                                                 </div>
                                                 <div class="ministry-container">
@@ -284,10 +272,13 @@
                                                 <div class="ministry-card-content">
                                                   <h3><%= ministry.name %></h3>
                                                   <p><%= ministry.description %></p>
-                                                  <a href="/<%= ministry.slug %>" class="glass-button">Learn More</a>
+                                                  <a href="/ministries/<%= ministry.slug %>" class="glass-button">Learn More</a>
                                                 </div>
                                               </div>
                                             <% }) %>
+                                          </div>
+                                          <div style="text-align: center; margin-top: 40px;">
+                                            <a href="/ministries" class="glass-button" style="background: rgba(37, 211, 102, 0.1); border-color: #25D366; color: #1a1a1a;">See All Ministries</a>
                                           </div>
                                         </div>
                                       </div>
@@ -299,9 +290,9 @@
                                             class="swiper min-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
                                             <div class="swiper-wrapper" id="swiper-wrapper-41f67cfbaad5d4e1"
                                               aria-live="polite">
-                                              <% ministries.forEach((ministry, i) => { %>
+                                              <% ministries.slice(0, 5).forEach((ministry, i) => { %>
                                                 <div class="swiper-slide ministry-card glass-card <%= i === 0 ? 'swiper-slide-active' : (i === 1 ? 'swiper-slide-next' : '') %>"
-                                                  role="group" aria-label="<%= i + 1 %> / <%= ministries.length %>" data-swiper-slide-index="<%= i %>"
+                                                  role="group" aria-label="<%= i + 1 %> / 5" data-swiper-slide-index="<%= i %>"
                                                   style="margin-right: 20px;">
                                                   <div class="ministry-img" id="mob-img-<%= i + 1 %>"
                                                     style="--img: url(<%= ministry.cover_image_url %>)">
@@ -309,10 +300,13 @@
                                                   <div class="ministry-card-content">
                                                     <h3><%= ministry.name %></h3>
                                                     <p><%= ministry.description %></p>
-                                                    <a href="/<%= ministry.slug %>" class="glass-button">Learn More</a>
+                                                    <a href="/ministries/<%= ministry.slug %>" class="glass-button">Learn More</a>
                                                   </div>
                                                 </div>
                                               <% }) %>
+                                              <div class="swiper-slide glass-card" style="display: flex; align-items: center; justify-content: center; height: 100%; min-height: 300px; margin-right: 20px;">
+                                                <a href="/ministries" class="glass-button">See All Ministries</a>
+                                              </div>
                                             </div>
                                             <div class="swiper-button-next min-nav-next swiper-button-lock" tabindex="0"
                                               role="button" aria-label="Next slide"
@@ -528,7 +522,7 @@
                   </div>
 
                           <!-- ========= ABOUT / LEADERSHIP ========= -->
-                          <section class="about-section" id="about-section">
+                          <section class="about-section" id="about-section" style="background-color: #5DD988;">
                             <div class="about-section__inner">
                               <div class="about-card">
                                 <img class="about-card__img" src="https://irp.cdn-website.com/23c7a45a/dms3rep/multi/2H2A0124-2880w.webp" alt="Church Leadership" loading="lazy">
@@ -540,11 +534,11 @@
                                 </div>
                               </div>
                               <div class="about-content">
-                                <h2 class="about-content__title">About Ambassadors Assembly</h2>
-                                <p class="about-content__subtitle">Ambassadors Assembly is a vibrant expression of faith, community, and purpose.</p>
-                                <p class="about-content__desc">Born out of a desire to see lives transformed and communities restored, Ambassadors Assembly emerged as a beacon of hope. Our mission is to establish a firm foundation for every believer — nurturing their faith and grounding them solely in God. We believe in the power of genuine community, authentic worship, and the transformative work of the Holy Spirit.</p>
+                                <h2 class="about-content__title">Who We Are</h2>
+                                <p class="about-content__subtitle">We are passionate about seeing lives changed by the Gospel of Jesus Christ and raising believers who will impact their generation.</p>
+                                <p class="about-content__desc">The Ambassadors' Assembly was established in 2009 as a church planting project birthed from the ZOA International Bible School Lagos cohort. The inaugural service was held on 15th November 2009 in Alausa, Lagos. Since then, the church has continued to grow in impact, influence, and vision. Today, we worship at our permanent site in Lagos as God continues to expand the ministry.</p>
                                 <a href="/about" class="about-btn">
-                                  About Us
+                                  Learn More
                                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </a>
                               </div>
@@ -575,14 +569,14 @@
                                    <!-- ========= LOVE IN ACTION — Scroll-Scrubbed Parallax ========= -->
                           <div class="love-section" id="love-section">
                             <!-- Giant background words -->
-                            <div class="love-giant love-giant--love">LOVE</div>
-                            <div class="love-giant love-giant--in">IN</div>
-                            <div class="love-giant love-giant--action">ACTION</div>
-                            <div class="love-giant love-giant--action-shadow">ACTION</div>
+                            <div class="love-giant love-giant--love">REACH</div>
+                            <div class="love-giant love-giant--in">RAISE</div>
+                            <div class="love-giant love-giant--action">RULE</div>
+                            <div class="love-giant love-giant--action-shadow">RULE</div>
 
                             <!-- Pinned center text -->
                             <div class="love-center" id="love-center">
-                              <div class="love-center__text">OUR MISSION IS<br>LOVE IN ACTION</div>
+                              <div class="love-center__text">THE 3 R's<br>REACH, RAISE, RULE</div>
                               <!-- Collapsing circle -->
                               <svg class="love-circle" id="love-circle" viewBox="0 0 400 400" fill="none">
                                 <circle cx="200" cy="200" r="195" stroke="#1a1a1a" stroke-width="1.5"/>

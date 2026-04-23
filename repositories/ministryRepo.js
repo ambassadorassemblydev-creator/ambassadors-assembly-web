@@ -5,7 +5,7 @@ export const ministryRepo = {
     getFeaturedMinistries: async (limit = 6) => {
         const { data, error } = await supabase
             .from('ministries')
-            .select('name, slug, description, cover_image_url')
+            .select('name, slug, description, cover_image_url, category')
             .eq('is_active', true)
             // .eq('is_featured', true) // You can uncomment this later if you only want specific ones shown
             .order('sort_order', { ascending: true })

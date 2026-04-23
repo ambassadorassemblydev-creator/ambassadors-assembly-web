@@ -13,7 +13,7 @@
           <!-- AMBIENT BG -->
           <div class="give-bg">
             <div class="bg-overlay"></div>
-            <img src="https://images.unsplash.com/photo-1510531704581-5b2870972060?q=80&w=2000&auto=format&fit=crop" alt="Onboarding Background" class="bg-img">
+            <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1775987631/45-dream-dark-blue-gradient.jpg" alt="Onboarding Background" class="bg-img">
           </div>
           
           <div class="onboard-container gsap-up">
@@ -272,16 +272,18 @@
                   <div class="form-group">
                     <label>Join a Ministry (Fellowship Groups)</label>
                     <div class="ministry-grid">
-                      <% ministries.forEach(min => { 
+                      <% const fellowshipGroups = ministries.filter(m => m.category === 'fellowship'); %>
+                      <% fellowshipGroups.forEach(min => { 
                         const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
                           ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
                           : false;
                       %>
-                        <div class="min-card <%= isSelected ? 'selected' : '' %>" 
-                             onclick="toggleMin(this, '<%= min.name.replace(/'/g, \"\\\\'\") %>')">
+                         <div class="min-card <%= isSelected ? 'selected' : '' %>" 
+                              data-name="<%= min.name %>"
+                              onclick="toggleMin(this, this.dataset.name)">
                           <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
                           <strong><%= min.name %></strong>
-                          <p><%= min.description ? min.description.substring(0, 40) + '...' : 'Community fellowship' %></p>
+                          <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Community fellowship' %></p>
                         </div>
                       <% }) %>
                     </div>
@@ -298,13 +300,29 @@
                 <!-- STEP 5: SERVICE ASSIGNMENT -->
                 <div id="stepSection5" class="form-section" style="display:none">
                    <div class="form-group">
-                    <label>Where would you like to serve? (Department) <span>*</span></label>
+                    <label>Where would you like to serve? (Outreach & Community Impact) <span>*</span></label>
                     <div class="dept-selection-grid">
                        <% departments.forEach(dept => { %>
+                        <% 
+                          function getIcon(name) {
+                            const n = name.toLowerCase();
+                            if (n.includes('choir') || n.includes('music')) return 'fa-music';
+                            if (n.includes('evangelism') || n.includes('outreach') || n.includes('impact')) return 'fa-bullhorn';
+                            if (n.includes('prayer') || n.includes('intercession')) return 'fa-praying-hands';
+                            if (n.includes('media') || n.includes('technical') || n.includes('it')) return 'fa-video';
+                            if (n.includes('junior') || n.includes('children') || n.includes('kids')) return 'fa-child';
+                            if (n.includes('usher') || n.includes('protocol')) return 'fa-door-open';
+                            if (n.includes('welfare') || n.includes('care')) return 'fa-hands-helping';
+                            if (n.includes('finance')) return 'fa-coins';
+                            return 'fa-bullhorn';
+                          }
+                        %>
                         <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
-                             onclick="selectDept(this, '<%= dept.name.replace(/'/g, \"\\\\'\") %>', '<%= dept.id %>')">
+                             data-name="<%= dept.name %>"
+                             data-id="<%= dept.id %>"
+                             onclick="selectDept(this, this.dataset.name, this.dataset.id)">
                           <div class="tile-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            <i class="fas <%= getIcon(dept.name) %>"></i>
                           </div>
                           <div class="tile-info">
                             <strong><%= dept.name %></strong>
@@ -325,7 +343,8 @@
                        <% positions.forEach(pos => { %>
                         <div class="role-pill <%= (user && user.position_interest === pos.title) ? 'active' : '' %>" 
                              data-dept-id="<%= pos.department_id %>"
-                             onclick="selectRole(this, '<%= pos.title.replace(/'/g, \"\\\\'\") %>')">
+                             data-title="<%= pos.title %>"
+                             onclick="selectRole(this, this.dataset.title)">
                           <%= pos.title %>
                         </div>
                       <% }) %>
@@ -347,7 +366,7 @@
 
                   <div class="form-group">
                     <label>Why do you want to serve in this capacity? (Motivation)</label>
-                    <textarea name="motivation" placeholder="Share your heart or specific reasons for choosing this department..." class="glass-input"><%= user && user.motivation ? user.motivation : '' %></textarea>
+                    <textarea name="motivation" placeholder="Share your heart or specific reasons for choosing this outreach team..." class="glass-input"><%= user && user.motivation ? user.motivation : '' %></textarea>
                   </div>
 
                   <div class="form-group">

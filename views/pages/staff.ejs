@@ -36,7 +36,7 @@
           
           <div class="staff-grid" id="staff-grid">
             <% staff.forEach((s, i) => { %>
-              <div class="staff-card gsap-reveal" data-dept="<%= s.department %>" onclick="openStaffDetail(`<%= s.first_name %> <%= s.last_name %>`, `<%= s.role %>`, `Leading the <%= s.department %> with excellence and consecration to ensure the kingdom's mandate is fulfilled.`)">
+              <div class="staff-card gsap-reveal" data-dept="<%= s.department %>" onclick="openStaffDetail(`<%= s.first_name %> <%= s.last_name %>`, `<%= s.role %>`, `Leading the <%= s.department %> outreach with excellence and consecration to ensure the kingdom's mandate is fulfilled.`)">
                 <div class="staff-card__img">
                     <img src="<%= s.avatar_url || '/images/default-avatar.png' %>" alt="<%= s.first_name %>" loading="lazy">
                 </div>
@@ -52,23 +52,30 @@
         </div>
       </section>
 
-      <!-- BOTTOM FILTER BAR -->
-      <div class="filter-controls-wrap">
-          <div class="bottom-filter-bar filter-bar">
-              <button class="filter-btn active" data-filter="all">All Leadership</button>
-              <% departments.forEach(dept => { %>
-                  <button class="filter-btn" data-filter="<%= dept.name %>"><%= dept.name %></button>
-              <% }) %>
+      <!-- CENTERED FILTER BUTTON -->
+      <div class="filter-section-centered">
+          <button id="filterToggle" class="main-filter-trigger gsap-reveal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 3H2l8 9v6l4 3v-9L22 3z"/></svg>
+              <span>Filter</span>
+          </button>
+          
+          <div id="filterMenu" class="fancy-filter-menu glass-fx">
+              <div class="filter-menu-inner">
+                  <button class="filter-btn active" data-filter="all">All Leadership</button>
+                  <% departments.forEach(dept => { %>
+                      <button class="filter-btn" data-filter="<%= dept.name %>"><%= dept.name %></button>
+                  <% }) %>
+              </div>
           </div>
       </div>
 
-      <!-- MINISTRIES / DEPARTMENTS SECTION -->
+      <!-- FELLOWSHIP & IMPACT SECTION -->
       <section class="team-extra-section" style="padding: 80px 6%;">
         <div class="directory-container">
           <div style="margin-bottom: 40px; text-align: center;">
             <span class="sub-label">Get Involved</span>
-            <h2 style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 15px; color: #1a1a1a;">Ministries & Departments</h2>
-            <p style="color: rgba(26,26,26,0.6); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">Discover active ministries and join a community where you can serve with purpose.</p>
+            <h2 style="font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 15px; color: #1a1a1a;">Fellowship & Outreach</h2>
+            <p style="color: rgba(26,26,26,0.6); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">Discover active fellowships and join a community where you can serve with purpose.</p>
           </div>
           
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
@@ -235,32 +242,69 @@
     .staff-name { font-size: 1.5rem; font-weight: 850; margin-bottom: 5px; color: #1a1a1a; }
     .staff-role { font-size: 0.85rem; color: var(--aa-green); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
-    /* Bottom Filter Bar */
-    .bottom-filter-bar { 
-      position: fixed; 
-      bottom: 30px; 
-      left: 50%; 
-      transform: translateX(-50%); 
-      z-index: 1000;
-      padding: 10px 10px; 
-      border-radius: 100px; 
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      width: max-content;
-      max-width: 90vw; 
+    /* Centered Filter */
+    .filter-section-centered {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    
+    .main-filter-trigger {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 40px;
+      background: var(--aa-green);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(23, 106, 96, 0.2);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 100;
+    }
+    .main-filter-trigger:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(23, 106, 96, 0.3);
+    }
+    .main-filter-trigger.active {
+      background: #1a1a1a;
+    }
+
+    .fancy-filter-menu {
+      position: absolute;
+      top: calc(100% + 20px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(23, 106, 96, 0.1);
+      border-radius: 30px;
+      padding: 15px;
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      z-index: 99;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+      width: max-content;
+      max-width: 90vw;
+    }
+    .filter-menu-inner {
+      display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      overflow-x: auto; 
-      scrollbar-width: none;
+      gap: 10px;
+      max-width: 600px;
     }
-    .bottom-filter-bar::-webkit-scrollbar { display: none; }
-    .filter-controls { display: flex; gap: 5px; white-space: nowrap; }
+
     .filter-btn { 
-      padding: 12px 25px; border-radius: 100px; background: transparent; border: none; 
-      color: #1a1a1a; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.3s;
+      padding: 10px 22px; border-radius: 100px; background: rgba(26,26,26,0.03); border: 1px solid transparent; 
+      color: #1a1a1a; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s;
     }
-    .filter-btn:hover { color: var(--aa-green); }
-    .filter-btn.active { background: var(--aa-green); color: white; }
+    .filter-btn:hover { background: rgba(23, 106, 96, 0.05); color: var(--aa-green); }
+    .filter-btn.active { background: var(--aa-green); color: white; border-color: var(--aa-green); }
 
     /* Popup */
     .staff-popup { 
@@ -312,11 +356,47 @@
       }
     });
 
+    // Filter Toggle Logic
+    const filterTrigger = document.getElementById('filterToggle');
+    const filterMenu = document.getElementById('filterMenu');
+    
+    filterTrigger.addEventListener('click', () => {
+        const isOpen = filterTrigger.classList.contains('active');
+        if (isOpen) {
+            closeFilter();
+        } else {
+            openFilter();
+        }
+    });
+
+    function openFilter() {
+        filterTrigger.classList.add('active');
+        filterMenu.style.display = 'block';
+        gsap.to(filterMenu, { opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.7)' });
+    }
+
+    function closeFilter() {
+        filterTrigger.classList.remove('active');
+        gsap.to(filterMenu, { 
+            opacity: 0, y: 10, duration: 0.3, 
+            onComplete: () => filterMenu.style.display = 'none' 
+        });
+    }
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+        if (!filterMenu.contains(e.target) && !filterTrigger.contains(e.target)) {
+            closeFilter();
+        }
+    });
+
     filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         applyFilter(btn.dataset.filter);
+        closeFilter();
       });
     });
 

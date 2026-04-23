@@ -145,7 +145,7 @@ export const accountRepo = {
   getMinistries: async () => {
     const { data, error } = await supabase
       .from('ministries')
-      .select('id, name, description, slug')
+      .select('id, name, description, slug, category')
       .eq('is_active', true)
       .order('name', { ascending: true });
 

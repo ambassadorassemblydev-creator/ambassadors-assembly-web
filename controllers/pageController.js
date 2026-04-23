@@ -257,12 +257,24 @@ export const pageController = {
     // Render the Ministries Grid
     renderMinistries: async (req, res) => {
         try {
-            const ministries = await ministryRepo.getFeaturedMinistries(20);
+            const ministries = await ministryRepo.getFeaturedMinistries(30);
+            
+            // High IQ: Fetch outreach events for Community Impact
+            const { data: outreachEvents } = await supabase
+                .from('events')
+                .select('*')
+                .eq('event_type', 'outreach')
+                .eq('status', 'published')
+                .gte('start_date', new Date().toISOString())
+                .order('start_date', { ascending: true })
+                .limit(4);
+
             res.render('pages/ministries', {
                 pageTitle: 'Ministries | Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'COMMUNITY',
-                ministries
+                ministries,
+                outreachEvents: outreachEvents || []
             });
         } catch (error) {
             console.error('[PageController] Error rendering ministries:', error.message);
@@ -282,6 +294,20 @@ export const pageController = {
             });
         } catch (error) {
             console.error('[PageController] Error rendering about:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading page' });
+        }
+    },
+
+    // Render Meet Our Pastor Page
+    renderMeetThePastor: async (req, res) => {
+        try {
+            res.render('pages/pastor', {
+                pageTitle: 'Meet Our Pastor | Ambassadors Assembly',
+                currentPath: req.path,
+                preloaderText: 'LEADERSHIP'
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering pastor page:', error.message);
             res.status(500).render('pages/error', { message: 'Error loading page' });
         }
     },

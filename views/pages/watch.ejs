@@ -35,6 +35,32 @@
                       <p>Join us for <%= displayTitle %></p>
                     </div>
                   </div>
+                <% } else if (content && content.platform === 'instagram') { %>
+                  <div class="offline-placeholder instagram-live">
+                    <div class="offline-card glass-fx">
+                      <div class="instagram-icon" style="margin-bottom: 20px;">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="url(#ig-grad)" stroke-width="2">
+                          <defs>
+                            <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                              <stop offset="0%" style="stop-color:#f09433" />
+                              <stop offset="25%" style="stop-color:#e6683c" />
+                              <stop offset="50%" style="stop-color:#dc2743" />
+                              <stop offset="75%" style="stop-color:#cc2366" />
+                              <stop offset="100%" style="stop-color:#bc1888" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                      </div>
+                      <h2>We are Live on Instagram!</h2>
+                      <p>Instagram does not allow embedding live streams. Click the button below to join the service on our official profile.</p>
+                      <a href="<%= content.stream_url %>" target="_blank" class="action-btn give-primary" style="margin-top: 20px; width: auto; padding: 15px 40px; border-radius: 50px;">
+                        Join Instagram Live
+                      </a>
+                    </div>
+                  </div>
                 <% } else if (videoUrl) { %>
                   <iframe src="<%= videoUrl %>" frameborder="0" allowfullscreen></iframe>
                 <% } else { %>
@@ -61,14 +87,25 @@
                 <p class="description"><%= description %></p>
 
                 <div class="quick-actions">
-                  <a href="/give" class="action-btn give-primary">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Give / Donate
-                  </a>
-                  <a href="/give" class="action-btn partner">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    Partner
-                  </a>
+                  <% if (user) { %>
+                    <a href="/give" class="action-btn give-primary">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                      Give / Donate
+                    </a>
+                    <a href="/give" class="action-btn partner">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                      Partner
+                    </a>
+                  <% } else { %>
+                    <a href="/account/login?returnTo=/watch" class="action-btn give-primary">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                      Sign In to Give
+                    </a>
+                    <a href="/account/login?returnTo=/watch" class="action-btn partner">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                      Sign In to Partner
+                    </a>
+                  <% } %>
                   <button class="action-btn share" onclick="copyWatchLink()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
                     Invite a Friend

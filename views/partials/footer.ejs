@@ -139,17 +139,18 @@
                                             </p>
                                           </div>
                                         </div>
-                                        <div id="widget_departments" class="flex-element widget-wrapper footer-nav"
-                                          data-auto="flex-element-widget-wrapper" data-widget-type="paragraph">
-                                          <div class="dmNewParagraph" data-element-type="paragraph" data-version="5">
-                                            <p class="m-size-20 t-size-27 size-32 m-text-align-center">
-                                              <a href="/departments" runtime_url="/departments" type="page"
-                                                style="text-decoration: none; font-weight: bold; text-transform: uppercase; color: var(--color_1); display: initial;"
-                                                class="m-font-size-20 t-font-size-27 font-size-32"
-                                                m-font-size-set="true"><strong>Departments</strong></a>
-                                            </p>
+                                          <div id="widget_departments" class="flex-element widget-wrapper footer-nav"
+                                            data-auto="flex-element-widget-wrapper" data-widget-type="paragraph">
+                                            <div class="dmNewParagraph" data-element-type="paragraph" data-version="5">
+                                              <p class="m-size-20 t-size-27 size-32 m-text-align-center">
+                                                <a href="/departments" runtime_url="/departments" type="page"
+                                                  style="text-decoration: none; font-weight: bold; text-transform: uppercase; color: var(--color_1); display: initial;"
+                                                  class="m-font-size-20 t-font-size-27 font-size-32"
+                                                  m-font-size-set="true"><strong>Outreach & Impact</strong></a>
+                                              </p>
+                                            </div>
                                           </div>
-                                        </div>
+
                                       </div>
                                     </div>
                                     <div id="widget_b54" class="flex-element widget-wrapper"
@@ -306,9 +307,17 @@
                         <a href="/faq">FAQ</a>
                         <a href="/terms-of-service">Terms of Service</a>
                         <a href="/privacy-policy">Privacy Policy</a>
+                        <a href="/system-status" style="display: inline-flex; vertical-align: middle; margin-left: 10px;">
+                          <iframe src="https://ambassadors.betteruptime.com/badge?theme=dark" width="250" height="30" frameborder="0" scrolling="no" style="color-scheme: normal"></iframe>
+                        </a>
                       </div>
-                      <p class="copyright">&copy; <%= new Date().getFullYear() %> Ambassadors Assembly. All Rights Reserved.</p>
+                      <div class="church-tagline" style="text-align: center; margin-top: 20px; color: var(--color_1); opacity: 0.8; font-size: 14px; line-height: 1.6;">
+                        <p style="margin-bottom: 5px; font-weight: bold;">Living Faith Foundation - The Ambassadors' Assembly</p>
+                        <p>Raising Men. Transforming Lives. Advancing God's Kingdom.</p>
+                      </div>
+                      <p class="copyright" style="margin-top: 15px;">&copy; <%= new Date().getFullYear() %> Ambassadors Assembly. All Rights Reserved.</p>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -640,10 +649,11 @@
         </div>
         <div class="quick-prompts">
           <button class="quick-prompt" data-msg="What are the service times?">Service Times</button>
-          <button class="quick-prompt" data-msg="/prayer-wall">Prayer Wall</button>
-          <button class="quick-prompt" data-msg="How can I give?">Giving</button>
-          <button class="quick-prompt" data-msg="Who is the Lead Pastor?">Lead Pastor</button>
+          <button class="quick-prompt" data-msg="Give me a word of encouragement/Scripture.">Encouragement</button>
+          <button class="quick-prompt" data-msg="How can I join an Outreach Team?">Join Outreach</button>
+          <button class="quick-prompt" data-msg="How do I give online?">Giving</button>
         </div>
+
       </div>
 
       <form id="ai-chat-form" class="ai-chat-footer">
@@ -869,7 +879,7 @@
         input.value = '';
         addMessage(text, 'user');
 
-        const typingIndicator = addMessage('Thinking...', 'ai typing-indicator');
+        const typingIndicator = addMessage('...', 'ai typing-indicator');
 
         try {
           const response = await fetch('/api/ai/chat', {
@@ -878,17 +888,34 @@
               'Content-Type': 'application/json',
               'X-CSRF-Token': document.querySelector('input[name="_csrf"]').value
             },
-            body: JSON.stringify({ message: text, history: chatHistory.filter(m => m.role !== 'typing') })
+            body: JSON.stringify({ message: text, history: chatHistory.filter(m => !m.className?.includes('typing')) })
           });
 
           const data = await response.json();
           typingIndicator.remove();
-          addMessage(data.response, 'ai');
+          
+          // Cinematic Staggered Reveal
+          const aiMsg = addMessage('', 'ai');
+          const content = data.response;
+          let i = 0;
+          const speed = 15; // ms per char
+
+          const typeChar = () => {
+              if (i < content.length) {
+                  aiMsg.querySelector('.msg-content').innerHTML += content.charAt(i);
+                  i++;
+                  messagesBody.scrollTop = messagesBody.scrollHeight;
+                  setTimeout(typeChar, speed);
+              }
+          };
+          typeChar();
+
         } catch (error) {
-          typingIndicator.innerHTML = '<span style="color:red">Connection failed. Please try again.</span>';
+          typingIndicator.innerHTML = '<span style="color:red">The sanctuary connection is weak. Please try again.</span>';
           console.error(error);
         }
       });
+
     });
   </script>
 
@@ -1004,10 +1031,13 @@
       .baseline-links { display: flex; gap: 30px; }
       .baseline-links a { 
         font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-        color: green; text-decoration: none; transition: 0.3s;
+      .baseline-links a { 
+        font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        color: var(--color_1); text-decoration: none; transition: 0.3s;
       }
       .baseline-links a:hover { color: var(--aa-green); }
-      .copyright { font-size: 0.75rem; color: green; font-weight: 600; margin: 0; }
+      .copyright { font-size: 0.75rem; color: var(--color_1); font-weight: 600; margin: 0; }
+
 
       @media (max-width: 600px) {
         .footer-baseline { flex-direction: column; gap: 20px; text-align: center; }

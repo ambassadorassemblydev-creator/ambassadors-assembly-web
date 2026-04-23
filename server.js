@@ -7,8 +7,13 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
-import { RedisStore } from 'rate-limit-redis';
+import { RedisStore as RateLimitRedisStore } from 'rate-limit-redis';
+
 import { redis } from './config/redis.js';
+import session from 'express-session';
+import RedisStore from "connect-redis";
+
+
 
 import { logger } from './config/logger.js';
 import { globalErrorHandler } from './middlewares/errorHandler.js';
@@ -16,7 +21,8 @@ import { AppError } from './utils/AppError.js';
 import indexRouter from './routes/index.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
 import { siteConfigMiddleware } from './middlewares/siteConfigMiddleware.js';
-import { doubleCsrfProtection, generateToken, csrfErrorHandler } from './middlewares/csrfMiddleware.js';
+import { csrfProtection, generateToken, csrfErrorHandler } from './middlewares/csrfMiddleware.js';
+
 import { accountController } from './controllers/accountController.js';
 import statusMonitor from 'express-status-monitor';
 
@@ -53,8 +59,44 @@ const __dirname = path.dirname(__filename);
 // ==========================================
 // 1. GLOBAL MIDDLEWARES (Security & Parsing)
 // ==========================================
+
+// Rate Limiter (High IQ Security)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: new RateLimitRedisStore({
+    sendCommand: (...args) => redis.call(...args),
+  }),
+  message: { error: "Too many attempts. Please try again in 15 minutes." }
+});
+
 // Set Security HTTP Headers (Top 1% Security)
-app.use(helmet({ contentSecurityPolicy: false })); // Disabled CSP temporarily for Cloudinary/Stripe scripts
+
+// Set Security HTTP Headers (High IQ: Enabling CSP with specific exceptions)
+app.use(helmet({
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://checkout.paystack.com", "https://js.sentry-cdn.com"],
+      "style-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
+      "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://irp.cdn-website.com", "https://images.unsplash.com", "https://api.dicebear.com"],
+      "connect-src": ["'self'", "https://api.paystack.co", "https://vitals.vercel-insights.com", "*.sentry.io"],
+      "frame-src": ["'self'", "https://ambassadors.betteruptime.com", "https://checkout.paystack.com", "https://www.youtube.com", "https://player.vimeo.com"],
+      "font-src": ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+      "object-src": ["'none'"],
+      "upgrade-insecure-requests": []
+    }
+  },
+  crossOriginEmbedderPolicy: false
+}));
+
+// Apply rate limiting to sensitive routes
+app.use('/account/login', authLimiter);
+app.use('/account/register', authLimiter);
+app.use('/auth/reset-password', authLimiter);
+
 
 // High IQ: Moved currentPath higher to ensure it's defined for early-request errors (e.g. PayloadTooLarge)
 app.use((req, res, next) => {
@@ -67,6 +109,21 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '10mb' })); 
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
+
+// High IQ: Session configuration using Redis for persistence
+app.use(session({
+  store: redis ? new RedisStore({ client: redis, prefix: "aa_sess:" }) : undefined,
+  secret: process.env.SESSION_SECRET || "AA-AMBASSADORS-SESSION-KEY-2024",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+  }
+}));
+
 
 // ==========================================
 // 2. VIEW ENGINE & ASSETS
@@ -85,21 +142,23 @@ app.locals.SENTRY_BROWSER_DSN = process.env.SENTRY_BROWSER_DSN || '';
 app.use(authMiddleware.checkUser);
 app.use(siteConfigMiddleware);
 
-// 3. Initialize CSRF Protection Globally
-// High IQ: Run protection BEFORE we inject new tokens to avoid state conflicts.
+// Maintenance Mode Interceptor
 app.use((req, res, next) => {
-  // Nuclear Option: Skip CSRF strictly for specific POSTs if it keeps failing 
-  if (req.method === 'POST' && (
-      req.url === '/onboarding' || 
-      req.url === '/testimonies/submit' || 
-      req.url === '/prayer-wall/submit' || 
-      req.url === '/prayer-wall/intercede'
-  )) {
-    return next();
+  const isMaintenance = res.locals.churchSettings?.maintenance_mode === 'true';
+  const allowedPaths = ['/maintenance', '/auth/login', '/auth/logout', '/api/health', '/status', '/css', '/js', '/images', '/fonts'];
+  const isAllowed = allowedPaths.some(path => req.path.startsWith(path));
+
+  if (isMaintenance && !isAllowed && (!req.user || req.user.role !== 'admin')) {
+    return res.redirect('/maintenance');
   }
-  doubleCsrfProtection(req, res, next);
+  next();
 });
+
+// 3. Initialize CSRF Protection Globally
+// High IQ: No more exclusions needed as csrf-sync is rock solid with sessions.
+app.use(csrfProtection);
 app.use(csrfErrorHandler);
+
 
 // 2. Pass global variables to ALL EJS Templates (with CSRF stability)
 app.use((req, res, next) => {
@@ -128,9 +187,10 @@ const limiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per 15 mins
   standardHeaders: true,
   legacyHeaders: false,
-  store: redis ? new RedisStore({
+  store: redis ? new RateLimitRedisStore({
     sendCommand: (...args) => redis.call(...args),
   }) : undefined,
+
   message: 'Too many requests from this IP, please try again in 15 minutes!'
 });
 app.use('/api', limiter);

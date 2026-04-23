@@ -79,15 +79,22 @@
                   <h3>Get Involved</h3>
                   <p>Ready to serve? Fill out the form below to express your interest in joining the <%= ministry.name %>.</p>
                   
-                  <form action="/ministries/<%= ministry.slug %>/join" method="POST" class="join-form">
-                    <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
-                    <div class="form-group">
-                      <label>Why do you want to join? (Optional)</label>
-                      <textarea name="notes" placeholder="Tell us a bit about your interest or experience..."></textarea>
+                  <% if (user) { %>
+                    <form action="/ministries/<%= ministry.slug %>/join" method="POST" class="join-form">
+                      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                      <div class="form-group">
+                        <label>Why do you want to join? (Optional)</label>
+                        <textarea name="notes" placeholder="Tell us a bit about your interest or experience..."></textarea>
+                      </div>
+                      <button type="submit" class="submit-btn">Submit Request</button>
+                      <p class="form-note">By submitting, you agree to be contacted by the ministry leads.</p>
+                    </form>
+                  <% } else { %>
+                    <div class="login-gate" style="text-align: center; padding: 20px 0;">
+                      <p style="margin-bottom: 25px; color: rgba(26,26,26,0.6);">You must be logged in to express interest in joining a ministry.</p>
+                      <a href="/account/login" class="submit-btn" style="display: block; text-decoration: none; text-align: center;">Sign In to Join</a>
                     </div>
-                    <button type="submit" class="submit-btn">Submit Request</button>
-                    <p class="form-note">By submitting, you agree to be contacted by the ministry leads.</p>
-                  </form>
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -141,8 +148,8 @@
     .form-group textarea { width: 100%; height: 150px; background: #fafafa; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 16px; padding: 20px; color: #1a1a1a; font-family: inherit; transition: 0.3s; resize: none; }
     .form-group textarea:focus { border-color: var(--aa-green); background: #ffffff; outline: none; }
     
-    .submit-btn { width: 100%; padding: 20px; background: var(--aa-green); color: white; border: none; border-radius: 16px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.4s; }
-    .submit-btn:hover { background: #1a1a1a; transform: scale(1.02); }
+    .submit-btn { width: 100%; padding: 20px; background: #176a60; color: white; border: none; border-radius: 16px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.4s; }
+    .submit-btn:hover { background: #1a1a1a; transform: scale(1.02); color: white; }
 
     .form-note { font-size: 0.75rem !important; color: rgba(26,26,26,0.3) !important; text-align: center; margin-top: 20px; }
 

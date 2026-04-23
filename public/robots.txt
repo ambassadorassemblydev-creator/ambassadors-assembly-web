@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Exclude sensitive areas
+Disallow: /onboarding
+Disallow: /api/
+Disallow: /my-account/
+Disallow: /maintenance
+
+Sitemap: https://www.ambassadorsassembly.com/sitemap.xml

@@ -12,6 +12,8 @@ const router = express.Router();
 
 // Public API Endpoints
 router.post('/payments/verify', paymentController.verifyPayment);
+router.post('/payments/webhook', paymentController.handleWebhook);
+
 
 // Restricted API Endpoints (Require Auth)
 router.use(authMiddleware.protect); 
