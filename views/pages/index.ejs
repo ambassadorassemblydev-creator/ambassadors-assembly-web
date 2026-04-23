@@ -436,26 +436,29 @@
                                         data-widget-id="d5c0c8fad21f4820bc13d4fe48e88a9e" data-widget-version="2"
                                        >
                                         <div class="event-cards">
-                                          <% events.forEach((evt, i) => { 
-                                            const offsets = [
-                                              { x: "-240%", y: "26%", r: -12, s: -30 },
-                                              { x: "-160%", y: "12%", r: -8, s: -20 },
-                                              { x: "-80%", y: "3%", r: -4, s: -10 },
-                                              { x: "0", y: "0", r: 0, s: 0 },
-                                              { x: "80%", y: "3%", r: 4, s: 10 },
-                                              { x: "160%", y: "12%", r: 8, s: 20 },
-                                              { x: "240%", y: "26%", r: 12, s: 30 }
+                                          <% 
+                                            const values = [
+                                              { title: 'Integrity', img: '/images/values/our_values_integrity_1776914230541.png', desc: 'Walking in honesty' },
+                                              { title: 'Excellence', img: '/images/values/our_values_excellence_1776914244492.png', desc: 'Reflecting God’s glory' },
+                                              { title: 'Community', img: '/images/values/our_values_community_1776914256252.png', desc: 'Fostering love' },
+                                              { title: 'Faith', img: '/images/values/our_values_faith_1776914270104.png', desc: 'Trusting God’s Word' }
                                             ];
-                                            const pos = offsets[i] || offsets[3];
+                                            values.forEach((val, i) => { 
+                                              const offsets = [
+                                                { x: "-80%", y: "3%", r: -4, s: -10 },
+                                                { x: "0", y: "0", r: 0, s: 0 },
+                                                { x: "80%", y: "3%", r: 4, s: 10 },
+                                                { x: "160%", y: "12%", r: 8, s: 20 }
+                                              ];
+                                              const pos = offsets[i];
                                           %>
                                           <div class="event-card" data-x="<%= pos.x %>" data-y="<%= pos.y %>" data-rotate="<%= pos.r %>" data-start="<%= pos.s %>">
-                                            <a type="url" href="/events" target="_blank">
-                                              <img src="<%= evt.cover_image_url %>" alt="<%= evt.title %>" onerror="handleImageLoadError(this)">
+                                            <a type="url" href="/about">
+                                              <img src="<%= val.img %>" alt="<%= val.title %>" onerror="handleImageLoadError(this)">
                                             </a>
                                             <div class="card-content">
-                                              <h4><%= evt.title %></h4>
-                                              <% if (evt.title !== 'First Steps Class') { %>
-                                              <a type="url" href="/events" target="_blank">
+                                              <h4><%= val.title %></h4>
+                                              <a type="url" href="/about">
                                                 <div class="card-button">Learn More <span> <svg
                                                       xmlns="http://www.w3.org/2000/svg" data-name="Layer 2"
                                                       viewBox="0 0 16.82 29.7">
@@ -468,7 +471,6 @@
                                                   </span>
                                                 </div>
                                               </a>
-                                              <% } %>
                                             </div>
                                           </div>
                                           <% }) %>
@@ -483,7 +485,7 @@
                                         data-version="5" id="2594540577" >
                                         <h2 class="t-size-60 m-size-40 size-72 text-align-center"><span
                                             class="m-font-size-40 t-font-size-60 font-size-72"
-                                            style="display: unset; color: #1a1a1a;">What's Coming Up</span></h2>
+                                            style="display: unset; color: #1a1a1a;">Our Core Values</span></h2>
                                       </div>
                                     </div>
                                     <div id="widget_vnm" class="flex-element widget-wrapper animate-up delay-x1"
@@ -493,8 +495,7 @@
                                       <div class="dmNewParagraph" data-element-type="paragraph" data-version="5"
                                         id="3540360603" >
                                         <p class="text-align-center m-text-align-center"><span
-                                            style="display: unset; color: rgba(26, 26, 26, 0.75);">Check out our
-                                            upcoming events!</span></p>
+                                            style="display: unset; color: rgba(26, 26, 26, 0.75);">The pillars of our faith and community.</span></p>
                                       </div>
                                     </div>
                                     <div id="widget_8e6" class="flex-element widget-wrapper animate-up delay-x3"
@@ -506,9 +507,7 @@
                                         data-element-type="custom_extension" icon="false" surround="false"
                                         data-widget-id="f99e8ecbb02d43cab2f6f81f8cffcf13" data-widget-version="8"
                                         >
-                                        <a class="glass-button" value="events" label="" type="page" href="/events"
-                                          raw_url="/site/50e7ebb2/events?nee=true&amp;ed=true&amp;showOriginal=true&amp;preview=true&amp;dm_try_mode=true&amp;dm_checkSync=1">See
-                                          All Events</a>
+                                        <a class="glass-button" label="" type="page" href="/about">About Our Mission</a>
                                       </div>
                                     </div>
                                   </div>
@@ -516,6 +515,7 @@
                               </div>
                             </section>
                           </div>
+
                         </div>
                       </div>
                     </div>

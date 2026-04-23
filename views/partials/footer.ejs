@@ -160,18 +160,18 @@
                                         id="1774813324" dmle_extension="social_hub" data-element-type="social_hub"
                                         wr="true" networks="" icon="true" surround="true" adwords="">
                                         <div class="socialHubWrapper">
-                                            <div class="socialHubInnerDiv "> 
-                                              <a href="<%= locals.churchSettings?.social_youtube || 'https://www.youtube.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="youtube">
-                                                <span class="dmSocialYoutube dm-social-icons-youtube oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                            <div class="socialHubInnerDiv" style="display: flex; gap: 20px; justify-content: flex-start; margin-top: 20px;"> 
+                                              <a href="<%= locals.churchSettings?.social_youtube || 'https://www.youtube.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="youtube" style="color: white; font-size: 24px; transition: 0.3s;" onmouseover="this.style.color='#FF0000'" onmouseout="this.style.color='white'">
+                                                <i class="fab fa-youtube"></i>
                                               </a>
-                                              <a href="<%= locals.churchSettings?.social_instagram || 'https://www.instagram.com/ambassadorsassembly/' %>" target="_blank" aria-label="instagram">
-                                                <span class="dmSocialInstagram dm-social-icons-instagram oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              <a href="<%= locals.churchSettings?.social_instagram || 'https://www.instagram.com/ambassadorsassembly/' %>" target="_blank" aria-label="instagram" style="color: white; font-size: 24px; transition: 0.3s;" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='white'">
+                                                <i class="fab fa-instagram"></i>
                                               </a>
-                                              <a href="<%= locals.churchSettings?.social_facebook || 'https://www.facebook.com/AmbassadorsAssembly' %>" target="_blank" aria-label="facebook">
-                                                <span class="dmSocialFacebook dm-social-icons-facebook oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              <a href="<%= locals.churchSettings?.social_facebook || 'https://www.facebook.com/AmbassadorsAssembly' %>" target="_blank" aria-label="facebook" style="color: white; font-size: 24px; transition: 0.3s;" onmouseover="this.style.color='#1877F2'" onmouseout="this.style.color='white'">
+                                                <i class="fab fa-facebook"></i>
                                               </a>
-                                              <a href="<%= locals.churchSettings?.social_tiktok || 'https://www.tiktok.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="tiktok">
-                                                <span class="dmSocialTiktok dm-social-icons-tiktok oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              <a href="<%= locals.churchSettings?.social_tiktok || 'https://www.tiktok.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="tiktok" style="color: white; font-size: 24px; transition: 0.3s;" onmouseover="this.style.color='#000000'" onmouseout="this.style.color='white'">
+                                                <i class="fab fa-tiktok"></i>
                                               </a>
                                             </div>
                                         </div>
@@ -307,8 +307,9 @@
                         <a href="/faq">FAQ</a>
                         <a href="/terms-of-service">Terms of Service</a>
                         <a href="/privacy-policy">Privacy Policy</a>
-                        <a href="/system-status" style="display: inline-flex; vertical-align: middle; margin-left: 10px;">
-                          <iframe src="https://ambassadors.betteruptime.com/badge?theme=dark" width="250" height="30" frameborder="0" scrolling="no" style="color-scheme: normal"></iframe>
+                        <a href="https://ambassadors.betteruptime.com/" target="_blank" class="status-badge-custom">
+                          <span class="status-dot"></span>
+                          <span class="status-text">System Operational</span>
                         </a>
                       </div>
                       <div class="church-tagline" style="text-align: center; margin-top: 20px; color: var(--color_1); opacity: 0.8; font-size: 14px; line-height: 1.6;">
@@ -1031,12 +1032,46 @@
       .baseline-links { display: flex; gap: 30px; }
       .baseline-links a { 
         font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-      .baseline-links a { 
-        font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
         color: var(--color_1); text-decoration: none; transition: 0.3s;
+        opacity: 0.7;
       }
-      .baseline-links a:hover { color: var(--aa-green); }
-      .copyright { font-size: 0.75rem; color: var(--color_1); font-weight: 600; margin: 0; }
+      .baseline-links a:hover { color: var(--aa-green); opacity: 1; }
+      .copyright { font-size: 0.75rem; color: var(--color_1); font-weight: 600; margin: 0; opacity: 0.6; }
+
+      .status-badge-custom {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.05);
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: 0.3s;
+      }
+      .status-badge-custom:hover {
+        background: rgba(255,255,255,0.1);
+        transform: translateY(-2px);
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #25D366;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #25D366;
+        animation: pulse-green 2s infinite;
+      }
+      .status-text {
+        font-size: 0.65rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: white;
+      }
+      @keyframes pulse-green {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+      }
 
 
       @media (max-width: 600px) {

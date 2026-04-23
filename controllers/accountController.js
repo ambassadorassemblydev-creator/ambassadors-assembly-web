@@ -105,6 +105,7 @@ export const accountController = {
         stats,
         departments: departments || [],
         activeTab: tab,
+        interest: req.query.interest || null,
         isStaff: !!profile.church_workers && profile.church_workers.length > 0
       });
 
