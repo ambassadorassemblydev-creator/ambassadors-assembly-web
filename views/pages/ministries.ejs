@@ -21,6 +21,7 @@
           <!-- AMBIENT BG -->
           <div class="give-bg">
             <img src="/images/emerald-hero-bg.png" alt="Ministries Background" class="bg-img">
+            <div class="bg-overlay"></div>
           </div>
 
           <!-- HERO SECTION -->
@@ -161,13 +162,13 @@
     .hero-bg-accent {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+      background: linear-gradient(to bottom, rgba(247, 250, 248, 0.9) 0%, rgba(247, 250, 248, 0.4) 100%);
       z-index: 0;
     }
     .hero-content { position: relative; z-index: 1; }
     .min-hero span { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; color: var(--aa-green); margin-bottom: 20px; }
-    .min-hero h1 { font-family: 'Outfit', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; color: white; text-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-    .min-hero p { font-size: 1.15rem; color: rgba(255,255,255,0.9); max-width: 600px; margin: 0 auto; font-weight: 500; }
+    .min-hero h1 { font-family: 'Outfit', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 25px; color: #1a1a1a; }
+    .min-hero p { font-size: 1.15rem; color: rgba(26,26,26,0.8); max-width: 600px; margin: 0 auto; font-weight: 500; }
 
     .min-section { padding: 80px 6%; position: relative; }
     .alt-bg { background: rgba(23, 106, 96, 0.03); border-top: 1px solid rgba(23, 106, 96, 0.08); border-bottom: 1px solid rgba(23, 106, 96, 0.08); }
@@ -215,13 +216,14 @@
 
     /* Ambient BG */
     .give-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.08; filter: grayscale(1); }
+    .bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.05; filter: grayscale(1); }
+    .bg-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to bottom, #f7faf8 0%, #ffffff 100%); z-index: -1; }
 
     @media (max-width: 1100px) { .min-grid { grid-template-columns: repeat(2, 1fr) !important; } .impact-grid { grid-template-columns: 1fr; } }
     @media (max-width: 768px) { .min-grid { grid-template-columns: 1fr !important; } .min-hero { height: 45vh; } .impact-areas { grid-template-columns: 1fr; } }
   </style>
 
-  <script>
+  <!-- <script>
     window.addEventListener('load', () => {
       gsap.from('.gsap-min', { y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: 'power3.out' });
       gsap.from('.gsap-min-card', { 
@@ -229,5 +231,5 @@
         y: 60, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out' 
       });
     });
-  </script>
-                </div></div></div></div></div></div></div></div></body></html>
+  </script> -->
+             </body></html>
