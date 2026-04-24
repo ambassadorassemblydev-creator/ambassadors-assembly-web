@@ -72,6 +72,7 @@
 
                   <% if (event.registration_required) { %>
                     <% if (user) { %>
+                      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" id="csrfToken">
                       <button id="regButton" class="register-btn" onclick="showRegConfirmation()">
                         Register Now
                       </button>
@@ -307,7 +308,10 @@
       try {
         const response = await fetch('/api/events/register', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-csrf-token': document.getElementById('csrfToken').value
+          },
           body: JSON.stringify({ eventId })
         });
         
