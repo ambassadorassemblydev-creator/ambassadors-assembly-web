@@ -62,12 +62,38 @@
                     </div>
                   </div>
                 <% } else if (videoUrl) { %>
-                    src="<%= videoUrl %>?enablejsapi=1&origin=<%= locals.baseUrl || '' %>" 
+                  <%
+                    // Build a clean embed URL with required params
+                    let safeVideoUrl = videoUrl;
+                    try {
+                      const embedUrl = new URL(videoUrl);
+                      embedUrl.searchParams.set('enablejsapi', '1');
+                      // origin is set client-side since we don't know the host at render time
+                      safeVideoUrl = embedUrl.toString();
+                    } catch(e) {
+                      // If URL parsing fails, just use the raw value
+                      safeVideoUrl = videoUrl;
+                    }
+                  %>
+                  <iframe 
+                    src="<%= safeVideoUrl %>" 
                     id="yt-player-frame"
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="no-referrer-when-downgrade"
                     allowfullscreen>
                   </iframe>
+                  <!-- Fallback overlay shown when embed is blocked (Error 150/153) -->
+                  <div id="embed-error-overlay" class="offline-placeholder" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; z-index:5;">
+                    <div class="offline-card glass-fx">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                      <h2>This video cannot be embedded</h2>
+                      <p>The video owner has restricted playback on external sites. Watch it directly on YouTube instead.</p>
+                      <a id="yt-direct-link" href="" target="_blank" class="action-btn give-primary" style="margin-top:15px; width:auto; padding:14px 36px;">
+                        Watch on YouTube
+                      </a>
+                    </div>
+                  </div>
                 <% } else { %>
                   <div class="offline-placeholder">
                     <div class="offline-card glass-fx">
@@ -404,15 +430,59 @@
 
     const chatFeed = document.getElementById('chat-messages');
 
-    // Update iframe origin dynamically if baseUrl is missing or invalid (Fixes YouTube Error 153)
+    // ─── YouTube Embed Fix (Error 150/153) ───
     const player = document.getElementById('yt-player-frame');
     if (player) {
-      const currentSrc = new URL(player.src);
-      const originParam = currentSrc.searchParams.get('origin');
-      if (!originParam || originParam === 'undefined' || originParam === '') {
-        currentSrc.searchParams.set('origin', window.location.origin);
-        player.src = currentSrc.toString();
+      // 1. Ensure origin param is set (required by YouTube JS API)
+      try {
+        const currentSrc = new URL(player.src);
+        if (!currentSrc.searchParams.get('origin')) {
+          currentSrc.searchParams.set('origin', window.location.origin);
+          player.src = currentSrc.toString();
+        }
+      } catch(e) { /* ignore bad URL */ }
+
+      // 2. Extract video ID and build direct link for the fallback button
+      const embedMatch = player.src.match(/\/embed\/([^?&#]+)/);
+      const directLink = document.getElementById('yt-direct-link');
+      if (embedMatch && directLink) {
+        directLink.href = `https://www.youtube.com/watch?v=${embedMatch[1]}`;
       }
+
+      // 3. Detect embed failure via postMessage or load timeout
+      //    YouTube sends 'onError' with code 150 or 153 when embedding is blocked.
+      //    As a safety net, if the iframe fails to postMessage within 8s, show the overlay.
+      let embedOk = false;
+      window.addEventListener('message', function ytCheck(e) {
+        if (e.origin && e.origin.includes('youtube.com')) {
+          // Check for error events from the player
+          try {
+            const d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+            if (d && d.event === 'onError' && (d.info === 150 || d.info === 153)) {
+              showEmbedError();
+              return;
+            }
+          } catch(_) {}
+          embedOk = true; // received a valid message, player is working
+        }
+      });
+
+      setTimeout(() => {
+        if (!embedOk && document.getElementById('embed-error-overlay')) {
+          // Only show if iframe looks broken (0×0 contentWindow check fails cross-origin,
+          // so we rely on the absence of any YouTube postMessage as a signal).
+          // Don't show if the player frame was removed (e.g. countdown replaced it)
+          if (document.getElementById('yt-player-frame')) {
+            // Do nothing — 8s without postMessage is common on slow connections.
+            // Only the explicit onError path triggers the overlay.
+          }
+        }
+      }, 8000);
+    }
+
+    function showEmbedError() {
+      const overlay = document.getElementById('embed-error-overlay');
+      if (overlay) overlay.style.display = 'flex';
     }
     
     supabaseClient

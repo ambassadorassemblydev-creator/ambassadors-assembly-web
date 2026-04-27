@@ -31,6 +31,8 @@ export const watchController = {
           .from('live_streams')
           .select('*')
           .eq('status', 'live')
+          .order('created_at', { ascending: false })
+          .limit(1)
           .maybeSingle();
 
         if (liveStream) {
@@ -87,7 +89,21 @@ export const watchController = {
         displayTitle = activeContent.title;
         description = activeContent.description;
         videoUrl = activeContent.embed_url;
-        // Streams might not have hardcoded speakers/scriptures in DB yet
+        
+        // Fetch speaker if linked
+        if (activeContent.speaker_id) {
+          const { data: speakerData } = await supabase
+            .from('sermon_speakers')
+            .select('*')
+            .eq('id', activeContent.speaker_id)
+            .single();
+          speaker = speakerData;
+        }
+        
+        scripture = { 
+          reference: activeContent.scripture_reference || "", 
+          text: activeContent.scripture_text || "" 
+        };
       } else if (recentSermons && recentSermons[0]) {
         // Fallback to latest
         activeContent = recentSermons[0];
