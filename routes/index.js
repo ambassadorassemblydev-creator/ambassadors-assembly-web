@@ -41,6 +41,7 @@ router.get('/onboarding', authMiddleware.protect, accountController.renderOnboar
 router.post('/onboarding', authMiddleware.protect, accountController.submitOnboarding);
 router.get('/my-account/attendance/mark', authMiddleware.protect, accountController.handleMarkAttendance);
 router.get('/watch', watchController.renderWatch);
+router.post('/watch/comment', authMiddleware.protect, watchController.handlePostComment);
 
 // Testimonies & Prayer Wall
 router.get('/testimonies', pageController.renderTestimonies);

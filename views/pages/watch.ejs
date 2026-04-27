@@ -62,7 +62,12 @@
                     </div>
                   </div>
                 <% } else if (videoUrl) { %>
-                  <iframe src="<%= videoUrl %>" frameborder="0" allowfullscreen></iframe>
+                  <iframe 
+                    src="<%= videoUrl %>" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                  </iframe>
                 <% } else { %>
                   <div class="offline-placeholder">
                     <div class="offline-card glass-fx">
@@ -424,13 +429,27 @@
 
         const name = currentUser ? (currentUser.first_name || currentUser.user_metadata?.first_name || 'Member') : 'Guest';
         
-        await supabaseClient.from('sermon_comments').insert([{
-          sermon_id: contentId,
-          user_id: currentUser?.id,
-          author_name: name,
-          content: val,
-          is_approved: true
-        }]);
+        try {
+          const response = await fetch('/watch/comment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('input[name="_csrf"]').value
+            },
+            body: JSON.stringify({
+              sermon_id: contentId,
+              author_name: name,
+              content: val
+            })
+          });
+
+          if (!response.ok) {
+            const errData = await response.json();
+            console.error('Comment error:', errData.error);
+          }
+        } catch (err) {
+          console.error('Comment submission failed:', err);
+        }
       });
     }
 

@@ -149,42 +149,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const mobileMenu = document.querySelector(".mobile-menu");
-    const scrollPoint = 145;
-    const mobileMenuTl = gsap.timeline({ paused: true })
-      .to(mobileMenu, {
-        y: -50,
-        scale: 0.8,
-        opacity: 0,
-        ease: "sine.out",
-        onComplete: function () { mobileMenu.style.display = "none" },
-      });
+    if (mobileMenu) {
+      const scrollPoint = 145;
+      const mobileMenuTl = gsap.timeline({ paused: true })
+        .to(mobileMenu, {
+          y: -50,
+          scale: 0.8,
+          opacity: 0,
+          ease: "sine.out",
+          onComplete: function () { 
+            if (mobileMenu) mobileMenu.style.display = "none";
+          },
+        });
 
-    let isHidden = false;
-    window.addEventListener("scroll", () => {
-      const scrollTop = window.scrollY;
-      if (scrollTop >= scrollPoint && !isHidden) {
-        isHidden = true;
-        mobileMenuTl.restart();
-      }
-      if (scrollTop < scrollPoint && isHidden) {
-        isHidden = false;
-        if (!document.querySelector(".layout-drawer_open")) {
-          gsap.set(mobileMenu, {
-            y: 0,
-            opacity: 0,
-            display: 'block',
-            scale: 1
-          });
-          gsap.to(mobileMenu, {
-            opacity: 1,
-            duration: 0.4,
-            ease: "sine.out"
-          });
-        } else {
-          mobileMenuTl.pause(100);
+      let isHidden = false;
+      window.addEventListener("scroll", () => {
+        const scrollTop = window.scrollY;
+        if (scrollTop >= scrollPoint && !isHidden) {
+          isHidden = true;
+          mobileMenuTl.restart();
         }
-      }
-    });
+        if (scrollTop < scrollPoint && isHidden) {
+          isHidden = false;
+          if (!document.querySelector(".layout-drawer_open")) {
+            gsap.set(mobileMenu, {
+              y: 0,
+              opacity: 0,
+              display: 'block',
+              scale: 1
+            });
+            gsap.to(mobileMenu, {
+              opacity: 1,
+              duration: 0.4,
+              ease: "sine.out"
+            });
+          } else {
+            mobileMenuTl.pause(100);
+          }
+        }
+      });
+    }
   }
 
   // ── Shared Animation Utilities ──────────────────────────────

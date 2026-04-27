@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 import { AppError } from '../utils/AppError.js';
 import { logger } from '../config/logger.js';
 import { cache } from '../config/redis.js';
@@ -114,6 +114,36 @@ export const watchController = {
     } catch (err) {
       logger.error(`Watch Page Error: ${err.message}`);
       next(new AppError('The watch page is currently unavailable.', 500));
+    }
+  },
+
+  handlePostComment: async (req, res, next) => {
+    try {
+      const { sermon_id, content, author_name } = req.body;
+      
+      if (!content || !sermon_id) {
+        return res.status(400).json({ error: 'Missing comment content or sermon ID' });
+      }
+
+      // Use the service client to bypass RLS and post
+      const { data, error } = await supabaseService
+        .from('sermon_comments')
+        .insert([{
+          sermon_id,
+          user_id: req.user?.id,
+          author_name: author_name || (req.user ? (req.user.first_name || req.user.user_metadata?.first_name) : 'Member'),
+          content,
+          is_approved: true
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return res.status(200).json({ success: true, data });
+    } catch (err) {
+      logger.error(`Comment Post Error: ${err.message}`);
+      return res.status(500).json({ error: 'Failed to post comment' });
     }
   }
 };
