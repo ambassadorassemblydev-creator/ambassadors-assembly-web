@@ -160,20 +160,47 @@
                                         id="1774813324" dmle_extension="social_hub" data-element-type="social_hub"
                                         wr="true" networks="" icon="true" surround="true" adwords="">
                                         <div class="socialHubWrapper">
-                                            <div class="socialHubInnerDiv "> 
-                                              <a href="<%= locals.churchSettings?.social_youtube || 'https://www.youtube.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="youtube">
-                                                <span class="dmSocialYoutube dm-social-icons-youtube oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                            <div class="socialHubInnerDiv-fixed"> 
+                                              <a href="<%= locals.churchSettings?.social_youtube || 'https://www.youtube.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="youtube" class="social-icon">
+                                                <i class="fab fa-youtube"></i>
                                               </a>
-                                              <a href="<%= locals.churchSettings?.social_instagram || 'https://www.instagram.com/ambassadorsassembly/' %>" target="_blank" aria-label="instagram">
-                                                <span class="dmSocialInstagram dm-social-icons-instagram oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              <a href="<%= locals.churchSettings?.social_instagram || 'https://www.instagram.com/ambassadorsassembly/' %>" target="_blank" aria-label="instagram" class="social-icon">
+                                                <i class="fab fa-instagram"></i>
                                               </a>
-                                              <a href="<%= locals.churchSettings?.social_facebook || 'https://www.facebook.com/AmbassadorsAssembly' %>" target="_blank" aria-label="facebook">
-                                                <span class="dmSocialFacebook dm-social-icons-facebook oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              <a href="<%= locals.churchSettings?.social_facebook || 'https://www.facebook.com/AmbassadorsAssembly' %>" target="_blank" aria-label="facebook" class="social-icon">
+                                                <i class="fab fa-facebook-f"></i>
                                               </a>
-                                              <a href="<%= locals.churchSettings?.social_tiktok || 'https://www.tiktok.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="tiktok">
-                                                <span class="dmSocialTiktok dm-social-icons-tiktok oneIcon socialHubIcon style9" aria-hidden="true"></span>
+                                              <a href="<%= locals.churchSettings?.social_tiktok || 'https://www.tiktok.com/@AmbassadorsAssembly' %>" target="_blank" aria-label="tiktok" class="social-icon">
+                                                <i class="fab fa-tiktok"></i>
                                               </a>
                                             </div>
+
+                                            <style>
+                                              .socialHubInnerDiv-fixed {
+                                                display: flex;
+                                                justify-content: center;
+                                                gap: 20px;
+                                                margin: 20px 0;
+                                              }
+                                              .social-icon {
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                width: 40px;
+                                                height: 40px;
+                                                border-radius: 50%;
+                                                background: rgba(26, 26, 26, 0.05);
+                                                color: var(--color_1);
+                                                font-size: 1.2rem;
+                                                transition: all 0.3s ease;
+                                                text-decoration: none;
+                                              }
+                                              .social-icon:hover {
+                                                background: var(--color_1);
+                                                color: white;
+                                                transform: translateY(-3px);
+                                              }
+                                            </style>
                                         </div>
                                       </div>
                                     </div>

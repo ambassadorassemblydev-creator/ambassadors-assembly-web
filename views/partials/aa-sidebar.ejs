@@ -1,0 +1,88 @@
+<%
+  // ── Helper vars ──
+  const hasWorker = user && user.church_workers && user.church_workers.length > 0;
+  const w = hasWorker ? user.church_workers[0] : null;
+
+  let displayRole = 'Member';
+  if (hasWorker) {
+    displayRole = (w.church_positions && w.church_positions.title) ? w.church_positions.title : 'Church Worker';
+  }
+%>
+
+<aside class="aas-bar" id="aasSidebar">
+  <!-- Profile section -->
+  <div class="aas-profile">
+    <div class="aas-av-wrap">
+      <% if (user.avatar_url) { %>
+        <img src="<%= user.avatar_url %>" alt="<%= user.first_name %>" class="aas-av">
+      <% } else { %>
+        <div class="aas-av-init">
+          <%= user.first_name ? user.first_name[0].toUpperCase() : 'A' %><%= user.last_name ? user.last_name[0].toUpperCase() : 'A' %>
+        </div>
+      <% } %>
+      <% if (hasWorker) { %>
+        <div class="aas-av-worker" title="Church Worker">⭐</div>
+      <% } %>
+    </div>
+
+    <div class="aas-name">
+      <%= user.title ? user.title + ' ' : '' %><%= user.first_name %> <%= user.last_name %>
+    </div>
+    <div class="aas-role-pill">
+      <i class="fas fa-shield-alt" style="font-size:8px;"></i>
+      <%= displayRole %>
+    </div>
+    <% if (hasWorker && w.church_departments) { %>
+      <div class="aas-dept-line">
+        <i class="fas fa-building" style="font-size:9px;"></i>
+        <%= w.church_departments.name %>
+      </div>
+    <% } %>
+    <div class="aas-mid"># <%= user.member_id || 'AA-' + user.id.substring(0,6).toUpperCase() %></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="aas-nav">
+    <span class="aas-nav-lbl">My Dashboard</span>
+    <button class="aas-lnk <%= activeTab === 'overview' ? 'active' : '' %>" onclick="aasTab('overview',this)">
+      <i class="fas fa-th-large"></i> Overview
+    </button>
+    <button class="aas-lnk <%= activeTab === 'attendance' ? 'active' : '' %>" onclick="aasTab('attendance',this)">
+      <i class="fas fa-calendar-check"></i> Attendance
+    </button>
+    <button class="aas-lnk <%= activeTab === 'events' ? 'active' : '' %>" onclick="aasTab('events',this)">
+      <i class="fas fa-calendar-alt"></i> My Events
+    </button>
+    <button class="aas-lnk <%= activeTab === 'giving' ? 'active' : '' %>" onclick="aasTab('giving',this)">
+      <i class="fas fa-hand-holding-heart"></i> Partnership
+    </button>
+    <button class="aas-lnk <%= activeTab === 'prayers' ? 'active' : '' %>" onclick="aasTab('prayers',this)">
+      <i class="fas fa-praying-hands"></i> Prayer Requests
+    </button>
+    <button class="aas-lnk <%= activeTab === 'notes' ? 'active' : '' %>" onclick="aasTab('notes',this)">
+      <i class="fas fa-sticky-note"></i> My Notes
+    </button>
+
+    <div class="aas-sep"></div>
+    <span class="aas-nav-lbl">Church Life</span>
+    <button class="aas-lnk <%= activeTab === 'ministry' ? 'active' : '' %>" onclick="aasTab('ministry',this)">
+      <i class="fas fa-users"></i> Fellowship Groups
+    </button>
+    <button class="aas-lnk <%= activeTab === 'outreach' ? 'active' : '' %>" onclick="aasTab('outreach',this)">
+      <i class="fas fa-hands-helping"></i> Outreach & Community Impact
+    </button>
+
+    <div class="aas-sep"></div>
+    <span class="aas-nav-lbl">Account</span>
+    <button class="aas-lnk <%= activeTab === 'profile' ? 'active' : '' %>" onclick="aasTab('profile',this)">
+      <i class="fas fa-user-circle"></i> My Profile
+    </button>
+  </nav>
+
+  <!-- Footer -->
+  <div class="aas-foot">
+    <a href="/auth/logout" class="aas-logout">
+      <i class="fas fa-sign-out-alt"></i> Sign Out
+    </a>
+  </div>
+</aside>

@@ -14,16 +14,21 @@
                 <div id="site_content">
 
         <%- include('../partials/navbar') %>
+        <link rel="stylesheet" href="/css/dashboard-new.css">
 
-        <link rel="stylesheet" href="/css/account.css">
+        <div class="aa-dash">
+          <%- include('../partials/aa-sidebar', { activeTab: 'departments' }) %>
 
-        <div class="dashboard-wrapper">
-          <%- include('../partials/account-sidebar', { activePage: 'departments' }) %>
+          <main class="aas-main">
+            <!-- Mobile top bar -->
+            <div class="aas-mob-bar">
+              <button class="aas-ham" id="aasHam"><i class="fas fa-bars"></i></button>
+              <span class="aas-mob-hello"><%= user.title ? user.title + ' ' : '' %><%= user.first_name %></span>
+            </div>
 
-          <main class="dash-content">
             <!-- PREMIUM HEADER -->
-            <div class="content-header">
-              <div class="header-badge">OUTREACH & COMMUNITY IMPACT</div>
+            <div class="aas-ph" style="margin-bottom: 40px;">
+              <div class="aas-eyebrow">OUTREACH & COMMUNITY IMPACT</div>
               <h1>Outreach and Community Impact</h1>
               <p>Be the hands and feet of Jesus. Join a team focused on making a real difference in our assembly and community.</p>
             </div>
@@ -40,7 +45,7 @@
                       <p class="dept-desc"><%= dept.description || 'Ensuring excellence in church operations and service execution.' %></p>
                       
                       <div class="dept-footer">
-                        <a href="/my-account/profile?success=Apply for <%= dept.name %> in your profile settings." class="interest-btn">
+                        <a href="/my-account?tab=profile&interest=<%= encodeURIComponent(dept.name) %>" class="interest-btn">
                           Volunteer Now
                           <i class="fas fa-arrow-right"></i>
                         </a>

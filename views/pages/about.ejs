@@ -45,12 +45,16 @@
                 <span class="side-nav__num">01</span>
                 <span class="side-nav__label">OUR STORY</span>
               </li>
-              <li class="side-nav__item" data-section="leadership">
+              <li class="side-nav__item" data-section="who-we-are">
                 <span class="side-nav__num">02</span>
+                <span class="side-nav__label">WHO WE ARE</span>
+              </li>
+              <li class="side-nav__item" data-section="leadership">
+                <span class="side-nav__num">03</span>
                 <span class="side-nav__label">LEADERSHIP</span>
               </li>
               <li class="side-nav__item" data-section="dna">
-                <span class="side-nav__num">03</span>
+                <span class="side-nav__num">04</span>
                 <span class="side-nav__label">OUR DNA</span>
               </li>
             </ul>
@@ -73,9 +77,30 @@
             </div>
           </section>
 
-          <!-- SECTION 2: LEADERSHIP -->
+          <!-- SECTION 2: WHO WE ARE (MOVED FROM INDEX) -->
+          <section id="who-we-are" class="ed-section about-section-moved">
+            <div class="section-label">02 / IDENTITY</div>
+            <div class="about-section__inner-moved">
+              <div class="about-card-moved">
+                <img class="about-card__img-moved" src="https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1777044608/IMG-20260424-WA0011.jpg" alt="Church Leadership" loading="lazy">
+                <div class="about-card__overlay-moved">
+                  <div class="about-card__badge-moved">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                  </div>
+                  <h3 class="about-card__name-moved">Ambassadors<br>Assembly</h3>
+                </div>
+              </div>
+              <div class="about-content-moved">
+                <h2 class="about-content__title-moved">Who We Are</h2>
+                <p class="about-content__subtitle-moved">We are passionate about seeing lives changed by the Gospel of Jesus Christ and raising believers who will impact their generation.</p>
+                <p class="about-content__desc-moved">The Ambassadors' Assembly was established in 2009 as a church planting project birthed from the ZOA International Bible School Lagos cohort. The inaugural service was held on 15th November 2009 in Alausa, Lagos. Since then, the church has continued to grow in impact, influence, and vision. Today, we worship at our permanent site in Lagos as God continues to expand the ministry.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 3: LEADERSHIP -->
           <section id="leadership" class="ed-section ed-section--leadership">
-            <div class="section-label">02 / STEWARDSHIP</div>
+            <div class="section-label">03 / STEWARDSHIP</div>
             <h2 class="ed-title">Led by <span class="text-green">Divine Intent</span></h2>
             <div class="ed-text">
               <p>Our leadership is defined by servitude and a relentless pursuit of spiritual depth. Led by our Presiding Pastors and a college of consecrated ministers.</p>
@@ -104,9 +129,9 @@
             </div>
           </section>
 
-          <!-- SECTION 3: DNA -->
+          <!-- SECTION 4: DNA -->
           <section id="dna" class="ed-section ed-section--dna">
-            <div class="section-label">03 / ESSENCE</div>
+            <div class="section-label">04 / ESSENCE</div>
             <h2 class="ed-title">Our <span class="text-green">Holy DNA</span></h2>
             
             <div class="dna-list">
@@ -262,6 +287,95 @@
       .side-nav__progress, .side-nav__line { display: none; }
       .about-hero { padding-left: 6%; }
     }
+
+    /* MOVED WHO WE ARE STYLES */
+    .about-section-moved {
+      position: relative;
+      padding: 60px 0;
+      overflow: hidden;
+    }
+    .about-section__inner-moved {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .about-card-moved {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      background: #2a2a2a;
+    }
+    .about-card__img-moved {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.85;
+    }
+    .about-card__overlay-moved {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 40px 30px;
+      background: linear-gradient(to top, rgba(20, 20, 20, 0.95) 0%, transparent 100%);
+    }
+    .about-card__badge-moved {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(26, 26, 26, 0.12);
+      border: 1px solid rgba(26, 26, 26, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .about-card__badge-moved svg {
+      width: 24px;
+      height: 24px;
+      color: #fff;
+    }
+    .about-card__name-moved {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .about-content-moved {
+      padding: 20px 0;
+    }
+    .about-content__title-moved {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      color: #1a1a1a;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .about-content__subtitle-moved {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: rgba(26, 26, 26, 0.65);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .about-content__desc-moved {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: rgba(26, 26, 26, 0.5);
+      line-height: 1.75;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 768px) {
+      .about-section__inner-moved { grid-template-columns: 1fr; gap: 40px; }
+    }
   </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -299,7 +413,7 @@
       });
 
       // 3. SECTION SPY
-      const sections = ['story', 'leadership', 'dna'];
+      const sections = ['story', 'who-we-are', 'leadership', 'dna'];
       sections.forEach(id => {
         ScrollTrigger.create({
           trigger: `#${id}`,

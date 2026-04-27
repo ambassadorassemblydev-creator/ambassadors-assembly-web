@@ -29,9 +29,6 @@ export const authService = {
     return data;
   },
 
-  /**
-   * Authenticates user and returns session
-   */
   login: async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     
@@ -40,6 +37,10 @@ export const authService = {
       throw new AppError('Invalid credentials', 401);
     }
     
+    if (data.user) {
+      await supabaseService.rpc('track_user_login', { p_user_id: data.user.id });
+    }
+
     return data;
   },
 

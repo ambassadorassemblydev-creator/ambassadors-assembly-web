@@ -39,6 +39,7 @@ router.get('/departments', authMiddleware.protect, authMiddleware.requireProfile
 router.get('/directory', authMiddleware.protect, authMiddleware.requireProfileCompletion, pageController.renderDirectory);
 router.get('/onboarding', authMiddleware.protect, accountController.renderOnboarding);
 router.post('/onboarding', authMiddleware.protect, accountController.submitOnboarding);
+router.get('/my-account/attendance/mark', authMiddleware.protect, accountController.handleMarkAttendance);
 router.get('/watch', watchController.renderWatch);
 
 // Testimonies & Prayer Wall

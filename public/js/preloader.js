@@ -17,12 +17,12 @@
   'use strict';
 
   // ── Configurable Durations (seconds) ────────────────────────
-  var SCALE_DOWN      = 1.2;   // Stage 1→2: giant text shrinks
-  var HOLD_BRAND      = 2.0;   // Stage 2: hold on brand name
-  var SWAP_DURATION   = 1.0;   // Stage 3: text slides through mask
-  var HOLD_TAGLINE    = 1.0;   // Stage 3b: hold on tagline
+  var SCALE_DOWN      = 0.6;   // Stage 1→2: giant text shrinks
+  var HOLD_BRAND      = 0.8;   // Stage 2: hold on brand name
+  var SWAP_DURATION   = 0.5;   // Stage 3: text slides through mask
+  var HOLD_TAGLINE    = 0.4;   // Stage 3b: hold on tagline
   var TAGLINE_FADE    = 0.3;   // Stage 4a: tagline disappears
-  var COLLAPSE_SPEED  = 0.9;   // Stage 4b: circle collapses
+  var COLLAPSE_SPEED  = 0.6;   // Stage 4b: circle collapses
   var EXIT_DURATION   = 0.8;   // Link click exit animation
 
   var EXCLUDED_CLASS  = 'no-transition';

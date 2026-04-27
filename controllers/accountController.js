@@ -9,6 +9,7 @@ import { Buffer } from 'node:buffer';
 import { withRetry } from '../utils/fetchUtils.js';
 
 const updateProfileSchema = z.object({
+  title: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   phone: z.string().optional(),
@@ -56,7 +57,10 @@ const onboardingSchema = z.object({
   emergency_contact_phone: z.string().optional(),
   
   // Avatar
-  avatar_data: z.string().optional(), 
+  avatar_data: z.string().optional(),
+  
+  // High IQ: Capture multiple interests
+  interests: z.union([z.string(), z.array(z.string())]).optional(),
 });
 
 export const accountController = {
@@ -69,15 +73,17 @@ export const accountController = {
       const userId = req.user.id;
       const tab = req.query.tab || 'overview';
       logger.info(`Loading dashboard (SPA) for user: ${userId}`);
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
 
       // Fetch all data in parallel — departments now included for integrated sidebar
-      const [profile, donations, events, prayers, notes, departments] = await Promise.all([
+      const [profile, donations, events, prayers, notes, departments, attendance] = await Promise.all([
         accountRepo.getUserDashboardData(userId),
         accountRepo.getFullDonationHistory(userId),
         accountRepo.getUserEvents(userId),
         accountRepo.getUserPrayers(userId),
         accountRepo.getUserNotes(userId),
-        accountRepo.getDepartments()
+        accountRepo.getDepartments(),
+        accountRepo.getUserAttendance(userId)
       ]);
 
       if (!profile) {
@@ -92,6 +98,16 @@ export const accountController = {
         noteCount: notes.length
       };
 
+      // Handle session selection if scan found multiple
+      let selectSessions = null;
+      if (req.query.selectSessions) {
+        try {
+          selectSessions = JSON.parse(Buffer.from(req.query.selectSessions, 'base64').toString());
+        } catch (e) {
+          logger.error('Failed to parse selection sessions');
+        }
+      }
+
       res.render('pages/my-account', {
         pageTitle: 'My Dashboard | Ambassadors Assembly',
         currentPath: req.path,
@@ -104,9 +120,11 @@ export const accountController = {
         notes,
         stats,
         departments: departments || [],
+        attendance: attendance || [],
         activeTab: tab,
         interest: req.query.interest || null,
-        isStaff: !!profile.church_workers && profile.church_workers.length > 0
+        isStaff: !!profile.church_workers && profile.church_workers.length > 0,
+        selectSessions
       });
 
     } catch (err) {
@@ -116,19 +134,7 @@ export const accountController = {
   },
 
   renderEditProfile: async (req, res, next) => {
-    try {
-      const profile = await accountRepo.getUserDashboardData(req.user.id);
-      res.render('pages/edit-profile', {
-        pageTitle: 'Edit Profile | Ambassadors Assembly',
-        currentPath: req.path,
-        activePage: 'profile',
-        user: profile,
-        error: null,
-        success: req.query.success || null
-      });
-    } catch (err) {
-      next(new AppError('Error loading profile editor.', 500));
-    }
+    res.redirect('/my-account?tab=profile');
   },
 
   handleUpdateProfile: async (req, res, next) => {
@@ -139,18 +145,10 @@ export const accountController = {
       if (req.xhr || req.headers.accept?.includes('json')) {
         return res.json({ status: 'success', message: 'Profile updated successfully' });
       }
-      res.redirect('/my-account/profile?success=Your profile has been updated.');
+      res.redirect('/my-account?tab=profile&success=Your profile has been updated.');
     } catch (err) {
       if (err instanceof z.ZodError) {
-        const profile = await accountRepo.getUserDashboardData(req.user.id);
-        return res.status(400).render('pages/edit-profile', {
-          pageTitle: 'Edit Profile',
-          currentPath: req.path,
-          activePage: 'profile',
-          user: profile,
-          error: err.errors[0].message,
-          success: null
-        });
+        return res.redirect(`/my-account?tab=profile&error=${encodeURIComponent(err.errors[0].message)}`);
       }
       next(err);
     }
@@ -312,7 +310,13 @@ export const accountController = {
         already_serving: isAlreadyServing,
         approval_status: needsApproval ? 'pending' : 'none',
         role_claim: needsApproval ? (titleStr || (isAlreadyServing ? 'worker' : null)) : null,
+        department_interest: validatedData.department_interest || null,
         department_claim: validatedData.department_interest || null,
+        // High IQ: Syncing membership status
+        is_member: true,
+        member_since: new Date(),
+        country: 'Nigeria',
+        interests: Array.isArray(validatedData.interests) ? validatedData.interests : (validatedData.interests ? [validatedData.interests] : [])
       };
 
       if (avatarUrl) {
@@ -432,6 +436,35 @@ export const accountController = {
         user: profile,
         error: errorMessage
       });
+    }
+  },
+
+  /**
+   * GET /my-account/attendance/mark
+   * Entry point for static QR code scanning
+   */
+  handleMarkAttendance: async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const { service } = req.query;
+
+      logger.info(`Attendance scan attempt by user: ${userId}`);
+      const result = await accountRepo.markAttendance(userId, service);
+
+      if (result.needsSelection) {
+        // High IQ: Multiple sessions active. Redirect to dashboard with selection options
+        const sessionsJson = Buffer.from(JSON.stringify(result.sessions)).toString('base64');
+        return res.redirect(`/my-account?tab=attendance&selectSessions=${sessionsJson}`);
+      }
+
+      if (!result.success) {
+        return res.redirect(`/my-account?tab=attendance&error=${encodeURIComponent(result.message)}`);
+      }
+
+      res.redirect(`/my-account?tab=attendance&success=${encodeURIComponent(result.message)}`);
+    } catch (err) {
+      logger.error(`Attendance Marking Error: ${err.message}`);
+      res.redirect('/my-account?tab=attendance&error=An error occurred while marking your attendance. Please try again.');
     }
   }
 };

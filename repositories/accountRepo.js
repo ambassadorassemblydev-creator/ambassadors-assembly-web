@@ -80,6 +80,104 @@ export const accountRepo = {
     if (error) throw error;
     return data;
   },
+
+  // Fetch user attendance for the last year
+  getUserAttendance: async (userId) => {
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+    const { data, error } = await supabase
+      .from('attendance_records')
+      .select('service_date, attendance, service_name')
+      .eq('user_id', userId)
+      .gte('service_date', oneYearAgo.toISOString().split('T')[0])
+      .order('service_date', { ascending: true });
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Mark attendance for a user (Self-Marking via QR)
+  markAttendance: async (userId, requestedService) => {
+    const now = new Date();
+    const today = now.toISOString().split('T')[0];
+    const day = now.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+    const hour = now.getHours();
+
+    let activeSessions = [];
+
+    // 1. Check for active standard services (Nigeria Time - UTC+1)
+    if (day === 0) { // Sunday
+      if (hour >= 6 && hour <= 14) activeSessions.push({ name: 'Sunday Service', type: 'service' });
+    } else if (day === 3) { // Wednesday
+      if (hour >= 16 && hour <= 21) activeSessions.push({ name: 'Midweek Service', type: 'service' });
+    }
+
+    // 2. Check for active events (Temporal lookup)
+    const { data: activeEvents } = await supabase
+      .from('events')
+      .select('id, title, start_date, end_date')
+      .lte('start_date', now.toISOString())
+      .gte('end_date', now.toISOString())
+      .eq('status', 'upcoming');
+
+    if (activeEvents && activeEvents.length > 0) {
+      activeEvents.forEach(evt => {
+        activeSessions.push({ name: evt.title, type: 'event', id: evt.id });
+      });
+    }
+
+    // 3. Handle selection logic
+    let serviceName = requestedService;
+
+    if (!serviceName) {
+      if (activeSessions.length === 0) {
+        return { 
+          success: false, 
+          message: 'No active service or event found for this time. Attendance can only be marked during scheduled times.' 
+        };
+      }
+
+      if (activeSessions.length > 1) {
+        return {
+          success: false,
+          needsSelection: true,
+          sessions: activeSessions,
+          message: 'Multiple activities are happening right now. Which one are you attending?'
+        };
+      }
+
+      // Auto-pick if only one
+      serviceName = activeSessions[0].name;
+    }
+
+    // Check if already marked for today's specific service
+    const { data: existing } = await supabase
+      .from('attendance_records')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('service_date', today)
+      .eq('service_name', serviceName)
+      .maybeSingle();
+
+    if (existing) {
+      return { success: true, message: `You are already marked present for ${serviceName} today.` };
+    }
+
+    const { data, error } = await supabase
+      .from('attendance_records')
+      .insert([{
+        user_id: userId,
+        service_date: today,
+        service_name: serviceName,
+        attendance: 'in_person',
+        checked_in_at: now.toISOString()
+      }])
+      .select();
+
+    if (error) throw error;
+    return { success: true, message: `Welcome! You have been marked present for ${serviceName}.`, data };
+  },
   
   /**
    * High IQ Self-Healing: Provision a missing profile
@@ -160,6 +258,7 @@ export const accountRepo = {
     };
 
     // Mapping camelCase to snake_case if present
+    if (updateData.title !== undefined) payload.title = updateData.title;
     if (updateData.firstName !== undefined) payload.first_name = updateData.firstName;
     if (updateData.lastName !== undefined) payload.last_name = updateData.lastName;
     if (updateData.phone !== undefined) payload.phone = updateData.phone;
@@ -188,6 +287,15 @@ export const accountRepo = {
     if (updateData.emergency_contact_name !== undefined) payload.emergency_contact_name = updateData.emergency_contact_name;
     if (updateData.emergency_contact_phone !== undefined) payload.emergency_contact_phone = updateData.emergency_contact_phone;
     if (updateData.avatar_url !== undefined) payload.avatar_url = updateData.avatar_url;
+    
+    // Membership & Approval Fields
+    if (updateData.already_serving !== undefined) payload.already_serving = updateData.already_serving;
+    if (updateData.role_claim !== undefined) payload.role_claim = updateData.role_claim;
+    if (updateData.department_claim !== undefined) payload.department_claim = updateData.department_claim;
+    if (updateData.approval_status !== undefined) payload.approval_status = updateData.approval_status;
+    if (updateData.is_member !== undefined) payload.is_member = updateData.is_member;
+    if (updateData.member_since !== undefined) payload.member_since = updateData.member_since;
+    if (updateData.interests !== undefined) payload.interests = updateData.interests;
 
     const { data, error } = await supabaseService
       .from('profiles')

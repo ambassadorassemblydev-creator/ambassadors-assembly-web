@@ -374,7 +374,7 @@ export const pageController = {
                 departments: departments || [],
                 ministries: ministries || [],
                 projects: projects || [],
-                defaultFilter: 'Pastoral'
+                defaultFilter: 'all'
             });
         } catch (error) {
             console.error('[PageController] Error rendering staff:', error.message);
@@ -447,12 +447,30 @@ export const pageController = {
                 return res.redirect(`${req.header('Referer') || '/testimonies'}?success=Thank you for sharing your story! It has been submitted for review.`);
             }
 
+            const isAnonymous = is_anonymous === 'true' || is_anonymous === 'on';
+            let authorName = 'Anonymous Member';
+
+            if (!isAnonymous && userId) {
+                // Fetch the real name from the profiles table
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('first_name, last_name')
+                    .eq('id', userId)
+                    .single();
+                
+                if (profile && profile.first_name) {
+                    authorName = `${profile.first_name} ${profile.last_name || ''}`.trim();
+                } else if (req.user?.user_metadata?.first_name) {
+                    authorName = `${req.user.user_metadata.first_name} ${req.user.user_metadata.last_name || ''}`.trim();
+                }
+            }
+
             const testimonyData = {
                 user_id: userId || null,
-                author_name: req.user ? `${req.user.user_metadata?.first_name} ${req.user.user_metadata?.last_name}` : 'Anonymous Member',
+                author_name: authorName,
                 title,
                 content,
-                is_anonymous: is_anonymous === 'true' || is_anonymous === 'on',
+                is_anonymous: isAnonymous,
                 status: 'pending',
                 is_approved: false
             };
@@ -519,13 +537,14 @@ export const pageController = {
                 return res.redirect(`${req.header('Referer') || '/connect'}?success=Your prayer request has been submitted for review.`);
             }
 
+            const isAnonymous = is_anonymous === 'true' || is_anonymous === 'on';
             const prayerData = {
                 user_id: userId || null,
-                requester_name: req.user ? `${req.user.user_metadata?.first_name} ${req.user.user_metadata?.last_name}` : 'Anonymous Member',
+                requester_name: isAnonymous ? 'Anonymous' : (req.user ? `${req.user.user_metadata?.first_name} ${req.user.user_metadata?.last_name}` : 'Visitor'),
                 title,
                 description,
                 category: category || 'other',
-                is_anonymous: is_anonymous === 'true' || is_anonymous === 'on',
+                is_anonymous: isAnonymous,
                 is_public: is_public === 'true' || is_public === 'on',
                 status: 'pending',
                 is_approved: false // Requires admin approval
