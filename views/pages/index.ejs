@@ -266,9 +266,9 @@
                                                 <div class="ministry-container">
                                               <% } %>
                                               <div class="ministry-card glass-card">
-                                                <div class="ministry-img" id="img-<%= i + 1 %>"
-                                                  style="--img: url(<%= ministry.cover_image_url %>); <%= imgTransforms[i] || '' %>">
-                                                </div>
+                                                  <div class="ministry-img" id="img-<%= i + 1 %>"
+                                                    style="--img: url('<%= ministry.cover_image_url %>'); <%= imgTransforms[i] || '' %>">
+                                                  </div>
                                                 <div class="ministry-card-content">
                                                   <h3><%= ministry.name %></h3>
                                                   <p><%= ministry.description %></p>
@@ -295,7 +295,7 @@
                                                   role="group" aria-label="<%= i + 1 %> / 5" data-swiper-slide-index="<%= i %>"
                                                   style="margin-right: 20px;">
                                                   <div class="ministry-img" id="mob-img-<%= i + 1 %>"
-                                                    style="--img: url(<%= ministry.cover_image_url %>)">
+                                                    style="--img: url('<%= ministry.cover_image_url %>')">
                                                   </div>
                                                   <div class="ministry-card-content">
                                                     <h3><%= ministry.name %></h3>

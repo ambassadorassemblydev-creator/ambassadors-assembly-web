@@ -1,77 +1,64 @@
 import axios from 'axios';
 import { supabase } from '../config/supabase.js';
+import { GoogleGenAI } from '@google/genai';
 
 /**
- * AIService handles communication with OpenRouter
- * to provide a church-aware assistant.
+ * AIService handles communication with AI providers
+ * (Native Google GenAI or OpenRouter) to provide a church-aware assistant.
  */
 export const aiService = {
     async getChurchContext(userId = null) {
-        // Fetch public church info
+        // Fetch public church info (selective)
         const { data: settings } = await supabase
             .from('church_settings')
             .select('key, value')
+            .in('key', ['mission', 'vision', 'about_us', 'contact_email', 'phone_number'])
             .eq('is_public', true);
             
-        // Fetch upcoming events
+        // Fetch upcoming events (concise)
         const { data: events } = await supabase
             .from('events')
-            .select('title, start_date, location_name, event_type')
+            .select('title, start_date')
             .gte('start_date', new Date().toISOString())
             .order('start_date', { ascending: true })
-            .limit(5);
-
-        // Fetch recent sermons
-        const { data: sermons } = await supabase
-            .from('sermons')
-            .select('title, speaker, date, scripture_reference')
-            .order('date', { descending: true })
             .limit(3);
 
-        // Fetch ministries (Outreach & Impact)
+        // Fetch recent sermons (concise)
+        const { data: sermons } = await supabase
+            .from('sermons')
+            .select('title, speaker')
+            .order('date', { descending: true })
+            .limit(2);
+
+        // Fetch ministries (names only)
         const { data: ministries } = await supabase
             .from('ministries')
-            .select('name, description, category')
-            .limit(15);
+            .select('name')
+            .limit(8);
 
-        // If user is logged in, fetch profile and worker data
-        let userActivity = '';
         let userRole = '';
         if (userId) {
             const { data: profile } = await supabase
                 .from('profiles')
-                .select('*, church_workers(church_departments(name))')
+                .select('first_name, church_workers(church_departments(name))')
                 .eq('id', userId)
                 .single();
             
             if (profile?.church_workers?.[0]) {
-                userRole = `They are a member of the ${profile.church_workers[0].church_departments?.name} Outreach Team.`;
-            }
-
-            const { data: logs } = await supabase
-                .from('audit_log')
-                .select('action, description, created_at')
-                .eq('actor_id', userId)
-                .order('created_at', { descending: true })
-                .limit(5);
-                
-            if (logs && logs.length > 0) {
-                userActivity = `\nRecent User Activity:\n${logs.map(l => `- ${l.description || l.action} at ${l.created_at}`).join('\n')}`;
+                userRole = `User: ${profile.first_name || 'Ambassador'}. Member of ${profile.church_workers[0].church_departments?.name} Outreach Team.`;
             }
         }
 
+        const formatList = (arr, key) => arr?.map(i => i[key]).join(', ') || 'None';
+
         const context = `
-Church Identity: Ambassadors Assembly (Raising Men, Transforming Lives, Advancing God's Kingdom).
-Core Values: Love in Action, Spiritual Excellence, Community Impact.
-Nomenclature: We recently transitioned from "Departments" to "Outreach & Community Impact" teams.
-Location: Lagos, Nigeria (Main Sanctuary).
-Service Times: Sunday (8:00 AM & 10:00 AM), Wednesday (6:00 PM Mid-Week Encounter).
-Settings: ${JSON.stringify(settings)}
-Events: ${JSON.stringify(events)}
-Sermons: ${JSON.stringify(sermons)}
-Ministries/Outreach: ${JSON.stringify(ministries)}
-User Info: ${userRole}
-${userActivity}
+Identity: Ambassadors Assembly (Raising Men, Transforming Lives).
+Mission/Vision: ${settings?.map(s => `${s.key}: ${s.value}`).join(' | ') || ''}
+Service: Sunday (8AM/10AM), Wed (6PM).
+Upcoming: ${formatList(events, 'title')}
+Latest Sermons: ${formatList(sermons, 'title')}
+Outreach Teams: ${formatList(ministries, 'name')}
+${userRole}
 `;
         return context;
     },
@@ -82,28 +69,43 @@ ${userActivity}
         
         const systemPrompt = `
 You are the "Ambassadors AI", a premium, empathetic, and spiritually wise pastoral assistant for Ambassadors Assembly.
-Your tone is deeply encouraging, professional, and cinematic. You address users as "Ambassador" to acknowledge their divine identity.
-
-Core Mission:
-Guide members and visitors through our church life, answer spiritual questions with scripture, and provide information about our events, sermons, and "Outreach & Community Impact" teams.
-
-Context about the church:
-${context}
-
-Instructions:
-1. SPIRITUAL WISDOM: When users share struggles, respond with deep empathy and a relevant scripture (NIV or KJV). Offer a short, powerful prayer.
-2. OUTREACH & IMPACT: If users ask about joining a "Department", guide them toward our "Outreach & Community Impact" teams. Explain that we serve to transform lives.
-3. PERSONALIZATION: If the context shows they are already on a team, acknowledge their service with gratitude.
-4. ACTION ORIENTED:
-   - Giving -> /give
-   - Prayer Wall -> /prayer-wall
-   - Testimony -> /testimonies
-   - Events -> /events
-5. ACCURACY: If the information isn't in the context, say "I don't have those specific details yet, Ambassador, but I'd love for you to speak with one of our Pastors on Sunday."
-6. STYLE: Respond in PLAIN TEXT. No Markdown, no bolding (**), no special characters. Use paragraph breaks for readability.
+Tone: Encouraging, professional, cinematic. Address user as "Ambassador".
+Mission: Guide users through church life, answer spiritual questions with scripture.
+Context: ${context}
+Rules: 
+1. Spiritual Wisdom: Use scripture (NIV/KJV) for struggles. Short prayer.
+2. Outreach: Guide to "Outreach & Community Impact" teams.
+3. Links: Giving(/give), Prayer(/prayer-wall), Testimony(/testimonies), Events(/events).
+4. Accuracy: If unknown, refer to Sunday service.
+5. Style: PLAIN TEXT only. No markdown, no bold (**). Use paragraph breaks.
 `;
 
+        // HIGH IQ: Use the new @google/genai SDK (User Documentation Sync)
+        if (process.env.GEMINI_API_KEY) {
+            try {
+                const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+                
+                const response = await ai.models.generateContent({
+                    model: "gemini-3.1-flash-lite-preview",
+                    systemInstruction: systemPrompt,
+                    contents: [
+                        ...history.map(h => ({
+                            role: h.role === 'user' ? 'user' : 'model',
+                            parts: [{ text: h.content }]
+                        })),
+                        { role: 'user', parts: [{ text: message }] }
+                    ],
+                    generationConfig: { maxOutputTokens: 500 }
+                });
 
+                if (response.text) return response.text;
+            } catch (error) {
+                console.error('[AIService] Native GenAI SDK Error:', error.message);
+                // Fallback to OpenRouter if native fails
+            }
+        }
+
+        // Fallback: OpenRouter with Gemini 2.0 Flash (Fastest free option)
         const messages = [
             { role: 'system', content: systemPrompt },
             ...history,
@@ -112,21 +114,29 @@ Instructions:
 
         try {
             const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
-                model: 'tencent/hy3-preview:free', 
+                model: 'tencent/hy3-preview:free', // Stable free model
                 messages: messages,
+                max_tokens: 500,
+                temperature: 0.7
             }, {
                 headers: {
                     'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
                     'HTTP-Referer': 'https://ambassadors-assembly-web.onrender.com',
                     'X-Title': 'Ambassadors Assembly'
-                }
+                },
+                timeout: 15000 // Increased to 15s to prevent false offline messages
             });
 
-            return response.data.choices[0].message.content;
+            if (response.data?.choices?.[0]?.message?.content) {
+                return response.data.choices[0].message.content;
+            }
+            throw new Error('Invalid response from OpenRouter');
 
         } catch (error) {
-            console.error('[AIService] OpenRouter Error:', error.response?.data || error.message);
-            return "I'm having a small connection issue, Ambassador. Please try again in a moment.";
+            console.error('[AIService] Provider Error:', error.response?.data || error.message);
+            // High IQ: Using unicode for apostrophe to avoid encoding issues
+            return "Ambassador, I\u0027m momentarily offline. Please try again or join us this Sunday!";
         }
     }
 };
+

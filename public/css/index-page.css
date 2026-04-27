@@ -116,6 +116,13 @@ html.lenis, html.lenis body {
   border-radius: 20px;
 }
 
+@media (max-width: 767px) {
+  .min-swiper {
+    padding: 0 20px !important;
+    overflow: visible !important;
+  }
+}
+
 .min-swiper .ministry-img {
   background-position: 40% 50%;
 }
