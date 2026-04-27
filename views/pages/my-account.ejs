@@ -60,6 +60,9 @@
   <!--                MAIN CONTENT                -->
   <!-- ═══════════════════════════════════════════ -->
   <main class="aas-main">
+    <!-- Top Progress Bar -->
+    <div id="aasProgress" style="position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--g) 0%,var(--g-lt) 100%);width:0%;z-index:100000;transition:width .4s ease,opacity .3s ease;opacity:0;"></div>
+
 
     <!-- Mobile top bar -->
     <div class="aas-mob-bar">
@@ -426,7 +429,7 @@
             <div class="aas-min-info">
               <h3><%= m.name %></h3>
               <p><%= m.description || 'A ministry of Ambassadors Assembly.' %></p>
-              <span class="min-role-tag"><%= mm.role || 'Member' %></span>
+              <span class="min-role-tag"><%= mm.role === 'pending' ? 'Pending Approval' : (mm.role || 'Member') %></span>
             </div>
             <a href="/ministries/<%= m.slug %>" class="btn-o" style="align-self:flex-start;">View</a>
           </div>
@@ -470,6 +473,10 @@
               <% if (hasWorker && w.church_departments && w.church_departments.id === dept.id) { %>
                 <span style="background:var(--g-pl);color:var(--g);padding:9px 18px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;display:inline-flex;align-items:center;gap:7px;">
                   <i class="fas fa-check-circle"></i> My Outreach Team
+                </span>
+              <% } else if (user.department_interest && user.department_interest.toLowerCase() === dept.name.toLowerCase()) { %>
+                <span style="background:#fff3cd;color:#856404;padding:9px 18px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;display:inline-flex;align-items:center;gap:7px;border:1px solid #ffeeba;">
+                  <i class="fas fa-clock"></i> Interest Pending
                 </span>
               <% } else { %>
                 <a href="/my-account?tab=profile&interest=<%= encodeURIComponent(dept.name) %>" class="dept-apply">
@@ -535,21 +542,36 @@
             border-radius: 12px;
             border: 1px solid var(--bdr);
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(23, 106, 96, 0.2) transparent;
+          }
+          .attendance-calendar-container::-webkit-scrollbar {
+            height: 6px;
+          }
+          .attendance-calendar-container::-webkit-scrollbar-thumb {
+            background: rgba(23, 106, 96, 0.2);
+            border-radius: 10px;
           }
           .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(53, 1fr);
-            grid-template-rows: repeat(7, 1fr);
+            grid-template-rows: repeat(7, 12px);
+            grid-auto-flow: column;
             gap: 4px;
-            min-width: 700px;
+            padding-bottom: 10px;
           }
           .calendar-day {
-            width: 10px;
-            height: 10px;
-            border-radius: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
             background: #ebedf0;
             cursor: pointer;
             position: relative;
+            transition: transform 0.2s;
+          }
+          .calendar-day:hover {
+            transform: scale(1.2);
+            z-index: 2;
           }
           .calendar-day:hover::after {
             content: attr(data-date);
@@ -714,16 +736,28 @@
         <form action="/my-account/profile" method="POST">
           <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
           <% if (locals.interest) { %>
-            <div style="background:var(--g-pl); border:1.5px dashed var(--g); border-radius:16px; padding:20px; margin-bottom:26px; display:flex; align-items:center; gap:15px; animation:aas-in .5s ease;">
-              <div style="width:44px; height:44px; border-radius:12px; background:var(--g); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
-                <i class="fas fa-hands-helping"></i>
+            <% if (user.department_interest && user.department_interest.toLowerCase() === locals.interest.toLowerCase()) { %>
+              <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:16px; padding:20px; margin-bottom:26px; display:flex; align-items:center; gap:15px;">
+                <div style="width:44px; height:44px; border-radius:12px; background:#22c55e; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div style="flex:1;">
+                  <h4 style="font-size:14px; font-weight:800; color:#166534; margin:0 0 3px;">Interest Recorded: <%= interest %></h4>
+                  <p style="font-size:12px; color:#15803d; margin:0;">The leadership team has been notified of your interest.</p>
+                </div>
               </div>
-              <div style="flex:1;">
-                <h4 style="font-size:14px; font-weight:800; color:var(--g); margin:0 0 3px;">Showing Interest: <%= interest %></h4>
-                <p style="font-size:12px; color:var(--mu); margin:0;">Click "Confirm Interest & Save" below to notify the leadership team.</p>
+            <% } else { %>
+              <div style="background:var(--g-pl); border:1.5px dashed var(--g); border-radius:16px; padding:20px; margin-bottom:26px; display:flex; align-items:center; gap:15px; animation:aas-in .5s ease;">
+                <div style="width:44px; height:44px; border-radius:12px; background:var(--g); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <div style="flex:1;">
+                  <h4 style="font-size:14px; font-weight:800; color:var(--g); margin:0 0 3px;">Showing Interest: <%= interest %></h4>
+                  <p style="font-size:12px; color:var(--mu); margin:0;">Click "Confirm Interest & Save" below to notify the leadership team.</p>
+                </div>
+                <input type="hidden" name="department_interest" value="<%= interest %>">
               </div>
-              <input type="hidden" name="department_interest" value="<%= interest %>">
-            </div>
+            <% } %>
           <% } %>
 
           <!-- Avatar + name strip -->
@@ -849,7 +883,41 @@
 </div><!-- /aa-dash -->
 
 <!-- Toast handler -->
-<div id="__toast" data-err="<%= locals.error || '' %>" data-ok="<%= locals.success || locals.successMessage || '' %>" style="display:none;"></div>
+<div id="__toast" data-err="<%= error || '' %>" data-ok="<%= success || '' %>" style="display:none;"></div>
+
+<!-- Social Share Popup -->
+<div id="socialSharePopup" class="social-share-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000000; align-items: center; justify-content: center;">
+  <div class="share-card-container" style="background: white; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; position: relative; animation: aas-in 0.4s ease;">
+    <button onclick="closeSharePopup()" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.1); border: none; font-size: 24px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">&times;</button>
+    
+    <!-- The card to be captured -->
+    <div id="shareCardImage" style="padding: 40px 20px; background: linear-gradient(135deg, #176a60, #115048); color: white; border-radius: 20px 20px 0 0; position: relative; overflow: hidden;">
+      <div style="position: absolute; top: -50px; left: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+      <div style="position: absolute; bottom: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+      
+      <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 4px solid white; margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); position: relative; z-index: 2;">
+        <img src="<%= user.avatar_url || 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1777047322/media__1777047322335.png' %>" style="width: 100%; height: 100%; object-fit: cover;" crossorigin="anonymous">
+      </div>
+      <h2 style="font-size: 26px; margin-bottom: 5px; font-weight: 800; position: relative; z-index: 2;"><%= user.first_name %> <%= user.last_name %></h2>
+      <p style="font-size: 15px; opacity: 0.9; font-weight: 600; margin-bottom: 25px; position: relative; z-index: 2;">I just joined Ambassadors Assembly!</p>
+      
+      <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); padding: 10px 20px; border-radius: 100px; display: inline-flex; align-items: center; gap: 10px; position: relative; z-index: 2;">
+        <i class="fas fa-church"></i>
+        <span style="font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">A Place of Purpose</span>
+      </div>
+    </div>
+    
+    <div style="padding: 25px;">
+      <p style="color: #666; margin-bottom: 20px; font-size: 14px; line-height: 1.5;">Download this card and share it on your social media to let your friends know you're now part of the family.</p>
+      <button onclick="downloadShareCard()" class="btn-g" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 800; border-radius: 14px; box-shadow: 0 10px 20px rgba(23,106,96,0.3);">
+        <i class="fas fa-download"></i> Save Image & Share
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 
 <script>
 (function() {
@@ -857,6 +925,18 @@
 
   // ── Tab switching ──
   window.aasTab = function(id, btn) {
+    const progress = document.getElementById('aasProgress');
+    if (progress) {
+      progress.style.width = '0%';
+      progress.style.opacity = '1';
+      setTimeout(() => progress.style.width = '40%', 10);
+      setTimeout(() => progress.style.width = '100%', 200);
+      setTimeout(() => {
+        progress.style.opacity = '0';
+        setTimeout(() => progress.style.width = '0%', 300);
+      }, 500);
+    }
+
     document.querySelectorAll('.aas-tab').forEach(t => t.classList.remove('on'));
     document.querySelectorAll('.aas-lnk').forEach(l => l.classList.remove('active'));
     const panel = document.getElementById('aas-' + id);
@@ -923,6 +1003,79 @@
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 8000);
   }
+
+  // ── Social Share Popup ──
+  if (ok && ok.includes('Welcome home')) {
+    const popup = document.getElementById('socialSharePopup');
+    if (popup) {
+      setTimeout(() => {
+        popup.style.display = 'flex';
+      }, 1000); // Show after 1 second
+    }
+  }
+
+  window.closeSharePopup = function() {
+    const popup = document.getElementById('socialSharePopup');
+    if (popup) popup.style.display = 'none';
+  };
+
+  window.downloadShareCard = async function() {
+    const card = document.getElementById('shareCardImage');
+    if (!card) return;
+    
+    try {
+      const btn = document.querySelector('#socialSharePopup .btn-g');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+      btn.disabled = true;
+
+      const canvas = await html2canvas(card, {
+        scale: 2, // High resolution
+        useCORS: true,
+        backgroundColor: null
+      });
+
+      const image = canvas.toDataURL("image/png", 1.0);
+      
+      // Try Web Share API if mobile
+      if (navigator.share) {
+        try {
+          const blob = await (await fetch(image)).blob();
+          const file = new File([blob], 'ambassadors-assembly-invite.png', { type: 'image/png' });
+          await navigator.share({
+            title: 'I joined Ambassadors Assembly!',
+            text: 'I just joined Ambassadors Assembly! You can join too.',
+            files: [file]
+          });
+          closeSharePopup();
+        } catch (shareErr) {
+          // Fallback to download
+          triggerDownload(image);
+        }
+      } else {
+        // Fallback for desktop/unsupported
+        triggerDownload(image);
+      }
+
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    } catch (err) {
+      console.error("Error generating share card:", err);
+      showRedToast("Could not generate image. Please try again.");
+      document.querySelector('#socialSharePopup .btn-g').disabled = false;
+      document.querySelector('#socialSharePopup .btn-g').innerHTML = '<i class="fas fa-download"></i> Save Image & Share';
+    }
+  };
+
+  function triggerDownload(dataUrl) {
+    const link = document.createElement('a');
+    link.download = 'Ambassadors-Assembly-Invite.png';
+    link.href = dataUrl;
+    link.click();
+    showGreenToast("Image saved! You can now share it.");
+    setTimeout(closeSharePopup, 2000);
+  }
+
 })();
 </script>
 

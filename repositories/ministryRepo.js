@@ -52,8 +52,7 @@ export const ministryRepo = {
             .upsert({
                 ministry_id: ministryId,
                 user_id: userId,
-                notes: notes,
-                status: 'pending'
+                role: 'pending'
             }, { onConflict: 'ministry_id,user_id' });
 
         if (error) {

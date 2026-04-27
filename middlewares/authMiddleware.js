@@ -126,5 +126,28 @@ export const authMiddleware = {
     } catch (err) {
       next();
     }
+  },
+
+  // 4. The "VIP Access": Restricts route to specific roles
+  restrictTo: (...roles) => {
+    return async (req, res, next) => {
+      try {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', userId)
+          .single();
+
+        if (!profile || !roles.includes(profile.role)) {
+          return res.status(403).json({ error: 'Forbidden' });
+        }
+        next();
+      } catch (err) {
+        return res.status(500).json({ error: 'Server error during authorization' });
+      }
+    };
   }
 };

@@ -81,6 +81,10 @@
                     </select>
                   </div>
 
+                  <div class="custom-amount" style="margin-top: -10px;">
+                    <input type="text" id="give-reason" placeholder="Reason for giving (Optional)" style="width: 100%; background: #fafafa; border: 1.5px solid rgba(26, 26, 26, 0.1); border-radius: 12px; padding: 16px; color: #1a1a1a; font-size: 0.9rem; font-weight: 600; outline: none; transition: 0.3s; margin-bottom: 30px;">
+                  </div>
+
                   <button class="give-submit-btn" onclick="initiateGiving()">Partner Now</button>
 
                   <div class="security-badges">
@@ -209,6 +213,7 @@
       const payBtn = document.querySelector('.give-submit-btn');
       let amount = customInp.value || document.querySelector('.preset-btn.active').dataset.amt;
       let fund = document.getElementById('fund-type').value;
+      let reason = document.getElementById('give-reason').value;
       
       // Resolve Email from session
       const email = "<%= locals.user ? locals.user.email : '' %>";
@@ -236,7 +241,8 @@
         ref: 'AA-GEN-' + Math.floor((Math.random() * 1e9) + 1),
         metadata: {
           custom_fields: [
-            { display_name: "Fund Type", variable_name: "fund_type", value: fund }
+            { display_name: "Fund Type", variable_name: "fund_type", value: fund },
+            { display_name: "Reason", variable_name: "reason", value: reason || "General" }
           ]
         },
         callback: async function(response) {
@@ -254,7 +260,8 @@
                 amount: amount,
                 categoryId: fund,
                 type: 'general_giving',
-                email: email
+                email: email,
+                notes: reason
               })
             });
 

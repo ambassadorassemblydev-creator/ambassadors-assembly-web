@@ -305,6 +305,31 @@ export const accountRepo = {
       .single();
 
     if (error) throw error;
+
+    // Automatically create a volunteer application if department_interest is saved
+    if (updateData.department_interest) {
+      try {
+        const { data: dept } = await supabaseService
+          .from('church_departments')
+          .select('id')
+          .ilike('name', updateData.department_interest)
+          .single();
+
+        if (dept) {
+          await supabaseService
+            .from('volunteer_applications')
+            .upsert({
+              user_id: userId,
+              church_department_id: dept.id,
+              status: 'pending',
+              motivation: 'Expressed interest via Dashboard'
+            }, { onConflict: 'user_id,church_department_id' });
+        }
+      } catch (err) {
+        console.error('Failed to auto-create volunteer application:', err);
+      }
+    }
+
     return data;
   },
 

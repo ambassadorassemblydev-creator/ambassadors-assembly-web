@@ -90,10 +90,13 @@ export const watchController = {
         // Streams might not have hardcoded speakers/scriptures in DB yet
       } else if (recentSermons && recentSermons[0]) {
         // Fallback to latest
-        const latest = recentSermons[0];
-        displayTitle = latest.title;
-        description = latest.description;
-        videoUrl = latest.video_embed_url;
+        activeContent = recentSermons[0];
+        contentType = 'sermon';
+        displayTitle = activeContent.title;
+        description = activeContent.description;
+        videoUrl = activeContent.video_embed_url;
+        speaker = activeContent.sermon_speakers;
+        scripture = { reference: activeContent.scripture_reference, text: activeContent.scripture_text };
       }
 
       res.render('pages/watch', {
@@ -119,17 +122,26 @@ export const watchController = {
 
   handlePostComment: async (req, res, next) => {
     try {
-      const { sermon_id, content, author_name } = req.body;
+      const { sermon_id, content, author_name, contentType } = req.body;
       
-      if (!content || !sermon_id) {
-        return res.status(400).json({ error: 'Missing comment content or sermon ID' });
+      // Validate UUID to prevent 500 error from Postgres
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!sermon_id || !uuidRegex.test(sermon_id)) {
+        return res.status(400).json({ error: 'Invalid or missing content ID' });
       }
+
+      if (!content) {
+        return res.status(400).json({ error: 'Missing comment content' });
+      }
+
+      const table = contentType === 'stream' ? 'live_stream_comments' : 'sermon_comments';
+      const idColumn = contentType === 'stream' ? 'stream_id' : 'sermon_id';
 
       // Use the service client to bypass RLS and post
       const { data, error } = await supabaseService
-        .from('sermon_comments')
+        .from(table)
         .insert([{
-          sermon_id,
+          [idColumn]: sermon_id,
           user_id: req.user?.id,
           author_name: author_name || (req.user ? (req.user.first_name || req.user.user_metadata?.first_name) : 'Member'),
           content,
@@ -138,7 +150,10 @@ export const watchController = {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        logger.error(`Supabase Insert Error in ${table}: ${error.message}`);
+        throw error;
+      }
 
       return res.status(200).json({ success: true, data });
     } catch (err) {

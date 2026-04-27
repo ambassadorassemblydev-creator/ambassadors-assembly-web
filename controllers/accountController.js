@@ -124,7 +124,9 @@ export const accountController = {
         activeTab: tab,
         interest: req.query.interest || null,
         isStaff: !!profile.church_workers && profile.church_workers.length > 0,
-        selectSessions
+        selectSessions,
+        error: req.query.error || null,
+        success: req.query.success || null
       });
 
     } catch (err) {

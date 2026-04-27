@@ -924,13 +924,19 @@
           
           // Cinematic Staggered Reveal
           const aiMsg = addMessage('', 'ai');
-          const content = data.response;
+          let content = data.response || "I'm sorry, I encountered an error.";
+          content = content.replace(/\*\*/g, '').replace(/\*/g, '').replace(/#/g, '');
           let i = 0;
           const speed = 15; // ms per char
 
           const typeChar = () => {
               if (i < content.length) {
-                  aiMsg.querySelector('.msg-content').innerHTML += content.charAt(i);
+                  let char = content.charAt(i);
+                  if (char === '\n') {
+                    aiMsg.querySelector('.msg-content').innerHTML += '<br>';
+                  } else {
+                    aiMsg.querySelector('.msg-content').innerHTML += char;
+                  }
                   i++;
                   messagesBody.scrollTop = messagesBody.scrollHeight;
                   setTimeout(typeChar, speed);

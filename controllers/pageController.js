@@ -221,10 +221,27 @@ export const pageController = {
             
             if (!ministry) return res.status(404).render('pages/error', { message: 'Ministry not found' });
 
+            let isMember = false;
+            let memberStatus = null;
+            if (req.user) {
+                const { data } = await supabase
+                    .from('ministry_members')
+                    .select('role')
+                    .eq('ministry_id', ministry.id)
+                    .eq('user_id', req.user.id)
+                    .single();
+                if (data) {
+                    isMember = true;
+                    memberStatus = data.role;
+                }
+            }
+
             res.render('pages/ministry-detail', {
                 pageTitle: `${ministry.name} | Ambassadors Assembly`,
                 currentPath: req.path,
-                ministry
+                ministry,
+                isMember,
+                memberStatus
             });
         } catch (error) {
             console.error('[PageController] Error rendering ministry detail:', error.message);

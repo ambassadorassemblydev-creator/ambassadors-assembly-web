@@ -62,8 +62,8 @@
                     </div>
                   </div>
                 <% } else if (videoUrl) { %>
-                  <iframe 
-                    src="<%= videoUrl %>" 
+                    src="<%= videoUrl %>?enablejsapi=1&origin=<%= locals.baseUrl || '' %>" 
+                    id="yt-player-frame"
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowfullscreen>
@@ -375,6 +375,7 @@
   <div id="watch-state" 
        data-user='<%- JSON.stringify(locals.user || null) %>'
        data-content-id='<%= (content && content.id) ? content.id : "general" %>'
+       data-content-type='<%= contentType %>'
        data-status='<%= content ? content.status : "unknown" %>'
        data-start-time='<%= content ? content.scheduled_start : "" %>'
        style="display:none;"></div>
@@ -387,6 +388,9 @@
     const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
     const currentUser = JSON.parse(watchState.user);
     const contentId = watchState.contentId;
+    const contentType = watchState.contentType;
+    const chatTable = contentType === 'stream' ? 'live_stream_comments' : 'sermon_comments';
+    const idField = contentType === 'stream' ? 'stream_id' : 'sermon_id';
 
     // ─── TAB LOGIC ───
     document.querySelectorAll('.hub-tab').forEach(btn => {
@@ -398,13 +402,23 @@
       });
     });
 
-    // ─── CHAT LOGIC ───
     const chatFeed = document.getElementById('chat-messages');
+
+    // Update iframe origin dynamically if baseUrl is missing or invalid (Fixes YouTube Error 153)
+    const player = document.getElementById('yt-player-frame');
+    if (player) {
+      const currentSrc = new URL(player.src);
+      const originParam = currentSrc.searchParams.get('origin');
+      if (!originParam || originParam === 'undefined' || originParam === '') {
+        currentSrc.searchParams.set('origin', window.location.origin);
+        player.src = currentSrc.toString();
+      }
+    }
     
     supabaseClient
-      .channel('public:sermon_comments')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sermon_comments' }, payload => {
-        if(payload.new.sermon_id === contentId) {
+      .channel(`public:${chatTable}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: chatTable }, payload => {
+        if(payload.new[idField] === contentId) {
           appendMessage(payload.new.author_name || 'Member', payload.new.content);
         }
       })
@@ -439,7 +453,8 @@
             body: JSON.stringify({
               sermon_id: contentId,
               author_name: name,
-              content: val
+              content: val,
+              contentType: contentType
             })
           });
 

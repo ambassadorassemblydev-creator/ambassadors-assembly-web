@@ -38,7 +38,12 @@ export const authService = {
     }
     
     if (data.user) {
-      await supabaseService.rpc('track_user_login', { p_user_id: data.user.id });
+      try {
+        await supabase.rpc('track_user_login', { p_user_id: data.user.id });
+      } catch (rpcError) {
+        // Don't fail the login if the RPC fails
+        logger.error(`Failed to track login: ${rpcError.message}`);
+      }
     }
 
     return data;

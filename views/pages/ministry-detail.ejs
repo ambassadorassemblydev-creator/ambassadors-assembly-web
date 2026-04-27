@@ -80,15 +80,29 @@
                   <p>Ready to serve? Fill out the form below to express your interest in joining the <%= ministry.name %>.</p>
                   
                   <% if (user) { %>
-                    <form action="/ministries/<%= ministry.slug %>/join" method="POST" class="join-form">
-                      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
-                      <div class="form-group">
-                        <label>Why do you want to join? (Optional)</label>
-                        <textarea name="notes" placeholder="Tell us a bit about your interest or experience..."></textarea>
+                    <% if (locals.isMember) { %>
+                      <div class="login-gate" style="text-align: center; padding: 20px 0;">
+                        <p style="margin-bottom: 25px; color: rgba(26,26,26,0.6);">
+                          <% if (memberStatus === 'pending') { %>
+                            <span style="display:inline-block; margin-bottom:10px; background:#fff3cd; color:#856404; padding:8px 16px; border-radius:100px; font-weight:800; font-size:12px; border:1px solid #ffeeba;">Interest Pending</span><br>
+                            Your request to join is pending approval from the ministry leads.
+                          <% } else { %>
+                            <span style="display:inline-block; margin-bottom:10px; background:#f0fdf4; color:#166534; padding:8px 16px; border-radius:100px; font-weight:800; font-size:12px; border:1px solid #bbf7d0;">Active Member</span><br>
+                            You are an active member of this ministry!
+                          <% } %>
+                        </p>
                       </div>
-                      <button type="submit" class="submit-btn">Submit Request</button>
-                      <p class="form-note">By submitting, you agree to be contacted by the ministry leads.</p>
-                    </form>
+                    <% } else { %>
+                      <form action="/ministries/<%= ministry.slug %>/join" method="POST" class="join-form">
+                        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                        <div class="form-group">
+                          <label>Why do you want to join? (Optional)</label>
+                          <textarea name="notes" placeholder="Tell us a bit about your interest or experience..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Submit Request</button>
+                        <p class="form-note">By submitting, you agree to be contacted by the ministry leads.</p>
+                      </form>
+                    <% } %>
                   <% } else { %>
                     <div class="login-gate" style="text-align: center; padding: 20px 0;">
                       <p style="margin-bottom: 25px; color: rgba(26,26,26,0.6);">You must be logged in to express interest in joining a ministry.</p>
