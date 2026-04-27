@@ -109,7 +109,7 @@ Rules:
         const messages = [
             { role: 'system', content: systemPrompt },
             ...history,
-            { role: 'user', content: message }
+            { role: 'user', content: message } 
         ];
 
         try {
