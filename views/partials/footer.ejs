@@ -1078,7 +1078,12 @@
         <!-- The card to be captured -->
         <div id="shareCardImage" class="share-card-visual">
           <div class="card-glow"></div>
-          <div class="card-pattern"></div>
+          <div class="card-noise"></div>
+          <div class="card-blobs">
+            <div class="blob b1"></div>
+            <div class="blob b2"></div>
+          </div>
+          
           <div class="card-logo">
             <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775383070/IMG-20260304-WA0059_2.jpg" alt="Logo" crossorigin="anonymous">
           </div>
@@ -1096,9 +1101,13 @@
             <div class="card-badge-row">
               <div class="card-tagline">
                 <i class="fas fa-shield-alt"></i>
-                <span>AMBASSADOR FOR CHRIST • EST. <%= new Date(user.created_at).getFullYear() %></span>
+                <span>AMBASSADOR FOR CHRIST</span>
               </div>
             </div>
+          </div>
+
+          <div class="card-footer-text">
+            WELCOME TO AMBASSADORS ASSEMBLY
           </div>
         </div>
 
@@ -1144,55 +1153,80 @@
       .social-popup-overlay.show .social-popup-content { transform: translateY(0) scale(1); }
 
       .share-card-visual {
-        padding: 50px 30px; background: linear-gradient(135deg, #176a60 0%, #0e423c 100%);
+        padding: 50px 30px 40px; 
+        background: linear-gradient(135deg, #0e423c 0%, #061a18 100%);
         color: white; text-align: center; position: relative; overflow: hidden;
       }
       .card-glow {
         position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-        background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
-        animation: rotateGlow 10s linear infinite;
+        background: radial-gradient(circle at center, rgba(23, 106, 96, 0.2) 0%, transparent 70%);
+        animation: rotateGlow 15s linear infinite;
         z-index: 1;
       }
-      .card-pattern {
+      .card-noise {
         position: absolute; inset: 0;
-        background-image: radial-gradient(rgba(255,255,255,0.05) 2px, transparent 2px);
-        background-size: 20px 20px;
-        opacity: 0.5; z-index: 1;
+        background-image: url("https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/noise_pattern.png");
+        opacity: 0.15; z-index: 1; mix-blend-mode: overlay; pointer-events: none;
+      }
+      /* Fallback noise if image fails */
+      .card-noise::after {
+        content: ""; position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.1; mix-blend-mode: soft-light;
+      }
+
+      .card-blobs { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
+      .blob { 
+        position: absolute; width: 300px; height: 300px; 
+        background: radial-gradient(circle, rgba(74, 222, 128, 0.15) 0%, transparent 70%); 
+        border-radius: 50%; filter: blur(40px);
+      }
+      .blob.b1 { top: -100px; right: -50px; animation: floatBlob 20s infinite alternate; }
+      .blob.b2 { bottom: -100px; left: -50px; animation: floatBlob 25s infinite alternate-reverse; }
+      
+      @keyframes floatBlob {
+        from { transform: translate(0, 0) scale(1); }
+        to { transform: translate(50px, 30px) scale(1.2); }
       }
       @keyframes rotateGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
       .card-logo { 
-        margin-bottom: 30px; position: relative; z-index: 2; height: 60px; 
+        margin-bottom: 30px; position: relative; z-index: 2; height: 50px; 
         display: flex; align-items: center; justify-content: center;
-        background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
-        padding: 12px 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+        padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
         width: fit-content; margin: 0 auto 25px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       }
-      .card-logo img { max-height: 100%; max-width: 160px; object-fit: contain; }
+      .card-logo img { max-height: 100%; max-width: 140px; object-fit: contain; }
 
       .user-avatar-ring {
         width: 110px; height: 110px; border-radius: 50%;
-        border: 4px solid rgba(255,255,255,0.3); margin: 0 auto 20px;
+        border: 4px solid rgba(255,255,255,0.2); margin: 0 auto 20px;
         position: relative; z-index: 2; overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
       }
       .user-avatar-ring img { width: 100%; height: 100%; object-fit: cover; }
 
       .card-text { position: relative; z-index: 2; }
-      .card-welcome { display: block; font-size: 10px; font-weight: 800; letter-spacing: 3px; opacity: 0.7; margin-bottom: 10px; }
-      .card-text h2 { font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px; }
-      .card-divider { width: 40px; height: 3px; background: rgba(255,255,255,0.3); margin: 15px auto; border-radius: 10px; }
-      .card-status { font-size: 13px; font-weight: 700; margin-bottom: 20px; }
-      .status-active { color: #4ade80; text-shadow: 0 0 10px rgba(74,222,128,0.5); }
+      .card-welcome { display: block; font-size: 10px; font-weight: 800; letter-spacing: 3px; color: #4ade80; margin-bottom: 12px; }
+      .card-text h2 { font-size: 26px; font-weight: 900; margin: 0; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+      .card-divider { width: 40px; height: 3px; background: #4ade80; margin: 18px auto; border-radius: 10px; opacity: 0.6; }
+      .card-status { font-size: 13px; font-weight: 700; margin-bottom: 25px; opacity: 0.9; }
+      .status-active { color: #4ade80; font-weight: 800; }
 
       .card-tagline {
         display: inline-flex; align-items: center; gap: 8px;
-        background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
-        padding: 8px 16px; border-radius: 100px; font-size: 10px; font-weight: 800;
-        letter-spacing: 1px; text-transform: uppercase;
+        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+        padding: 10px 20px; border-radius: 100px; font-size: 10px; font-weight: 800;
+        letter-spacing: 1.5px; text-transform: uppercase;
       }
       .card-tagline i { color: #fbbf24; }
+
+      .card-footer-text {
+        margin-top: 40px; font-size: 9px; font-weight: 800; letter-spacing: 4px;
+        opacity: 0.4; position: relative; z-index: 2; text-transform: uppercase;
+      }
 
       .social-share-row { margin-top: 25px; text-align: center; }
       .share-label { display: block; font-size: 11px; font-weight: 700; opacity: 0.4; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
