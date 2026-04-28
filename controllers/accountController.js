@@ -475,15 +475,25 @@ export const accountController = {
   markSocialShareShown: async (req, res, next) => {
     try {
       const userId = req.user.id;
-      const { error } = await supabaseService
+      
+      // High IQ: Use the service role client if available to ensure RLS bypass for system flags
+      const client = supabaseService || supabase;
+      
+      const { error } = await client
         .from('profiles')
         .update({ social_share_shown: true })
         .eq('id', userId);
       
-      if (error) throw error;
+      if (error) {
+        logger.warn(`Non-critical Social Share Update Error: ${error.message}`);
+        // Even if DB update fails, we return 200 to the client so the UI can proceed
+        // unless it's a critical system failure.
+        return res.json({ status: 'warning', message: 'Flag not updated in DB but proceeding.' });
+      }
+
       res.json({ status: 'success' });
     } catch (err) {
-      logger.error(`Mark Social Share Shown Error: ${err.message}`);
+      logger.error(`Mark Social Share Shown Critical Error: ${err.message}`);
       res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
   }

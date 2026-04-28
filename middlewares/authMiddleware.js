@@ -41,7 +41,20 @@ export const authMiddleware = {
         );
         
         if (result && !result.error && result.data?.user) {
-          user = result.data.user;
+          const authUser = result.data.user;
+          
+          // High IQ: Fetch full profile data so avatar/title/role are available globally
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', authUser.id)
+            .single();
+          
+          if (profile) {
+            user = { ...authUser, ...profile };
+          } else {
+            user = authUser;
+          }
         }
       } catch (err) {
         logger.warn(`Auth CheckUser Resilience: ${err.message}`);

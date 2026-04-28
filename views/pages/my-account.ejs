@@ -809,7 +809,7 @@
               <label class="pf-lbl">Title</label>
               <select name="title" class="pf-inp">
                 <option value="" <%= !user.title ? 'selected' : '' %>>None</option>
-                <% ['Mr', 'Mrs', 'Ms', 'Dr', 'Pastor', 'Deacon', 'Deaconess', 'Elder', 'Minister', 'Bishop', 'Evangelist', 'Apostle', 'Prophet'].forEach(t => { %>
+                <% ['Mr', 'Mrs', 'Ms', 'Bro', 'Sis', 'Dr', 'Pastor', 'Deacon', 'Deaconess', 'Elder', 'Minister', 'Bishop', 'Evangelist', 'Apostle', 'Prophet'].forEach(t => { %>
                   <option value="<%= t %>" <%= user.title === t ? 'selected' : '' %>><%= t %></option>
                 <% }) %>
               </select>
