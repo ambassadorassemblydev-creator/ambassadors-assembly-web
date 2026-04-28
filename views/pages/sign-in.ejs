@@ -228,6 +228,63 @@
                       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
                     }
 
+                    .google-btn {
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 12px;
+                      width: 100%;
+                      padding: 14px;
+                      border-radius: 12px;
+                      background: #ffffff;
+                      border: 1.5px solid rgba(26, 26, 26, 0.1);
+                      color: #1a1a1a;
+                      font-family: 'Articulat CF Demi Bold', sans-serif;
+                      font-size: 15px;
+                      font-weight: 700;
+                      text-decoration: none;
+                      transition: all 0.3s ease;
+                      margin-bottom: 25px;
+                    }
+
+                    .google-btn:hover {
+                      background: #fcfcfc;
+                      border-color: rgba(26, 26, 26, 0.2);
+                      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                      transform: translateY(-1px);
+                    }
+
+                    .google-btn img {
+                      width: 20px;
+                      height: 20px;
+                    }
+
+                    .auth-divider {
+                      position: relative;
+                      text-align: center;
+                      margin-bottom: 25px;
+                    }
+
+                    .auth-divider::before {
+                      content: "";
+                      position: absolute;
+                      top: 50%;
+                      left: 0;
+                      width: 100%;
+                      height: 1px;
+                      background: rgba(26, 26, 26, 0.08);
+                    }
+
+                    .auth-divider span {
+                      position: relative;
+                      background: #ffffff;
+                      padding: 0 15px;
+                      font-size: 12px;
+                      text-transform: uppercase;
+                      letter-spacing: 1px;
+                      color: rgba(26, 26, 26, 0.4);
+                    }
+
                     .auth-footer-link {
                       text-align: center;
                       margin-top: 30px;
@@ -342,6 +399,15 @@ body.dmRoot,
 
                         <!-- Alert box for JS errors -->
                         <div class="error-alert" id="auth-error"></div>
+
+                        <a href="/auth/google" class="google-btn">
+                          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                          Continue with Google
+                        </a>
+
+                        <div class="auth-divider">
+                          <span>Or continue with email</span>
+                        </div>
 
                         <form id="sign-in-form">
                           <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">

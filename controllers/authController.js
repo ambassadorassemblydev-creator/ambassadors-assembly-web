@@ -11,6 +11,8 @@ export const authController = {
   
   renderSignUp: (req, res) => res.render('pages/sign-up', { pageTitle: 'Create Account', currentPath: req.path }),
 
+  renderEmailConfirmed: (req, res) => res.render('pages/email-confirmed', { pageTitle: 'Email Confirmed | Ambassadors Assembly', currentPath: req.path }),
+
   signUp: async (req, res, next) => {
     try {
       const validatedData = registerSchema.parse(req.body);
@@ -41,6 +43,32 @@ export const authController = {
       res.status(200).json({ status: 'success' });
     } catch (err) {
       next(err);
+    }
+  },
+
+  googleLogin: async (req, res, next) => {
+    try {
+      const redirectTo = `${req.protocol}://${req.get('host')}/auth/callback`;
+      const url = await authService.getGoogleOAuthUrl(redirectTo);
+      res.redirect(url);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  handleCallback: async (req, res, next) => {
+    try {
+      const { code } = req.query;
+      if (!code) return res.redirect('/sign-in');
+
+      const { session, user } = await authService.exchangeCodeForSession(code);
+      setAuthCookies(res, session);
+
+      // Redirect to confirmation page
+      res.redirect('/email-confirmed');
+    } catch (err) {
+      logger.error('OAuth callback error:', err);
+      res.redirect('/sign-in?error=oauth_failed');
     }
   }
 };

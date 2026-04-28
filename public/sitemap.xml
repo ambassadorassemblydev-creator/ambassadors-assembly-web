@@ -1,27 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.ambassadorsassembly.com/</loc>
+    <loc>https://www.theambassadorsassembly.com/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.ambassadorsassembly.com/ministries</loc>
+    <loc>https://www.theambassadorsassembly.com/ministries</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ambassadorsassembly.com/events</loc>
+    <loc>https://www.theambassadorsassembly.com/events</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ambassadorsassembly.com/sermons</loc>
+    <loc>https://www.theambassadorsassembly.com/sermons</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.ambassadorsassembly.com/about</loc>
+    <loc>https://www.theambassadorsassembly.com/about</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.ambassadorsassembly.com/give</loc>
+    <loc>https://www.theambassadorsassembly.com/give</loc>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.theambassadorsassembly.com/testimonies</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.theambassadorsassembly.com/prayer-wall</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.theambassadorsassembly.com/connect</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.theambassadorsassembly.com/plan-a-visit</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.theambassadorsassembly.com/staff</loc>
+    <priority>0.5</priority>
   </url>
 </urlset>

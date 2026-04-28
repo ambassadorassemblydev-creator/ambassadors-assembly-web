@@ -1,5 +1,8 @@
 
-<%- include('../partials/head') %>
+<%- include('../partials/head', { 
+  pageTitle: 'Ambassadors Assembly | Home',
+  lcpImage: (locals.events && events.length > 0) ? events[0].cover_image_url : null
+}) %>
 
 <body id="dmRoot" data-page-alias="home" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition"
   style="padding: 0px; margin: 0px;" data-flex-site="">
@@ -265,16 +268,16 @@
                                                 </div>
                                                 <div class="ministry-container">
                                               <% } %>
-                                              <div class="ministry-card glass-card">
-                                                  <div class="ministry-img" id="img-<%= i + 1 %>"
-                                                    style="--img: url('<%= ministry.cover_image_url %>'); <%= imgTransforms[i] || '' %>">
+                                                <div class="ministry-card glass-card">
+                                                    <div class="ministry-img" id="img-<%= i + 1 %>"
+                                                      style="--img: url('<%= ministry.cover_image_url %>'); <%= imgTransforms[i] || '' %>">
+                                                    </div>
+                                                  <div class="ministry-card-content">
+                                                    <h3><%= ministry.name %></h3>
+                                                    <p><%= ministry.description %></p>
+                                                    <a href="/ministries/<%= ministry.slug %>" class="glass-button" aria-label="Learn more about <%= ministry.name %>">Learn More</a>
                                                   </div>
-                                                <div class="ministry-card-content">
-                                                  <h3><%= ministry.name %></h3>
-                                                  <p><%= ministry.description %></p>
-                                                  <a href="/ministries/<%= ministry.slug %>" class="glass-button">Learn More</a>
                                                 </div>
-                                              </div>
                                             <% }) %>
                                           </div>
                                           <div style="text-align: center; margin-top: 40px;">
@@ -300,7 +303,7 @@
                                                   <div class="ministry-card-content">
                                                     <h3><%= ministry.name %></h3>
                                                     <p><%= ministry.description %></p>
-                                                    <a href="/ministries/<%= ministry.slug %>" class="glass-button">Learn More</a>
+                                                    <a href="/ministries/<%= ministry.slug %>" class="glass-button" aria-label="Learn more about <%= ministry.name %>">Learn More</a>
                                                   </div>
                                                 </div>
                                               <% }) %>
@@ -438,11 +441,11 @@
                                         <div class="event-cards">
                                           <% 
                                             const values = [
-                                              { title: 'Integrity', img: '/images/values/our_values_integrity_1776914230541.png', desc: 'Walking in honesty' },
-                                              { title: 'Excellence', img: '/images/values/our_values_excellence_1776914244492.png', desc: 'Reflecting God’s glory' },
-                                              { title: 'Community', img: '/images/values/our_values_community_1776914256252.png', desc: 'Fostering love' },
-                                              { title: 'Faith', img: '/images/values/our_values_faith_1776914270104.png', desc: 'Trusting God’s Word' },
-                                              { title: 'Leadership', img: '/images/values/our_values_leadership_1776916107476.png', desc: 'Impacting generations' }
+                                              { title: 'Integrity', img: 'https://res.cloudinary.com/dxwhpacz7/image/upload/f_auto,q_auto/v1777418401/our_values_integrity_1776914230541.jpg', desc: 'Walking in honesty' },
+                                              { title: 'Excellence', img: 'https://res.cloudinary.com/dxwhpacz7/image/upload/f_auto,q_auto/v1777418401/our_values_excellence_1776914244492.jpg', desc: 'Reflecting God’s glory' },
+                                              { title: 'Community', img: 'https://res.cloudinary.com/dxwhpacz7/image/upload/f_auto,q_auto/v1777418400/our_values_community_1776914256252.jpg', desc: 'Fostering love' },
+                                              { title: 'Faith', img: 'https://res.cloudinary.com/dxwhpacz7/image/upload/f_auto,q_auto/v1777418401/our_values_faith_1776914270104.jpg', desc: 'Trusting God’s Word' },
+                                              { title: 'Leadership', img: 'https://res.cloudinary.com/dxwhpacz7/image/upload/f_auto,q_auto/v1777418401/our_values_leadership_1776916107476.jpg', desc: 'Impacting generations' }
                                             ];
                                             values.forEach((val, i) => { 
                                               const offsets = [
@@ -455,7 +458,7 @@
                                               const pos = offsets[i];
                                           %>
                                           <div class="event-card" data-x="<%= pos.x %>" data-y="<%= pos.y %>" data-rotate="<%= pos.r %>" data-start="<%= pos.s %>">
-                                            <a type="url" href="/about">
+                                            <a type="url" href="/about" aria-label="Learn more about our value: <%= val.title %>">
                                               <img src="<%= val.img %>" alt="<%= val.title %>" onerror="handleImageLoadError(this)">
                                             </a>
                                             <div class="card-content">
@@ -539,7 +542,7 @@
                                 <h2 class="about-content__title">The Living Faith Foundation</h2>
                                 <p class="about-content__subtitle">The Ambassadors Assembly is a unique expression of The Living Faith Foundation.</p>
                                 <p class="about-content__desc">The Living Faith Foundation emerged as a beacon of hope during a time when faith seemed dormant, lacking the power to bring salvation and deliverance. It aimed to establish a firm foundation for new converts, nurturing their faith and grounding them solely in God.</p>
-                                <a href="/about" class="about-btn">
+                                <a href="/about" class="about-btn" aria-label="Learn more about The Living Faith Foundation">
                                   Learn More
                                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </a>

@@ -66,5 +66,33 @@ export const authService = {
   logout: async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw new AppError(error.message, 500);
+  },
+
+  /**
+   * Generates the Supabase OAuth URL for Google login
+   */
+  getGoogleOAuthUrl: async (redirectTo) => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    });
+
+    if (error) throw new AppError(error.message, 400);
+    return data.url;
+  },
+
+  /**
+   * Exchanges an OAuth code for a session
+   */
+  exchangeCodeForSession: async (code) => {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) throw new AppError(error.message, 400);
+    return data;
   }
 };

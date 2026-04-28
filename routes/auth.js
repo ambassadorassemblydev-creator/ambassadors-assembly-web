@@ -7,10 +7,15 @@ const router = express.Router();
 // HTML Pages (GET)
 router.get('/sign-in', authController.renderSignIn);
 router.get('/sign-up', authController.renderSignUp); // <-- ADD THIS
+router.get('/email-confirmed', authController.renderEmailConfirmed);
 router.get('/check-email', (req, res) => res.render('pages/check-email', { pageTitle: 'Check Your Email | Ambassadors Assembly' }));
 // API Endpoints (POST)
 router.post('/api/login', authController.login);
 router.post('/api/signup', authController.signUp); // <-- ADD THIS
 router.get('/logout', authController.logout);
+
+// OAuth Routes
+router.get('/auth/google', authController.googleLogin);
+router.get('/auth/callback', authController.handleCallback);
 
 export default router;
