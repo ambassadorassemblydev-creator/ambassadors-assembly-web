@@ -38,74 +38,11 @@
   <!-- Canonical -->
   <link rel="canonical" href="https://www.ambassadorsassembly.com/">
 
-  <!-- ========= Duda Runtime Stubs ========= -->
-  <!-- Minimal stubs required by the Duda runtime JS engine -->
+  <!-- ========= Duda Runtime Stubs (Disabled) ========= 
   <script id="d-js-dmapi">
-    window._currentDevice = 'desktop';
-    window.SystemID = 'US_DIRECT_PRODUCTION';
-    window.Parameters = {
-      HomeUrl: 'https://www.ambassadorsassembly.com/',
-      SiteAlias: '23c7a45a',
-      InitialPageAlias: 'home',
-      IsCurrentHomePage: true,
-      AllowAjax: false,
-      HomeLinkText: 'Back To Home',
-      IsHeaderFixed: false,
-      HasCustomDomain: true,
-      hasCustomCode: true,
-      isFlexSite: true,
-      isRuntimeServer: true,
-      isInEditor: false,
-      currentLanguage: 'en',
-      currentLocale: 'en',
-      NavigationAreaParams: {
-        ShowBackToHomeOnInnerPages: true,
-        NavbarSize: -1,
-        NavbarLiveHomePage: 'https://www.ambassadorsassembly.com/',
-        BlockContainerSelector: '.dmBody',
-        NavbarSelector: '#dmNav:has(a)',
-        SubNavbarSelector: '#subnav_main',
-        MoreButtonText: 'MORE',
-        LessButtonText: 'LESS'
-      },
-      LayoutID: {},
-      LayoutVariationID: {}
-    };
-    window.Parameters.LayoutID[window._currentDevice] = 30;
-    window.Parameters.LayoutVariationID[window._currentDevice] = 5;
-
-    if (!window.dmAPI) {
-      window.dmAPI = {
-        registerExternalRuntimeComponent: function () {},
-        getCurrentDeviceType: function () { return window._currentDevice; },
-        runOnReady: (ns, fn) => {
-          const safeFn = dmAPI.toSafeFn(fn);
-          ns = ns || 'global_' + Math.random().toString(36).slice(2, 11);
-          const eventName = 'afterAjax.' + ns;
-          if (document.readyState === 'complete') {
-            $.DM.events.off(eventName).on(eventName, safeFn);
-            setTimeout(() => safeFn({ isAjax: false }), 0);
-          } else {
-            window?.waitForDeferred?.('dmAjax', () => {
-              $.DM.events.off(eventName).on(eventName, safeFn);
-              safeFn({ isAjax: false });
-            });
-          }
-        },
-        toSafeFn: (fn) => {
-          if (fn?.safe) return fn;
-          const safeFn = function (...args) {
-            try { return fn?.apply(null, args); } catch (e) { console.log('function failed ' + e.message); }
-          };
-          safeFn.safe = true;
-          return safeFn;
-        }
-      };
-    }
-    if (!window.requestIdleCallback) {
-      window.requestIdleCallback = function (fn) { setTimeout(fn, 0); };
-    }
+    ... (stubs removed for performance)
   </script>
+  -->
 
   <!-- Deferred promise utility (used by runtime) -->
   <script data-role="deferred-init" type="text/javascript">
@@ -196,7 +133,6 @@
   <meta name="twitter:image" content="<%= optimizedOgImage %>">
 
   <!-- ========= Structured Data (JSON-LD) ========= -->
-  <!-- TODO: Replace placeholder data with real Ambassadors Assembly info -->
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -205,14 +141,15 @@
       "@type": "WebSite",
       "@id": "https://www.ambassadorsassembly.com/#website",
       "url": "https://www.ambassadorsassembly.com/",
-      "name": "Ambassadors Assembly",
+      "name": "<%= locals.churchSettings?.church_name || 'Ambassadors Assembly' %>",
       "publisher": { "@id": "https://www.ambassadorsassembly.com/#organization" }
     },
     {
       "@type": "WebPage",
       "@id": "https://www.ambassadorsassembly.com/#webpage",
       "url": "https://www.ambassadorsassembly.com/",
-      "name": "Ambassadors Assembly | Join Us on Sunday!",
+      "name": "<%= pageTitle %> | Ambassadors Assembly",
+      "description": "<%= locals.churchSettings?.site_description %>",
       "isPartOf": { "@id": "https://www.ambassadorsassembly.com/#website" },
       "about": { "@id": "https://www.ambassadorsassembly.com/#organization" },
       "primaryImageOfPage": { "@id": "https://www.ambassadorsassembly.com/#primaryimage" }
@@ -220,91 +157,49 @@
     {
       "@type": "ImageObject",
       "@id": "https://www.ambassadorsassembly.com/#primaryimage",
-      "url": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg",
-      "contentUrl": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg"
+      "url": "<%= optimizedOgImage %>",
+      "contentUrl": "<%= optimizedOgImage %>"
     },
     {
       "@type": ["Organization", "Place", "Church"],
       "@id": "https://www.ambassadorsassembly.com/#organization",
-      "name": "Ambassadors Assembly",
+      "name": "<%= locals.churchSettings?.church_name || 'Ambassadors Assembly' %>",
       "url": "https://www.ambassadorsassembly.com/",
-      "logo": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg",
-      "image": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg",
-      "telephone": "+234-801-234-5678",
+      "logo": "<%= locals.churchSettings?.logo_url || optimizedOgImage %>",
+      "image": "<%= optimizedOgImage %>",
+      "telephone": "<%= locals.churchSettings?.church_phone || '+234 803 333 3333' %>",
+      "email": "<%= locals.churchSettings?.church_email %>",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "12 Adeola Odeku Street, Victoria Island",
+        "streetAddress": "<%= locals.churchSettings?.church_address || '7 Fashe Street, Omole Phase 2' %>",
         "addressLocality": "Lagos",
         "addressRegion": "Lagos",
-        "postalCode": "101241",
         "addressCountry": "NG"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 6.4281,
-        "longitude": 3.4219
+        "latitude": 6.6341,
+        "longitude": 3.3702
       },
-      "sameAs": [
-        "https://www.youtube.com/@AmbassadorsAssembly",
-        "https://www.instagram.com/ambassadorsassembly/",
-        "https://www.facebook.com/AmbassadorsAssembly"
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Sunday",
+          "opens": "08:00",
+          "closes": "12:30"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Wednesday",
+          "opens": "18:00",
+          "closes": "20:00"
+        }
       ],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Ministries & Services",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Sunday Worship Services",
-              "serviceType": "Church service / worship gathering",
-              "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Lagos" }
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Kids Ministry",
-              "serviceType": "Children's ministry",
-              "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Lagos" }
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Youth Ministry",
-              "serviceType": "Student ministry",
-              "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Lagos" }
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Young Adults (18|28)",
-              "serviceType": "Young adults ministry",
-              "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Lagos" }
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Small Groups",
-              "serviceType": "Small group / community groups",
-              "provider": { "@id": "https://www.ambassadorsassembly.com/#organization" },
-              "areaServed": { "@type": "City", "name": "Lagos" }
-            }
-          }
-        ]
-      }
+      "sameAs": [
+        "<%= locals.churchSettings?.social_youtube || 'https://www.youtube.com/@AmbassadorsAssembly' %>",
+        "<%= locals.churchSettings?.social_instagram || 'https://www.instagram.com/theambassadorsassembly' %>",
+        "<%= locals.churchSettings?.social_facebook || 'https://www.facebook.com/AmbassadorsAssembly' %>"
+      ]
     }
   ]
 }
@@ -322,14 +217,4 @@
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- ========= Duda Runtime Chunks (local) ========= -->
-  <script charset="utf-8" src="/js/vendor/runtime-module-layout.js"></script>
-  <script charset="utf-8" src="/js/vendor/runtime-flex-link-on-container.js"></script>
-  <script charset="utf-8" src="/js/vendor/runtime-module-anchors.js"></script>
-  <script charset="utf-8" src="/js/vendor/913.js"></script>
-  <script charset="utf-8" src="/js/vendor/897.js"></script>
-  <script charset="utf-8" src="/js/vendor/873.js"></script>
-  <script charset="utf-8" src="/js/vendor/250.js"></script>
-  <script charset="utf-8" src="/js/vendor/292.js"></script>
-  <script charset="utf-8" src="/js/vendor/555.js"></script>
 </head>

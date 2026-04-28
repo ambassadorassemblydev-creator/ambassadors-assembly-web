@@ -724,6 +724,24 @@
     </div>
   </div>
 <% } %>
+
+<% if (locals.error && locals.error.includes('No active service or event found')) { %>
+  <!-- No Active Service Modal -->
+  <div class="aas-modal-overlay" id="noServiceModal">
+    <div class="aas-modal" style="max-width: 400px; text-align: center; padding: 40px 30px;">
+      <div style="width: 80px; height: 80px; background: #fee2e2; color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 24px;">
+        <i class="fas fa-calendar-times"></i>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 800; color: var(--dk); margin-bottom: 12px;">Not a Service Day</h3>
+      <p style="font-size: 14px; color: var(--mu); line-height: 1.6; margin-bottom: 30px;">
+        <%= error %>
+      </p>
+      <button class="btn-g" style="width: 100%; justify-content: center; padding: 14px;" onclick="document.getElementById('noServiceModal').remove()">
+        Understood
+      </button>
+    </div>
+  </div>
+<% } %>
     <!-- ───────── TAB: PROFILE ───────── -->
     <div class="aas-tab" id="aas-profile">
       <div class="aas-ph">
@@ -825,6 +843,24 @@
               <input type="text" name="occupation" class="pf-inp" value="<%= user.occupation || '' %>">
             </div>
             <div class="pf-g">
+              <label class="pf-lbl">Marital Status</label>
+              <select name="marital_status" class="pf-inp" id="maritalStatusEdit">
+                <option value="single" <%= user.marital_status === 'single' ? 'selected' : '' %>>Single</option>
+                <option value="married" <%= user.marital_status === 'married' ? 'selected' : '' %>>Married</option>
+                <option value="divorced" <%= user.marital_status === 'divorced' ? 'selected' : '' %>>Divorced</option>
+                <option value="widowed" <%= user.marital_status === 'widowed' ? 'selected' : '' %>>Widowed</option>
+              </select>
+            </div>
+            <div class="pf-g" id="anniversaryEditGroup" style="display: <%= user.marital_status === 'married' ? 'block' : 'none' %>;">
+              <label class="pf-lbl">Wedding Anniversary</label>
+              <input type="date" name="wedding_anniversary" class="pf-inp" value="<%= user.wedding_anniversary || '' %>">
+            </div>
+            <script>
+              document.getElementById('maritalStatusEdit').addEventListener('change', function() {
+                document.getElementById('anniversaryEditGroup').style.display = this.value === 'married' ? 'block' : 'none';
+              });
+            </script>
+            <div class="pf-g">
               <label class="pf-lbl">Email (read-only)</label>
               <input type="email" class="pf-inp" value="<%= user.email %>" readonly>
               <span class="pf-hint">Contact admin to change your email.</span>
@@ -885,199 +921,16 @@
 <!-- Toast handler -->
 <div id="__toast" data-err="<%= error || '' %>" data-ok="<%= success || '' %>" style="display:none;"></div>
 
-<!-- Social Share Popup -->
-<div id="socialSharePopup" class="social-share-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000000; align-items: center; justify-content: center;">
-  <div class="share-card-container" style="background: white; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; position: relative; animation: aas-in 0.4s ease;">
-    <button onclick="closeSharePopup()" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.1); border: none; font-size: 24px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">&times;</button>
-    
-    <!-- The card to be captured -->
-    <div id="shareCardImage" style="padding: 40px 20px; background: linear-gradient(135deg, #176a60, #115048); color: white; border-radius: 20px 20px 0 0; position: relative; overflow: hidden;">
-      <div style="position: absolute; top: -50px; left: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
-      <div style="position: absolute; bottom: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
-      
-      <div style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 4px solid white; margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); position: relative; z-index: 2;">
-        <img src="<%= user.avatar_url || 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1777047322/media__1777047322335.png' %>" style="width: 100%; height: 100%; object-fit: cover;" crossorigin="anonymous">
-      </div>
-      <h2 style="font-size: 26px; margin-bottom: 5px; font-weight: 800; position: relative; z-index: 2;"><%= user.first_name %> <%= user.last_name %></h2>
-      <p style="font-size: 15px; opacity: 0.9; font-weight: 600; margin-bottom: 25px; position: relative; z-index: 2;">I just joined Ambassadors Assembly!</p>
-      
-      <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); padding: 10px 20px; border-radius: 100px; display: inline-flex; align-items: center; gap: 10px; position: relative; z-index: 2;">
-        <i class="fas fa-church"></i>
-        <span style="font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">A Place of Purpose</span>
-      </div>
-    </div>
-    
-    <div style="padding: 25px;">
-      <p style="color: #666; margin-bottom: 20px; font-size: 14px; line-height: 1.5;">Download this card and share it on your social media to let your friends know you're now part of the family.</p>
-      <button onclick="downloadShareCard()" class="btn-g" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 800; border-radius: 14px; box-shadow: 0 10px 20px rgba(23,106,96,0.3);">
-        <i class="fas fa-download"></i> Save Image & Share
-      </button>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-
-<script>
-(function() {
-  'use strict';
-
-  // ── Tab switching ──
-  window.aasTab = function(id, btn) {
-    const progress = document.getElementById('aasProgress');
-    if (progress) {
-      progress.style.width = '0%';
-      progress.style.opacity = '1';
-      setTimeout(() => progress.style.width = '40%', 10);
-      setTimeout(() => progress.style.width = '100%', 200);
-      setTimeout(() => {
-        progress.style.opacity = '0';
-        setTimeout(() => progress.style.width = '0%', 300);
-      }, 500);
-    }
-
-    document.querySelectorAll('.aas-tab').forEach(t => t.classList.remove('on'));
-    document.querySelectorAll('.aas-lnk').forEach(l => l.classList.remove('active'));
-    const panel = document.getElementById('aas-' + id);
-    if (panel) panel.classList.add('on');
-    if (btn) btn.classList.add('active');
-    history.replaceState(null, '', '/my-account?tab=' + id);
-    closeSidebar();
-    document.querySelector('.aas-main').scrollTo(0, 0);
-  };
-
-  window.aasTabById = function(id) {
-    const btn = document.querySelector(`.aas-lnk[onclick*="'${id}'"]`);
-    aasTab(id, btn);
-  };
-
-  // ── Mobile sidebar ──
-  const sidebar = document.getElementById('aasSidebar');
-  const overlay = document.getElementById('aasOverlay');
-  const ham     = document.getElementById('aasHam');
-
-  function closeSidebar() {
-    if (!sidebar) return;
-    sidebar.classList.remove('open');
-    if (overlay) overlay.classList.remove('on');
-    document.body.style.overflow = '';
-  }
-  function openSidebar() {
-    if (!sidebar) return;
-    sidebar.classList.add('open');
-    if (overlay) overlay.classList.add('on');
-    document.body.style.overflow = 'hidden';
-  }
-  if (ham) ham.addEventListener('click', openSidebar);
-  if (overlay) overlay.addEventListener('click', closeSidebar);
-
-  // ── Restore tab from URL ──
-  const urlTab = new URLSearchParams(location.search).get('tab') || '<%= activeTab %>';
-  if (urlTab && urlTab !== 'overview') aasTabById(urlTab);
-
-  // ── Toast messages ──
-  const td = document.getElementById('__toast');
-  if (td) {
-    const err = td.dataset.err;
-    const ok  = td.dataset.ok;
-    if (ok && ok.trim()) {
-      setTimeout(() => showGreenToast(ok), 400);
-    } else if (err && err.trim()) {
-      setTimeout(() => showRedToast(err), 400);
-    }
-  }
-
-  function showGreenToast(msg) {
-    const t = document.createElement('div');
-    t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#4a8c5a;color:#fff;padding:14px 22px;border-radius:14px;font-size:13.5px;font-weight:700;z-index:100000001;box-shadow:0 12px 40px rgba(74,140,90,.4);display:flex;align-items:center;gap:10px;max-width:320px;animation:aas-in .4s ease;';
-    t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 5000);
-  }
-
-  function showRedToast(msg) {
-    const t = document.createElement('div');
-    t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#dc2626;color:#fff;padding:14px 22px;border-radius:14px;font-size:13.5px;font-weight:700;z-index:100000001;box-shadow:0 12px 40px rgba(220,38,38,.3);display:flex;align-items:center;gap:10px;max-width:320px;animation:aas-in .4s ease;';
-    t.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${msg}`;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 8000);
-  }
-
-  // ── Social Share Popup ──
-  if (ok && ok.includes('Welcome home')) {
-    const popup = document.getElementById('socialSharePopup');
-    if (popup) {
-      setTimeout(() => {
-        popup.style.display = 'flex';
-      }, 1000); // Show after 1 second
-    }
-  }
-
-  window.closeSharePopup = function() {
-    const popup = document.getElementById('socialSharePopup');
-    if (popup) popup.style.display = 'none';
-  };
-
-  window.downloadShareCard = async function() {
-    const card = document.getElementById('shareCardImage');
-    if (!card) return;
-    
-    try {
-      const btn = document.querySelector('#socialSharePopup .btn-g');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-      btn.disabled = true;
-
-      const canvas = await html2canvas(card, {
-        scale: 2, // High resolution
-        useCORS: true,
-        backgroundColor: null
-      });
-
-      const image = canvas.toDataURL("image/png", 1.0);
-      
-      // Try Web Share API if mobile
-      if (navigator.share) {
-        try {
-          const blob = await (await fetch(image)).blob();
-          const file = new File([blob], 'ambassadors-assembly-invite.png', { type: 'image/png' });
-          await navigator.share({
-            title: 'I joined Ambassadors Assembly!',
-            text: 'I just joined Ambassadors Assembly! You can join too.',
-            files: [file]
-          });
-          closeSharePopup();
-        } catch (shareErr) {
-          // Fallback to download
-          triggerDownload(image);
-        }
-      } else {
-        // Fallback for desktop/unsupported
-        triggerDownload(image);
-      }
-
-      btn.innerHTML = originalText;
-      btn.disabled = false;
-    } catch (err) {
-      console.error("Error generating share card:", err);
-      showRedToast("Could not generate image. Please try again.");
-      document.querySelector('#socialSharePopup .btn-g').disabled = false;
-      document.querySelector('#socialSharePopup .btn-g').innerHTML = '<i class="fas fa-download"></i> Save Image & Share';
-    }
-  };
-
-  function triggerDownload(dataUrl) {
+  <!-- function triggerDownload(dataUrl) {
     const link = document.createElement('a');
     link.download = 'Ambassadors-Assembly-Invite.png';
     link.href = dataUrl;
     link.click();
     showGreenToast("Image saved! You can now share it.");
-    setTimeout(closeSharePopup, 2000);
   }
 
 })();
-</script>
+</script> -->
 
 
 

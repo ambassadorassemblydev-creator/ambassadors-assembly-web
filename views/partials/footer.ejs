@@ -598,11 +598,13 @@
       });
     };
   </script>
+  <!-- Duda Runtime Disabled 
   <script src="/js/duda-runtime-config.js"></script>
   <script src="/js/vendor/d-js-runtime-flex-package.min.js" id="d-js-core" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => window.runtime.initLayout());
   </script>
+  -->
   <svg height="0" width="0" style="position:absolute; z-index: -999;">
     <defs>
       <linearGradient id="icon-gradient" x1="0.5" y1="1" x2="0.5" y2="0">
@@ -612,6 +614,7 @@
     </defs>
   </svg>
   <script src="/js/index-page.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <div id="ambassadors-ai-container">
     <button id="ai-chat-bubble" class="ai-chat-bubble" aria-label="Chat with Ambassadors AI">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -826,8 +829,8 @@
         msgDiv.innerHTML = `<div class="msg-content">${text}</div>`;
         messagesBody.appendChild(msgDiv);
         messagesBody.scrollTop = messagesBody.scrollHeight;
-        if (role !== 'typing-indicator') {
-          chatHistory.push({ role: role === 'ai' ? 'assistant' : 'user', content: text });
+        if (!role.includes('typing-indicator')) {
+          chatHistory.push({ role: role.includes('ai') ? 'assistant' : 'user', content: text });
           if (chatHistory.length > 10) chatHistory.shift();
         }
         return msgDiv;
@@ -854,7 +857,6 @@
               'X-CSRF-Token': document.querySelector('input[name="_csrf"]').value
             },
             body: JSON.stringify({ 
-              model: 'google/gemini-flash-1.5-free',
               message: text, 
               history: chatHistory 
             })
@@ -863,32 +865,20 @@
           typingIndicator.remove();
           setStatus(false);
           
-          // Cinematic Staggered Reveal
+          // Cinematic Staggered Reveal with Markdown Support
           const aiMsg = addMessage('', 'ai');
           const contentEl = aiMsg.querySelector('.msg-content');
-          let content = data.response || "I\u0027m sorry, I encountered an error.";
+          const rawContent = data.response || "I'm sorry, I encountered an error.";
           
-          // Normalize and Clean formatting
-          content = content.normalize('NFC').replace(/\*\*/g, '').replace(/\*/g, '').replace(/#/g, '');
+          // Use marked for high-IQ markdown rendering
+          const htmlContent = marked.parse(rawContent);
           
-          let i = 0;
-          const speed = 10; // Faster reveal for better UX
-
-          const typeChar = () => {
-              if (i < content.length) {
-                  let char = content.charAt(i);
-                  if (char === '\n') {
-                    contentEl.appendChild(document.createElement('br'));
-                  } else {
-                    // High IQ: Using textNode to correctly render all characters including '
-                    contentEl.appendChild(document.createTextNode(char));
-                  }
-                  i++;
-                  messagesBody.scrollTop = messagesBody.scrollHeight;
-                  setTimeout(typeChar, speed);
-              }
-          };
-          typeChar();
+          // Staggered HTML reveal logic
+          contentEl.innerHTML = htmlContent;
+          messagesBody.scrollTop = messagesBody.scrollHeight;
+          
+          // High IQ: Scroll to bottom after rendering
+          setTimeout(() => { messagesBody.scrollTop = messagesBody.scrollHeight; }, 100);
 
         } catch (error) {
           setStatus(false);
@@ -1071,10 +1061,339 @@
     </script>
 
     <!-- BETTER STACK ANNOUNCEMENTS (High IQ: Direct-to-User Alerts) -->
-    <script src="https://uptime.betterstack.com/widgets/announcement.js" data-id="244038" async="async" type="text/javascript"></script>
+    <!-- <script src="https://uptime.betterstack.com/widgets/announcement.js" data-id="244038" async="async" type="text/javascript" crossorigin="anonymous"></script>
     <style>
       .betteruptime-announcement { position: relative !important; top: unset !important; bottom: 0 !important; background: white !important; z-index: 50 !important; }
       .betteruptime-announcement__message { color: black !important; font-family: 'Articulatcf-regular', sans-serif; font-weight: 700; }
+    </style> -->
+    <% if (locals.user && !locals.socialShareShown) { %>
+    <!-- SOCIAL SHARE POPUP (Shareable Celebration Card) -->
+    <div id="socialSharePopup" class="social-popup-overlay">
+      <div class="social-popup-content share-card-mode">
+        <button class="popup-close-btn" onclick="dismissSocialPopup()">
+          <i class="fas fa-times"></i>
+        </button>
+        
+        <!-- The card to be captured -->
+        <div id="shareCardImage" class="share-card-visual">
+          <div class="card-glow"></div>
+          <div class="card-logo">
+            <img src="<%= (locals.churchSettings && locals.churchSettings.og_image) ? locals.churchSettings.og_image : 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg' %>" alt="Logo" crossorigin="anonymous">
+          </div>
+          
+          <div class="user-avatar-ring">
+            <img src="<%= user.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user.first_name || user.id || 'Ambassador') %>" alt="Avatar" crossorigin="anonymous">
+          </div>
+          
+          <div class="card-text">
+            <h2><%= user.first_name %> <%= user.last_name %></h2>
+            <p>I am now an Ambassador!</p>
+            
+            <div class="card-badge-row">
+              <div class="card-tagline">
+                <i class="fas fa-crown"></i>
+                <span>Ambassador since <%= new Date(user.created_at).getFullYear() %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="popup-actions">
+          <h3>Welcome Home, Ambassador!</h3>
+          <p>Share this celebration card with your friends and family to let them know you've joined the family.</p>
+          
+          <button onclick="downloadShareCard()" class="download-btn">
+            <i class="fas fa-download"></i> Save & Share My Card
+          </button>
+          
+          <button class="dismiss-link" onclick="dismissSocialPopup()">I'll share later</button>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .social-popup-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 100000; opacity: 0; visibility: hidden; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .social-popup-overlay.show { opacity: 1; visibility: visible; }
+      
+      .social-popup-content.share-card-mode {
+        background: white; width: 90%; max-width: 420px;
+        padding: 0; border-radius: 35px; overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        transform: translateY(40px) scale(0.9);
+        transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .social-popup-overlay.show .social-popup-content { transform: translateY(0) scale(1); }
+
+      .share-card-visual {
+        padding: 50px 30px; background: linear-gradient(135deg, #176a60 0%, #0e423c 100%);
+        color: white; text-align: center; position: relative; overflow: hidden;
+      }
+      .card-glow {
+        position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: rotateGlow 10s linear infinite;
+      }
+      @keyframes rotateGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+      .card-logo { margin-bottom: 25px; position: relative; z-index: 2; height: 60px; display: flex; align-items: center; justify-content: center; }
+      .card-logo img { max-height: 100%; max-width: 150px; filter: brightness(0) invert(1); opacity: 1; }
+
+      .user-avatar-ring {
+        width: 110px; height: 110px; border-radius: 50%;
+        border: 4px solid white; margin: 0 auto 20px;
+        overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        position: relative; z-index: 2;
+      }
+      .user-avatar-ring img { width: 100%; height: 100%; object-fit: cover; }
+
+      .card-text h2 { font-size: 24px; font-weight: 800; margin-bottom: 5px; position: relative; z-index: 2; }
+      .card-text p { font-size: 16px; opacity: 0.9; font-weight: 600; margin-bottom: 25px; position: relative; z-index: 2; }
+      
+      .card-tagline {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
+        padding: 8px 20px; border-radius: 100px; font-size: 11px;
+        text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;
+        position: relative; z-index: 2;
+      }
+
+      .popup-actions { padding: 35px 30px; text-align: center; }
+      .popup-actions h3 { font-size: 1.3rem; color: #176a60; margin-bottom: 12px; font-weight: 800; }
+      .popup-actions p { font-size: 0.9rem; color: #6b7280; line-height: 1.5; margin-bottom: 25px; }
+
+      .download-btn {
+        width: 100%; padding: 18px; background: #176a60; color: white;
+        border: none; border-radius: 18px; font-weight: 800; font-size: 1rem;
+        cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(23, 106, 96, 0.3);
+        margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;
+      }
+      .download-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(23, 106, 96, 0.4); }
+
+      .dismiss-link {
+        background: none; border: none; font-size: 0.85rem; font-weight: 700;
+        color: #9ca3af; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+      }
+      .dismiss-link:hover { color: #176a60; }
     </style>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          const popup = document.getElementById('socialSharePopup');
+          if (popup) popup.classList.add('show');
+        }, 4000); // Wait 4 seconds
+      });
+
+      async function markSocialShown() {
+        try {
+          const csrfEl = document.querySelector('input[name="_csrf"]');
+          const csrfToken = csrfEl ? csrfEl.value : '';
+          
+          await fetch('/api/profile/mark-share-shown', { 
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({ shown: true })
+          });
+        } catch (e) { console.warn('Popup sync ignored'); }
+      }
+
+      async function dismissSocialPopup() {
+        const popup = document.getElementById('socialSharePopup');
+        if (popup) {
+          popup.classList.remove('show');
+          // Add a small delay to ensure animation completes before sync
+          setTimeout(() => { popup.style.display = 'none'; }, 600);
+        }
+        await markSocialShown();
+      }
+
+      function triggerDownload(dataUrl) {
+        const link = document.createElement('a');
+        link.download = `ambassador-card-${Date.now()}.png`;
+        link.href = dataUrl;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        setTimeout(() => {
+          link.click();
+          document.body.removeChild(link);
+          dismissSocialPopup();
+        }, 100);
+      }
+
+      async function downloadShareCard() {
+        const card = document.getElementById('shareCardImage');
+        const btn = document.querySelector('.download-btn');
+        if (!card || !btn) return;
+
+        try {
+          const originalHTML = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+          btn.disabled = true;
+
+          const canvas = await html2canvas(card, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: false,
+            backgroundColor: null,
+            logging: false,
+            ignoreElements: (el) => {
+              // High IQ: Explicitly ignore heavy/tainted elements to prevent 17s lag
+              return el.tagName === 'VIDEO' || el.tagName === 'IFRAME' || el.classList.contains('hero-video');
+            }
+          });
+
+          const dataUrl = canvas.toDataURL("image/png", 1.0);
+          
+          if (navigator.share) {
+            try {
+              const blob = await (await fetch(dataUrl)).blob();
+              const file = new File([blob], 'ambassador-card.png', { type: 'image/png' });
+              await navigator.share({
+                title: 'I am now an Ambassador!',
+                text: 'Join me at Ambassadors Assembly!',
+                files: [file]
+              });
+              dismissSocialPopup();
+            } catch (sErr) { 
+              console.warn('Navigator share failed, falling back to download', sErr);
+              triggerDownload(dataUrl); 
+            }
+          } else {
+            triggerDownload(dataUrl);
+          }
+        } catch (err) {
+          console.error('[CaptureError]', err);
+          btn.innerHTML = originalHTML;
+          btn.disabled = false;
+        }
+      }
+    </script>
+
+    <style>
+      @media (max-width: 600px) {
+        .footer-baseline { flex-direction: column; gap: 20px; text-align: center; }
+      }
+    </style>
+    <% } %>
+
+
+
+    <!-- COOKIE CONSENT POPUP -->
+    <div id="cookie-consent" class="cookie-popup">
+      <div class="cookie-content">
+        <div class="cookie-icon">🍪</div>
+        <div class="cookie-text">
+          <h4>Ambassador, we use cookies!</h4>
+          <p>We use cookies to enhance your experience and help us grow our mission. By staying, you agree to our spiritual and digital cookies.</p>
+        </div>
+        <div class="cookie-actions">
+          <button onclick="acceptCookies()" class="btn-accept">Bless it!</button>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .cookie-popup {
+        position: fixed;
+        bottom: -250px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(23, 106, 96, 0.15);
+        padding: 20px 25px;
+        border-radius: 24px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+        z-index: 99999999;
+        display: flex;
+        align-items: center;
+        width: calc(100% - 40px);
+        max-width: 600px;
+        transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .cookie-popup.active { 
+        bottom: 25px; 
+        opacity: 1;
+        pointer-events: all;
+      }
+      .cookie-content { display: flex; align-items: center; gap: 18px; width: 100%; }
+      .cookie-icon { font-size: 28px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
+      .cookie-text { flex: 1; }
+      .cookie-text h4 { margin: 0; font-size: 0.95rem; color: #134e5e; font-weight: 800; letter-spacing: -0.01em; }
+      .cookie-text p { margin: 4px 0 0; font-size: 0.78rem; color: #64748b; line-height: 1.45; }
+      .cookie-actions { margin-left: 10px; }
+      .btn-accept {
+        background: linear-gradient(135deg, #134e5e 0%, #176a60 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        white-space: nowrap;
+        box-shadow: 0 8px 20px rgba(19, 78, 94, 0.2);
+      }
+      .btn-accept:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 25px rgba(19, 78, 94, 0.3); background: #25D366; }
+      
+      @media (max-width: 580px) {
+        .cookie-popup { padding: 18px 20px; border-radius: 20px; }
+        .cookie-content { flex-direction: row; align-items: flex-start; gap: 12px; }
+        .cookie-icon { font-size: 24px; margin-top: 2px; }
+        .cookie-text h4 { font-size: 0.85rem; }
+        .cookie-text p { font-size: 0.72rem; line-height: 1.3; }
+        .cookie-actions { margin-left: 0; margin-top: 5px; }
+        .btn-accept { padding: 10px 18px; font-size: 0.75rem; border-radius: 12px; }
+      }
+
+      @media (max-width: 420px) {
+        .cookie-popup { bottom: 15px; width: calc(100% - 20px); }
+        .cookie-content { flex-direction: column; text-align: left; align-items: stretch; }
+        .cookie-actions { margin-top: 15px; text-align: right; }
+        .btn-accept { width: auto; min-width: 120px; }
+      }
+    </style>
+
+    <script>
+      function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        const popup = document.getElementById('cookie-consent');
+        if (popup) {
+          popup.classList.remove('active');
+          // High IQ: Fully remove after transition to free up GPU resources
+          setTimeout(() => { popup.style.display = 'none'; }, 800);
+        }
+      }
+      window.addEventListener('load', () => {
+        if (!localStorage.getItem('cookiesAccepted')) {
+          // Cinematic entrance after 4s
+          setTimeout(() => {
+            const popup = document.getElementById('cookie-consent');
+            if (popup) {
+              popup.style.display = 'flex';
+              // Force reflow for animation
+              popup.offsetHeight;
+              popup.classList.add('active');
+            }
+          }, 4000);
+        } else {
+          const popup = document.getElementById('cookie-consent');
+          if (popup) popup.style.display = 'none';
+        }
+      });
+    </script>
+  </body>
 </html>

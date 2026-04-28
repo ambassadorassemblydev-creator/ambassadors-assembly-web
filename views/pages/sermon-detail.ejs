@@ -26,7 +26,7 @@
         <main class="page-container">
           <div class="sermon-layout">
             
-             <!-- LEFT: PLAYER & INFO -->
+              <!-- LEFT: PLAYER & INFO -->
               <div class="player-wrapper glass-fx">
                 <% 
                   function getEmbedUrl(url) {
@@ -35,11 +35,11 @@
                     // YouTube
                     if (url.includes('youtube.com/watch')) {
                       const videoId = new URL(url).searchParams.get('v');
-                      return `https://www.youtube.com/embed/${videoId}`;
+                      return `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
                     }
                     if (url.includes('youtu.be/')) {
                       const videoId = url.split('/').pop().split('?')[0];
-                      return `https://www.youtube.com/embed/${videoId}`;
+                      return `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
                     }
                     
                     // Vimeo
@@ -55,7 +55,19 @@
                   const isIframe = activeUrl.includes('youtube.com') || activeUrl.includes('vimeo.com') || activeUrl.includes('embed');
                 %>
                 <% if (isIframe) { %>
-                  <iframe src="<%= activeUrl %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  <iframe id="yt-player-frame" src="<%= activeUrl %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  
+                  <!-- Fallback overlay shown when embed is blocked (Error 150/153) -->
+                  <div id="embed-error-overlay" class="offline-placeholder" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; z-index:5; background: #000;">
+                    <div class="offline-card" style="color: white; padding: 30px; text-align: center;">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e94560" stroke-width="1.5" style="margin-bottom: 20px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                      <h2 style="color: white; font-size: 20px; margin-bottom: 10px;">This video cannot be embedded</h2>
+                      <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 20px;">The owner has restricted playback on external sites. Watch it directly on YouTube.</p>
+                      <a id="yt-direct-link" href="" target="_blank" class="action-btn" style="background: #176a60; color: white; border: none; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 700;">
+                        Watch on YouTube
+                      </a>
+                    </div>
+                  </div>
                 <% } else { %>
                   <video src="<%= activeUrl %>" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
                 <% } %>
@@ -144,8 +156,8 @@
                 <!-- BIBLE PANEL -->
                 <div id="tab-bible" class="tab-panel">
                   <div class="bible-placeholder">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V4a2 2 0 0 1 2-2h10l4 4v10a2 2 0 0 1-2 2H6.5a2.5 2.5 0 0 0-2.5 2.5z"/></svg>
-                    <p>Search Scripture references here.</p>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V4a2 2 0 0 1 2-2h10l4 4v10a2 2 0 0 1-2 2H6.5a2.5 2.5 0 0 0-2.5 2.5z"/></svg>
+                    <p style="color: #6b7280;">Search Scripture references here.</p>
                     <input type="text" placeholder="John 3:16..." class="bible-search">
                   </div>
                 </div>
@@ -159,10 +171,12 @@
 
   <style>
     :root {
-      --accent: #3b82f6;
-      --glass: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.08);
+      --accent: #176a60;
+      --glass: rgba(255, 255, 255, 0.6);
+      --glass-border: rgba(0, 0, 0, 0.08);
     }
+
+    body { font-family: 'Articulat_CF_Normal', sans-serif; color: #1a1a1a; background: var(--color_1); }
 
     .page-container { padding-top: 100px; min-height: 100vh; }
     
@@ -183,43 +197,43 @@
       overflow: hidden; 
       background: black;
       margin-bottom: 40px;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.4);
     }
     .player-wrapper iframe { position: absolute; top:0; left:0; width:100%; height:100%; }
 
     .sermon-info { margin-bottom: 60px; }
     .meta-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-    .series-pill { background: rgba(59, 130, 246, 0.1); color: #60a5fa; padding: 4px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-    .date-label { color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 500; }
+    .series-pill { background: rgba(23, 106, 96, 0.1); color: #176a60; padding: 4px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .date-label { color: #6b7280; font-size: 13px; font-weight: 500; }
     
-    .sermon-title { font-family: 'Manrope', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; margin-bottom: 30px; line-height: 1.1; letter-spacing: -0.02em; }
+    .sermon-title { font-family: 'Manrope', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; margin-bottom: 30px; line-height: 1.1; letter-spacing: -0.02em; color: #1a1a1a; }
 
     .speaker-row { display: flex; align-items: center; gap: 15px; padding-bottom: 30px; border-bottom: 1px solid var(--glass-border); margin-bottom: 30px; }
-    .speaker-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: #1a1a1a; }
+    .speaker-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: #f3f4f6; }
     .speaker-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .speaker-name { display: block; font-weight: 700; font-size: 16px; color: white; }
-    .speaker-role { display: block; font-size: 13px; color: rgba(255,255,255,0.4); }
+    .speaker-name { display: block; font-weight: 700; font-size: 16px; color: #1a1a1a; }
+    .speaker-role { display: block; font-size: 13px; color: #6b7280; }
 
-    .sermon-description { color: rgba(255,255,255,0.6); line-height: 1.8; font-size: 17px; margin-bottom: 40px; }
+    .sermon-description { color: #4b5563; line-height: 1.8; font-size: 17px; margin-bottom: 40px; }
 
     .action-grid { display: flex; gap: 15px; }
     .action-btn { 
       padding: 14px 28px; border-radius: 50px; display: inline-flex; align-items: center; gap: 12px;
       font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.3s; text-decoration: none;
-      border: 1px solid var(--glass-border); color: white; background: var(--glass);
+      border: 1px solid var(--glass-border); color: #1a1a1a; background: #ffffff;
     }
-    .action-btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
-    .action-btn.share { background: white; color: black; border: none; }
+    .action-btn:hover { background: #f9fafb; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+    .action-btn.share { background: #176a60; color: white; border: none; }
 
     /* Related Section */
     .related-section { border-top: 1px solid var(--glass-border); padding-top: 60px; }
-    .section-heading { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; }
+    .section-heading { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; color: #1a1a1a; }
     .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .related-card { display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 16px; text-decoration: none; }
+    .related-card { display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 16px; text-decoration: none; background: #ffffff; border: 1px solid var(--glass-border); }
     .rel-img { width: 80px; aspect-ratio: 16/10; border-radius: 8px; overflow: hidden; }
     .rel-img img { width: 100%; height: 100%; object-fit: cover; }
-    .rel-info h4 { font-size: 14px; color: white; margin: 0 0 4px 0; }
-    .rel-info span { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .rel-info h4 { font-size: 14px; color: #1a1a1a; margin: 0 0 4px 0; }
+    .rel-info span { font-size: 12px; color: #6b7280; }
 
     /* Study Hub */
     .study-hub { 
@@ -227,38 +241,96 @@
       position: sticky; top: 140px; 
       border-radius: 24px; 
       display: flex; flex-direction: column; 
+      background: #ffffff;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05);
     }
     .hub-tabs { display: flex; border-bottom: 1px solid var(--glass-border); }
-    .hub-tab { flex: 1; padding: 20px; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 2px; cursor: pointer; opacity: 0.4; }
-    .hub-tab.active { opacity: 1; box-shadow: inset 0 -2px 0 white; }
+    .hub-tab { flex: 1; padding: 20px; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 2px; cursor: pointer; color: #1a1a1a; opacity: 0.4; }
+    .hub-tab.active { opacity: 1; box-shadow: inset 0 -2px 0 #176a60; color: #176a60; }
 
     .hub-content { flex: 1; padding: 30px; overflow-y: auto; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
+    .notes-header h3 { color: #1a1a1a; font-size: 18px; font-weight: 800; margin-bottom: 5px; }
+    .notes-header p { color: #6b7280; font-size: 13px; }
+
     #personal-notes { 
-      width: 100%; min-height: 400px; background: transparent; border: none; 
-      color: white; font-size: 16px; line-height: 1.6; outline: none; resize: none;
-      margin-top: 20px; font-family: inherit;
+      width: 100%; min-height: 400px; background: #f9fafb; border: 1px solid #e5e7eb; 
+      border-radius: 12px; color: #1a1a1a; font-size: 15px; line-height: 1.6; outline: none; resize: none;
+      margin-top: 20px; padding: 20px; font-family: inherit;
+    }
+    .notes-footer { margin-top: 20px; }
+    .export-btn { 
+      width: 100%; padding: 12px; background: #f3f4f6; border: 1px solid #e5e7eb; 
+      border-radius: 10px; color: #1a1a1a; font-weight: 700; cursor: pointer; transition: 0.3s;
+    }
+    .export-btn:hover { background: #e5e7eb; }
+
+    .bible-search { 
+      width: 100%; padding: 12px 20px; border-radius: 10px; border: 1px solid #e5e7eb;
+      background: #f9fafb; color: #1a1a1a; margin-top: 15px; outline: none;
     }
 
     /* BG Blobs */
-    .watch-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-    .bg-blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.1; }
-    .blob-1 { width: 60vw; height: 60vw; top: -10%; left: -10%; background: #3b82f6; }
-    .blob-2 { width: 40vw; height: 40vw; bottom: -5%; right: -5%; background: #93c5fd; }
+    .watch-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: #fdfdfd; }
+    .bg-blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.05; }
+    .blob-1 { width: 60vw; height: 60vw; top: -10%; left: -10%; background: #176a60; }
+    .blob-2 { width: 40vw; height: 40vw; bottom: -5%; right: -5%; background: #2d948a; }
 
     .glass-fx { background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--glass-border); }
 
     @media (max-width: 1200px) {
-      .sermon-layout { grid-template-columns: 1fr; }
-      .study-hub { height: 600px; position: static; margin-top: 60px; }
+      .sermon-layout { grid-template-columns: 1fr; padding: 20px; }
+      .study-hub { height: 600px; position: static; margin-top: 40px; }
+      .sermon-title { font-size: 2.2rem; }
     }
   </style>
 
   <%- include('../partials/footer') %>
 
   <script>
+    // ─── YouTube Embed Fix (Error 150/153) ───
+    const player = document.getElementById('yt-player-frame');
+    if (player) {
+      // 1. Ensure origin param is set (required by YouTube JS API)
+      try {
+        const currentSrc = new URL(player.src);
+        if (!currentSrc.searchParams.get('origin')) {
+          currentSrc.searchParams.set('origin', window.location.origin);
+          player.src = currentSrc.toString();
+        }
+      } catch(e) { /* ignore */ }
+
+      // 2. Extract video ID and build direct link for the fallback button
+      const embedMatch = player.src.match(/\/embed\/([^?&#]+)/);
+      const directLink = document.getElementById('yt-direct-link');
+      if (embedMatch && directLink) {
+        directLink.href = `https://www.youtube.com/watch?v=${embedMatch[1]}`;
+      }
+
+      // 3. Detect embed failure
+      let embedOk = false;
+      window.addEventListener('message', function ytCheck(e) {
+        if (e.origin && e.origin.includes('youtube.com')) {
+          try {
+            const d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+            if (d && d.event === 'onError' && (d.info === 150 || d.info === 153)) {
+              showEmbedError();
+              return;
+            }
+          } catch(_) {}
+          embedOk = true;
+        }
+      });
+    }
+
+    function showEmbedError() {
+      const overlay = document.getElementById('embed-error-overlay');
+      if (overlay) overlay.style.display = 'flex';
+    }
+
     const sermonId = '<%= sermon.id %>';
     const storageKey = `notes_${sermonId}`;
     

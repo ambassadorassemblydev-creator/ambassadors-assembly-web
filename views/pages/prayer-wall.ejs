@@ -401,6 +401,14 @@
     }
 
     async function intercede(id) {
+        // Check if user is logged in (Pass from EJS)
+        const isLoggedIn = <%= user ? 'true' : 'false' %>;
+        if (!isLoggedIn) {
+            showToast('Please sign in to join in intercession.');
+            setTimeout(() => window.location.href = '/account/login', 1500);
+            return;
+        }
+
         const btn = document.querySelector(`#prayer-${id} .intercede-btn`);
         const countSpan = btn.querySelector('.count');
         const csrfToken = document.querySelector('input[name="_csrf"]').value;
@@ -410,10 +418,15 @@
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'x-csrf-token': csrfToken
+                    'X-CSRF-Token': csrfToken
                 },
                 body: JSON.stringify({ requestId: id })
             });
+
+            if (response.status === 401) {
+                showToast('Your session has expired. Please sign in again.');
+                return;
+            }
 
             const result = await response.json();
             
@@ -423,21 +436,23 @@
                 
                 // LIGHT UP EFFECT
                 const glow = document.querySelector(`#prayer-${id} .prayer-card__glow`);
-                gsap.to(glow, {
-                    scale: 3,
-                    opacity: 0.8,
-                    duration: 0.5,
-                    yoyo: true,
-                    repeat: 1
-                });
+                if (glow && typeof gsap !== 'undefined') {
+                    gsap.to(glow, {
+                        scale: 3,
+                        opacity: 0.8,
+                        duration: 0.5,
+                        yoyo: true,
+                        repeat: 1
+                    });
+                }
 
-                // Toast or feedback
                 showToast('Thank you for praying. Your intercession is recorded!');
             } else {
-                showToast(result.error || 'Something went wrong.');
+                showToast(result.error || result.message || 'Something went wrong.');
             }
         } catch (error) {
             console.error('Intercession error:', error);
+            showToast('Connection error. Please check your network and try again.');
         }
     }
 

@@ -7,7 +7,7 @@ const {
   csrfSynchronisedProtection: csrfProtection,
 } = csrfSync({
   // High IQ: Read from both body and header for maximum compatibility with forms and AJAX
-  getTokenFromRequest: (req) => req.body._csrf || req.headers["x-csrf-token"],
+  getTokenFromRequest: (req) => (req.body ? req.body._csrf : undefined) || req.headers["x-csrf-token"],
 });
 
 /**

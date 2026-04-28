@@ -40,6 +40,26 @@ export const siteConfigMiddleware = async (req, res, next) => {
         res.locals.stickyConfig = config.stickyConfig;
         res.locals.latestSermons = config.latestSermons;
 
+        // Fetch user-specific UI states (like social share popup)
+        res.locals.socialShareShown = true; // Default to true so it doesn't show for guests
+        if (req.user) {
+            try {
+                // High IQ: Fetch full profile data and merge into user object for global access (Navbar, Fab, etc)
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('social_share_shown, avatar_url, first_name, last_name, role')
+                    .eq('id', req.user.id)
+                    .single();
+                
+                if (profile) {
+                    res.locals.socialShareShown = profile.social_share_shown;
+                    res.locals.user = { ...res.locals.user, ...profile };
+                }
+            } catch (err) {
+                console.error('[SiteConfig] Profile Fetch Error:', err.message);
+            }
+        }
+
         next();
     } catch (error) {
         console.error('[SiteConfigMiddleware] Error fetching site config:', error.message);

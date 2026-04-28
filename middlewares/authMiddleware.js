@@ -85,7 +85,7 @@ export const authMiddleware = {
 
     if (!user) {
       // Kick them back to the login page or return JSON for APIs
-      if (req.originalUrl.startsWith('/api')) {
+      if (req.originalUrl.startsWith('/api') || req.originalUrl.includes('/intercede')) {
         return res.status(401).json({ status: 'fail', message: 'Unauthorized. Please check your credentials.' });
       }
       return res.status(401).redirect('/account/login');

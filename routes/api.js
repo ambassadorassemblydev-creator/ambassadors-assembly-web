@@ -22,6 +22,7 @@ router.use(authMiddleware.protect);
 
 // Profile Endpoints
 router.post('/update-profile', accountController.handleUpdateProfile);
+router.post('/profile/mark-share-shown', accountController.markSocialShareShown);
 
 // Admin Endpoints
 router.post('/admin/attendance/notify', authMiddleware.restrictTo('admin', 'super_admin', 'pastor'), adminController.notifyAbsentees);

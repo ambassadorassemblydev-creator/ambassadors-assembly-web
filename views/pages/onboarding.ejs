@@ -766,6 +766,9 @@ main.onboarding-page {
         if (input.id === 'isBaptized') {
            document.getElementById('baptismDateGroup').style.display = input.value === 'true' ? 'block' : 'none';
         }
+        if (input.id === 'maritalStatusInput') {
+           document.getElementById('anniversaryGroup').style.display = input.value === 'married' ? 'block' : 'none';
+        }
       }
     });
 

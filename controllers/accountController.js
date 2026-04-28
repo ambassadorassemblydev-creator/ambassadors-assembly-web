@@ -139,6 +139,8 @@ export const accountController = {
     res.redirect('/my-account?tab=profile');
   },
 
+
+
   handleUpdateProfile: async (req, res, next) => {
     try {
       const validatedData = updateProfileSchema.parse(req.body);
@@ -411,7 +413,7 @@ export const accountController = {
       }
 
       // 6. Finalize - Audit & Redirect
-      await auditRepo.logAction(req, 'complete_onboarding', 'profile', userId, {}, profileUpdates);
+      await auditRepo.logAction(req, 'complete_onboarding', 'Completed full profile onboarding', 'profiles', userId, profileUpdates);
 
       return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
     } catch (err) {
@@ -467,6 +469,22 @@ export const accountController = {
     } catch (err) {
       logger.error(`Attendance Marking Error: ${err.message}`);
       res.redirect('/my-account?tab=attendance&error=An error occurred while marking your attendance. Please try again.');
+    }
+  },
+
+  markSocialShareShown: async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const { error } = await supabaseService
+        .from('profiles')
+        .update({ social_share_shown: true })
+        .eq('id', userId);
+      
+      if (error) throw error;
+      res.json({ status: 'success' });
+    } catch (err) {
+      logger.error(`Mark Social Share Shown Error: ${err.message}`);
+      res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
   }
 };

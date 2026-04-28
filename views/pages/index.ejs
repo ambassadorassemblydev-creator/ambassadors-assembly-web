@@ -523,7 +523,200 @@
                     </div>
                   </div>
 
+ <!-- ========= ABOUT / LEADERSHIP ========= -->
+                          <section class="about-section" id="about-section" style="background-color: #5DD988;">
+                            <div class="about-section__inner">
+                              <div class="about-card">
+                                <img class="about-card__img" src="https://res.cloudinary.com/dxwhpacz7/image/upload/q_auto/f_auto/v1777044608/IMG-20260424-WA0011.jpg"  alt="Church Leadership" loading="lazy">
+                                <div class="about-card__overlay">
+                                  <div class="about-card__badge">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                                  </div>
+                                  <h3 class="about-card__name">Ambassadors<br>Assembly</h3>
+                                </div>
+                              </div>
+                              <div class="about-content">
+                                <h2 class="about-content__title">The Ambassadors Assembly</h2>
+                                <p class="about-content__subtitle">The Ambassadors Assembly is a unique expression of The Living Faith Foundation.</p>
+                                <p class="about-content__desc">The Ambassadors Assembly emerged as a beacon of hope during a time when faith seemed dormant, lacking the power to bring salvation and deliverance. It aimed to establish a firm foundation for new converts, nurturing their faith and grounding them solely in God.</p>
+                                <a href="/about" class="about-btn">
+                                  Learn More
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </a>
+                              </div>
+                            </div>
+                          </section>
+                          <!-- ========= END ABOUT / LEADERSHIP ========= -->
+                           <style>    
+                            /* ============================================================
+   ABOUT / LEADERSHIP — Two-Column Split
+   ============================================================ */
 
+.about-section {
+  position: relative;
+  background: var(--color_1);
+  padding: 120px 0;
+  overflow: hidden;
+}
+
+.about-section__inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Left — Image card */
+.about-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: #2a2a2a;
+}
+
+.about-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+}
+
+.about-card__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px 30px;
+  background: linear-gradient(to top, rgba(20, 20, 20, 0.95) 0%, transparent 100%);
+}
+
+.about-card__badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(26, 26, 26, 0.12);
+  border: 1px solid rgba(26, 26, 26, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.about-card__badge svg {
+  width: 24px;
+  height: 24px;
+  color: #1a1a1a;
+}
+
+.about-card__name {
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+
+/* Decorative script behind photo */
+.about-card::before {
+  content: 'faith';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 10rem;
+  color: rgba(26, 26, 26, 0.04);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* Right — Text content */
+.about-content {
+  padding: 20px 0;
+}
+
+.about-content__title {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  color: #1a1a1a;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.about-content__subtitle {
+  font-family: 'Manrope', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(26, 26, 26, 0.65);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.about-content__desc {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: rgba(26, 26, 26, 0.5);
+  line-height: 1.75;
+  margin-bottom: 36px;
+}
+
+.about-btn {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  text-decoration: none;
+  border: 1.5px solid rgba(26, 26, 26, 0.3);
+  border-radius: 50px;
+  padding: 14px 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.about-btn:hover {
+  background: #1a1a1a;
+  color: var(--color_1);
+}
+
+.about-btn svg {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  padding: 2px;
+}
+@media (max-width: 768px) {
+
+
+  /* About */
+  .about-section { padding: 80px 0; }
+  .about-section__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 0 24px;
+  }
+  .about-card { max-width: 100%; aspect-ratio: 4 / 4; }
+}
+@media (max-width: 480px) {
+ 
+  .about-card__name { font-size: 1.2rem; }
+  .about-card::before { font-size: 6rem; }
+
+}
+                           </style>
                           <!-- ========= NEWSLETTER ========= -->
                           <section class="newsletter-section" id="newsletter-section">
                             <div class="newsletter-bg">
