@@ -139,8 +139,6 @@ export const accountController = {
     res.redirect('/my-account?tab=profile');
   },
 
-
-
   handleUpdateProfile: async (req, res, next) => {
     try {
       const validatedData = updateProfileSchema.parse(req.body);
@@ -415,7 +413,7 @@ export const accountController = {
       // 6. Finalize - Audit & Redirect
       await auditRepo.logAction(req, 'complete_onboarding', 'Completed full profile onboarding', 'profiles', userId, profileUpdates);
 
-      return res.redirect('/my-account?success=Welcome home! Your profile has been set up.');
+      return res.redirect('/my-account?triggerShare=true&success=Welcome home! Your profile has been set up.');
     } catch (err) {
       logger.error(`Onboarding Submission Error: ${err.message}`);
       
@@ -495,6 +493,18 @@ export const accountController = {
     } catch (err) {
       logger.error(`Mark Social Share Shown Critical Error: ${err.message}`);
       res.status(500).json({ status: 'error', message: 'Internal server error' });
+    }
+  },
+
+  getMe: async (req, res) => {
+    try {
+      logger.info(`Dynamic profile sync requested for user: ${req.user?.id}`);
+      if (!req.user) return res.status(401).json({ status: 'error', message: 'Not authenticated' });
+      const userId = req.user.id;
+      const profile = await accountRepo.getUserDashboardData(userId);
+      res.json({ status: 'success', data: profile });
+    } catch (err) {
+      res.status(500).json({ status: 'error', message: err.message });
     }
   }
 };

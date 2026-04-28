@@ -18,9 +18,10 @@ router.post('/payments/webhook', paymentController.handleWebhook);
 import { adminController } from '../controllers/adminController.js';
 
 // Restricted API Endpoints (Require Auth)
-router.use(authMiddleware.protect); 
+router.use(authMiddleware.protect);  
 
 // Profile Endpoints
+router.get('/profile/me', (req, res) => accountController.getMe(req, res));
 router.post('/update-profile', accountController.handleUpdateProfile);
 router.post('/profile/mark-share-shown', accountController.markSocialShareShown);
 

@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 import { setAuthCookies } from '../utils/authUtils.js';
 import { withRetry } from '../utils/fetchUtils.js';
 import { logger } from '../config/logger.js';
@@ -44,7 +44,7 @@ export const authMiddleware = {
           const authUser = result.data.user;
           
           // High IQ: Fetch full profile data so avatar/title/role are available globally
-          const { data: profile } = await supabase
+          const { data: profile } = await supabaseService
             .from('profiles')
             .select('*')
             .eq('id', authUser.id)

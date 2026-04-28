@@ -38,12 +38,6 @@
   <!-- Canonical -->
   <link rel="canonical" href="https://www.ambassadorsassembly.com/">
 
-  <!-- ========= Duda Runtime Stubs (Disabled) ========= 
-  <script id="d-js-dmapi">
-    ... (stubs removed for performance)
-  </script>
-  -->
-
   <!-- Deferred promise utility (used by runtime) -->
   <script data-role="deferred-init" type="text/javascript">
     function Def() {
@@ -64,12 +58,8 @@
 
   <!-- ========= Stylesheets ========= -->
   <link rel="stylesheet" href="/css/vendor/d-css-runtime-flex.min.css" type="text/css">
-  <!-- End of RT CSS Include -->
   <link rel="stylesheet" href="/css/vendor/widget-styles.css" id="widgetCSS" type="text/css">
-  <!-- Support `img` size attributes -->
-   <!-- Page CSS -->
   <link rel="stylesheet" href="/css/vendor/home-page.min.css" id="homeCssLink" type="text/css">
-   <!-- Site CSS -->
   <link rel="stylesheet" href="/css/vendor/site-global.min.css" id="siteGlobalCss" type="text/css">
   <style>
     @font-face {
@@ -78,35 +68,10 @@
       font-weight: 400;
       font-style: normal;
     }
-  </style>
-  <!-- RT CSS Include d-css-runtime-flex-->
- 
-  <style>
-    img[width][height] {
-      height: auto;
-    }
-  </style>
-  <!-- Support showing sticky element on page only -->
-  <style>
-    body[data-page-alias="home"] #dm [data-show-on-page-only="home"] {
-      display: block !important;
-    }
-  </style>
-  <!-- This is populated in Ajax navigation -->
-  <style id="pageAdditionalWidgetsCss" type="text/css">
-  </style>
- 
-  <style id="customWidgetStyle" type="text/css">
-  </style>
-  <style id="innerPagesStyle" type="text/css">
-  </style>
-  <style id="additionalGlobalCss" type="text/css">
+    img[width][height] { height: auto; }
+    body[data-page-alias="home"] #dm [data-show-on-page-only="home"] { display: block !important; }
   </style>
   
-  <style id="pagestyle" type="text/css">
-  </style>
-  <style id="pagestyleDevice" type="text/css">
-  </style>
   <link rel="stylesheet" href="/css/style.css?v=1.1">
   <link rel="stylesheet" href="/css/index-page.css?v=1.1">
 
@@ -208,7 +173,6 @@
   <!-- ========= Third-Party Libraries ========= -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
-
   <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
@@ -216,5 +180,6 @@
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="/js/aa-ui.js" defer></script>
 </head>

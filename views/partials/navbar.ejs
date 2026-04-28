@@ -131,9 +131,9 @@
             <i class="fas fa-users"></i>
             <span>Ministries</span>
           </a>
-          <a href="/give" class="quick-action">
-            <i class="fas fa-heart"></i>
-            <span>Giving</span>
+          <a href="#" onclick="showSocialSharePopup(event)" class="quick-action">
+            <i class="fas fa-bullhorn"></i>
+            <span>Spread the Gospel</span>
           </a>
           <a href="/prayer-wall" class="quick-action">
             <i class="fas fa-hands-praying"></i>
@@ -273,9 +273,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const panel = document.getElementById('account-panel');
     const close = document.getElementById('account-panel-close');
     
+    // Function to update the UI with real data
+    const updateAccountUI = async () => {
+        try {
+            const response = await fetch('/api/profile/me');
+            const result = await response.json();
+            if (result.status === 'success' && result.data) {
+                const profile = result.data;
+                const nameEls = document.querySelectorAll('.user-name');
+                const avatarContainer = document.querySelector('.user-avatar');
+                const desktopNavName = document.querySelector('.aa-nav__signin');
+
+                // Update Name everywhere
+                nameEls.forEach(el => {
+                    el.textContent = profile.first_name || 'Ambassador';
+                });
+
+                if (desktopNavName) {
+                    desktopNavName.textContent = `Hello, ${profile.first_name || 'Member'}`;
+                }
+
+                // Update Avatar (Handle case where <img> doesn't exist yet)
+                if (avatarContainer && profile.avatar_url) {
+                    let img = avatarContainer.querySelector('img');
+                    if (!img) {
+                        avatarContainer.innerHTML = `<img src="${profile.avatar_url}" alt="Avatar">`;
+                    } else {
+                        img.src = profile.avatar_url;
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('Silent Profile Sync Failed:', err);
+        }
+    };
+
     if (fab && panel) {
         fab.addEventListener('click', () => {
+            const isOpening = !panel.classList.contains('active');
             panel.classList.toggle('active');
+            
+            // If opening, trigger a quick data sync
+            if (isOpening) {
+                updateAccountUI();
+            }
         });
         
         if (close) {

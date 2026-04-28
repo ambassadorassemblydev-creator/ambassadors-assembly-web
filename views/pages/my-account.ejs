@@ -155,6 +155,10 @@
           <div class="aas-qa-ic"><i class="fas fa-heartbeat"></i></div>
           <span class="aas-qa-lbl">Outreach Team</span>
         </button>
+        <button class="aas-qa-btn" onclick="triggerShareCardPopup()">
+          <div class="aas-qa-ic" style="background:var(--g); color:#fff;"><i class="fas fa-share-alt"></i></div>
+          <span class="aas-qa-lbl">Share My Card</span>
+        </button>
 
       </div>
 
@@ -918,6 +922,34 @@
   </main><!-- /aas-main -->
 </div><!-- /aa-dash -->
 
+<script>
+  // High IQ: Dashboard-specific UI logic
+  function triggerShareCardPopup() {
+    const popup = document.getElementById('socialSharePopup');
+    if (popup) {
+      popup.style.display = 'flex';
+      // Force reflow
+      popup.offsetHeight;
+      popup.classList.add('show');
+    } else {
+      console.warn('Social share popup not found in DOM.');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check if we should automatically trigger the share card (e.g. from onboarding)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('triggerShare') === 'true') {
+      setTimeout(() => {
+        triggerShareCardPopup();
+        // Clean up the URL so it doesn't trigger on reload
+        const newUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, newUrl);
+      }, 1500); // Wait 1.5s for the dashboard to settle
+    }
+  });
+</script>
+
 <!-- Toast handler -->
 <div id="__toast" data-err="<%= error || '' %>" data-ok="<%= success || '' %>" style="display:none;"></div>
 
@@ -940,5 +972,6 @@
     </div>
   </div>
 </div>
+<%- include('../partials/footer', { hideVisualFooter: true }) %>
 </body>
 </html>

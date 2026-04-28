@@ -325,9 +325,10 @@
 
     /* CHAT PANEL */
     .chat-feed { flex: 1; padding: 20px; overflow-y: auto; scroll-behavior: smooth; }
-    .chat-msg { margin-bottom: 15px; font-size: 14px; line-height: 1.4; }
-    .chat-msg .name { font-weight: 800; color: var(--accent); margin-right: 8px; font-size: 12px; }
-    .system-msg { text-align: center; font-size: 12px; color: #999; font-style: italic; margin: 20px 0; }
+    .chat-msg { margin-bottom: 15px; font-size: 14px; line-height: 1.4; display: flex; flex-wrap: wrap; align-items: baseline; }
+    .chat-msg .name { font-weight: 800; color: var(--accent); margin-right: 8px; font-size: 12px; white-space: nowrap; }
+    .chat-msg .text { color: #1a1a1a; font-weight: 500; word-break: break-word; }
+    .system-msg { text-align: center; font-size: 12px; color: #666; font-style: italic; margin: 20px 0; background: #f9f9f9; padding: 10px; border-radius: 8px; }
     
     .chat-controls { padding: 20px; border-top: 1px solid #1a1a1a; }
     .glass-input-group { 

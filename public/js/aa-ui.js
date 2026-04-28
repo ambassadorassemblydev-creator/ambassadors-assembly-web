@@ -155,14 +155,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('aasOverlay');
 
     if (ham && sidebar && overlay) {
+        if (ham.getAttribute('data-aas-ready')) return;
+        ham.setAttribute('data-aas-ready', 'true');
+        
+        console.log('[AA-UI] Hamburger system initialized');
+        // Attach to the main dashboard ham
         ham.addEventListener('click', () => {
+            console.log('[AA-UI] Hamburger clicked');
             sidebar.classList.toggle('open');
             overlay.classList.toggle('on');
+        });
+
+        // Also attach to any other hamburger buttons that might be visible (e.g. from navbar)
+        document.querySelectorAll('.hamburgerButton').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (window.location.pathname.includes('account') || window.location.pathname.includes('dashboard')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('[AA-UI] Global hamburger intercepted for dashboard');
+                    sidebar.classList.toggle('open');
+                    overlay.classList.toggle('on');
+                }
+            });
         });
 
         overlay.addEventListener('click', () => {
             sidebar.classList.remove('open');
             overlay.classList.remove('on');
         });
+    } else {
+        console.warn('[AA-UI] Hamburger elements missing:', { ham: !!ham, sidebar: !!sidebar, overlay: !!overlay });
     }
 });
+
+// Global Share Card Trigger
+window.showSocialSharePopup = function(e) {
+    if (e) e.preventDefault();
+    const popup = document.getElementById('socialSharePopup');
+    if (popup) {
+        popup.style.display = 'flex';
+        // Trigger reflow for animation
+        popup.offsetHeight;
+        popup.classList.add('show');
+        
+        // Close account panel if open
+        const panel = document.getElementById('account-panel');
+        if (panel) panel.classList.remove('active');
+    } else {
+        // Fallback: If not on a page with the popup, redirect to dashboard which usually has it
+        window.location.href = '/my-account?triggerShare=true';
+    }
+};
