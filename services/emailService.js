@@ -100,6 +100,71 @@ export const emailService = {
 </html>
     `;
     return this.sendEmail({ to, subject: 'Welcome to the Assembly', html });
+  },
+
+  /**
+   * Send a premium donation alert to the Admin
+   */
+  async sendAdminDonationAlert({ amount, reference, email, categoryId, donorName }) {
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Inter', -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border: 1px solid #e2e8f0; }
+    .header { background: #176a60; padding: 30px; text-align: center; }
+    .content { padding: 40px; }
+    .badge { display: inline-block; padding: 4px 12px; background: #f1f5f9; color: #475569; border-radius: 100px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
+    .amount { font-size: 48px; font-weight: 800; color: #176a60; margin: 10px 0; letter-spacing: -0.02em; }
+    .title { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+    .details { background: #f8fafc; border-radius: 16px; padding: 20px; margin: 24px 0; }
+    .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+    .detail-row:last-child { border-bottom: none; }
+    .label { color: #64748b; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+    .value { color: #0f172a; font-size: 13px; font-weight: 700; }
+    .footer { padding: 24px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" style="width: 140px; filter: brightness(0) invert(1);" alt="Ambassadors Assembly">
+    </div>
+    <div class="content">
+      <div class="badge">Internal Alert</div>
+      <h2 class="title">New Donation Received</h2>
+      <div class="amount">₦${amount.toLocaleString()}</div>
+      
+      <div class="details">
+        <div class="detail-row">
+          <span class="label">Donor</span>
+          <span class="value">${donorName || email}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Reference</span>
+          <span class="value">${reference}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Category</span>
+          <span class="value">${categoryId || 'General Giving'}</span>
+        </div>
+      </div>
+
+      <p style="font-size: 14px; color: #64748b; line-height: 1.5;">This donation has been verified and recorded in the system. The donor has received their receipt via email.</p>
+    </div>
+    <div class="footer">
+      <p>&copy; ${new Date().getFullYear()} Ambassadors Assembly Admin System</p>
+    </div>
+  </div>
+</body>
+</html>
+    `;
+    return this.sendEmail({ 
+      to: 'info@theambassadorsassembly.org', 
+      subject: `🚨 New Donation Received: ₦${amount.toLocaleString()}`, 
+      html 
+    });
   }
 };
 

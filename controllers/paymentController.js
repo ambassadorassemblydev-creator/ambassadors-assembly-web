@@ -58,6 +58,15 @@ export const paymentController = {
                     firstName: req.user?.user_metadata?.first_name || 'Ambassador'
                 });
 
+                // 4. Alert Admin (High Priority)
+                await emailService.sendAdminDonationAlert({
+                    amount,
+                    reference,
+                    email,
+                    categoryId,
+                    donorName: req.user?.user_metadata?.full_name || email
+                });
+
                 return res.json(result);
             } else {
                 return res.status(400).json({ 
@@ -128,6 +137,15 @@ export const paymentController = {
                     receiptNumber: dbResult.donation?.receipt_number || reference,
                     categoryId,
                     firstName: customer.first_name || 'Ambassador'
+                });
+
+                // Trigger Admin Alert for Webhook too
+                await emailService.sendAdminDonationAlert({
+                    amount: amount / 100,
+                    reference,
+                    email: customer.email,
+                    categoryId,
+                    donorName: `${customer.first_name || ''} ${customer.last_name || ''}`.trim() || customer.email
                 });
             } else if (event.event === 'charge.failed') {
                 const { reference, message, customer } = event.data;

@@ -81,6 +81,7 @@ export const authService = {
           access_type: 'offline',
           prompt: 'consent',
         },
+        flowType: 'pkce'
       },
     });
 
