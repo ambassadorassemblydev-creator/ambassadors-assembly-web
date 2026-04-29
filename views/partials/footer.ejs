@@ -326,7 +326,7 @@
                           <span class="status-text">System Operational</span>
                         </a>
                       </div> 
-                      <p class="copyright" style="margin-top: 15px;">&copy; <%= new Date().getFullYear() %> Ambassadors Assembly. All Rights Reserved.</p>
+                      <p class="copyright" style="margin-top: 15px;">&copy; <%= new Date().getFullYear() %> The Ambassadors Assembly. All Rights Reserved.</p>
                     </div>
 
                   </div>
@@ -1075,39 +1075,84 @@
           <i class="fas fa-times"></i>
         </button>
         
-        <!-- The card to be captured -->
+        <!-- The card to be captured (High IQ Advert Style) -->
         <div id="shareCardImage" class="share-card-visual">
-          <div class="card-glow"></div>
+          <div class="card-background"></div>
           <div class="card-noise"></div>
-          <div class="card-blobs">
-            <div class="blob b1"></div>
-            <div class="blob b2"></div>
-          </div>
           
-          <div class="card-logo">
-            <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775383070/IMG-20260304-WA0059_2.jpg" alt="Logo" crossorigin="anonymous">
+          <!-- Header Section -->
+          <div class="card-header">
+            <div class="card-logo">
+              <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" alt="Logo" crossorigin="anonymous">
+            </div>
+            <div class="header-main">
+              <span class="welcome-line">WELCOME TO THE</span>
+              <h1 class="mission-title">BORN</h1>
+              <h1 class="impact-title">TO <span class="text-emerald">PREACH</span></h1>
+            </div>
+            <p class="mission-subtext">YOU'RE NOT JUST IN THE CHURCH,<br>YOU ARE THE CHURCH ON MISSION.</p>
           </div>
-          
-          <div class="user-avatar-ring">
-            <img src="<%= user.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user.first_name || user.id || 'Ambassador') %>" alt="Avatar" crossorigin="anonymous">
+
+          <!-- Avatar Section -->
+          <div class="avatar-container">
+            <div class="avatar-ring-outer">
+              <div class="avatar-ring-inner">
+                <img src="<%= user.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user.first_name || user.id || 'Ambassador') %>" alt="Avatar" crossorigin="anonymous">
+              </div>
+            </div>
+            <div class="avatar-sweep"></div>
           </div>
-          
-          <div class="card-text">
-            <span class="card-welcome">KINGDOM COMMISSION</span>
-            <h2><%= user.first_name %> <%= user.last_name %></h2>
-            <div class="card-divider"></div>
-            <p class="card-status">Status: <span class="status-active">OFFICIALLY COMMISSIONED</span></p>
-            
-            <div class="card-badge-row">
-              <div class="card-tagline">
-                <i class="fas fa-shield-alt"></i>
-                <span>AMBASSADOR FOR CHRIST</span>
+
+          <!-- Identity Block -->
+          <div class="identity-pill">
+            <span class="pill-label">KINGDOM COMMISSION</span>
+            <h2 class="user-name"><%= user.first_name %> <%= user.last_name %></h2>
+            <div class="pill-divider"></div>
+          </div>
+
+          <!-- Status Block -->
+          <div class="status-block">
+            <p class="status-label">STATUS: <span class="text-emerald">OFFICIALLY COMMISSIONED</span></p>
+            <div class="commission-badge">
+              <i class="fas fa-shield-alt text-gold"></i>
+              <span>AMBASSADOR FOR CHRIST</span>
+            </div>
+          </div>
+
+          <!-- Icon Grid -->
+          <div class="icons-grid">
+            <div class="icon-item">
+              <div class="icon-circle"><i class="fas fa-users"></i></div>
+              <div class="icon-text">
+                <strong>INVITE</strong>
+                <span class="text-emerald">A FRIEND</span>
+                <small>Share the hope.</small>
+              </div>
+            </div>
+            <div class="icon-item">
+              <div class="icon-circle"><i class="fas fa-paper-plane"></i></div>
+              <div class="icon-text">
+                <strong>SHARE YOUR</strong>
+                <span class="text-emerald">JOURNEY</span>
+                <small>Inspire others.</small>
+              </div>
+            </div>
+            <div class="icon-item">
+              <div class="icon-circle"><i class="fas fa-globe"></i></div>
+              <div class="icon-text">
+                <strong>JOIN THE</strong>
+                <span class="text-emerald">MISSION</span>
+                <small>Let's change lives.</small>
               </div>
             </div>
           </div>
 
-          <div class="card-footer-text">
-            WELCOME TO AMBASSADORS ASSEMBLY
+          <!-- Footer Block -->
+          <div class="card-footer">
+            <p class="footer-together">TOGETHER,<br><strong>WE BUILD HIS KINGDOM.</strong></p>
+            <div class="footer-btn">
+              WELCOME TO THE AMBASSADORS ASSEMBLY!
+            </div>
           </div>
         </div>
 
@@ -1153,108 +1198,102 @@
       .social-popup-overlay.show .social-popup-content { transform: translateY(0) scale(1); }
 
       .share-card-visual {
-        padding: 50px 30px 40px; 
-        background: linear-gradient(135deg, #0e423c 0%, #061a18 100%);
+        width: 100%; aspect-ratio: 1/1.5;
+        background: #041c18;
         color: white; text-align: center; position: relative; overflow: hidden;
+        display: flex; flex-direction: column; align-items: center; padding: 40px 20px;
+        font-family: 'Inter', sans-serif;
       }
-      .card-glow {
-        position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-        background: radial-gradient(circle at center, rgba(23, 106, 96, 0.2) 0%, transparent 70%);
-        animation: rotateGlow 15s linear infinite;
+      .card-background {
+        position: absolute; inset: 0;
+        background: radial-gradient(circle at 50% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 60%);
         z-index: 1;
       }
       .card-noise {
         position: absolute; inset: 0;
-        background-image: url("https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/noise_pattern.png");
-        opacity: 0.15; z-index: 1; mix-blend-mode: overlay; pointer-events: none;
-      }
-      /* Fallback noise if image fails */
-      .card-noise::after {
-        content: ""; position: absolute; inset: 0;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        opacity: 0.1; mix-blend-mode: soft-light;
+        opacity: 0.1; z-index: 2; mix-blend-mode: overlay; pointer-events: none;
       }
 
-      .card-blobs { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
-      .blob { 
-        position: absolute; width: 300px; height: 300px; 
-        background: radial-gradient(circle, rgba(74, 222, 128, 0.15) 0%, transparent 70%); 
-        border-radius: 50%; filter: blur(40px);
-      }
-      .blob.b1 { top: -100px; right: -50px; animation: floatBlob 20s infinite alternate; }
-      .blob.b2 { bottom: -100px; left: -50px; animation: floatBlob 25s infinite alternate-reverse; }
+      /* Header */
+      .card-header { position: relative; z-index: 10; margin-bottom: 25px; width: 100%; }
+      .card-logo { margin-bottom: 20px; }
+      .card-logo img { height: 40px; border-radius: 8px; background: white; padding: 4px; }
       
-      @keyframes floatBlob {
-        from { transform: translate(0, 0) scale(1); }
-        to { transform: translate(50px, 30px) scale(1.2); }
+      .welcome-line {
+        display: flex; align-items: center; justify-content: center; gap: 15px;
+        font-size: 10px; font-weight: 800; letter-spacing: 3px; opacity: 0.8;
       }
-      @keyframes rotateGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-      .card-logo { 
-        margin-bottom: 30px; position: relative; z-index: 2; height: 50px; 
-        display: flex; align-items: center; justify-content: center;
-        background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
-        padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-        width: fit-content; margin: 0 auto 25px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      }
-      .card-logo img { max-height: 100%; max-width: 140px; object-fit: contain; }
-
-      .user-avatar-ring {
-        width: 110px; height: 110px; border-radius: 50%;
-        border: 4px solid rgba(255,255,255,0.2); margin: 0 auto 20px;
-        position: relative; z-index: 2; overflow: hidden;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-      }
-      .user-avatar-ring img { width: 100%; height: 100%; object-fit: cover; }
-
-      .card-text { position: relative; z-index: 2; }
-      .card-welcome { display: block; font-size: 10px; font-weight: 800; letter-spacing: 3px; color: #4ade80; margin-bottom: 12px; }
-      .card-text h2 { font-size: 26px; font-weight: 900; margin: 0; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-      .card-divider { width: 40px; height: 3px; background: #4ade80; margin: 18px auto; border-radius: 10px; opacity: 0.6; }
-      .card-status { font-size: 13px; font-weight: 700; margin-bottom: 25px; opacity: 0.9; }
-      .status-active { color: #4ade80; font-weight: 800; }
-
-      .card-tagline {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
-        padding: 10px 20px; border-radius: 100px; font-size: 10px; font-weight: 800;
-        letter-spacing: 1.5px; text-transform: uppercase;
-      }
-      .card-tagline i { color: #fbbf24; }
-
-      .card-footer-text {
-        margin-top: 40px; font-size: 9px; font-weight: 800; letter-spacing: 4px;
-        opacity: 0.4; position: relative; z-index: 2; text-transform: uppercase;
-      }
-
-      .social-share-row { margin-top: 25px; text-align: center; }
-      .share-label { display: block; font-size: 11px; font-weight: 700; opacity: 0.4; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
-      .social-icons { display: flex; justify-content: center; gap: 15px; }
-      .social-icon {
-        width: 42px; height: 42px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 18px; color: white; transition: all 0.3s;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      }
-      .social-icon.wa { background: #25d366; }
-      .social-icon.fb { background: #1877f2; }
-      .social-icon.ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-      .social-icon:hover { transform: translateY(-3px) scale(1.1); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-        position: relative; z-index: 2;
-      }
-      .user-avatar-ring img { width: 100%; height: 100%; object-fit: cover; }
-
-      .card-text h2 { font-size: 24px; font-weight: 800; margin-bottom: 5px; position: relative; z-index: 2; }
-      .card-text p { font-size: 16px; opacity: 0.9; font-weight: 600; margin-bottom: 25px; position: relative; z-index: 2; }
+      .welcome-line::before, .welcome-line::after { content: ""; height: 1px; width: 40px; background: rgba(255,255,255,0.3); }
       
-      .card-tagline {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
-        padding: 8px 20px; border-radius: 100px; font-size: 11px;
-        text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;
-        position: relative; z-index: 2;
+      .mission-title { font-size: 55px; font-family: serif; font-weight: 300; margin: 10px 0 -15px; letter-spacing: 5px; }
+      .impact-title { font-size: 55px; font-weight: 900; margin: 0; letter-spacing: -1px; }
+      .text-emerald { color: #10b981; }
+      .text-gold { color: #fbbf24; }
+      
+      .mission-subtext { font-size: 9px; font-weight: 700; color: #fbbf24; letter-spacing: 1px; margin-top: 15px; line-height: 1.4; opacity: 0.8; }
+
+      /* Avatar */
+      .avatar-container { position: relative; z-index: 10; margin: 20px 0; }
+      .avatar-ring-outer {
+        width: 160px; height: 160px; border-radius: 50%;
+        background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+        padding: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      }
+      .avatar-ring-inner {
+        width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+        border: 2px solid #041c18; background: #121212;
+      }
+      .avatar-ring-inner img { width: 100%; height: 100%; object-fit: cover; }
+      .avatar-sweep {
+        position: absolute; top: 50%; left: 50%; width: 250px; height: 120px;
+        border: 1px solid rgba(251, 191, 36, 0.2); border-radius: 50%;
+        transform: translate(-50%, -50%) rotate(-15deg); z-index: -1;
+      }
+
+      /* Identity Pill */
+      .identity-pill {
+        position: relative; z-index: 10;
+        background: #061a18; border: 1.5px solid #d97706;
+        border-radius: 20px; padding: 15px 40px; margin-top: -30px;
+        min-width: 280px; box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      }
+      .pill-label { display: block; font-size: 9px; font-weight: 900; color: #10b981; letter-spacing: 2px; margin-bottom: 5px; }
+      .user-name { font-size: 24px; font-weight: 800; margin: 0; color: white; text-transform: capitalize; }
+      .pill-divider { width: 40px; height: 3px; background: #10b981; margin: 10px auto 0; border-radius: 10px; }
+
+      /* Status */
+      .status-block { position: relative; z-index: 10; margin-top: 20px; }
+      .status-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 15px; }
+      .commission-badge {
+        display: inline-flex; align-items: center; gap: 10px;
+        background: #061a18; border: 1px solid #d97706;
+        padding: 10px 25px; border-radius: 100px; font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      }
+
+      /* Icons Grid */
+      .icons-grid {
+        position: relative; z-index: 10; width: 100%;
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+        margin-top: 30px; padding: 0 10px;
+      }
+      .icon-item { text-align: center; }
+      .icon-circle {
+        width: 40px; height: 40px; border-radius: 50%; margin: 0 auto 10px;
+        background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3);
+        display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 16px;
+      }
+      .icon-text { font-size: 8px; line-height: 1.2; }
+      .icon-text strong { display: block; font-weight: 900; letter-spacing: 1px; }
+      .icon-text span { display: block; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px; }
+      .icon-text small { opacity: 0.5; font-size: 7px; }
+
+      /* Footer */
+      .card-footer { position: relative; z-index: 10; margin-top: 30px; width: 100%; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; }
+      .footer-together { font-size: 10px; opacity: 0.8; margin-bottom: 15px; line-height: 1.4; }
+      .footer-btn {
+        background: #fbbf24; color: #000; padding: 12px 20px; border-radius: 8px;
+        font-weight: 900; font-size: 11px; letter-spacing: 1px; width: 100%;
       }
 
       .popup-actions { padding: 35px 30px; text-align: center; }
@@ -1323,7 +1362,7 @@
 
       window.shareToWhatsApp = function(e) {
         if(e) e.preventDefault();
-        const text = encodeURIComponent("I've officially been commissioned as an Ambassador at Ambassadors Assembly! Join the movement: " + window.location.origin);
+        const text = encodeURIComponent("I've officially been commissioned as an Ambassador at The Ambassadors Assembly! Join the movement: " + window.location.origin);
         window.open(`https://wa.me/?text=${text}`, '_blank');
       };
       

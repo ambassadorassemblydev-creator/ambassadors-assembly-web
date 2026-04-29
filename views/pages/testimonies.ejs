@@ -336,6 +336,39 @@
         document.getElementById('testimonyForm').classList.toggle('is-active');
     }
 
+    // High IQ: Handle Form Submission with reCAPTCHA
+    document.querySelector('.actual-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = this;
+        const btn = form.querySelector('.submit-btn');
+        
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+
+        try {
+            // Get reCAPTCHA token
+            if (typeof grecaptcha !== 'undefined') {
+                const token = await grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'testimony_submit' });
+                
+                // Inject token into form
+                let input = form.querySelector('input[name="g-recaptcha-response"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'g-recaptcha-response';
+                    form.appendChild(input);
+                }
+                input.value = token;
+            }
+            
+            form.submit();
+        } catch (error) {
+            console.error('reCAPTCHA Error:', error);
+            form.submit(); // Fallback to submit anyway, server will handle missing token if configured
+        }
+    });
+
+
     function openTestimonyModal(id) {
         // Find the card content
         const card = document.querySelector(`.testimony-card[onclick*="${id}"]`) || document.querySelector(`[onclick*="${id}"]`).closest('.testimony-card');

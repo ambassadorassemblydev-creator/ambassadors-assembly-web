@@ -56,9 +56,9 @@
               <!-- LOCATION -->
               <div class="detail-panel glass-fx gsap-up">
                 <h3>How to Find Us</h3>
-                <p>123 Ambassadors Drive, Ikeja,<br>Lagos, Nigeria.</p>
+                <p><%= locals.churchSettings?.church_address || 'The Ambassadors Assembly' %></p>
                 <div class="map-link">
-                  <a href="https://www.google.com/maps/dir/?api=1&destination=Ambassadors+Assembly+Ikeja" target="_blank" class="map-btn">Get Directions ↗</a>
+                  <a href="https://www.google.com/maps/dir/?api=1&destination=<%= encodeURIComponent(locals.churchSettings?.church_address || 'The Ambassadors Assembly') %>" target="_blank" class="map-btn">Get Directions ↗</a>
                 </div>
                 <!-- Google Maps Embed -->
                 <div class="map-embed glass-fx" style="margin-top: 30px; height: 300px; padding: 0; overflow: hidden; border-radius: 20px;">
@@ -87,7 +87,7 @@
                 <div class="expect-text gsap-visit">
                   <span class="small-label">The Experience</span>
                   <h2>What to Expect</h2>
-                  <p>We know that visiting a new church can be intimidating. Here’s a glimpse into what your first Sunday at Ambassadors Assembly will look like.</p>
+                  <p>We know that visiting a new church can be intimidating. Here’s a glimpse into what your first Sunday at The Ambassadors Assembly will look like.</p>
                   
                   <div class="expect-features">
                     <div class="feature-item gsap-up">

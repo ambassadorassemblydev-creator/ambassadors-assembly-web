@@ -4,28 +4,28 @@
    For: Ambassadors Assembly — Homepage
    ============================================================ */
 
-// ─── Lenis Smooth Scroll + GSAP Integration ─────────────────
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  orientation: 'vertical',
-  gestureOrientation: 'vertical',
-  smoothWheel: true,
-  touchMultiplier: 2,
-});
-
-// Connect Lenis scroll position to GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update);
-
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000);
-});
-gsap.ticker.lagSmoothing(0);
-
-// ─── Ministry Card GSAP Scroll Animations (Desktop) ─────────
-gsap.registerPlugin(ScrollTrigger, SplitText);
-
 document.addEventListener("DOMContentLoaded", () => {
+  // ─── Lenis Smooth Scroll + GSAP Integration ─────────────────
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    touchMultiplier: 2,
+  });
+
+  // Connect Lenis scroll position to GSAP ScrollTrigger
+  lenis.on('scroll', ScrollTrigger.update);
+
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
+
+  // ─── Ministry Card GSAP Scroll Animations (Desktop) ─────────
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+
   // ── Ministry image scatter → grid animation (desktop only) ──
   const mm = gsap.matchMedia();
   mm.add("(min-width: 1024px)", () => {

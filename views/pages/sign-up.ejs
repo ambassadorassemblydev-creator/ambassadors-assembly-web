@@ -277,7 +277,7 @@
                       <div class="auth-form-side">
                         <div class="auth-form-header">
                           <h1>Create an Account.</h1>
-                          <p>Join Ambassadors Assembly to connect, serve, and grow.</p>
+                          <p>Join The Ambassadors Assembly to connect, serve, and grow.</p>
                         </div>
 
                         <div class="error-alert" id="auth-error"></div>
@@ -442,6 +442,16 @@
         };
 
         try {
+          // 0. High IQ: Get reCAPTCHA token if configured
+          let recaptchaToken = null;
+          if (typeof grecaptcha !== 'undefined') {
+              recaptchaToken = await new Promise((resolve) => {
+                  grecaptcha.ready(() => {
+                      grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'signup' }).then(resolve);
+                  });
+              });
+          }
+
           const response = await fetch('/api/signup', {
             method: 'POST',
             credentials: 'same-origin',
@@ -449,8 +459,9 @@
               'Content-Type': 'application/json',
               'x-csrf-token': document.getElementById("csrfToken").value
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify({ ...formData, 'g-recaptcha-response': recaptchaToken })
           });
+
 
           const data = await response.json();
 

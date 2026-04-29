@@ -313,6 +313,16 @@
           try {
             payBtn.textContent = "Verifying Seed...";
             
+            // 0. High IQ: Get reCAPTCHA token
+            let recaptchaToken = null;
+            if (typeof grecaptcha !== 'undefined') {
+                recaptchaToken = await new Promise((resolve) => {
+                    grecaptcha.ready(() => {
+                        grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'donation_verify' }).then(resolve);
+                    });
+                });
+            }
+
             const verifyRes = await fetch('/api/payments/verify', {
               method: 'POST',
               headers: { 
@@ -325,15 +335,18 @@
                 categoryId: fund,
                 type: 'general_giving',
                 email: email,
-                notes: reason
+                notes: reason,
+                'g-recaptcha-response': recaptchaToken
               })
             });
+
 
             const result = await verifyRes.json();
             
             if (result.success) {
               showToast('Seed received with Honor! Thank you for your partnership.', 'success');
-              setTimeout(() => window.location.href = '/my-account', 2000);
+              // High IQ: Include reference for the receipt page
+              setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}`, 2000);
             } else {
               showToast('Verification failed: ' + (result.message || 'Check reference'), 'error');
               payBtn.disabled = false;

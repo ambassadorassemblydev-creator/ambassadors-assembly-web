@@ -4,9 +4,11 @@ import { auditRepo } from '../repositories/auditRepo.js';
 import { AppError } from '../utils/AppError.js';
 import { logger } from '../config/logger.js';
 import { supabaseService } from '../config/supabase.js';
+import { emailService } from '../services/emailService.js';
 import { z } from 'zod';
 import { Buffer } from 'node:buffer';
 import { withRetry } from '../utils/fetchUtils.js';
+import { automationService } from '../services/automationService.js';
 
 const updateProfileSchema = z.object({
   title: z.string().optional(),
@@ -348,7 +350,7 @@ export const accountController = {
             }, { onConflict: 'user_id' });
 
             // Create a formal volunteer application
-            await supabaseService.from('volunteer_applications').insert({
+            const { data: application, error: insError } = await supabaseService.from('volunteer_applications').insert({
               user_id: userId,
               department_id: deptData.data.id,
               position_id: posData.data.id,
@@ -359,7 +361,11 @@ export const accountController = {
                 : (validatedData.motivation || 'Standard onboarding interest.'),
               skills: gifts,
               status: isAlreadyServing ? 'approved' : 'pending'
-            });
+            }).select().single();
+
+            if (!insError && application) {
+                await automationService.handleVolunteerApplication(application);
+            }
 
             logger.info(`Service entry processed for user: ${userId} to ${validatedData.department_interest} (Existing: ${isAlreadyServing})`);
           }
@@ -410,10 +416,16 @@ export const accountController = {
         logger.warn(`Non-critical role assignment error during onboarding: ${roleErr.message}`);
       }
 
-      // 6. Finalize - Audit & Redirect
+      // 6. Finalize - Trigger Welcome & Redirect
+      await emailService.triggerAutomation('auth.welcome', {
+          email: req.user.email,
+          firstName: validatedData.firstName || 'Ambassador',
+          lastName: validatedData.lastName || ''
+      });
+
       await auditRepo.logAction(req, 'complete_onboarding', 'Completed full profile onboarding', 'profiles', userId, profileUpdates);
 
-      return res.redirect('/my-account?triggerShare=true&success=Welcome home! Your profile has been set up.');
+      return res.redirect('/confirmation?type=onboarding');
     } catch (err) {
       logger.error(`Onboarding Submission Error: ${err.message}`);
       

@@ -8,6 +8,8 @@ import { memberRepo } from '../repositories/memberRepo.js';
 import { testimonyRepo } from '../repositories/testimonyRepo.js';
 import { prayerRepo } from '../repositories/prayerRepo.js';
 import { auditLogger } from '../utils/auditLogger.js';
+import { verifyRecaptcha } from '../utils/recaptcha.js';
+
 
 export const pageController = {
 
@@ -40,7 +42,7 @@ export const pageController = {
     renderFaq: async (req, res) => {
         try {
             res.render('pages/faq', {
-                pageTitle: 'FAQ | Ambassadors Assembly',
+                pageTitle: 'FAQ | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'QUESTIONS'
             });
@@ -68,7 +70,7 @@ export const pageController = {
             }
 
             res.render('pages/index', {
-                pageTitle: 'Welcome | Ambassadors Assembly',
+                pageTitle: 'Welcome | The Ambassadors Assembly',
                 currentPath: req.path,
                 sermons: sermons || [],
                 events: events || [],
@@ -77,7 +79,7 @@ export const pageController = {
         } catch (error) {
             console.error('[PageController] Error rendering home:', error.message);
             res.render('pages/index', {
-                pageTitle: 'Welcome | Ambassadors Assembly',
+                pageTitle: 'Welcome | The Ambassadors Assembly',
                 currentPath: req.path,
                 sermons: [], events: [], ministries: []
             });
@@ -96,7 +98,7 @@ export const pageController = {
             }
             
             res.render('pages/sermons', {
-                pageTitle: 'Sermons | Ambassadors Assembly',
+                pageTitle: 'Sermons | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'MESSAGE LIBRARY',
                 sermons: sermons || []
@@ -128,7 +130,7 @@ export const pageController = {
             }
 
             res.render('pages/sermon-detail', {
-                pageTitle: `${data.sermon.title} | Ambassadors Assembly`,
+                pageTitle: `${data.sermon.title} | The Ambassadors Assembly`,
                 currentPath: req.path,
                 sermon: data.sermon,
                 relatedSermons: data.relatedSermons || [],
@@ -153,7 +155,7 @@ export const pageController = {
             }
 
             res.render('pages/events', {
-                pageTitle: 'Events | Ambassadors Assembly',
+                pageTitle: 'Events | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'GATHERINGS',
                 events: events || []
@@ -178,7 +180,7 @@ export const pageController = {
             }
 
             res.render('pages/event-detail', {
-                pageTitle: `${event.title} | Ambassadors Assembly`,
+                pageTitle: `${event.title} | The Ambassadors Assembly`,
                 currentPath: req.path,
                 event
             });
@@ -202,7 +204,7 @@ export const pageController = {
                 .order('sort_order', { ascending: true });
 
             res.render('pages/give', {
-                pageTitle: 'Give | Ambassadors Assembly',
+                pageTitle: 'Give | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'GENEROSITY',
                 categories: allCategories || []
@@ -237,7 +239,7 @@ export const pageController = {
             }
 
             res.render('pages/ministry-detail', {
-                pageTitle: `${ministry.name} | Ambassadors Assembly`,
+                pageTitle: `${ministry.name} | The Ambassadors Assembly`,
                 currentPath: req.path,
                 ministry,
                 isMember,
@@ -287,7 +289,7 @@ export const pageController = {
                 .limit(4);
 
             res.render('pages/ministries', {
-                pageTitle: 'Ministries | Ambassadors Assembly',
+                pageTitle: 'Ministries | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'COMMUNITY',
                 ministries,
@@ -304,7 +306,7 @@ export const pageController = {
         try {
             const staff = await memberRepo.getStaff();
             res.render('pages/about', {
-                pageTitle: 'About Us | Ambassadors Assembly',
+                pageTitle: 'About Us | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'OUR STORY',
                 staff: staff || []
@@ -319,7 +321,7 @@ export const pageController = {
     renderMeetThePastor: async (req, res) => {
         try {
             res.render('pages/pastor', {
-                pageTitle: 'Meet Our Pastor | Ambassadors Assembly',
+                pageTitle: 'Meet Our Pastor | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'LEADERSHIP'
             });
@@ -333,7 +335,7 @@ export const pageController = {
     renderConnect: async (req, res) => {
         try {
             res.render('pages/connect', {
-                pageTitle: 'Connect | Ambassadors Assembly',
+                pageTitle: 'Connect | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'JOIN US'
             });
@@ -346,7 +348,7 @@ export const pageController = {
     renderPlanVisit: async (req, res) => {
         try {
             res.render('pages/plan-a-visit', {
-                pageTitle: 'Plan Your Visit | Ambassadors Assembly',
+                pageTitle: 'Plan Your Visit | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'VISIT US'
             });
@@ -362,7 +364,7 @@ export const pageController = {
             const members = await memberRepo.searchMembers(query);
 
             res.render('pages/directory', {
-                pageTitle: 'Member Directory | Ambassadors Assembly',
+                pageTitle: 'Member Directory | The Ambassadors Assembly',
                 currentPath: req.path,
                 searchQuery: query,
                 members: members || []
@@ -384,7 +386,7 @@ export const pageController = {
             ]);
             
             res.render('pages/staff', {
-                pageTitle: 'Our Team | Ambassadors Assembly',
+                pageTitle: 'Our Team | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'OUR TEAM',
                 staff: staff || [],
@@ -404,7 +406,7 @@ export const pageController = {
         try {
             const projects = await donationRepo.getBuildingProjects();
             res.render('pages/fund-the-buildings', {
-                pageTitle: 'Fund The Buildings | Ambassadors Assembly',
+                pageTitle: 'Fund The Buildings | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'THE VISION',
                 projects: projects || []
@@ -425,7 +427,7 @@ export const pageController = {
             if (!project) return res.status(404).render('pages/error', { message: 'Project not found' });
 
             res.render('pages/building-detail', {
-                pageTitle: `${project.name} | Ambassadors Assembly`,
+                pageTitle: `${project.name} | The Ambassadors Assembly`,
                 currentPath: req.path,
                 preloaderText: 'VISION DETAIL',
                 project
@@ -441,7 +443,7 @@ export const pageController = {
         try {
             const testimonies = await testimonyRepo.getApprovedTestimonies();
             res.render('pages/testimonies', {
-                pageTitle: 'Testimonies | Ambassadors Assembly',
+                pageTitle: 'Testimonies | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'GLORY TO GOD',
                 testimonies: testimonies || []
@@ -455,8 +457,15 @@ export const pageController = {
     // Handle Testimony Submission
     handleTestimonySubmit: async (req, res) => {
         try {
-            const { title, content, is_anonymous, full_name_hp } = req.body;
+            const { title, content, is_anonymous, full_name_hp, 'g-recaptcha-response': recaptchaToken } = req.body;
             const userId = req.user?.id;
+
+            // 0. Verify reCAPTCHA
+            const isHuman = await verifyRecaptcha(recaptchaToken);
+            if (!isHuman) {
+                return res.redirect(`${req.header('Referer') || '/testimonies'}?error=Security verification failed.`);
+            }
+
 
             // Honeypot Spam Protection
             if (full_name_hp) {
@@ -498,8 +507,7 @@ export const pageController = {
                 await auditLogger.log(userId, 'submit_testimony', `Shared a new testimony: "${title}"`, { title });
             }
 
-            const redirectUrl = req.header('Referer') || '/testimonies';
-            res.redirect(`${redirectUrl}?success=Thank you for sharing your story! It has been submitted for review.`);
+            res.redirect('/confirmation?type=testimony');
         } catch (error) {
             console.error('[PageController] Error submitting testimony:', error.message);
             res.redirect(`${req.header('Referer') || '/testimonies'}?error=Something went wrong.`);
@@ -511,7 +519,7 @@ export const pageController = {
         try {
             const prayers = await prayerRepo.getPublicPrayers();
             res.render('pages/prayer-wall', {
-                pageTitle: 'Prayer Wall | Ambassadors Assembly',
+                pageTitle: 'Prayer Wall | The Ambassadors Assembly',
                 currentPath: req.path,
                 preloaderText: 'INTERCESSION',
                 prayers: prayers || []
@@ -525,10 +533,15 @@ export const pageController = {
     // Handle Prayer Intercession ("I prayed for this")
     handleIntercede: async (req, res) => {
         try {
-            const { requestId } = req.body;
+            const { requestId, 'g-recaptcha-response': recaptchaToken } = req.body;
             const userId = req.user?.id;
 
             if (!userId) return res.status(401).json({ error: 'Please sign in to intercede.' });
+            
+            // 0. Verify reCAPTCHA
+            const isHuman = await verifyRecaptcha(recaptchaToken);
+            if (!isHuman) return res.status(400).json({ error: 'Security verification failed.' });
+
             
             await prayerRepo.intercede(requestId, userId);
             
@@ -545,8 +558,15 @@ export const pageController = {
     // Handle Prayer Submission
     handlePrayerSubmit: async (req, res) => {
         try {
-            const { title, description, category, is_anonymous, is_public, full_name_hp } = req.body;
+            const { title, description, category, is_anonymous, is_public, full_name_hp, 'g-recaptcha-response': recaptchaToken } = req.body;
             const userId = req.user?.id;
+
+            // 0. Verify reCAPTCHA
+            const isHuman = await verifyRecaptcha(recaptchaToken);
+            if (!isHuman) {
+                return res.redirect(`${req.header('Referer') || '/connect'}?error=Security verification failed.`);
+            }
+
 
             // Honeypot Spam Protection
             if (full_name_hp) {
@@ -573,8 +593,7 @@ export const pageController = {
                 await auditLogger.log(userId, 'prayer_submit', `Submitted a new prayer request: "${title}"`, { title, category });
             }
 
-            const redirectUrl = req.header('Referer') || '/connect';
-            res.redirect(`${redirectUrl}?success=Your prayer request has been submitted for review.`);
+            res.redirect('/confirmation?type=prayer');
         } catch (error) {
             console.error('[PageController] Error submitting prayer:', error.message);
             res.redirect(`${req.header('Referer') || '/connect'}?error=Something went wrong.`);
@@ -584,7 +603,7 @@ export const pageController = {
     // Render Terms of Service
     renderTerms: (req, res) => {
         res.render('pages/legal/terms', {
-            pageTitle: 'Terms of Service | Ambassadors Assembly',
+            pageTitle: 'Terms of Service | The Ambassadors Assembly',
             currentPath: req.path
         });
     },
@@ -592,8 +611,19 @@ export const pageController = {
     // Render Privacy Policy
     renderPrivacy: (req, res) => {
         res.render('pages/legal/privacy', {
-            pageTitle: 'Privacy Policy | Ambassadors Assembly',
+            pageTitle: 'Privacy Policy | The Ambassadors Assembly',
             currentPath: req.path
+        });
+    },
+
+    // Render cinematic Confirmation Page
+    renderConfirmation: (req, res) => {
+        const { type, reference } = req.query;
+        res.render('pages/confirmation', {
+            pageTitle: 'Success | The Ambassadors Assembly',
+            currentPath: req.path,
+            type: type || 'default',
+            reference: reference || null
         });
     }
 };

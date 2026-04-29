@@ -197,7 +197,7 @@
 
     .prayer-grid {
         display: grid;
-        grid-template_columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 30px;
     }
 
@@ -400,9 +400,42 @@
         document.getElementById('prayerForm').classList.toggle('is-active');
     }
 
+    // High IQ: Handle Form Submission with reCAPTCHA
+
+    document.querySelector('.actual-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = this;
+        const btn = form.querySelector('.submit-btn');
+        
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+
+        try {
+            // Get reCAPTCHA token
+            if (typeof grecaptcha !== 'undefined') {
+                const token = await grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'prayer_submit' });
+                
+                // Inject token into form
+                let input = form.querySelector('input[name="g-recaptcha-response"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'g-recaptcha-response';
+                    form.appendChild(input);
+                }
+                input.value = token;
+            }
+            
+            form.submit();
+        } catch (error) {
+            console.error('reCAPTCHA Error:', error);
+            form.submit();
+        }
+    });
+
     async function intercede(id) {
         // Check if user is logged in (Pass from EJS)
-        const isLoggedIn = <%= user ? 'true' : 'false' %>;
+        const isLoggedIn = '<%= locals.user ? "true" : "false" %>' === 'true';
         if (!isLoggedIn) {
             showToast('Please sign in to join in intercession.');
             setTimeout(() => window.location.href = '/account/login', 1500);
@@ -414,14 +447,21 @@
         const csrfToken = document.querySelector('input[name="_csrf"]').value;
         
         try {
+            // 0. Get reCAPTCHA token
+            let recaptchaToken = null;
+            if (typeof grecaptcha !== 'undefined') {
+                recaptchaToken = await grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'prayer_intercede' });
+            }
+
             const response = await fetch('/prayer-wall/intercede', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
                     'X-CSRF-Token': csrfToken
                 },
-                body: JSON.stringify({ requestId: id })
+                body: JSON.stringify({ requestId: id, 'g-recaptcha-response': recaptchaToken })
             });
+
 
             if (response.status === 401) {
                 showToast('Your session has expired. Please sign in again.');

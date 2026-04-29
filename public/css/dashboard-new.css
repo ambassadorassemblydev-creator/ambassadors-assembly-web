@@ -483,8 +483,6 @@
   .pf-grid { grid-template-columns: 1fr; }
   .pf-g.full { grid-column: 1; }
 }
-  .pf-g.full { grid-column: 1; }
-}
 @media (max-width: 480px) {
   .aas-stats { grid-template-columns: 1fr 1fr; }
   .aas-qa    { grid-template-columns: 1fr 1fr; }

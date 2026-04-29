@@ -76,7 +76,7 @@
       <!-- Hero -->
       <div class="aas-hero">
         <div class="aas-hero-inner">
-          <div class="aas-hero-eye"><i class="fas fa-church"></i> Ambassadors Assembly</div>
+          <div class="aas-hero-eye"><i class="fas fa-church"></i> The Ambassadors Assembly</div>
           <h1 class="aas-hero-title">
             Welcome back,<br>
             <%= user.title ? user.title + ' ' : '' %><%= user.first_name %> <%= user.last_name %>
@@ -273,7 +273,7 @@
             <div style="flex:1;">
               <div style="font-size:15px;font-weight:800;color:var(--dk);margin-bottom:4px;"><%= ev.title %></div>
               <div style="font-size:11.5px;color:var(--mu);display:flex;gap:14px;flex-wrap:wrap;">
-                <span><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i><%= ev.location_name || 'Ambassadors Assembly' %></span>
+                <span><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i><%= ev.location_name || 'The Ambassadors Assembly' %></span>
                 <span><i class="fas fa-clock" style="margin-right:4px;"></i><%= new Date(ev.start_date).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) %></span>
               </div>
             </div>

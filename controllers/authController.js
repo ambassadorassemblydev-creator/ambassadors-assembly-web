@@ -3,6 +3,8 @@ import { registerSchema, loginSchema } from '../validators/authSchema.js';
 import { AppError } from '../utils/AppError.js';
 import { logger } from '../config/logger.js';
 import { setAuthCookies } from '../utils/authUtils.js';
+import { verifyRecaptcha } from '../utils/recaptcha.js';
+
 
 // setAuthCookies moved to utils/authUtils.js for shared access
 
@@ -16,7 +18,15 @@ export const authController = {
   signUp: async (req, res, next) => {
     try {
       const validatedData = registerSchema.parse(req.body);
+      
+      // 1. Verify reCAPTCHA
+      const isHuman = await verifyRecaptcha(req.body['g-recaptcha-response']);
+      if (!isHuman) {
+          return next(new AppError('Security verification failed. Please try again.', 400));
+      }
+
       await authService.signUp(validatedData);
+
       res.status(201).json({ status: 'success', message: 'Check your email to verify your account.' });
     } catch (err) {
       if (err.name === 'ZodError') return next(new AppError(err.errors[0].message, 400));
@@ -27,7 +37,15 @@ export const authController = {
   login: async (req, res, next) => {
     try {
       const { email, password } = loginSchema.parse(req.body);
+      
+      // 1. Verify reCAPTCHA
+      const isHuman = await verifyRecaptcha(req.body['g-recaptcha-response']);
+      if (!isHuman) {
+          return next(new AppError('Security verification failed. Please try again.', 400));
+      }
+
       const { user, session } = await authService.login(email, password);
+
       setAuthCookies(res, session);
       res.status(200).json({ status: 'success', data: { user } });
     } catch (err) {

@@ -374,11 +374,11 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="fs-menu__details" id="fs-menu-details">
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Address:</p>
-        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_address || 'Ambassadors Assembly' %></p>
+        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_address || 'The Ambassadors Assembly' %></p>
       </div>
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Email:</p>
-        <p class="fs-menu__detail-text">[EMAIL_ADDRESS]</p>
+        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_email || 'info@theambassadorsassembly.org' %></p>
       </div>
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Call:</p>

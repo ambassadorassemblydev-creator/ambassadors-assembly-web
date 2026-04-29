@@ -10,11 +10,14 @@
   <% } %>
   
   <!-- Preconnect to CDNs for faster asset delivery -->
-  <link rel="preconnect" href="https://code.jquery.com">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://res.cloudinary.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  
+  <!-- Font Preloading (High IQ: Mitigates FOIT and improves LCP) -->
+  <link rel="preload" href="/fonts/Articulatcf-regular.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="/fonts/Articulat-CF-Demi-Bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-446GXF82G8"></script>
@@ -27,10 +30,10 @@
   <!-- ========= Meta Tags ========= -->
   <meta id="view" name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Ambassadors Assembly">
+  <meta name="apple-mobile-web-app-title" content="The Ambassadors Assembly">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="keywords" content="Ambassadors Assembly, Church in Lagos, Christian Community, Jesus, Lagos Church, Faith, Ministry, Sermons, Reach Raise Rule">
-  <meta name="author" content="Ambassadors Assembly">
+  <meta name="keywords" content="The Ambassadors Assembly, Church in Lagos, Christian Community, Jesus, Lagos Church, Faith, Ministry, Sermons, Reach Raise Rule">
+  <meta name="author" content="The Ambassadors Assembly">
   <meta name="geo.region" content="NG-LA" />
   <meta name="geo.placename" content="Lagos" />
   <meta name="geo.position" content="6.6341;3.3702" />
@@ -65,7 +68,7 @@
     href="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg">
 
   <!-- Canonical -->
-  <link rel="canonical" href="https://www.theambassadorsassembly.com/">
+  <link rel="canonical" href="https://www.theambassadorsassembly.org/">
 
   <!-- Deferred promise utility (used by runtime) -->
   <script data-role="deferred-init" type="text/javascript">
@@ -87,9 +90,9 @@
 
   <!-- ========= Stylesheets ========= -->
   <link rel="stylesheet" href="/css/vendor/d-css-runtime-flex.min.css" type="text/css">
-  <link rel="stylesheet" href="/css/vendor/widget-styles.css" id="widgetCSS" type="text/css">
-  <link rel="stylesheet" href="/css/vendor/home-page.min.css" id="homeCssLink" type="text/css">
-  <link rel="stylesheet" href="/css/vendor/site-global.min.css" id="siteGlobalCss" type="text/css">
+  <link rel="stylesheet" href="/css/vendor/widget-styles.css" id="widgetCSS" type="text/css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/vendor/home-page.min.css" id="homeCssLink" type="text/css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/vendor/site-global.min.css" id="siteGlobalCss" type="text/css" media="print" onload="this.media='all'">
   <style>
     @font-face {
       font-family: "AppleGaramond-Light";
@@ -126,8 +129,8 @@
   <link rel="stylesheet" href="/css/index-page.min.css?v=1.1">
 
   <!-- ========= Page Title & SEO ========= -->
-  <title><%= pageTitle || locals.churchSettings?.site_title || 'Ambassadors Assembly' %></title>
-  <meta name="description" content="<%= locals.churchSettings?.site_description || 'Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
+  <title><%= pageTitle || locals.churchSettings?.site_title || 'The Ambassadors Assembly' %></title>
+  <meta name="description" content="<%= locals.churchSettings?.site_description || 'The Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
 
   <!-- Meta Optimization -->
   <% 
@@ -136,17 +139,17 @@
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.theambassadorsassembly.com<%= currentPath || '' %>">
-  <meta property="og:title" content="<%= pageTitle || locals.churchSettings?.site_title || 'Ambassadors Assembly' %>">
-  <meta property="og:description" content="<%= locals.churchSettings?.site_description || 'Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
+  <meta property="og:url" content="https://www.theambassadorsassembly.org<%= currentPath || '' %>">
+  <meta property="og:title" content="<%= pageTitle || locals.churchSettings?.site_title || 'The Ambassadors Assembly' %>">
+  <meta property="og:description" content="<%= locals.churchSettings?.site_description || 'The Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
   <meta property="og:image" content="<%= optimizedOgImage %>">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@theambassadorsassembly">
   <meta name="twitter:creator" content="@theambassadorsassembly">
-  <meta name="twitter:title" content="<%= pageTitle || locals.churchSettings?.site_title || 'Ambassadors Assembly' %>">
-  <meta name="twitter:description" content="<%= locals.churchSettings?.site_description || 'Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
+  <meta name="twitter:title" content="<%= pageTitle || locals.churchSettings?.site_title || 'The Ambassadors Assembly' %>">
+  <meta name="twitter:description" content="<%= locals.churchSettings?.site_description || 'The Ambassadors Assembly — A Spirit-filled church in Lagos, Nigeria.' %>">
   <meta name="twitter:image" content="<%= optimizedOgImage %>">
 
   <!-- ========= Structured Data (JSON-LD) ========= -->
@@ -156,32 +159,32 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.theambassadorsassembly.com/#website",
-      "url": "https://www.theambassadorsassembly.com/",
-      "name": "<%= locals.churchSettings?.church_name || 'Ambassadors Assembly' %>",
-      "publisher": { "@id": "https://www.theambassadorsassembly.com/#organization" }
+      "@id": "https://www.theambassadorsassembly.org/#website",
+      "url": "https://www.theambassadorsassembly.org/",
+      "name": "<%= locals.churchSettings?.church_name || 'The Ambassadors Assembly' %>",
+      "publisher": { "@id": "https://www.theambassadorsassembly.org/#organization" }
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.theambassadorsassembly.com/#webpage",
-      "url": "https://www.theambassadorsassembly.com/",
-      "name": "<%= pageTitle %> | Ambassadors Assembly",
+      "@id": "https://www.theambassadorsassembly.org/#webpage",
+      "url": "https://www.theambassadorsassembly.org/",
+      "name": "<%= pageTitle %> | The Ambassadors Assembly",
       "description": "<%= locals.churchSettings?.site_description %>",
-      "isPartOf": { "@id": "https://www.theambassadorsassembly.com/#website" },
-      "about": { "@id": "https://www.theambassadorsassembly.com/#organization" },
-      "primaryImageOfPage": { "@id": "https://www.theambassadorsassembly.com/#primaryimage" }
+      "isPartOf": { "@id": "https://www.theambassadorsassembly.org/#website" },
+      "about": { "@id": "https://www.theambassadorsassembly.org/#organization" },
+      "primaryImageOfPage": { "@id": "https://www.theambassadorsassembly.org/#primaryimage" }
     },
     {
       "@type": "ImageObject",
-      "@id": "https://www.theambassadorsassembly.com/#primaryimage",
+      "@id": "https://www.theambassadorsassembly.org/#primaryimage",
       "url": "<%= optimizedOgImage %>",
       "contentUrl": "<%= optimizedOgImage %>"
     },
     {
       "@type": ["Organization", "Place", "Church"],
-      "@id": "https://www.theambassadorsassembly.com/#organization",
-      "name": "<%= locals.churchSettings?.church_name || 'Ambassadors Assembly' %>",
-      "url": "https://www.theambassadorsassembly.com/",
+      "@id": "https://www.theambassadorsassembly.org/#organization",
+      "name": "<%= locals.churchSettings?.church_name || 'The Ambassadors Assembly' %>",
+      "url": "https://www.theambassadorsassembly.org/",
       "logo": "<%= locals.churchSettings?.logo_url || optimizedOgImage %>",
       "image": "<%= optimizedOgImage %>",
       "telephone": "<%= locals.churchSettings?.church_phone || '+234 803 333 3333' %>",
@@ -226,10 +229,19 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script>
+    // Register plugins immediately after loading
+    gsap.registerPlugin(ScrollTrigger, SplitText);
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2" defer></script>
+  
+  <% if (locals.recaptchaSiteKey) { %>
+    <script src="https://www.google.com/recaptcha/api.js?render=<%= recaptchaSiteKey %>" defer></script>
+  <% } %>
+
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>

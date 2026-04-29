@@ -13,8 +13,8 @@ const router = express.Router();
 // ==========================================
 router.get('/', pageController.renderHome);
 router.get('/sermons', pageController.renderSermons);
-router.get('/account/login', (req, res) => res.render('pages/sign-in', { pageTitle: 'Login | Ambassadors Assembly', currentPath: req.path }));
-router.get('/account/register', (req, res) => res.render('pages/sign-up', { pageTitle: 'Register | Ambassadors Assembly', currentPath: req.path }));
+router.get('/account/login', (req, res) => res.render('pages/sign-in', { pageTitle: 'Login | The Ambassadors Assembly', currentPath: req.path }));
+router.get('/account/register', (req, res) => res.render('pages/sign-up', { pageTitle: 'Register | The Ambassadors Assembly', currentPath: req.path }));
 
 // Ministry Routes
 router.get('/ministries', pageController.renderMinistries);
@@ -60,12 +60,13 @@ router.post('/api/ai/chat', aiController.handleChat);
 // Legal Pages
 router.get('/terms-of-service', pageController.renderTerms);
 router.get('/privacy-policy', pageController.renderPrivacy);
+router.get('/confirmation', pageController.renderConfirmation);
 
 // ==========================================
 // MONITORING & HEALTH (For Uptime Bots)
 // ==========================================
 router.get('/api/health', pageController.handleHealthCheck);
-router.get('/system-status', (req, res) => res.render('pages/system-status', { pageTitle: 'System Status | Ambassadors Assembly', currentPath: '/system-status' }));
+router.get('/system-status', (req, res) => res.render('pages/system-status', { pageTitle: 'System Status | The Ambassadors Assembly', currentPath: '/system-status' }));
 
 // ==========================================
 // AUTH VIEWS & API
@@ -75,7 +76,7 @@ router.post('/api/events/register', authMiddleware.protect, accountController.ha
 router.use('/api', apiRoutes); 
 
 router.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("Sentry Debug Error: Ambassadors Assembly Monitoring Test");
+  throw new Error("Sentry Debug Error: The Ambassadors Assembly Monitoring Test");
 });
 
 export default router;

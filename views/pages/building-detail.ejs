@@ -272,7 +272,8 @@
             
             if (result.success) {
               showToast('Thank you for your seed! Your kingdom investment has been logged.', 'success');
-              setTimeout(() => location.reload(), 2000);
+              // High IQ: Include reference for the receipt page
+              setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}`, 2000);
             } else {
               showToast('Payment verify issue: ' + (result.message || 'Check reference'), 'error');
               payBtn.disabled = false;

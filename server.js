@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
+import compression from 'compression';
 import { RedisStore as RateLimitRedisStore } from 'rate-limit-redis';
 
 import { redis } from './config/redis.js';
@@ -56,6 +57,9 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// 0. COMPRESSION (High IQ: Must be first to compress all responses)
+app.use(compression());
+
 // ==========================================
 // 1. GLOBAL MIDDLEWARES (Security & Parsing)
 // ==========================================
@@ -79,17 +83,18 @@ app.use(helmet({
   contentSecurityPolicy: {
     useDefaults: true,
     directives: {
-      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://checkout.paystack.com", "https://js.sentry-cdn.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.multiscreensite.com", "https://code.jquery.com", "https://*.supabase.co", "https://*.dudacdn.net", "https://static-cdn.dwhitelabel.com"],
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://checkout.paystack.com", "https://js.paystack.co", "https://www.google.com/recaptcha/", "https://www.gstatic.com/recaptcha/", "https://js.sentry-cdn.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.multiscreensite.com", "https://code.jquery.com", "https://*.supabase.co", "https://*.dudacdn.net", "https://static-cdn.dwhitelabel.com", "https://www.googletagmanager.com", "https://*.google-analytics.com"],
       "style-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.supabase.co", "https://*.dudacdn.net", "https://static-cdn.dwhitelabel.com", "https://*.multiscreensite.com"],
-      "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://*.cdn-website.com", "https://static.cdn-website.com", "https://*.unsplash.com", "https://api.dicebear.com", "https://*.cloudinary.com", "https://*.multiscreensite.com", "https://*.betterstack.com", "https://*.betteruptime.com", "https://*.supabase.co", "https://*.duda.co", "https://*.dudacdn.net", "https://i.ytimg.com", "https://*.ytimg.com", "https://*.youtube.com"],
-      "connect-src": ["'self'", "data:", "https://api.paystack.co", "https://vitals.vercel-insights.com", "*.sentry.io", "https://rtc.multiscreensite.com", "https://*.multiscreensite.com", "https://cdn.jsdelivr.net", "https://sourcemaps-lambda.dwhitelabel.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.supabase.co", "wss://*.supabase.co", "https://bxlmmvunfyvsbqakgxed.supabase.co", "wss://bxlmmvunfyvsbqakgxed.supabase.co"],
-      "frame-src": ["'self'", "https://ambassadors.betteruptime.com", "https://*.betterstack.com", "https://checkout.paystack.com", "https://www.youtube.com", "https://*.youtube.com", "https://*.youtube-nocookie.com", "https://player.vimeo.com", "https://*.supabase.co", "https://www.google.com"],
+      "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://*.cdn-website.com", "https://static.cdn-website.com", "https://*.unsplash.com", "https://api.dicebear.com", "https://*.cloudinary.com", "https://*.multiscreensite.com", "https://*.betterstack.com", "https://*.betteruptime.com", "https://*.supabase.co", "https://*.duda.co", "https://*.dudacdn.net", "https://i.ytimg.com", "https://*.ytimg.com", "https://*.youtube.com", "https://www.gstatic.com"],
+      "connect-src": ["'self'", "data:", "https://api.paystack.co", "https://www.google.com/recaptcha/", "https://www.google-analytics.com", "https://*.google-analytics.com", "https://www.googletagmanager.com", "https://vitals.vercel-insights.com", "*.sentry.io", "https://rtc.multiscreensite.com", "https://*.multiscreensite.com", "https://cdn.jsdelivr.net", "https://sourcemaps-lambda.dwhitelabel.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.supabase.co", "wss://*.supabase.co", "https://bxlmmvunfyvsbqakgxed.supabase.co", "wss://bxlmmvunfyvsbqakgxed.supabase.co"],
+      "frame-src": ["'self'", "https://ambassadors.betteruptime.com", "https://*.betterstack.com", "https://checkout.paystack.com", "https://paystack.com", "https://pstk.co", "https://www.youtube.com", "https://*.youtube.com", "https://*.youtube-nocookie.com", "https://player.vimeo.com", "https://*.supabase.co", "https://www.google.com", "https://www.google.com/recaptcha/"],
       "font-src": ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:", "https://*.multiscreensite.com", "https://static.cdn-website.com", "https://static-cdn.dwhitelabel.com", "https://*.betterstack.com", "https://*.betteruptime.com", "https://unpkg.com", "https://*.supabase.co", "https://*.dudacdn.net"],
       "media-src": ["'self'", "https://res.cloudinary.com", "https://*.cloudinary.com", "https://*.supabase.co"],
       "script-src-attr": ["'unsafe-inline'"],
       "object-src": ["'none'"],
       "upgrade-insecure-requests": []
     }
+
 
   },
   crossOriginEmbedderPolicy: false
@@ -134,7 +139,11 @@ app.use(session({
 // ==========================================
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1y',
+  etag: true,
+  lastModified: true
+}));
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // Global Template Variables
@@ -181,6 +190,7 @@ app.use((req, res, next) => {
   }
   
   res.locals.paystackPublicKey = process.env.PAYSTACK_PUBLIC_KEY;
+  res.locals.recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY;
   next();
 });
 

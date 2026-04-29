@@ -1577,17 +1577,17 @@ html.lenis, html.lenis body {
     padding-right: 0 !important;
   }
 
-  /* Hero swiper fills full device width */
+  /* Hero swiper fills full device width without causing overflow */
   .widget-bb326d {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    margin-left: calc(-1 * var(--section-padding-left, 0%));
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
   }
 
   .widget-bb326d .hero-swiper-wrap,
   .widget-bb326d .heroSwiper {
     width: 100% !important;
-    max-width: 100vw;
+    max-width: 100%;
   }
 }
 

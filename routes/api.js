@@ -27,6 +27,7 @@ router.post('/profile/mark-share-shown', accountController.markSocialShareShown)
 
 // Admin Endpoints
 router.post('/admin/attendance/notify', authMiddleware.restrictTo('admin', 'super_admin', 'pastor'), adminController.notifyAbsentees);
+router.get('/admin/attendance/sync', authMiddleware.restrictTo('admin', 'super_admin', 'pastor'), adminController.manualSyncMissedAttendance);
 
 // Future API endpoints (Live chat, Event registration, etc.)
 // router.post('/events/register', eventController.register);

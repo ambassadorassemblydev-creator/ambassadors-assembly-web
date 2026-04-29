@@ -386,7 +386,7 @@ body.dmRoot,
                         </div>
                         <div class="auth-quote">
                           <p>"We exist to share Christ with those who don't know Him and lead those who do into a growing relationship with Him."</p>
-                          <span>— Ambassadors Assembly</span>
+                          <span>— The Ambassadors Assembly</span>
                         </div>
                       </div>
 
@@ -549,6 +549,16 @@ body.dmRoot,
         const _csrf = document.getElementById("csrfToken") ? document.getElementById("csrfToken").value : undefined;
 
         try {
+          // 0. High IQ: Get reCAPTCHA token if configured
+          let recaptchaToken = null;
+          if (typeof grecaptcha !== 'undefined') {
+              recaptchaToken = await new Promise((resolve) => {
+                  grecaptcha.ready(() => {
+                      grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'login' }).then(resolve);
+                  });
+              });
+          }
+
           const response = await fetch('/api/login', {
             method: 'POST',
             credentials: 'same-origin',
@@ -556,10 +566,11 @@ body.dmRoot,
               'Content-Type': 'application/json',
               'x-csrf-token': _csrf
             },
-            body: JSON.stringify({ email, password, _csrf })
+            body: JSON.stringify({ email, password, _csrf, 'g-recaptcha-response': recaptchaToken })
           });
 
           const data = await response.json();
+
 
           if (!response.ok) {
             throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign in. Please try again.");

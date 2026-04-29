@@ -1,6 +1,7 @@
 import { supabase } from '../config/supabase.js';
 import { AppError } from '../utils/AppError.js';
 import { logger } from '../config/logger.js';
+import { emailService } from './emailService.js';
 
 export const authService = {
   /**
@@ -25,7 +26,7 @@ export const authService = {
       logger.error(`Registration failed: ${error.message}`);
       throw new AppError(error.message, 400);
     }
-    
+
     return data;
   },
 

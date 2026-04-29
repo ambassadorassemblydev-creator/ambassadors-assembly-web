@@ -1,0 +1,243 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px; background: #0a0a0a;" data-flex-site="">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper">
+      <div class="confirmation-page">
+        
+        <!-- GLOW EFFECTS -->
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+
+        <main class="confirmation-card glass-fx gsap-reveal">
+          <div class="conf-icon-wrapper">
+            <div class="conf-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="conf-ripple"></div>
+          </div>
+
+          <header class="conf-header">
+            <h1 class="conf-title">
+              <% if (type === 'donation') { %>
+                Seed Received
+              <% } else if (type === 'onboarding') { %>
+                Welcome Home
+              <% } else if (type === 'volunteer') { %>
+                Application Sent
+              <% } else if (type === 'testimony') { %>
+                Testimony Shared
+              <% } else if (type === 'prayer') { %>
+                Prayer Received
+              <% } else { %>
+                Confirmed
+              <% } %>
+            </h1>
+            <p class="conf-subtitle">
+              <% if (type === 'donation') { %>
+                Your partnership is building the kingdom of God. A confirmation has been sent to your email.
+              <% } else if (type === 'onboarding') { %>
+                Your profile is now complete. We are excited to have you as part of the Ambassadors family!
+              <% } else if (type === 'volunteer') { %>
+                Thank you for your heart to serve. Our team will review your application and reach out shortly.
+              <% } else if (type === 'testimony') { %>
+                Thank you for sharing the wonders of God! Your testimony will inspire many.
+              <% } else if (type === 'prayer') { %>
+                We have received your prayer request. Our intercessors will stand in agreement with you.
+              <% } else { %>
+                Your request has been successfully processed.
+              <% } %>
+            </p>
+          </header>
+
+          <% if (locals.reference) { %>
+            <div class="conf-details">
+              <div class="detail-item">
+                <span class="label">Reference ID</span>
+                <span class="value"><%= reference %></span>
+              </div>
+            </div>
+          <% } %>
+
+          <div class="conf-actions">
+            <% if (type === 'donation' && locals.reference) { %>
+              <a href="https://paystack.com/receipt/<%= reference %>" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #176a60, #115048);">View Receipt</a>
+            <% } %>
+            <a href="/my-account" class="btn <%= type === 'donation' ? 'btn-secondary' : 'btn-primary' %>">Go to Dashboard</a>
+            <a href="/" class="btn btn-secondary">Return Home</a>
+          </div>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .confirmation-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: #0a0a0a;
+      position: relative;
+      overflow: hidden;
+      color: #ffffff;
+    }
+
+    /* GLOWS */
+    .glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.15;
+      z-index: 0;
+    }
+    .glow-1 { top: -100px; right: -100px; background: var(--aa-green); }
+    .glow-2 { bottom: -100px; left: -100px; background: #176a60; }
+
+    .glass-fx {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 540px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 40px;
+      padding: 60px 40px;
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+
+    .conf-icon-wrapper {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 40px;
+    }
+
+    .conf-icon {
+      width: 100%;
+      height: 100%;
+      background: var(--aa-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      position: relative;
+      z-index: 2;
+    }
+
+    .conf-icon svg { width: 48px; height: 48px; }
+
+    .conf-ripple {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border-radius: 50%;
+      background: var(--aa-green);
+      opacity: 0.3;
+      animation: ripple 2s infinite;
+      z-index: 1;
+    }
+
+    @keyframes ripple {
+      0% { transform: scale(1); opacity: 0.3; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    .conf-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      background: linear-gradient(to bottom, #ffffff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .conf-subtitle {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 40px;
+    }
+
+    .conf-details {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 40px;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .detail-item .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.4; }
+    .detail-item .value { font-family: monospace; font-size: 1rem; font-weight: 600; color: var(--aa-green); }
+
+    .conf-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 18px 30px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-primary {
+      background: var(--aa-green);
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(23, 106, 96, 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(23, 106, 96, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      .glass-fx { padding: 40px 20px; }
+      .conf-title { font-size: 2rem; }
+    }
+  </style>
+
+  <script>
+    window.addEventListener('load', () => {
+      gsap.from('.gsap-reveal', {
+        y: 40, opacity: 0, duration: 1.2, ease: 'power3.out'
+      });
+    });
+  </script>
+
+</body>
+</html>

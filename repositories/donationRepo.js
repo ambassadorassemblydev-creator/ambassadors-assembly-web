@@ -63,7 +63,8 @@ export const donationRepo = {
                 user_id: userId || null,
                 donor_email: email,
                 status: 'completed',
-                payment_gateway: 'paystack'
+                payment_gateway: 'paystack',
+                receipt_number: 'AA-' + Math.random().toString(36).substring(2, 8).toUpperCase()
             }])
             .select()
             .single();

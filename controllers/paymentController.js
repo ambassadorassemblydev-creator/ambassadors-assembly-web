@@ -1,5 +1,9 @@
 import { donationRepo } from '../repositories/donationRepo.js';
 import axios from 'axios';
+import { emailService } from '../services/emailService.js';
+import { verifyRecaptcha } from '../utils/recaptcha.js';
+import { logger } from '../config/logger.js';
+
 
 export const paymentController = {
     /**
@@ -14,6 +18,13 @@ export const paymentController = {
             if (!reference) {
                 return res.status(400).json({ success: false, message: 'Reference is required' });
             }
+
+            // 0. Verify reCAPTCHA
+            const isHuman = await verifyRecaptcha(req.body['g-recaptcha-response']);
+            if (!isHuman) {
+                return res.status(400).json({ success: false, message: 'Security verification failed. Please try again.' });
+            }
+
 
             // 1. Verify with Paystack API
             const secretKey = process.env.PAYSTACK_SECRET_KEY;
@@ -36,6 +47,17 @@ export const paymentController = {
             if (data.status === 'success' && data.amount === amount * 100) {
                 // 2. Finalize in DB
                 const result = await donationRepo.verifyAndCompleteDonation(reference, amount, categoryId, userId, email);
+                
+                // 3. Trigger Resend Automation
+                await emailService.triggerAutomation('donation.success', {
+                    email,
+                    amount,
+                    reference,
+                    receiptNumber: result.donation?.receipt_number || reference,
+                    categoryId,
+                    firstName: req.user?.user_metadata?.first_name || 'Ambassador'
+                });
+
                 return res.json(result);
             } else {
                 return res.status(400).json({ 
@@ -84,14 +106,41 @@ export const paymentController = {
                 const categoryId = metadata?.categoryId;
                 const userId = metadata?.userId;
                 
-                await donationRepo.verifyAndCompleteDonation(
+                // Idempotent processing in DB
+                const dbResult = await donationRepo.verifyAndCompleteDonation(
                     reference, 
                     amount / 100, 
                     categoryId, 
                     userId, 
                     customer.email
                 );
+
+                if (dbResult.message === 'Already processed') {
+                    logger.info(`[Paystack Webhook] Duplicate success received for reference: ${reference}`);
+                    return res.sendStatus(200);
+                }
+
+                // Trigger Automation for Webhook success too
+                await emailService.triggerAutomation('donation.success', {
+                    email: customer.email,
+                    amount: amount / 100,
+                    reference,
+                    receiptNumber: dbResult.donation?.receipt_number || reference,
+                    categoryId,
+                    firstName: customer.first_name || 'Ambassador'
+                });
+            } else if (event.event === 'charge.failed') {
+                const { reference, message, customer } = event.data;
+                logger.warn(`[Paystack Webhook] Charge failed for ${customer.email}: ${message} (Ref: ${reference})`);
+                
+                // Optionally notify the user about the failure
+                await emailService.triggerAutomation('donation.failed', {
+                    email: customer.email,
+                    reason: message,
+                    reference
+                });
             }
+
 
             res.sendStatus(200);
         } catch (error) {

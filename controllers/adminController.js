@@ -1,8 +1,7 @@
 import { supabaseService } from '../config/supabase.js';
 import { logger } from '../config/logger.js';
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY || 're_test_key_placeholder');
+import { automationService } from '../services/automationService.js';
+import { emailService } from '../services/emailService.js';
 
 export const adminController = {
   notifyAbsentees: async (req, res, next) => {
@@ -20,24 +19,15 @@ export const adminController = {
         if (!email) continue;
         
         try {
-          // Send silently in the background
-          const data = await resend.emails.send({
-            from: 'Ambassadors Assembly <hello@ambassadorsassembly.org>',
-            to: email,
-            subject: `We Missed You at ${eventName}!`,
-            html: `
-              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
-                <h2 style="color: #176a60;">We Missed You!</h2>
-                <p>Hello,</p>
-                <p>We noticed you weren't able to join us for <strong>${eventName}</strong> on ${date}.</p>
-                <p>We hope everything is going well. If you need prayer or support, please don't hesitate to reach out to us.</p>
-                <p>Stay blessed,<br>Ambassadors Assembly Team</p>
-              </div>
-            `
+          // High IQ: Trigger automation instead of hardcoded HTML
+          await emailService.triggerAutomation('attendance.missed', {
+            email,
+            eventName,
+            date
           });
-          results.push({ email, success: true, id: data?.id });
+          results.push({ email, success: true });
         } catch (e) {
-          logger.error(`Failed to email ${email}: ${e.message}`);
+          logger.error(`Failed to trigger automation for ${email}: ${e.message}`);
           results.push({ email, success: false, error: e.message });
         }
       }
@@ -46,6 +36,23 @@ export const adminController = {
     } catch (err) {
       logger.error(`Notify Absentees Error: ${err.message}`);
       res.status(500).json({ error: 'Failed to send notifications' });
+    }
+  },
+
+  /**
+   * GET /api/admin/sync-missed-attendance
+   * Manually triggers the automation engine to find absentees
+   */
+  manualSyncMissedAttendance: async (req, res, next) => {
+    try {
+      const days = parseInt(req.query.days) || 14;
+      logger.info(`Manual sync requested for missed attendance (past ${days} days)`);
+      
+      const result = await automationService.processMissedAttendance(days);
+      res.json({ status: 'success', ...result });
+    } catch (err) {
+      logger.error(`Manual Sync Error: ${err.message}`);
+      res.status(500).json({ error: err.message });
     }
   }
 };
