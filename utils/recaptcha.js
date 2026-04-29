@@ -42,3 +42,21 @@ export const verifyRecaptcha = async (token) => {
         return false;
     }
 };
+/**
+ * Get the actual reCAPTCHA score for database logging
+ * @param {string} token 
+ * @returns {Promise<number>} - Score (0.0 to 1.0)
+ */
+export const getRecaptchaScore = async (token) => {
+    try {
+        const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+        if (!secretKey || secretKey.includes('PLACEHOLDER') || !token) return 1.0;
+
+        const response = await axios.post(
+            `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`
+        );
+        return response.data.score || 1.0;
+    } catch (error) {
+        return 1.0;
+    }
+};

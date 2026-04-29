@@ -8,7 +8,7 @@ import { memberRepo } from '../repositories/memberRepo.js';
 import { testimonyRepo } from '../repositories/testimonyRepo.js';
 import { prayerRepo } from '../repositories/prayerRepo.js';
 import { auditLogger } from '../utils/auditLogger.js';
-import { verifyRecaptcha } from '../utils/recaptcha.js';
+import { verifyRecaptcha, getRecaptchaScore } from '../utils/recaptcha.js';
 
 
 export const pageController = {
@@ -461,9 +461,9 @@ export const pageController = {
             const userId = req.user?.id;
 
             // 0. Verify reCAPTCHA
-            const isHuman = await verifyRecaptcha(recaptchaToken);
-            if (!isHuman) {
-                return res.redirect(`${req.header('Referer') || '/testimonies'}?error=Security verification failed.`);
+            const score = await getRecaptchaScore(recaptchaToken);
+            if (score < 0.3) { // Stricter threshold for blocking, but we save the score anyway
+                return res.redirect(`${req.header('Referer') || '/testimonies'}?error=Security verification failed. Please try again.`);
             }
 
 
@@ -498,7 +498,8 @@ export const pageController = {
                 content,
                 is_anonymous: isAnonymous,
                 status: 'pending',
-                is_approved: false
+                is_approved: false,
+                recaptcha_score: score
             };
 
             await testimonyRepo.createTestimony(testimonyData);
@@ -562,8 +563,8 @@ export const pageController = {
             const userId = req.user?.id;
 
             // 0. Verify reCAPTCHA
-            const isHuman = await verifyRecaptcha(recaptchaToken);
-            if (!isHuman) {
+            const score = await getRecaptchaScore(recaptchaToken);
+            if (score < 0.3) {
                 return res.redirect(`${req.header('Referer') || '/connect'}?error=Security verification failed.`);
             }
 
@@ -584,7 +585,8 @@ export const pageController = {
                 is_anonymous: isAnonymous,
                 is_public: is_public === 'true' || is_public === 'on',
                 status: 'pending',
-                is_approved: false // Requires admin approval
+                is_approved: false, // Requires admin approval
+                recaptcha_score: score
             };
 
             await prayerRepo.submitPrayer(prayerData);
