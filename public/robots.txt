@@ -7,4 +7,4 @@ Disallow: /api/
 Disallow: /my-account/
 Disallow: /maintenance
 
-Sitemap: https://www.theambassadorsassembly.com/sitemap.xml
+Sitemap: https://www.theambassadorsassembly.org/sitemap.xml
