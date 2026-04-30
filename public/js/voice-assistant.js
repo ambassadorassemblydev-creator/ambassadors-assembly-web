@@ -20,28 +20,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let vapi = null;
     let isActive = false;
 
-    if (typeof Vapi !== 'undefined') {
-        vapi = new Vapi(VAPI_PUBLIC_KEY);
+    const initVapi = () => {
+        if (vapi) return true;
+        if (typeof Vapi !== 'undefined') {
+            vapi = new Vapi(VAPI_PUBLIC_KEY);
+            setupVapiHandlers();
+            return true;
+        }
+        return false;
+    };
 
+    const setupVapiHandlers = () => {
         vapi.on('call-start', () => {
             isActive = true;
             callBtn.classList.remove('connecting');
             callBtn.classList.add('active');
-            
-            // Show Call Overlay
             if (callOverlay) callOverlay.classList.add('active');
             if (callStatusText) callStatusText.innerText = "Call Active";
-            
             addSystemMessage("Voice call started. You can speak now.");
         });
 
         vapi.on('call-end', () => {
             isActive = false;
             callBtn.classList.remove('active', 'connecting');
-            
-            // Hide Call Overlay
             if (callOverlay) callOverlay.classList.remove('active');
-            
             addSystemMessage("Voice call ended.");
         });
 
@@ -53,21 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (callStatusText) callStatusText.innerText = "Listening...";
         });
 
-
-        vapi.on('message', (message) => {
-            if (message.type === 'transcript' && message.transcriptType === 'final') {
-                // If it's a transcript of the user or AI, we can show it in the chat
-                // For now, let's just log it or show it if you want text sync
-            }
-        });
-
         vapi.on('error', (e) => {
             console.error('Vapi Error:', e);
             addSystemMessage("Connection failed. Check your microphone.");
             isActive = false;
-            callBtn.classList.remove('active');
+            callBtn.classList.remove('active', 'connecting');
         });
-    }
+    };
+
+    // Try initial load
+    initVapi();
 
     const addSystemMessage = (text) => {
         const msgDiv = document.createElement('div');
@@ -80,8 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     callBtn.addEventListener('click', async () => {
-        if (!vapi) {
-            alert("Voice assistant is still initializing. Please wait.");
+        // High IQ: JIT Initialization if not already ready
+        if (!initVapi()) {
+            alert("Voice assistant library is still loading from the cloud. Please wait 2 seconds and try again.");
             return;
         }
 
