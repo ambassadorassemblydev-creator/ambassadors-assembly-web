@@ -1,5 +1,5 @@
 import webpush from 'web-push';
-import { supabase } from '../server.js';
+import { supabase } from '../config/supabase.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
