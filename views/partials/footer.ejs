@@ -268,8 +268,8 @@
                                           <div class="graphicWidget graphicWidgetV2 graphicWidgetV3 u_379522816"
                                             data-element-type="graphic" data-widget-type="graphic" id="379522816"
                                             data-hover-effect="forward"> <a
-                                              href=""
-                                              id="1371347025" class="" target="_blank" file="false"> <svg fill="#1A1A1A"
+                                              href="/download-app"
+                                              id="1371347025" class="" target="_self" file="false"> <svg fill="#1A1A1A"
                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px"
                                                 height="50px" id="1987502342" class="svg u_1987502342"
                                                 data-icon-custom="true" data-icon-name="icons8-google-play.svg">
@@ -286,8 +286,8 @@
                                           <div class="graphicWidget graphicWidgetV2 graphicWidgetV3 u_1765860511"
                                             data-element-type="graphic" data-widget-type="graphic" id="1765860511"
                                             data-hover-effect="forward"> <a
-                                              href="https://apps.apple.com/app/id1481517150?ign-mpt=uo%3D4"
-                                              id="1273590909" class="" target="_blank" file="false"> <svg fill="#000000"
+                                              href="/download-app"
+                                              id="1273590909" class="" target="_self" file="false"> <svg fill="#000000"
                                                 width="800px" height="800px" viewBox="0 0 24 24"
                                                 xmlns="http://www.w3.org/2000/svg" id="1670778629"
                                                 class="svg u_1670778629" data-icon-custom="true"
@@ -298,6 +298,7 @@
                                               </svg>
                                             </a>
                                           </div>
+
                                         </div>
                                       </div>
                                     </div>
@@ -629,8 +630,16 @@
           <h3>Ambassadors AI</h3>
           <span id="ai-chat-status" class="status-online">Online</span>
         </div>
-        <button id="close-ai-chat" class="close-chat">&times;</button>
+        <div class="header-actions">
+          <button type="button" id="ai-call-btn" class="ai-call-btn header-btn" title="Start Voice Call">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </button>
+          <button id="close-ai-chat" class="close-chat">&times;</button>
+        </div>
       </div>
+
       <div id="ai-chat-messages" class="ai-chat-body">
         <div class="message ai">
           <div class="msg-content">
@@ -654,6 +663,7 @@
           </svg>
         </button>
       </form>
+
     </div>
   </div>
   <style>
@@ -730,8 +740,10 @@
     .header-info h3 { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
     .status-online { font-size: 0.75rem; opacity: 0.8; display: flex; align-items: center; gap: 5px; }
     .status-online::before { content: ''; width: 8px; height: 8px; background: #4ade80; border-radius: 50%; }
-    .close-chat { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+    .header-actions { display: flex; align-items: center; gap: 15px; }
+    .close-chat { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; padding: 0; line-height: 1; }
     .close-chat:hover { opacity: 1; }
+
     .ai-chat-body {
       flex: 1;
       padding: 25px;
@@ -797,6 +809,33 @@
     }
     #ai-send-btn:hover { transform: scale(1.05); }
     #ai-send-btn svg { width: 20px; height: 20px; }
+    
+    .ai-call-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .ai-call-btn:hover { transform: translateY(-2px); background: #25D366; border-color: #25D366; }
+    .ai-call-btn svg { width: 18px; height: 18px; }
+    .ai-call-btn.active { 
+      background: #ef4444; 
+      border-color: #ef4444;
+      animation: call-pulse 1.5s infinite;
+    }
+
+    @keyframes call-pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
     @media (max-width: 767px) {
       .ai-chat-window { width: calc(100vw - 40px); height: 500px; right: -10px; }
       #ambassadors-ai-container { bottom: 20px; right: 20px; }
@@ -1531,5 +1570,27 @@
         }
       });
     </script>
+    <!-- High IQ: Context Data for AI (IDE-safe injection) -->
+    <div id="ai-context-data" style="display:none;" 
+      data-user='<%- locals.user ? JSON.stringify({ first_name: locals.user.first_name, last_name: locals.user.last_name, role: locals.user.role || "member" }) : "null" %>'
+      data-church='<%- locals.churchSettings ? JSON.stringify({ address: locals.churchSettings.church_address, phone: locals.churchSettings.church_phone, email: locals.churchSettings.church_email, description: locals.churchSettings.site_description }) : "{}" %>'>
+    </div>
+
+    <script>
+      (function() {
+        const contextEl = document.getElementById('ai-context-data');
+        if (contextEl) {
+          window.currentUser = JSON.parse(contextEl.getAttribute('data-user'));
+          window.churchContext = JSON.parse(contextEl.getAttribute('data-church'));
+        }
+      })();
+    </script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.browser.js"></script>
+    <script src="/js/voice-assistant.js"></script>
+
   </body>
+
 </html>

@@ -1,0 +1,198 @@
+<%- include('../partials/head') %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+  
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper -var5 null ">
+      <div dmwrapped="true" id="download-app-page" class="dm-download-page" themewaschanged="true">
+        <div dmtemplateid="FlexHeader" class="runtime-module-container dm-bfs dm-layout-home hasAnimations hasStickyHeader inMiniHeaderMode rows-1200" id="dm-outer-wrapper">
+          <div id="dmStyle_outerContainer" class="dmOuter">
+            <div id="dmStyle_innerContainer" class="dmInner">
+              <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+                <div id="site_content">
+
+                  <%- include('../partials/navbar') %>
+
+                  <style>
+                    .download-hero {
+                        padding: 180px 6% 80px;
+                        background: #010101;
+                        position: relative;
+                        overflow: hidden;
+                        min-height: 100vh;
+                    }
+                    .bg-glow {
+                        position: absolute;
+                        top: 20%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 800px;
+                        height: 800px;
+                        background: radial-gradient(circle, rgba(23, 106, 96, 0.15) 0%, transparent 70%);
+                        pointer-events: none;
+                        z-index: 1;
+                    }
+                    .hero-content {
+                        position: relative;
+                        z-index: 2;
+                        max-width: 1400px;
+                        margin: 0 auto;
+                        text-align: center;
+                    }
+                    .hero-label {
+                        font-family: 'Manrope', sans-serif;
+                        font-size: 0.8rem;
+                        font-weight: 700;
+                        letter-spacing: 0.3em;
+                        text-transform: uppercase;
+                        color: rgba(255,255,255,0.5);
+                        margin-bottom: 20px;
+                        display: block;
+                    }
+                    .hero-title {
+                        font-family: 'Manrope', sans-serif;
+                        font-size: clamp(3rem, 8vw, 6rem);
+                        font-weight: 900;
+                        line-height: 0.95;
+                        letter-spacing: -0.04em;
+                        color: white;
+                        margin-bottom: 40px;
+                        text-transform: uppercase;
+                    }
+                    .text-emerald { color: #10b981; }
+
+                    .download-grid {
+                        display: grid;
+                        grid-template-columns: 1.2fr 0.8fr;
+                        gap: 40px;
+                        margin-top: 60px;
+                        text-align: left;
+                    }
+
+                    .apk-card {
+                        background: rgba(255, 255, 255, 0.03);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 40px;
+                        padding: 50px;
+                        backdrop-filter: blur(20px);
+                    }
+                    .apk-card h2 { font-size: 2.5rem; margin-bottom: 15px; font-weight: 800; color: white; }
+                    .apk-card p { margin-bottom: 30px; opacity: 0.7; font-size: 1.1rem; color: white; }
+
+                    .btn-download {
+                        background: linear-gradient(135deg, #134e5e 0%, #176a60 100%);
+                        color: white;
+                        padding: 22px 40px;
+                        border-radius: 20px;
+                        text-decoration: none !important;
+                        font-weight: 800;
+                        font-size: 1.2rem;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 15px;
+                        width: fit-content;
+                        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                        box-shadow: 0 15px 30px rgba(19, 78, 94, 0.3);
+                    }
+                    .btn-download:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(19, 78, 94, 0.4); background: #10b981; }
+
+                    .pwa-info {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+                    }
+                    .pwa-step {
+                        background: rgba(255, 255, 255, 0.02);
+                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        padding: 25px;
+                        border-radius: 30px;
+                        transition: 0.3s;
+                    }
+                    .pwa-step:hover { background: rgba(255, 255, 255, 0.04); transform: translateX(10px); }
+                    .step-num { color: #10b981; font-weight: 900; font-size: 1.2rem; margin-bottom: 10px; display: block; }
+                    .pwa-step h3 { font-size: 1.1rem; margin-bottom: 5px; color: white; }
+                    .pwa-step p { font-size: 0.9rem; opacity: 0.6; color: white; }
+
+                    @media (max-width: 900px) {
+                        .download-grid { grid-template-columns: 1fr; }
+                        .hero-title { font-size: 3.5rem; }
+                    }
+                  </style>
+
+                  <main>
+                    <section class="download-hero">
+                        <div class="bg-glow"></div>
+                        <div class="hero-content">
+                            <span class="hero-label gsap-reveal">Mobile Experience</span>
+                            <h1 class="hero-title gsap-reveal">The <span class="text-emerald">Assembly</span><br>In Your Pocket</h1>
+                            
+                            <div class="download-grid">
+                                <div class="apk-card gsap-reveal">
+                                    <h2>Android APK</h2>
+                                    <p>Download the official Android installation package directly to your device. Full performance, zero limits.</p>
+                                    <a href="#" id="apk-link" class="btn-download">
+                                        <i class="fas fa-download"></i>
+                                        Download APK
+                                    </a>
+                                    <div style="margin-top: 30px; font-size: 0.8rem; opacity: 0.5; color: white;">
+                                        Current Version: v1.0.0 (Production)<br>
+                                        Last Updated: <%= new Date().toLocaleDateString() %>
+                                    </div>
+                                </div>
+
+                                <div class="pwa-info gsap-reveal">
+                                    <div class="pwa-step">
+                                        <span class="step-num">01</span>
+                                        <h3>Instant Install</h3>
+                                        <p>No app store needed. Tap the 'Share' or 'Menu' icon in your browser.</p>
+                                    </div>
+                                    <div class="pwa-step">
+                                        <span class="step-num">02</span>
+                                        <h3>Add to Home</h3>
+                                        <p>Select "Add to Home Screen" to install the Ambassadors app instantly.</p>
+                                    </div>
+                                    <div class="pwa-step">
+                                        <span class="step-num">03</span>
+                                        <h3>Launch Anywhere</h3>
+                                        <p>Access sermons, giving, and AI directly from your home screen.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                  </main>
+
+                  <%- include('../partials/footer') %>
+
+                  <script>
+                    window.addEventListener('load', () => {
+                      gsap.from('.gsap-reveal', {
+                        y: 60,
+                        opacity: 0,
+                        duration: 1.2,
+                        stagger: 0.2,
+                        ease: 'power4.out'
+                      });
+                    });
+
+                    document.getElementById('apk-link').addEventListener('click', (e) => {
+                        const link = e.currentTarget.getAttribute('href');
+                        if (link === '#') {
+                            e.preventDefault();
+                            alert("The High IQ APK link is coming soon! For now, please use the 'Add to Home Screen' method.");
+                        }
+                    });
+                  </script>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

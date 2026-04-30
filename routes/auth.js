@@ -11,7 +11,8 @@ router.get('/email-confirmed', authController.renderEmailConfirmed);
 router.get('/check-email', (req, res) => res.render('pages/check-email', { pageTitle: 'Check Your Email | Ambassadors Assembly' }));
 // API Endpoints (POST)
 router.post('/api/login', authController.login);
-router.post('/api/signup', authController.signUp); // <-- ADD THIS
+router.post('/api/signup', authController.signUp);
+router.post('/api/auth/session', authController.setSession); // <-- BRIDGE ENDPOINT
 router.get('/logout', authController.logout);
 
 // OAuth Routes

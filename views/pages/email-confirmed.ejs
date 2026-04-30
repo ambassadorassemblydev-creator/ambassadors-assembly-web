@@ -140,5 +140,49 @@
     </div> <!-- Closing dm_wrapper -->
   </div> <!-- Closing dmwr -->
 
+  <!-- AUTHENTICATION BRIDGE -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const handleAuthHash = async () => {
+        const hash = window.location.hash;
+        if (!hash || !hash.includes('access_token')) {
+          // If no hash, maybe they are already logged in or just visiting.
+          // But usually this page is reached via email link which HAS a hash.
+          return;
+        }
+
+        console.log("Auth hash detected, establishing session...");
+        const params = new URLSearchParams(hash.substring(1));
+        const session = {
+          access_token: params.get('access_token'),
+          refresh_token: params.get('refresh_token'),
+          expires_in: params.get('expires_in'),
+          token_type: params.get('token_type')
+        };
+
+        try {
+          const response = await fetch('/api/auth/session', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json'
+              // Note: CSRF might be tricky here if it's the first visit, 
+              // but since it's a GET page first, res.locals.csrfToken should be set in head/navbar
+            },
+            body: JSON.stringify({ session })
+          });
+
+          if (response.ok) {
+            console.log("Session established successfully.");
+            // We stay on this page to show the success message, 
+            // but now the "Go to Dashboard" button will work because the cookie is set.
+          }
+        } catch (err) {
+          console.error("Auth bridge failure:", err);
+        }
+      };
+
+      handleAuthHash();
+    });
+  </script>
 </body>
 </html>

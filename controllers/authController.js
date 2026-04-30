@@ -66,9 +66,31 @@ export const authController = {
 
   googleLogin: async (req, res, next) => {
     try {
-      const redirectTo = `${req.protocol}://${req.get('host')}/auth/callback`;
+      // Use the host from the request to ensure we redirect back to the same origin
+      const host = req.get('host');
+      const protocol = req.protocol;
+      const redirectTo = `${protocol}://${host}/auth/callback`;
+      
+      logger.info(`Initiating Google OAuth redirect to: ${redirectTo}`);
       const url = await authService.getGoogleOAuthUrl(redirectTo);
       res.redirect(url);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * High IQ: New endpoint to establish a session from a client-side hash (OAuth/Email Confirm)
+   */
+  setSession: async (req, res, next) => {
+    try {
+      const { session } = req.body;
+      if (!session || !session.access_token) {
+        return next(new AppError('No session data provided', 400));
+      }
+
+      setAuthCookies(res, session);
+      res.status(200).json({ status: 'success', message: 'Session established' });
     } catch (err) {
       next(err);
     }
@@ -77,16 +99,22 @@ export const authController = {
   handleCallback: async (req, res, next) => {
     try {
       const { code } = req.query;
-      if (!code) return res.redirect('/sign-in');
+      
+      // If no code is present, it might be an implicit flow (hash) handled by the client-side bridge
+      if (!code) {
+        logger.info('No OAuth code found in query, redirecting to sign-in to check for hash.');
+        return res.redirect('/sign-in');
+      }
 
       const { session, user } = await authService.exchangeCodeForSession(code);
       setAuthCookies(res, session);
 
-      // Redirect to confirmation page
+      // Redirect to confirmation page (which now has the bridge script)
       res.redirect('/email-confirmed');
     } catch (err) {
       logger.error('OAuth callback error:', err);
       res.redirect('/sign-in?error=oauth_failed');
     }
   }
+
 };

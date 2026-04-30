@@ -61,6 +61,9 @@ router.post('/api/ai/chat', aiController.handleChat);
 router.get('/terms-of-service', pageController.renderTerms);
 router.get('/privacy-policy', pageController.renderPrivacy);
 router.get('/confirmation', pageController.renderConfirmation);
+router.get('/download-app', (req, res) => res.render('pages/download-app', { pageTitle: 'Download App | The Ambassadors Assembly', currentPath: '/download-app' }));
+router.get('/offline', (req, res) => res.render('pages/offline', { layout: false }));
+
 
 // ==========================================
 // MONITORING & HEALTH (For Uptime Bots)

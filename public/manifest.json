@@ -1,0 +1,77 @@
+{
+  "name": "Ambassadors Assembly",
+  "short_name": "Ambassadors",
+  "description": "The official mobile platform for Ambassadors Assembly. Lead, Raise, Rule.",
+  "id": "org.theambassadorsassembly.app",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#010101",
+  "theme_color": "#176a60",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_192,h_192,g_auto,f_auto,q_auto/v1775200226/IMG-20260304-WA0059_telyum.jpg",
+      "type": "image/jpg",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_512,h_512,g_auto,f_auto,q_auto/v1775200226/IMG-20260304-WA0059_telyum.jpg",
+      "type": "image/jpg",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Watch Sermons",
+      "short_name": "Sermons",
+      "description": "Watch the latest messages",
+      "url": "/sermons",
+      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Give Online",
+      "short_name": "Giving",
+      "description": "Support the mission",
+      "url": "/give",
+      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "My Account",
+      "short_name": "Account",
+      "description": "Manage your profile",
+      "url": "/my-account",
+      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["lifestyle", "productivity", "social"],
+  "prefer_related_applications": false,
+  "screenshots": [
+    {
+      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1777418384/emerald-hero-bg.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpg",
+      "form_factor": "wide",
+      "label": "Ambassadors Assembly Home"
+    },
+    {
+      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1777418384/emerald-hero-bg.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg",
+      "form_factor": "narrow",
+      "label": "Mobile Dashboard"
+    }
+  ],
+  "share_target": {
+    "action": "/prayer-wall",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
+

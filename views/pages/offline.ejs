@@ -1,0 +1,45 @@
+<%- include('../partials/head', { 
+  pageTitle: 'Ambassador | Offline Connection'
+}) %>
+
+<body id="dmRoot" class="dmRoot fix-mobile-scrolling flex-site dmResellerSite no-scroll-transition" style="padding: 0px; margin: 0px;" data-flex-site="">
+  <%- include('../partials/preloader') %>
+  
+  <div id="dm" class="dmwr">
+    <div class="dm_wrapper">
+      <div class="dmLayoutWrapper standard-var dmStandardDesktop">
+        <div id="site_content">
+          <%- include('../partials/navbar') %>
+
+          <div id="dm_content" class="dmContent" role="main">
+            <div class="offline-hero" style="min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #0f172a 0%, #176a60 100%); color: white; text-align: center; padding: 40px 20px;">
+              
+              <div class="offline-icon" style="font-size: clamp(60px, 10vw, 100px); margin-bottom: 30px; filter: drop-shadow(0 0 20px rgba(37, 211, 102, 0.4)); animation: offlinePulse 2s infinite;">📡</div>
+              
+              <h1 style="font-family: 'Articulatcf-extra-bold', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 20px; line-height: 1.1;">Connection Lost, <span style="color: #25D366;">Ambassador</span></h1>
+              
+              <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; line-height: 1.6; margin-bottom: 40px; font-weight: 300;">The digital sanctuary is momentarily out of reach. Please check your signal and try to reconnect to the assembly.</p>
+              
+              <a href="/" class="glass-button" style="background: #25D366; color: white; border: none; padding: 18px 45px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3); transition: 0.4s; text-decoration: none; display: inline-block;">Try Reconnecting</a>
+
+              <style>
+                @keyframes offlinePulse {
+                  0% { transform: scale(1); opacity: 0.8; }
+                  50% { transform: scale(1.08); opacity: 1; }
+                  100% { transform: scale(1); opacity: 0.8; }
+                }
+                .glass-button:hover {
+                  transform: translateY(-5px) scale(1.05);
+                  box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+                }
+              </style>
+            </div>
+          </div>
+
+          <%- include('../partials/footer') %>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

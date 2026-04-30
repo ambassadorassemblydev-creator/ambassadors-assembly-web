@@ -1,0 +1,56 @@
+Exhaustive Stabilization Checklist
+Phase 1: Authentication & Global UI
+ Auth & Roles Fixes
+ Resolve why Super Admin is seen as "Member" in AuthContext.tsx
+ Fix fetchUserRole to prioritize super_admin from DB
+ Add "User Role Badge" to the Dashboard card for clarity
+ Navbar & Profile UI
+ Fix dummy avatar in Admin Navbar (pull from profile.avatar_url)
+ Fix Profile Settings page (currently not saving/working)
+ RBAC Visibility
+ Ensure Giving and Finance modules are visible to Super Admin/Pastor/Admin
+Phase 2: Member Management & Assignments
+ Member Card Fixes
+ Fix "Edit Profile" save logic (nothing happens on update)
+ Fix invalid input syntax for type date: "" error in MemberForm.tsx
+ Member Assignment Logic
+ Fix "Manage Assignments" role fetching (nothing shows for departments)
+ Fix ON CONFLICT unique constraint error in assignments
+ New Member View Module
+ Create /members/:id detail page
+ Implement Donation History (Tithes/Offerings/Donations)
+ Implement Pastoral Notes & Activity History
+Phase 3: Ministries, Departments & Outreach
+ Ministries Module
+ Fix location column schema mismatch in MinistryForm.tsx
+ Resolve failure to create new ministries
+ Fix "Members within a ministry aren't showing"
+ Departments & Outreach
+ Fix Failed to load department members in Outreach
+ Implement real logic for Recruit Volunteer button
+ Fix Master Rota page functionality
+Phase 4: Attendance, Events & Sermons
+ Attendance System
+ Update QR Code link to production domain
+ Fix data fetching (ensure saved records reload and don't show zero)
+ Add support for Sunday/Midweek Services in attendance
+ Events & Engagement
+ Fix Event Creation failure
+ Fix Go Live button popup (match "Schedule Stream" style)
+ Sermons & Media
+ Fix Upload Sermon failure
+ Add "Add Category/Series" buttons to Sermon form
+ Fix Media Gallery URL fetching and display
+ Correct/Remove Live Stream link in Sermons
+Phase 5: Additional Modules & Polish
+ Newsletter
+ Fix main site newsletter maintenance
+ Connect main site form to Admin Newsletter page
+ Milestones & Tasks
+ Fix Milestones buttons (stopped working)
+ Add support for Job Promotions and specific celebration types
+ Fix non-working buttons in Tasks module
+ Fix Task Save logic
+ Resource Center & AI
+ Fix Resource Center (Church Cloud) upload/download
+ Add History feature to AI Content Lab

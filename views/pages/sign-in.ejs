@@ -531,66 +531,108 @@ body.dmRoot,
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      // ==========================================
+      // 1. AUTH BRIDGE (Consumes Supabase Hash)
+      // ==========================================
+      const handleAuthHash = async () => {
+        const hash = window.location.hash;
+        if (!hash || !hash.includes('access_token')) return;
+
+        console.log("Auth hash detected, establishing session...");
+        const params = new URLSearchParams(hash.substring(1));
+        const session = {
+          access_token: params.get('access_token'),
+          refresh_token: params.get('refresh_token'),
+          expires_in: params.get('expires_in'),
+          token_type: params.get('token_type')
+        };
+
+        try {
+          const response = await fetch('/api/auth/session', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'x-csrf-token': document.getElementById("csrfToken")?.value
+            },
+            body: JSON.stringify({ session })
+          });
+
+          if (response.ok) {
+            window.location.hash = ""; // Clear hash
+            window.location.href = "/my-account";
+          }
+        } catch (err) {
+          console.error("Auth bridge failure:", err);
+        }
+      };
+
+      handleAuthHash();
+
+      // ==========================================
+      // 2. STANDARD LOGIN FORM
+      // ==========================================
       const form = document.getElementById("sign-in-form");
       const errorBox = document.getElementById("auth-error");
       const submitBtn = document.getElementById("submit-btn");
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-          
-        // Clear previous errors & show loading
-        errorBox.style.display = "none";
-        submitBtn.textContent = "Signing In...";
-        submitBtn.style.opacity = "0.7";
-        submitBtn.disabled = true;
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+            
+          // Clear previous errors & show loading
+          errorBox.style.display = "none";
+          submitBtn.textContent = "Signing In...";
+          submitBtn.style.opacity = "0.7";
+          submitBtn.disabled = true;
 
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const _csrf = document.getElementById("csrfToken") ? document.getElementById("csrfToken").value : undefined;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const _csrf = document.getElementById("csrfToken") ? document.getElementById("csrfToken").value : undefined;
 
-        try {
-          // 0. High IQ: Get reCAPTCHA token if configured
-          let recaptchaToken = null;
-          if (typeof grecaptcha !== 'undefined') {
-              recaptchaToken = await new Promise((resolve) => {
-                  grecaptcha.ready(() => {
-                      grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'login' }).then(resolve);
-                  });
-              });
+          try {
+            // 0. High IQ: Get reCAPTCHA token if configured
+            let recaptchaToken = null;
+            if (typeof grecaptcha !== 'undefined' && '<%= locals.recaptchaSiteKey %>') {
+                recaptchaToken = await new Promise((resolve) => {
+                    grecaptcha.ready(() => {
+                        grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'login' }).then(resolve);
+                    });
+                });
+            }
+
+            const response = await fetch('/api/login', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': _csrf
+              },
+              body: JSON.stringify({ email, password, _csrf, 'g-recaptcha-response': recaptchaToken })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign in. Please try again.");
+            }
+
+            // Success! Redirect to the dashboard
+            window.location.href = "/my-account";
+
+          } catch (err) {
+            // Show error
+            errorBox.textContent = err.message;
+            errorBox.style.display = "block";
+            
+            // Reset button
+            submitBtn.textContent = "Sign In";
+            submitBtn.style.opacity = "1";
+            submitBtn.disabled = false;
           }
-
-          const response = await fetch('/api/login', {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-csrf-token': _csrf
-            },
-            body: JSON.stringify({ email, password, _csrf, 'g-recaptcha-response': recaptchaToken })
-          });
-
-          const data = await response.json();
-
-
-          if (!response.ok) {
-            throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign in. Please try again.");
-          }
-
-          // Success! Redirect to the dashboard
-          window.location.href = "/my-account";
-
-        } catch (err) {
-          // Show error
-          errorBox.textContent = err.message;
-          errorBox.style.display = "block";
-          
-          // Reset button
-          submitBtn.textContent = "Sign In";
-          submitBtn.style.opacity = "1";
-          submitBtn.disabled = false;
-        }
-      });
+        });
+      }
     });
+
   </script>
 
 </body>

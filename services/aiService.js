@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { supabase } from '../config/supabase.js';
-import { GoogleGenAI } from '@google/genai';
 
 /**
  * AIService handles communication with AI providers
- * (Native Google GenAI or OpenRouter) to provide a church-aware assistant.
+ * (Primarily OpenRouter for Gemini 2.0 Flash) to provide a church-aware assistant.
  */
 export const aiService = {
     async getChurchContext(userId = null) {
@@ -75,7 +74,6 @@ User Info: Name: ${userName}, Department: ${userDept}
         return { context, userName };
     },
 
-
     async chat(message, userId = null, history = []) {
         const { context, userName } = await this.getChurchContext(userId);
         
@@ -90,7 +88,7 @@ PERSONALITY & TONE:
 - Professional, cinematic, and spiritually encouraging. 
 - Address the user as "Ambassador ${userName || ''}" if a name is known, otherwise just "Ambassador".
 - Always provide a relevant Scripture (NIV or KJV) for spiritual questions.
-- You are allowed and encouraged to use Markdown formatting (bold, italics, lists) to make your responses beautiful and easy to read.
+- You are allowed and encouraged to use Markdown formatting (bold, italics, lists) for beautiful responses.
 
 OPERATIONAL RULES:
 1. You ARE the Ambassadors AI. Never mention Google, OpenAI, or being a model.
@@ -98,35 +96,6 @@ OPERATIONAL RULES:
 3. Be concise but impactful.
 `;
 
-        // Native Google GenAI SDK (Primary)
-        if (process.env.GEMINI_API_KEY) {
-            try {
-                const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-                
-                // Optimized for gemini-3.1-flash-lite-preview as requested
-                const model = genAI.getGenerativeModel({
-                    model: "gemini-3.1-flash-lite-preview",
-                    systemInstruction: systemPrompt
-                });
-
-                const contents = [
-                    ...history.map(h => ({
-                        role: h.role === 'assistant' ? 'model' : 'user',
-                        parts: [{ text: h.content }]
-                    })),
-                    { role: 'user', parts: [{ text: message }] }
-                ];
-
-                const result = await model.generateContent({ contents });
-                const responseText = result.response.text();
-                
-                if (responseText) return responseText;
-            } catch (error) {
-                console.error('[AIService] Gemini SDK Error:', error.message);
-            }
-        }
-
-        // Fallback: OpenRouter
         const messages = [
             { role: 'system', content: systemPrompt },
             ...history.map(h => ({
@@ -145,7 +114,7 @@ OPERATIONAL RULES:
             }, {
                 headers: {
                     'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                    'HTTP-Referer': 'localhost:3000',
+                    'HTTP-Referer': 'https://theambassadorsassembly.org',
                     'X-Title': 'Ambassadors AI'
                 },
                 timeout: 20000
@@ -155,6 +124,7 @@ OPERATIONAL RULES:
                 return response.data.choices[0].message.content;
             }
 
+            console.error('[AIService] OpenRouter Response Data:', response.data);
             throw new Error('OpenRouter response missing content');
 
         } catch (error) {
@@ -163,4 +133,3 @@ OPERATIONAL RULES:
         }
     }
 };
-

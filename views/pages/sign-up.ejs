@@ -375,6 +375,46 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      // ==========================================
+      // 1. AUTH BRIDGE (Consumes Supabase Hash)
+      // ==========================================
+      const handleAuthHash = async () => {
+        const hash = window.location.hash;
+        if (!hash || !hash.includes('access_token')) return;
+
+        console.log("Auth hash detected, establishing session...");
+        const params = new URLSearchParams(hash.substring(1));
+        const session = {
+          access_token: params.get('access_token'),
+          refresh_token: params.get('refresh_token'),
+          expires_in: params.get('expires_in'),
+          token_type: params.get('token_type')
+        };
+
+        try {
+          const response = await fetch('/api/auth/session', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'x-csrf-token': document.getElementById("csrfToken")?.value
+            },
+            body: JSON.stringify({ session })
+          });
+
+          if (response.ok) {
+            window.location.hash = ""; // Clear hash
+            window.location.href = "/onboarding"; // New accounts go to onboarding
+          }
+        } catch (err) {
+          console.error("Auth bridge failure:", err);
+        }
+      };
+
+      handleAuthHash();
+
+      // ==========================================
+      // 2. STANDARD SIGN UP FORM
+      // ==========================================
       const form = document.getElementById("sign-up-form");
       const errorBox = document.getElementById("auth-error");
       const submitBtn = document.getElementById("submit-btn");
@@ -387,100 +427,105 @@
       const bar3 = document.getElementById("bar-3");
       const pwdText = document.getElementById("pwd-text");
 
-      pwdInput.addEventListener('input', () => {
-        const val = pwdInput.value;
-        let strength = 0;
-        if (val.length >= 8) strength += 1;
-        if (/[A-Z]/.test(val) && /[0-9]/.test(val)) strength += 1;
-        if (/[^A-Za-z0-9]/.test(val)) strength += 1; // Special char
+      if (pwdInput) {
+        pwdInput.addEventListener('input', () => {
+          const val = pwdInput.value;
+          let strength = 0;
+          if (val.length >= 8) strength += 1;
+          if (/[A-Z]/.test(val) && /[0-9]/.test(val)) strength += 1;
+          if (/[^A-Za-z0-9]/.test(val)) strength += 1; // Special char
 
-        // Reset
-        bar1.style.background = 'rgba(26, 26, 26, 0.05)';
-        bar2.style.background = 'rgba(26, 26, 26, 0.05)';
-        bar3.style.background = 'rgba(26, 26, 26, 0.05)';
-        pwdText.style.color = 'rgba(26, 26, 26, 0.45)';
+          // Reset
+          bar1.style.background = 'rgba(26, 26, 26, 0.05)';
+          bar2.style.background = 'rgba(26, 26, 26, 0.05)';
+          bar3.style.background = 'rgba(26, 26, 26, 0.05)';
+          pwdText.style.color = 'rgba(26, 26, 26, 0.45)';
 
-        if (strength === 1) {
-          bar1.style.background = '#ff453a'; // Red
-          pwdText.textContent = "Weak (Need uppercase & number)";
-        } else if (strength === 2) {
-          bar1.style.background = '#ffd60a'; // Yellow
-          bar2.style.background = '#ffd60a';
-          pwdText.textContent = "Good (Add special character)";
-        } else if (strength === 3) {
-          bar1.style.background = '#32d74b'; // Green
-          bar2.style.background = '#32d74b';
-          bar3.style.background = '#32d74b';
-          pwdText.textContent = "Strong password!";
-          pwdText.style.color = '#32d74b';
-        } else {
-          pwdText.textContent = "Minimum 8 characters";
-        }
-      });
+          if (strength === 1) {
+            bar1.style.background = '#ff453a'; // Red
+            pwdText.textContent = "Weak (Need uppercase & number)";
+          } else if (strength === 2) {
+            bar1.style.background = '#ffd60a'; // Yellow
+            bar2.style.background = '#ffd60a';
+            pwdText.textContent = "Good (Add special character)";
+          } else if (strength === 3) {
+            bar1.style.background = '#32d74b'; // Green
+            bar2.style.background = '#32d74b';
+            bar3.style.background = '#32d74b';
+            pwdText.textContent = "Strong password!";
+            pwdText.style.color = '#32d74b';
+          } else {
+            pwdText.textContent = "Minimum 8 characters";
+          }
+        });
+      }
 
       // Submit Form
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        
-        if (pwdInput.value !== confirmInput.value) {
-          errorBox.textContent = "Passwords do not match.";
-          errorBox.style.display = "block";
-          return;
-        }
-
-        errorBox.style.display = "none";
-        submitBtn.textContent = "Creating Account...";
-        submitBtn.style.opacity = "0.7";
-        submitBtn.disabled = true;
-
-        const formData = {
-          firstName: document.getElementById("firstName").value,
-          lastName: document.getElementById("lastName").value,
-          email: document.getElementById("email").value,
-          password: pwdInput.value,
-          _csrf: document.getElementById("csrfToken").value // CSRF Protection
-        };
-
-        try {
-          // 0. High IQ: Get reCAPTCHA token if configured
-          let recaptchaToken = null;
-          if (typeof grecaptcha !== 'undefined') {
-              recaptchaToken = await new Promise((resolve) => {
-                  grecaptcha.ready(() => {
-                      grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'signup' }).then(resolve);
-                  });
-              });
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          
+          if (pwdInput.value !== confirmInput.value) {
+            errorBox.textContent = "Passwords do not match.";
+            errorBox.style.display = "block";
+            return;
           }
 
-          const response = await fetch('/api/signup', {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: { 
-              'Content-Type': 'application/json',
-              'x-csrf-token': document.getElementById("csrfToken").value
-            },
-            body: JSON.stringify({ ...formData, 'g-recaptcha-response': recaptchaToken })
-          });
+          errorBox.style.display = "none";
+          submitBtn.textContent = "Creating Account...";
+          submitBtn.style.opacity = "0.7";
+          submitBtn.disabled = true;
+
+          const formData = {
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            email: document.getElementById("email").value,
+            password: pwdInput.value,
+            _csrf: document.getElementById("csrfToken").value // CSRF Protection
+          };
+
+          try {
+            // 0. High IQ: Get reCAPTCHA token if configured
+            let recaptchaToken = null;
+            if (typeof grecaptcha !== 'undefined' && '<%= locals.recaptchaSiteKey %>') {
+                recaptchaToken = await new Promise((resolve) => {
+                    grecaptcha.ready(() => {
+                        grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'signup' }).then(resolve);
+                    });
+                });
+            }
+
+            const response = await fetch('/api/signup', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: { 
+                'Content-Type': 'application/json',
+                'x-csrf-token': document.getElementById("csrfToken").value
+              },
+              body: JSON.stringify({ ...formData, 'g-recaptcha-response': recaptchaToken })
+            });
 
 
-          const data = await response.json();
+            const data = await response.json();
 
-          if (!response.ok) {
-            throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign up.");
+            if (!response.ok) {
+              throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign up.");
+            }
+
+            // Redirect to the "Check Your Email" page
+            window.location.href = "/check-email";
+
+          } catch (err) {
+            errorBox.textContent = err.message;
+            errorBox.style.display = "block";
+            submitBtn.textContent = "Create Account";
+            submitBtn.style.opacity = "1";
+            submitBtn.disabled = false;
           }
-
-          // Redirect to the "Check Your Email" page
-          window.location.href = "/check-email";
-
-        } catch (err) {
-          errorBox.textContent = err.message;
-          errorBox.style.display = "block";
-          submitBtn.textContent = "Create Account";
-          submitBtn.style.opacity = "1";
-          submitBtn.disabled = false;
-        }
-      });
+        });
+      }
     });
+
   </script>
 </body>
 </html>
