@@ -107,11 +107,12 @@ OPERATIONAL RULES:
 
         try {
             const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
-                model: 'tencent/hy3-preview:free', // Reverting to your exact free model choice
+                model: 'openai/gpt-oss-20b:free', 
                 messages: messages,
-                max_tokens: 1000,
+                max_tokens: 2048,
                 temperature: 0.7
             }, {
+
                 headers: {
                     'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
                     'HTTP-Referer': 'https://theambassadorsassembly.org',

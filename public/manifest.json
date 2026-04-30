@@ -1,67 +1,53 @@
 {
-  "name": "Ambassadors Assembly",
+  "name": "The Ambassadors Assembly",
   "short_name": "Ambassadors",
-  "description": "The official mobile platform for Ambassadors Assembly. Lead, Raise, Rule.",
-  "id": "org.theambassadorsassembly.app",
+  "description": "Raising Men, Transforming Lives. Join the global movement of Ambassadors Assembly.",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
-  "background_color": "#010101",
+  "background_color": "#0f172a",
   "theme_color": "#176a60",
-  "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
+  "orientation": "portrait-primary",
+  "categories": [
+    "lifestyle",
+    "social",
+    "education"
+  ],
   "icons": [
     {
       "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_192,h_192,g_auto,f_auto,q_auto/v1775200226/IMG-20260304-WA0059_telyum.jpg",
-      "type": "image/jpg",
       "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_512,h_512,g_auto,f_auto,q_auto/v1775200226/IMG-20260304-WA0059_telyum.jpg",
-      "type": "image/jpg",
       "sizes": "512x512",
-      "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Watch Sermons",
-      "short_name": "Sermons",
-      "description": "Watch the latest messages",
-      "url": "/sermons",
-      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "name": "Give Online",
-      "short_name": "Giving",
-      "description": "Support the mission",
-      "url": "/give",
-      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
-    },
-    {
-      "name": "My Account",
-      "short_name": "Account",
-      "description": "Manage your profile",
-      "url": "/my-account",
-      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
+      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_512,h_512,g_auto,f_auto,q_auto/v1775200226/IMG-20260304-WA0059_telyum.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "categories": ["lifestyle", "productivity", "social"],
-  "prefer_related_applications": false,
   "screenshots": [
     {
-      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1777418384/emerald-hero-bg.jpg",
-      "sizes": "1920x1080",
-      "type": "image/jpg",
+      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_1024,h_1024,g_auto/v1777418384/emerald-hero-bg.jpg",
+      "sizes": "1024x1024",
+      "type": "image/jpeg",
       "form_factor": "wide",
-      "label": "Ambassadors Assembly Home"
+      "label": "Ambassadors Assembly Cinematic Hero"
     },
     {
-      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/v1777418384/emerald-hero-bg.jpg",
-      "sizes": "1080x1920",
-      "type": "image/jpg",
+      "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_540,h_1170,g_auto/v1777418384/emerald-hero-bg.jpg",
+      "sizes": "540x1170",
+      "type": "image/jpeg",
       "form_factor": "narrow",
-      "label": "Mobile Dashboard"
+      "label": "Mobile Experience"
     }
   ],
   "share_target": {
@@ -72,6 +58,23 @@
       "text": "text",
       "url": "url"
     }
-  }
+  },
+  "shortcuts": [
+    {
+      "name": "Prayer Wall",
+      "url": "/prayer-wall",
+      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Give Online",
+      "url": "/give",
+      "icons": [{ "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.jpg", "sizes": "96x96" }]
+    }
+  ],
+  "display_override": [
+    "window-controls-overlay",
+    "minimal-ui",
+    "standalone"
+  ],
+  "prefer_related_applications": false
 }
-

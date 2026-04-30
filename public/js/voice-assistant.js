@@ -6,6 +6,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const callBtn = document.getElementById('ai-call-btn');
     const messagesBody = document.getElementById('ai-chat-messages');
+    const callOverlay = document.getElementById('ai-call-overlay');
+    const callStatusText = document.getElementById('ai-call-status');
+    const endCallBtn = document.getElementById('end-call-btn');
 
     // Replace with your Vapi Public Key from https://dashboard.vapi.ai
     const VAPI_PUBLIC_KEY = "b45e6a5e-44f4-48a5-a2ec-465df67f1887";
@@ -22,15 +25,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         vapi.on('call-start', () => {
             isActive = true;
+            callBtn.classList.remove('connecting');
             callBtn.classList.add('active');
+            
+            // Show Call Overlay
+            if (callOverlay) callOverlay.classList.add('active');
+            if (callStatusText) callStatusText.innerText = "Call Active";
+            
             addSystemMessage("Voice call started. You can speak now.");
         });
 
         vapi.on('call-end', () => {
             isActive = false;
-            callBtn.classList.remove('active');
+            callBtn.classList.remove('active', 'connecting');
+            
+            // Hide Call Overlay
+            if (callOverlay) callOverlay.classList.remove('active');
+            
             addSystemMessage("Voice call ended.");
         });
+
+        vapi.on('speech-start', () => {
+            if (callStatusText) callStatusText.innerText = "AI Speaking...";
+        });
+
+        vapi.on('speech-end', () => {
+            if (callStatusText) callStatusText.innerText = "Listening...";
+        });
+
 
         vapi.on('message', (message) => {
             if (message.type === 'transcript' && message.transcriptType === 'final') {
@@ -69,60 +91,49 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 2. Daily Limit Check (One Call Per User Per Day)
-        const userId = window.currentUser.id || 'anonymous';
-        const lastCallKey = `vapi_last_call_${userId}`;
-        const lastCallDate = localStorage.getItem(lastCallKey);
-        const today = new Date().toDateString();
-
-        if (lastCallDate === today) {
-            addSystemMessage("You have reached your spiritual allowance for voice calls today. Please return tomorrow, Ambassador!");
-            return;
-        }
-
-
         if (isActive) {
             vapi.stop();
         } else {
             // Check for microphone permission
             try {
-                await navigator.mediaDevices.getUserMedia({ audio: true });
+                const testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // HIGH IQ: Stop the test stream immediately to release the microphone for Vapi
+                testStream.getTracks().forEach(track => track.stop());
                 
                 // HIGH IQ: Pass user context to the AI
-                const options = {
-                    assistantId: ASSISTANT_ID
+                const assistantOverrides = {
+                    variableValues: {
+                        userName: window.currentUser?.first_name || 'Ambassador',
+                        userRole: window.currentUser?.role || 'Member',
+                        churchAddress: window.churchContext?.address || '',
+                        churchPhone: window.churchContext?.phone || '',
+                        churchEmail: window.churchContext?.email || '',
+                        churchDescription: window.churchContext?.description || ''
+                    }
                 };
 
-                if (window.currentUser) {
-                    options.assistantOverrides = {
-                        variableValues: {
-                            userName: window.currentUser.first_name,
-                            userRole: window.currentUser.role,
-                            churchAddress: window.churchContext.address || '',
-                            churchPhone: window.churchContext.phone || '',
-                            churchEmail: window.churchContext.email || '',
-                            churchDescription: window.churchContext.description || ''
-                        }
-                    };
-                }
-
-
-                const startOptions = {
-                    assistantId: ASSISTANT_ID,
-                    assistantOverrides: options.assistantOverrides
-                };
-
-                vapi.start(ASSISTANT_ID, options.assistantOverrides);
+                // Clear any previous state
+                vapi.stop();
                 
-                // HIGH IQ: Mark call as used for today
-                localStorage.setItem(lastCallKey, today);
-
-                addSystemMessage("Connecting to Ambassadors AI...");
+                // Connect with full context
+                vapi.start(ASSISTANT_ID, assistantOverrides);
+                
+                addSystemMessage("Connecting to the Throne Room (Ambassadors AI)...");
+                callBtn.classList.add('connecting');
 
             } catch (err) {
+                console.error("Voice Error:", err);
                 alert("Microphone access is required for voice calls.");
             }
         }
-
     });
+
+    if (endCallBtn) {
+        endCallBtn.addEventListener('click', () => {
+            if (vapi && isActive) {
+                vapi.stop();
+            }
+        });
+    }
 });
+

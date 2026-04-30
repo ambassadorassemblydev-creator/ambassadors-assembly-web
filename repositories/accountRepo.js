@@ -14,10 +14,15 @@ export const accountRepo = {
         ministry_members(
           role, 
           ministries(name, slug, cover_image_url)
+        ),
+        user_roles(
+          is_active,
+          roles(name)
         )
       `)
       .eq('id', userId)
       .maybeSingle();
+
 
     if (error) throw error;
 

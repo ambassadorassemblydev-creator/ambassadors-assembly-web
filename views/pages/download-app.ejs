@@ -18,19 +18,20 @@
                   <style>
                     .download-hero {
                         padding: 180px 6% 80px;
-                        background: #010101;
+                        /* High IQ: Soft ivory-green grained gradient */
+                        background: linear-gradient(135deg, #ffffff 0%, #f4fcf6 100%);
                         position: relative;
                         overflow: hidden;
                         min-height: 100vh;
                     }
                     .bg-glow {
                         position: absolute;
-                        top: 20%;
+                        top: 15%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        width: 800px;
-                        height: 800px;
-                        background: radial-gradient(circle, rgba(23, 106, 96, 0.15) 0%, transparent 70%);
+                        width: 1000px;
+                        height: 1000px;
+                        background: radial-gradient(circle, rgba(23, 106, 96, 0.05) 0%, transparent 70%);
                         pointer-events: none;
                         z-index: 1;
                     }
@@ -43,12 +44,12 @@
                     }
                     .hero-label {
                         font-family: 'Manrope', sans-serif;
-                        font-size: 0.8rem;
-                        font-weight: 700;
-                        letter-spacing: 0.3em;
+                        font-size: 0.85rem;
+                        font-weight: 800;
+                        letter-spacing: 0.4em;
                         text-transform: uppercase;
-                        color: rgba(255,255,255,0.5);
-                        margin-bottom: 20px;
+                        color: #176a60; /* Emerald Text */
+                        margin-bottom: 25px;
                         display: block;
                     }
                     .hero-title {
@@ -56,68 +57,71 @@
                         font-size: clamp(3rem, 8vw, 6rem);
                         font-weight: 900;
                         line-height: 0.95;
-                        letter-spacing: -0.04em;
-                        color: white;
+                        letter-spacing: -0.05em;
+                        color: #1a1a1a; /* Obsidian Black */
                         margin-bottom: 40px;
                         text-transform: uppercase;
                     }
-                    .text-emerald { color: #10b981; }
+                    .text-emerald { color: #176a60; }
 
                     .download-grid {
                         display: grid;
                         grid-template-columns: 1.2fr 0.8fr;
-                        gap: 40px;
+                        gap: 50px;
                         margin-top: 60px;
                         text-align: left;
                     }
 
                     .apk-card {
-                        background: rgba(255, 255, 255, 0.03);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        background: rgba(255, 255, 255, 0.9);
+                        border: 1.5px solid rgba(23, 106, 96, 0.15);
                         border-radius: 40px;
                         padding: 50px;
-                        backdrop-filter: blur(20px);
+                        box-shadow: 0 30px 60px rgba(23, 106, 96, 0.05);
+                        backdrop-filter: blur(10px);
                     }
-                    .apk-card h2 { font-size: 2.5rem; margin-bottom: 15px; font-weight: 800; color: white; }
-                    .apk-card p { margin-bottom: 30px; opacity: 0.7; font-size: 1.1rem; color: white; }
+                    .apk-card h2 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 900; color: #176a60; letter-spacing: -0.02em; }
+                    .apk-card p { margin-bottom: 35px; color: #334155; font-size: 1.2rem; line-height: 1.6; }
 
                     .btn-download {
-                        background: linear-gradient(135deg, #134e5e 0%, #176a60 100%);
+                        background: #176a60;
                         color: white;
-                        padding: 22px 40px;
-                        border-radius: 20px;
+                        padding: 24px 48px;
+                        border-radius: 24px;
                         text-decoration: none !important;
                         font-weight: 800;
-                        font-size: 1.2rem;
+                        font-size: 1.25rem;
                         display: inline-flex;
                         align-items: center;
                         gap: 15px;
                         width: fit-content;
-                        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                        box-shadow: 0 15px 30px rgba(19, 78, 94, 0.3);
+                        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+                        box-shadow: 0 15px 30px rgba(23, 106, 96, 0.25);
                     }
-                    .btn-download:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(19, 78, 94, 0.4); background: #10b981; }
+                    .btn-download:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px rgba(23, 106, 96, 0.35); background: #134e5e; }
 
                     .pwa-info {
                         display: flex;
                         flex-direction: column;
-                        gap: 20px;
+                        gap: 25px;
                     }
                     .pwa-step {
-                        background: rgba(255, 255, 255, 0.02);
-                        border: 1px solid rgba(255, 255, 255, 0.05);
-                        padding: 25px;
-                        border-radius: 30px;
-                        transition: 0.3s;
+                        background: #ffffff;
+                        border: 1.5px solid rgba(23, 106, 96, 0.08);
+                        padding: 30px;
+                        border-radius: 35px;
+                        transition: all 0.4s ease;
+                        box-shadow: 0 10px 20px rgba(0,0,0,0.02);
                     }
-                    .pwa-step:hover { background: rgba(255, 255, 255, 0.04); transform: translateX(10px); }
-                    .step-num { color: #10b981; font-weight: 900; font-size: 1.2rem; margin-bottom: 10px; display: block; }
-                    .pwa-step h3 { font-size: 1.1rem; margin-bottom: 5px; color: white; }
-                    .pwa-step p { font-size: 0.9rem; opacity: 0.6; color: white; }
+                    .pwa-step:hover { border-color: #176a60; transform: translateX(15px); box-shadow: 0 15px 40px rgba(23, 106, 96, 0.1); }
+                    .step-num { color: #176a60; font-weight: 900; font-size: 1.3rem; margin-bottom: 12px; display: block; opacity: 0.8; }
+                    .pwa-step h3 { font-size: 1.2rem; margin-bottom: 8px; color: #1a1a1a; font-weight: 800; }
+                    .pwa-step p { font-size: 0.95rem; color: #64748b; line-height: 1.5; }
 
                     @media (max-width: 900px) {
-                        .download-grid { grid-template-columns: 1fr; }
+                        .download-grid { grid-template-columns: 1fr; gap: 30px; }
                         .hero-title { font-size: 3.5rem; }
+                        .apk-card { padding: 35px 25px; }
                     }
                   </style>
 
@@ -125,8 +129,8 @@
                     <section class="download-hero">
                         <div class="bg-glow"></div>
                         <div class="hero-content">
-                            <span class="hero-label gsap-reveal">Mobile Experience</span>
-                            <h1 class="hero-title gsap-reveal">The <span class="text-emerald">Assembly</span><br>In Your Pocket</h1>
+                            <span class="hero-label gsap-reveal">Ambassadors Assembly Mobile</span>
+                            <h1 class="hero-title gsap-reveal">Divine <span class="text-emerald">Connection</span><br>On Every Device</h1>
                             
                             <div class="download-grid">
                                 <div class="apk-card gsap-reveal">
@@ -136,7 +140,7 @@
                                         <i class="fas fa-download"></i>
                                         Download APK
                                     </a>
-                                    <div style="margin-top: 30px; font-size: 0.8rem; opacity: 0.5; color: white;">
+                                    <div style="margin-top: 30px; font-size: 0.8rem; color: #888; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">
                                         Current Version: v1.0.0 (Production)<br>
                                         Last Updated: <%= new Date().toLocaleDateString() %>
                                     </div>

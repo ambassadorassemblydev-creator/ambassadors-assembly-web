@@ -8,7 +8,9 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import compression from 'compression';
+import cors from 'cors';
 import { RedisStore as RateLimitRedisStore } from 'rate-limit-redis';
+
 
 import { redis } from './config/redis.js';
 import session from 'express-session';
@@ -20,6 +22,7 @@ import { logger } from './config/logger.js';
 import { globalErrorHandler } from './middlewares/errorHandler.js';
 import { AppError } from './utils/AppError.js';
 import indexRouter from './routes/index.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
 import { siteConfigMiddleware } from './middlewares/siteConfigMiddleware.js';
 import { csrfProtection, generateToken, csrfErrorHandler } from './middlewares/csrfMiddleware.js';
@@ -32,6 +35,27 @@ dotenv.config();
 
 // Sentry is already initialized in instrument.js
 const app = express();
+
+// ==========================================
+// 🛡️ BOT SHIELD MIDDLEWARE
+// Silently handle common bot scans (WP, etc) to keep logs clean
+// ==========================================
+const BOT_PATHS = [
+  '/wp-includes/', 
+  '/wp-admin/', 
+  '/.env', 
+  '/wlwmanifest.xml', 
+  '/xmlrpc.php',
+  '/wp-content/'
+];
+app.use((req, res, next) => {
+  if (BOT_PATHS.some(path => req.url.includes(path))) {
+    // High IQ: Silent 404 - no logging, just drop
+    return res.status(404).send('Not Found');
+  }
+  next();
+});
+
 app.set('trust proxy', 1); // Support Render's reverse proxy for rate-limiting
 app.use(statusMonitor({
   title: 'Ambassadors Assembly | System Status',
@@ -59,6 +83,13 @@ const __dirname = path.dirname(__filename);
 
 // 0. COMPRESSION (High IQ: Must be first to compress all responses)
 app.use(compression());
+
+// High IQ: Allow Admin Portal to talk to API
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://172.28.48.1:3000', process.env.ADMIN_PORTAL_URL].filter(Boolean),
+  credentials: true
+}));
+
 
 // ==========================================
 // 1. GLOBAL MIDDLEWARES (Security & Parsing)
@@ -266,6 +297,8 @@ app.use((req, res, next) => {
 // 3. ROUTES
 // ==========================================
 app.use('/', indexRouter);
+app.use('/api/notifications', notificationRoutes);
+
 
 // Sentry Debug Route
 app.get("/debug-sentry", function mainHandler(req, res) {
