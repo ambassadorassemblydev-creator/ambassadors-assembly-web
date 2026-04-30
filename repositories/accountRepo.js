@@ -15,7 +15,7 @@ export const accountRepo = {
           role, 
           ministries(name, slug, cover_image_url)
         ),
-        user_roles(
+        user_roles!user_id(
           is_active,
           roles(name)
         )

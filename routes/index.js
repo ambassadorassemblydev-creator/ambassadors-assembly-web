@@ -15,6 +15,7 @@ router.get('/', pageController.renderHome);
 router.get('/sermons', pageController.renderSermons);
 router.get('/account/login', (req, res) => res.render('pages/sign-in', { pageTitle: 'Login | The Ambassadors Assembly', currentPath: req.path }));
 router.get('/account/register', (req, res) => res.render('pages/sign-up', { pageTitle: 'Register | The Ambassadors Assembly', currentPath: req.path }));
+router.get('/account/logout', (req, res) => res.redirect('/logout'));
 
 // Ministry Routes
 router.get('/ministries', pageController.renderMinistries);
