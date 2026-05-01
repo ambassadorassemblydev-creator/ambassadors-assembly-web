@@ -616,8 +616,11 @@ body.dmRoot,
               throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign in. Please try again.");
             }
 
-            // Success! Redirect to the dashboard
-            window.location.href = "/my-account";
+            // Success! Show toast and redirect
+            showToast("Welcome back to Ambassadors Assembly!", "success");
+            setTimeout(() => {
+              window.location.href = "/my-account";
+            }, 1000);
 
           } catch (err) {
             // Show error

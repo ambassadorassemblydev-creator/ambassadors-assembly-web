@@ -63,6 +63,18 @@ const onboardingSchema = z.object({
   
   // High IQ: Capture multiple interests
   interests: z.union([z.string(), z.array(z.string())]).optional(),
+  ministry_interests: z.union([z.string(), z.array(z.string())]).optional(),
+  
+  // Professional & Profile
+  employer: z.string().optional(),
+  bio: z.string().optional(),
+  
+  // Preferences
+  receive_email_newsletter: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  receive_email_events: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  receive_sms_notifications: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  receive_birthday_greeting: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  receive_email_devotionals: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
 });
 
 export const accountController = {
@@ -308,8 +320,15 @@ export const accountController = {
         how_did_you_hear: source,
         spiritual_gifts: gifts,
         occupation: validatedData.occupation || null,
+        employer: validatedData.employer || null,
+        bio: validatedData.bio || null,
         emergency_contact_name: validatedData.emergency_contact_name || null,
         emergency_contact_phone: validatedData.emergency_contact_phone || null,
+        receive_email_newsletter: validatedData.receive_email_newsletter ?? true,
+        receive_email_events: validatedData.receive_email_events ?? true,
+        receive_sms_notifications: validatedData.receive_sms_notifications ?? false,
+        receive_birthday_greeting: validatedData.receive_birthday_greeting ?? true,
+        receive_email_devotionals: validatedData.receive_email_devotionals ?? false,
         is_onboarded: true,
         already_serving: isAlreadyServing,
         approval_status: needsApproval ? 'pending' : 'none',
@@ -374,6 +393,36 @@ export const accountController = {
         }
       }
 
+      // 4.5. Ministry Interests Logic
+      if (validatedData.ministry_interests) {
+        try {
+          const mInterests = Array.isArray(validatedData.ministry_interests) 
+            ? validatedData.ministry_interests 
+            : [validatedData.ministry_interests];
+          
+          for (const mName of mInterests) {
+            const { data: mData } = await supabaseService
+              .from('ministries')
+              .select('id')
+              .eq('name', mName)
+              .single();
+
+            if (mData) {
+              await supabaseService.from('ministry_members').upsert({
+                user_id: userId,
+                ministry_id: mData.id,
+                role: 'pending',
+                status: 'pending',
+                joined_at: new Date()
+              }, { onConflict: 'user_id,ministry_id' });
+            }
+          }
+          logger.info(`Ministry interests processed for user: ${userId}`);
+        } catch (mErr) {
+          logger.warn(`Non-critical error in ministry linking: ${mErr.message}`);
+        }
+      }
+
       // 5. Assign correct role — never leave user as 'guest' after onboarding
       // NOTE: Picking a department during onboarding is an *interest*, not an approval.
       // Everyone gets 'member' after onboarding. Admin promotes to 'worker' after reviewing
@@ -417,11 +466,16 @@ export const accountController = {
       }
 
       // 6. Finalize - Trigger Welcome & Redirect
-      await emailService.triggerAutomation('auth.welcome', {
-          email: req.user.email,
-          firstName: validatedData.firstName || 'Ambassador',
-          lastName: validatedData.lastName || ''
-      });
+      // User has configured Resend Automations - triggering 'auth.welcome'
+      try {
+        await emailService.triggerAutomation('auth.welcome', {
+            email: req.user.email,
+            firstName: req.user.first_name || validatedData.firstName || 'Ambassador',
+            lastName: req.user.last_name || validatedData.lastName || ''
+        });
+      } catch (emailErr) {
+        logger.error(`Welcome automation failed but onboarding proceeded: ${emailErr.message}`);
+      }
 
       await auditRepo.logAction(req, 'complete_onboarding', 'Completed full profile onboarding', 'profiles', userId, profileUpdates);
 

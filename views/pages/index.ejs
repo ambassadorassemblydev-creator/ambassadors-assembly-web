@@ -730,11 +730,54 @@
                                 <h2 class="newsletter-text__title">Don't miss out on the inside scoop!</h2>
                                 <p class="newsletter-text__sub">Subscribe to our newsletter &amp; enjoy the latest News &amp; resources.</p>
                               </div>
-                              <form class="newsletter-form" id="newsletter-form" onsubmit="return false;">
-                                <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
-                                <input type="email" class="newsletter-form__input" placeholder="Your email" required>
-                                <button type="submit" class="newsletter-form__btn">Subscribe</button>
+                              <form class="newsletter-form" id="newsletter-form">
+                                <input type="hidden" id="newsletter-csrf" value="<%= locals.csrfToken %>">
+                                <input type="email" id="newsletter-email" class="newsletter-form__input" placeholder="Your email" required>
+                                <button type="submit" id="newsletter-submit" class="newsletter-form__btn">Subscribe</button>
                               </form>
+                              <div id="newsletter-message" style="margin-top: 10px; font-size: 14px; font-weight: bold; display: none;"></div>
+                              
+                              <script>
+                                document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+                                  e.preventDefault();
+                                  const email = document.getElementById('newsletter-email').value;
+                                  const csrf = document.getElementById('newsletter-csrf').value;
+                                  const btn = document.getElementById('newsletter-submit');
+                                  const msg = document.getElementById('newsletter-message');
+                                  
+                                  btn.disabled = true;
+                                  btn.innerText = 'Subscribing...';
+                                  
+                                  try {
+                                    const response = await fetch('/api/newsletter/subscribe', {
+                                      method: 'POST',
+                                      headers: { 
+                                        'Content-Type': 'application/json',
+                                        'x-csrf-token': csrf
+                                      },
+                                      body: JSON.stringify({ email })
+                                    });
+                                    const data = await response.json();
+                                    
+                                    msg.style.display = 'block';
+                                    if (response.ok) {
+                                      msg.style.color = '#fff';
+                                      msg.innerText = data.message || 'Successfully subscribed!';
+                                      document.getElementById('newsletter-email').value = '';
+                                    } else {
+                                      msg.style.color = '#ff9999';
+                                      msg.innerText = data.error || 'Something went wrong.';
+                                    }
+                                  } catch (err) {
+                                    msg.style.display = 'block';
+                                    msg.style.color = '#ff9999';
+                                    msg.innerText = 'Connection error. Please try again.';
+                                  } finally {
+                                    btn.disabled = false;
+                                    btn.innerText = 'Subscribe';
+                                  }
+                                });
+                              </script>
                             </div>
                           </section>
                           <!-- ========= END NEWSLETTER ========= -->

@@ -18,27 +18,32 @@
               <div class="progress-tracker">
                 <div class="step-indicator" data-step="1">
                   <span class="step-num">1</span>
-                  <span class="step-label">Avatar</span>
+                  <span class="step-label">Presence</span>
                 </div>
                 <div class="step-line" data-line="1"></div>
                 <div class="step-indicator" data-step="2">
                   <span class="step-num">2</span>
-                  <span class="step-label">Identity</span>
+                  <span class="step-label">Contact</span>
                 </div>
                 <div class="step-line" data-line="2"></div>
                 <div class="step-indicator" data-step="3">
                   <span class="step-num">3</span>
-                  <span class="step-label">Journey</span>
+                  <span class="step-label">Life</span>
                 </div>
                 <div class="step-line" data-line="3"></div>
                 <div class="step-indicator" data-step="4">
                   <span class="step-num">4</span>
-                  <span class="step-label">Gifts</span>
+                  <span class="step-label">Journey</span>
                 </div>
                 <div class="step-line" data-line="4"></div>
                 <div class="step-indicator" data-step="5">
                   <span class="step-num">5</span>
-                  <span class="step-label">Service</span>
+                  <span class="step-label">Ministry</span>
+                </div>
+                <div class="step-line" data-line="5"></div>
+                <div class="step-indicator" data-step="6">
+                  <span class="step-num">6</span>
+                  <span class="step-label">Connect</span>
                 </div>
               </div>
 
@@ -191,7 +196,46 @@
 
                   <div class="form-actions dual">
                     <button type="button" onclick="goToStep(1)" class="back-btn glass-btn">Back</button>
-                    <button type="button" class="submit-btn highlight" onclick="goToStep(3)">Journey
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(3)">Life & Skills
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 3: LIFE & PROFESSION -->
+                <div id="stepSection3" class="form-section" style="display:none">
+                   <div class="form-row">
+                    <div class="form-group">
+                      <label>Occupation <span>*</span></label>
+                      <input type="text" name="occupation" placeholder="e.g. Software Engineer, Student" value="<%= user && user.occupation ? user.occupation : '' %>">
+                    </div>
+                    <div class="form-group">
+                      <label>Employer / Company</label>
+                      <input type="text" name="employer" placeholder="Where do you work?" value="<%= user && user.employer ? user.employer : '' %>">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>A Little About You (Bio / Testimony)</label>
+                    <textarea name="bio" placeholder="Share a brief summary of who you are or your journey with God..." class="glass-input"><%= user && user.bio ? user.bio : '' %></textarea>
+                    <p class="field-hint">This helps us connect you with the right communities.</p>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Spiritual Gifts & Natural Skills</label>
+                    <div class="gift-tags-grid" id="giftGrid">
+                      <% ['Teaching', 'Worship', 'Hospitality', 'Media/Tech', 'Intercession', 'Administration', 'Evangelism', 'Graphic Design', 'Musical Instruments', 'Counselling', 'First Aid', 'Cooking'].forEach(gift => { %>
+                        <div class="gift-tag <%= (user && user.spiritual_gifts && user.spiritual_gifts.includes(gift)) ? 'selected' : '' %>" onclick="toggleTag(this, '<%= gift %>')">
+                          <input type="checkbox" name="spiritual_gifts" value="<%= gift %>" style="display:none" <%= (user && user.spiritual_gifts && user.spiritual_gifts.includes(gift)) ? 'checked' : '' %>>
+                          <%= gift %>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+
+                  <div class="form-actions dual">
+                    <button type="button" onclick="goToStep(2)" class="back-btn glass-btn">Back</button>
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(4)">Journey
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </button>
                   </div>
@@ -244,10 +288,161 @@
                   </div>
 
                   <div class="form-actions dual">
-                    <button type="button" onclick="goToStep(2)" class="back-btn glass-btn">Back</button>
-                    <button type="button" class="submit-btn highlight" onclick="goToStep(4)">Gifts & Interests
+                    <button type="button" onclick="goToStep(3)" class="back-btn glass-btn">Back</button>
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(5)">Ministry Joins
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </button>
+                  </div>
+                </div>
+
+                <!-- STEP 5: MINISTRY & FELLOWSHIP -->
+                <div id="stepSection5" class="form-section" style="display:none">
+                  <div class="form-group">
+                    <label>Join a Ministry (Fellowship Groups)</label>
+                    <div class="ministry-groups-container">
+                      <% const categories = [...new Set(ministries.map(m => m.category))]; %>
+                      <% categories.forEach(cat => { %>
+                        <div class="category-group" style="margin-bottom: 25px;">
+                          <h4 class="sub-label" style="font-size: 10px; opacity: 0.6;"><%= cat === 'fellowship' ? 'Fellowship Groups' : 'Service Ministries' %></h4>
+                          <div class="ministry-grid">
+                            <% ministries.filter(m => m.category === cat).forEach(min => { 
+                              const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
+                                ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
+                                : false;
+                            %>
+                               <div class="min-card <%= isSelected ? 'selected' : '' %>" 
+                                    data-name="<%= min.name %>"
+                                    onclick="toggleMin(this, this.dataset.name)">
+                                <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
+                                <strong><%= min.name %></strong>
+                                <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Kingdom community' %></p>
+                                <div class="role-hint">Joining as Member</div>
+                              </div>
+                            <% }) %>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+
+                   <div class="form-group">
+                    <label>Service Placement (Outreach & Community) <span>*</span></label>
+                    <div class="dept-selection-grid">
+                       <% departments.forEach(dept => { %>
+                        <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
+                             data-name="<%= dept.name %>"
+                             data-id="<%= dept.id %>"
+                             onclick="selectDept(this, this.dataset.name, this.dataset.id)">
+                          <div class="tile-icon">
+                            <i class="fas fa-bullhorn"></i>
+                          </div>
+                          <div class="tile-info">
+                            <strong><%= dept.name %></strong>
+                            <p><%= dept.description || 'Service unit' %></p>
+                          </div>
+                          <div class="selection-indicator">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </div>
+                    <input type="hidden" name="department_interest" id="deptInput" value="<%= (user && user.department_interest) ? user.department_interest : '' %>">
+                  </div>
+
+                  <div id="roleSelectionWrapper" class="form-group" style="display: none;">
+                    <label>Specific Position of Interest <span>*</span></label>
+                    <div class="role-pills" id="roleOptions">
+                       <% positions.forEach(pos => { %>
+                        <div class="role-pill <%= (user && user.position_interest === pos.title) ? 'active' : '' %>" 
+                             data-dept-id="<%= pos.department_id %>"
+                             data-title="<%= pos.title %>"
+                             onclick="selectRole(this, this.dataset.title)">
+                          <%= pos.title %>
+                        </div>
+                      <% }) %>
+                    </div>
+                    <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
+                  </div>
+
+                  <div class="form-actions dual">
+                    <button type="button" onclick="goToStep(4)" class="back-btn glass-btn">Back</button>
+                    <button type="button" class="submit-btn highlight" onclick="goToStep(6)">Final Connection
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- STEP 6: KINGDOM CONNECTION (PREFERENCES) -->
+                <div id="stepSection6" class="form-section" style="display:none">
+                  <div class="card-group" style="margin-bottom: 30px;">
+                    <h4 class="sub-label">Communication Preferences</h4>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="receive_email_newsletter" value="true" checked>
+                        <div class="custom-check"></div>
+                        <div class="label-info">
+                          <strong>Weekly Newsletter</strong>
+                          <p>Stay updated with church news and upcoming events.</p>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="receive_email_events" value="true" checked>
+                        <div class="custom-check"></div>
+                        <div class="label-info">
+                          <strong>Event Notifications</strong>
+                          <p>Get notified about special services and conferences.</p>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="receive_sms_notifications" value="true">
+                        <div class="custom-check"></div>
+                        <div class="label-info">
+                          <strong>SMS Notifications</strong>
+                          <p>Urgent updates and reminders via text message.</p>
+                        </div>
+                      </label>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="receive_birthday_greeting" value="true" checked>
+                        <div class="custom-check"></div>
+                        <div class="label-info">
+                          <strong>Birthday Greetings</strong>
+                          <p>Let the church family celebrate with you on your special day.</p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 35px; background: rgba(23, 106, 96, 0.03); padding: 25px; border-radius: 20px; border: 1px solid rgba(23, 106, 96, 0.1);">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="already_serving" value="true">
+                      <div class="custom-check"></div>
+                      <div class="label-info">
+                        <strong style="color: #4ade80;">I am already serving at Ambassadors Assembly</strong>
+                        <p>Check this if you are already a Pastor, Worker, or Choir member.</p>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Why do you want to serve? (Motivation)</label>
+                    <textarea name="motivation" placeholder="Share your heart..." class="glass-input"></textarea>
+                  </div>
+
+                  <div class="form-actions" style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
+                    <button type="submit" class="submit-btn highlight" id="btnFinal">Complete Onboarding
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </button>
+                    <button type="button" onclick="goToStep(5)" class="back-btn" style="border: none; background: transparent;">&larr; Back</button>
                   </div>
                 </div>
 
@@ -268,19 +463,27 @@
 
                   <div class="form-group">
                     <label>Join a Ministry (Fellowship Groups)</label>
-                    <div class="ministry-grid">
-                      <% const fellowshipGroups = ministries.filter(m => m.category === 'fellowship'); %>
-                      <% fellowshipGroups.forEach(min => { 
-                        const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
-                          ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
-                          : false;
-                      %>
-                         <div class="min-card <%= isSelected ? 'selected' : '' %>" 
-                              data-name="<%= min.name %>"
-                              onclick="toggleMin(this, this.dataset.name)">
-                          <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
-                          <strong><%= min.name %></strong>
-                          <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Community fellowship' %></p>
+                    <div class="ministry-groups-container">
+                      <% const categories = [...new Set(ministries.map(m => m.category))]; %>
+                      <% categories.forEach(cat => { %>
+                        <div class="category-group" style="margin-bottom: 25px;">
+                          <h4 class="sub-label" style="font-size: 10px; opacity: 0.6;"><%= cat === 'fellowship' ? 'Fellowship Groups' : 'Service Ministries' %></h4>
+                          <div class="ministry-grid">
+                            <% ministries.filter(m => m.category === cat).forEach(min => { 
+                              const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
+                                ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
+                                : false;
+                            %>
+                               <div class="min-card <%= isSelected ? 'selected' : '' %>" 
+                                    data-name="<%= min.name %>"
+                                    onclick="toggleMin(this, this.dataset.name)">
+                                <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
+                                <strong><%= min.name %></strong>
+                                <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Kingdom community' %></p>
+                                <div class="role-hint">Joining as Member</div>
+                              </div>
+                            <% }) %>
+                          </div>
                         </div>
                       <% }) %>
                     </div>
@@ -425,9 +628,21 @@ main.onboarding-page {
   min-height: 100vh;
   /* High IQ: Soft ivory-green grained gradient for a bright, divine feel */
   background: linear-gradient(135deg, #ffffff 0%, #f4fcf6 100%);
+  background-attachment: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 20px;
+}
+
+main.onboarding-page::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
 }
 
 
@@ -529,7 +744,8 @@ main.onboarding-page {
     .min-card:hover { background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: rgba(23, 106, 96, 0.3); }
     .min-card.selected { border-color: var(--color_2, #176a60); background: rgba(23, 106, 96, 0.05); box-shadow: 0 5px 15px rgba(23, 106, 96, 0.1); }
     .min-card strong { display: block; font-size: 14px; margin-bottom: 5px; color: #1a1a1a; }
-    .min-card p { font-size: 11px; color: rgba(26,26,26,0.6); line-height: 1.4; margin: 0; }
+    .min-card p { font-size: 11px; color: rgba(26,26,26,0.6); line-height: 1.4; margin-bottom: 10px; }
+    .role-hint { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--color_2, #176a60); opacity: 0.6; }
 
     /* Service Visuals / Dept Grid */
     .dept-selection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
@@ -669,11 +885,12 @@ main.onboarding-page {
 
       // Headers
       const headers = [
-        ['Step 1', 'Kingdom Identity', 'Let’s start with your profile photo.'],
+        ['Step 1', 'Kingdom Presence', 'Let’s start with your profile photo.'],
         ['Step 2', 'Personal Details', 'Basic information to help us know you better.'],
-        ['Step 3', 'Spiritual Journey', 'Tell us about your walk with Christ.'],
-        ['Step 4', 'Gifts & Interests', 'What has God placed in your hands?'],
-        ['Step 5', 'Service Placement', 'Where would you like to serve in the assembly?']
+        ['Step 3', 'Life & Profession', 'Your professional background and personal story.'],
+        ['Step 4', 'Spiritual Journey', 'Tell us about your walk with Christ.'],
+        ['Step 5', 'Ministry & Service', 'Where would you like to serve in the assembly?'],
+        ['Step 6', 'Final Connection', 'Set your preferences and join the family.']
       ];
       title.innerText = headers[num-1][1];
       sub.innerText = headers[num-1][2];

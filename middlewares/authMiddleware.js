@@ -104,9 +104,20 @@ export const authMiddleware = {
       return res.status(401).redirect('/account/login');
     }
 
-    // Allow them to pass
-    req.user = user;
-    res.locals.user = user;
+    // High IQ: Fetch full profile data so avatar/title/role are available in all protected routes
+    const { data: profile } = await supabaseService
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+    
+    if (profile) {
+      req.user = { ...user, ...profile };
+    } else {
+      req.user = user;
+    }
+    
+    res.locals.user = req.user;
     next();
   },
 

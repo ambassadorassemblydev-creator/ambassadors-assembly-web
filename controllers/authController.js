@@ -102,15 +102,15 @@ export const authController = {
       
       // If no code is present, it might be an implicit flow (hash) handled by the client-side bridge
       if (!code) {
-        logger.info('No OAuth code found in query, redirecting to sign-in to check for hash.');
-        return res.redirect('/sign-in');
+        logger.info('No OAuth code found in query, rendering auth bridge to process hash.');
+        return res.render('pages/auth-bridge', { pageTitle: 'Authenticating...', currentPath: req.path });
       }
 
       const { session, user } = await authService.exchangeCodeForSession(code);
       setAuthCookies(res, session);
 
-      // Redirect to confirmation page (which now has the bridge script)
-      res.redirect('/email-confirmed');
+      // Redirect to account with success message
+      res.redirect('/my-account?success=Welcome back! Your session has been established.');
     } catch (err) {
       logger.error('OAuth callback error:', err);
       res.redirect('/sign-in?error=oauth_failed');

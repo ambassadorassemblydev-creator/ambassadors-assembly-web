@@ -512,8 +512,11 @@
               throw new Error(data.message || (data.debug ? JSON.stringify(data.debug) : data.error) || "Failed to sign up.");
             }
 
-            // Redirect to the "Check Your Email" page
-            window.location.href = "/check-email";
+            // Success! Show toast and redirect
+            showToast("Account created! Please check your email to verify your account.", "success");
+            setTimeout(() => {
+              window.location.href = "/check-email";
+            }, 1500);
 
           } catch (err) {
             errorBox.textContent = err.message;

@@ -44,9 +44,10 @@ Phase 4: Attendance, Events & Sermons
  Correct/Remove Live Stream link in Sermons
 Phase 5: Additional Modules & Polish
  Newsletter
- Fix main site newsletter maintenance
+ Fix main site newsletter 
+ connect newsletter submisin to our resend account
  Connect main site form to Admin Newsletter page
- Milestones & Tasks
+ fix Milestones & Tasks
  Fix Milestones buttons (stopped working)
  Add support for Job Promotions and specific celebration types
  Fix non-working buttons in Tasks module
@@ -54,3 +55,45 @@ Phase 5: Additional Modules & Polish
  Resource Center & AI
  Fix Resource Center (Church Cloud) upload/download
  Add History feature to AI Content Lab
+
+
+Failed to load resource: net::ERR_FAILEDUnderstand this error
+cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+fa-brands-400.woff2:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+jquery-3.7.1.min.js:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+html2canvas.min.js:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+vapi.browser.js:1  Failed to load resource: the server responded with a status of 404 ()Understand this error
+manifest.json:1 Manifest: Enctype should be set to either application/x-www-form-urlencoded or multipart/form-data. It currently defaults to application/x-www-form-urlencodedUnderstand this warning
+html2canvas.min.js:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+aa-ui.js:161 [AA-UI] Hamburger system initialized
+www.gstatic.com/recaptcha/releases/gTpTIWhbKpxADzTzkcabhXN4/recaptcha__en.js:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+VM164 my-account:5 Service Worker registered: https://theambassadorsassembly.org/
+/api/notifications/subscribe:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+preloader.js:158 [Preloader] Safety fallback triggered.
+(anonymous) @ preloader.js:158Understand this warning
+12The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.Understand this warning
+The FetchEvent for "https://theambassadorsassembly.org/my-account?tab=prayers" resulted in a network error response: the promise was rejected.Understand this warning
+2service-worker.js:1 Uncaught (in promise) TypeError: Failed to convert value to 'Response'.Understand this error
+2service-worker.js:60 Uncaught (in promise) TypeError: Failed to execute 'clone' on 'Response': Response body is already used
+    at service-worker.js:60:48
+(anonymous) @ service-worker.js:60
+Promise.then
+(anonymous) @ service-worker.js:59Understand this error
+4service-worker.js:60 Uncaught (in promise) TypeError: Failed to execute 'clone' on 'Response': Response body is already used
+    at service-worker.js:60:48
+(anonymous) @ service-worker.js:60
+Promise.then
+(anonymous) @ service-worker.js:59
+Promise.then
+(anonymous) @ service-worker.js:56
+Promise.then
+(anonymous) @ service-worker.js:55Understand this error
+service-worker.js:56 Connecting to 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css' violates the following Content Security Policy directive: "connect-src 'self' data: https://res.cloudinary.com https://*.cloudinary.com https://api.paystack.co https://www.google.com/recaptcha/ https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://vitals.vercel-insights.com *.sentry.io https://rtc.multiscreensite.com https://*.multiscreensite.com https://cdn.jsdelivr.net https://sourcemaps-lambda.dwhitelabel.com https://unpkg.com https://uptime.betterstack.com https://*.betterstack.com https://*.supabase.co wss://*.supabase.co https://bxlmmvunfyvsbqakgxed.supabase.co wss://bxlmmvunfyvsbqakgxed.supabase.co". The action has been blocked.
+(anonymous) @ service-worker.js:56
+Promise.then
+(anonymous) @ service-worker.js:55Understand this error
+service-worker.js:56 Fetch API cannot load https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css. Refused to connect because it violates the document's Content Security Policy.
+(anonymous) @ service-worker.js:56
+Promise.then
+(anonymous) @ service-worker.js:55Understand this error
+The FetchEvent for "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" resulted in a network error response: the promise was rejected.
