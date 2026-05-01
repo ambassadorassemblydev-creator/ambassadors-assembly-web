@@ -58,7 +58,7 @@ export const authController = {
       await authService.logout();
       res.clearCookie('jwt');
       res.clearCookie('refresh_token');
-      res.status(200).json({ status: 'success' });
+      res.redirect('/sign-in');
     } catch (err) {
       next(err);
     }

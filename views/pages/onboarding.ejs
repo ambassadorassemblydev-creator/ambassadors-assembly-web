@@ -464,7 +464,7 @@
                   <div class="form-group">
                     <label>Join a Ministry (Fellowship Groups)</label>
                     <div class="ministry-groups-container">
-                      <% const categories = [...new Set(ministries.map(m => m.category))]; %>
+                      <% categories = [...new Set(ministries.map(m => m.category))]; %>
                       <% categories.forEach(cat => { %>
                         <div class="category-group" style="margin-bottom: 25px;">
                           <h4 class="sub-label" style="font-size: 10px; opacity: 0.6;"><%= cat === 'fellowship' ? 'Fellowship Groups' : 'Service Ministries' %></h4>

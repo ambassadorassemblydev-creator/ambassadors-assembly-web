@@ -497,7 +497,7 @@ export const pageController = {
                 title,
                 content,
                 is_anonymous: isAnonymous,
-                status: 'pending',
+                status: 'draft',
                 is_approved: false,
                 recaptcha_score: score
             };

@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -10,7 +10,7 @@ export const newsletterController = {
             if (!email) return res.status(400).json({ error: 'Email is required' });
 
             // 1. Save to database
-            const { data, error } = await supabase
+            const { data, error } = await supabaseService
                 .from('newsletter_subscribers')
                 .upsert([{ email, is_active: true }], { onConflict: 'email' })
                 .select()
