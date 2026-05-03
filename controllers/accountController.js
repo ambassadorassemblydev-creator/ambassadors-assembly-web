@@ -217,31 +217,52 @@ export const accountController = {
   
   renderOnboarding: async (req, res, next) => {
     try {
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) {
+        logger.warn('Onboarding Access Attempt: No User ID found');
+        return res.redirect('/account/login');
+      }
+
       // Force the browser to NEVER cache this page, ensuring CSRF tokens are always fresh
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       logger.info(`Starting high-resilience onboarding fetch for user: ${userId}`);
 
-      // Sequential fetching with retries to avoid socket exhaustion (UND_ERR_SOCKET)
-      // Per user request: No fallback—guarantee all data or throw
-      const departments = await withRetry(() => accountRepo.getDepartments(), { context: 'Departments' });
-      const positions = await withRetry(() => accountRepo.getPositions(), { context: 'Positions' });
-      const ministries = await withRetry(() => accountRepo.getMinistries(), { context: 'Ministries' });
-      const profile = await withRetry(() => accountRepo.getUserDashboardData(userId), { context: 'Profile' });
+      // High IQ: Parallel fetching with allSettled for maximum resilience
+      const results = await Promise.allSettled([
+        withRetry(() => accountRepo.getDepartments(), { context: 'Departments', maxRetries: 2 }),
+        withRetry(() => accountRepo.getPositions(), { context: 'Positions', maxRetries: 2 }),
+        withRetry(() => accountRepo.getMinistries(), { context: 'Ministries', maxRetries: 2 }),
+        withRetry(() => accountRepo.getUserDashboardData(userId), { context: 'Profile', maxRetries: 2 })
+      ]);
+
+      const departments = results[0].status === 'fulfilled' ? (results[0].value || []) : [];
+      const positions = results[1].status === 'fulfilled' ? (results[1].value || []) : [];
+      const ministries = results[2].status === 'fulfilled' ? (results[2].value || []) : [];
+      const profile = results[3].status === 'fulfilled' ? results[3].value : null;
+
+      // Handle query params safely to avoid URI malformed errors
+      let errorMsg = null;
+      try {
+        errorMsg = req.query.error ? String(req.query.error) : null;
+      } catch (e) {
+        logger.warn('Malformed error query param detected');
+      }
 
       res.render('pages/onboarding', {
-        pageTitle: 'Profile Setup',
-        currentPath: req.path,
+        pageTitle: 'Profile Setup | Ambassadors Assembly',
+        currentPath: req.path || '/onboarding',
         step: 1,
-        departments,
-        positions,
-        ministries,
-        user: profile,
-        error: null
+        departments: Array.isArray(departments) ? departments : [],
+        positions: Array.isArray(positions) ? positions : [],
+        ministries: Array.isArray(ministries) ? ministries : [],
+        user: profile || req.user || {},
+        error: errorMsg,
+        csrfToken: res.locals.csrfToken
       });
     } catch (err) {
       logger.error(`Onboarding Critical Failure: ${err.message}`, { stack: err.stack });
-      next(new AppError('We are having trouble connecting to the database. Please refresh the page in a few moments.', 503));
+      // Redirect to a safe fallback instead of throwing a raw error
+      res.redirect('/account/login?error=Service%20Unavailable');
     }
   },
 
@@ -333,8 +354,8 @@ export const accountController = {
         already_serving: isAlreadyServing,
         approval_status: needsApproval ? 'pending' : 'none',
         role_claim: needsApproval ? (titleStr || (isAlreadyServing ? 'worker' : null)) : null,
-        department_interest: validatedData.department_interest || null,
-        department_claim: validatedData.department_interest || null,
+        department_interest: (validatedData.department_interest && validatedData.department_interest !== 'None') ? validatedData.department_interest : null,
+        department_claim: (validatedData.department_interest && validatedData.department_interest !== 'None') ? validatedData.department_interest : null,
         // High IQ: Syncing membership status
         is_member: true,
         member_since: new Date(),
@@ -349,7 +370,7 @@ export const accountController = {
       await accountRepo.updateProfile(userId, profileUpdates);
 
       // 4. Church Worker & Volunteer Application Logic
-      if (validatedData.department_interest && validatedData.position_interest) {
+      if (validatedData.department_interest && validatedData.department_interest !== 'None' && validatedData.position_interest) {
         try {
           const [deptData, posData] = await Promise.all([
              supabaseService.from('church_departments').select('id').eq('name', validatedData.department_interest).single(),
@@ -396,9 +417,9 @@ export const accountController = {
       // 4.5. Ministry Interests Logic
       if (validatedData.ministry_interests) {
         try {
-          const mInterests = Array.isArray(validatedData.ministry_interests) 
+          const mInterests = (Array.isArray(validatedData.ministry_interests) 
             ? validatedData.ministry_interests 
-            : [validatedData.ministry_interests];
+            : [validatedData.ministry_interests]).filter(m => m && m !== 'None');
           
           for (const mName of mInterests) {
             const { data: mData } = await supabaseService

@@ -241,8 +241,8 @@
                   </div>
                 </div>
 
-                <!-- STEP 3: JOURNEY -->
-                <div id="stepSection3" class="form-section" style="display:none">
+                <!-- STEP 4: JOURNEY -->
+                <div id="stepSection4" class="form-section" style="display:none">
                    <div class="form-row">
                     <div class="form-group">
                       <label>Salvation Date</label>
@@ -300,34 +300,70 @@
                   <div class="form-group">
                     <label>Join a Ministry (Fellowship Groups)</label>
                     <div class="ministry-groups-container">
-                      <% const categories = [...new Set(ministries.map(m => m.category))]; %>
-                      <% categories.forEach(cat => { %>
-                        <div class="category-group" style="margin-bottom: 25px;">
-                          <h4 class="sub-label" style="font-size: 10px; opacity: 0.6;"><%= cat === 'fellowship' ? 'Fellowship Groups' : 'Service Ministries' %></h4>
-                          <div class="ministry-grid">
-                            <% ministries.filter(m => m.category === cat).forEach(min => { 
-                              const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
-                                ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
-                                : false;
-                            %>
-                               <div class="min-card <%= isSelected ? 'selected' : '' %>" 
-                                    data-name="<%= min.name %>"
-                                    onclick="toggleMin(this, this.dataset.name)">
-                                <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
-                                <strong><%= min.name %></strong>
-                                <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Kingdom community' %></p>
-                                <div class="role-hint">Joining as Member</div>
-                              </div>
-                            <% }) %>
-                          </div>
+                      <!-- NONE OPTION AT THE VERY TOP -->
+                      <div class="ministry-grid" style="margin-bottom: 25px;">
+                        <div class="min-card" data-name="None" onclick="toggleMin(this, 'None')">
+                          <input type="checkbox" name="ministry_interests" value="None" style="display:none">
+                          <strong style="color: var(--accent);">I don't want to join any ministry</strong>
+                          <p>Skip fellowship group selection for now.</p>
+                          <div class="role-hint">No selection</div>
                         </div>
-                      <% }) %>
+                      </div>
+
+                      <% 
+                        // High IQ: Grouping ministries by category for a cleaner UI
+                        const minCategories = (Array.isArray(ministries) && ministries.length > 0) 
+                          ? [...new Set(ministries.filter(m => m && m.category).map(m => m.category))] 
+                          : []; 
+                      %>
+                      
+                      <% if (minCategories.length === 0 && (!ministries || ministries.length === 0)) { %>
+                        <p class="field-hint" style="text-align: center; padding: 20px;">No fellowship groups available at the moment.</p>
+                      <% } else { %>
+                        <% minCategories.forEach(cat => { %>
+                          <div class="category-group" style="margin-bottom: 25px;">
+                            <h4 class="sub-label" style="font-size: 10px; opacity: 0.6;">
+                              <%= (cat === 'fellowship') ? 'Fellowship Groups' : (cat === 'ministry' ? 'Service Ministries' : cat) %>
+                            </h4>
+                            <div class="ministry-grid">
+                              <% ministries.filter(m => m && m.category === cat).forEach(min => { 
+                                const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
+                                  ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
+                                  : false;
+                              %>
+                                <div class="min-card <%= isSelected ? 'selected' : '' %>" 
+                                      data-name="<%= min.name %>"
+                                      onclick="toggleMin(this, this.dataset.name)">
+                                  <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
+                                  <strong><%= min.name %></strong>
+                                  <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Kingdom community' %></p>
+                                  <div class="role-hint">Joining as Member</div>
+                                </div>
+                              <% }) %>
+                            </div>
+                          </div>
+                        <% }) %>
+                      <% } %>
                     </div>
                   </div>
 
                    <div class="form-group">
                     <label>Service Placement (Outreach & Community) <span>*</span></label>
                     <div class="dept-selection-grid">
+                      <!-- NONE OPTION -->
+                      <div class="dept-tile" data-name="None" data-id="none" onclick="selectDept(this, 'None', 'none')">
+                        <div class="tile-icon">
+                          <i class="fas fa-times-circle" style="color: var(--accent);"></i>
+                        </div>
+                        <div class="tile-info">
+                          <strong>I don't want to join any outreach/departments</strong>
+                          <p>Skip service placement for now.</p>
+                        </div>
+                        <div class="selection-indicator">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                      </div>
+
                        <% departments.forEach(dept => { %>
                         <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
                              data-name="<%= dept.name %>"
@@ -446,145 +482,7 @@
                   </div>
                 </div>
 
-                <!-- STEP 4: GIFTS & PASSIONS -->
-                <div id="stepSection4" class="form-section" style="display:none">
-                   <div class="form-group">
-                    <label>Spiritual Gifts & Natural Skills</label>
-                    <div class="gift-tags-grid" id="giftGrid">
-                      <% ['Teaching', 'Worship', 'Hospitality', 'Media/Tech', 'Intercession', 'Administration', 'Evangelism', 'Graphic Design', 'Musical Instruments', 'Counselling', 'First Aid', 'Cooking'].forEach(gift => { %>
-                        <div class="gift-tag <%= (user && user.spiritual_gifts && user.spiritual_gifts.includes(gift)) ? 'selected' : '' %>" onclick="toggleTag(this, '<%= gift %>')">
-                          <input type="checkbox" name="spiritual_gifts" value="<%= gift %>" style="display:none" <%= (user && user.spiritual_gifts && user.spiritual_gifts.includes(gift)) ? 'checked' : '' %>>
-                          <%= gift %>
-                        </div>
-                      <% }) %>
-                    </div>
-                    <p class="field-hint">Select all that apply to you.</p>
-                  </div>
 
-                  <div class="form-group">
-                    <label>Join a Ministry (Fellowship Groups)</label>
-                    <div class="ministry-groups-container">
-                      <% categories = [...new Set(ministries.map(m => m.category))]; %>
-                      <% categories.forEach(cat => { %>
-                        <div class="category-group" style="margin-bottom: 25px;">
-                          <h4 class="sub-label" style="font-size: 10px; opacity: 0.6;"><%= cat === 'fellowship' ? 'Fellowship Groups' : 'Service Ministries' %></h4>
-                          <div class="ministry-grid">
-                            <% ministries.filter(m => m.category === cat).forEach(min => { 
-                              const isSelected = (user && user.ministry_members && Array.isArray(user.ministry_members)) 
-                                ? user.ministry_members.some(m => m && m.ministries && m.ministries.name === min.name) 
-                                : false;
-                            %>
-                               <div class="min-card <%= isSelected ? 'selected' : '' %>" 
-                                    data-name="<%= min.name %>"
-                                    onclick="toggleMin(this, this.dataset.name)">
-                                <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
-                                <strong><%= min.name %></strong>
-                                <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Kingdom community' %></p>
-                                <div class="role-hint">Joining as Member</div>
-                              </div>
-                            <% }) %>
-                          </div>
-                        </div>
-                      <% }) %>
-                    </div>
-                  </div>
-
-                  <div class="form-actions dual">
-                    <button type="button" onclick="goToStep(3)" class="back-btn glass-btn">Back</button>
-                    <button type="button" class="submit-btn highlight" onclick="goToStep(5)">Service Placement
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- STEP 5: SERVICE ASSIGNMENT -->
-                <div id="stepSection5" class="form-section" style="display:none">
-                   <div class="form-group">
-                    <label>Where would you like to serve? (Outreach & Community Impact) <span>*</span></label>
-                    <div class="dept-selection-grid">
-                       <% departments.forEach(dept => { %>
-                        <% 
-                          function getIcon(name) {
-                            const n = name.toLowerCase();
-                            if (n.includes('choir') || n.includes('music')) return 'fa-music';
-                            if (n.includes('evangelism') || n.includes('outreach') || n.includes('impact')) return 'fa-bullhorn';
-                            if (n.includes('prayer') || n.includes('intercession')) return 'fa-praying-hands';
-                            if (n.includes('media') || n.includes('technical') || n.includes('it')) return 'fa-video';
-                            if (n.includes('junior') || n.includes('children') || n.includes('kids')) return 'fa-child';
-                            if (n.includes('usher') || n.includes('protocol')) return 'fa-door-open';
-                            if (n.includes('welfare') || n.includes('care')) return 'fa-hands-helping';
-                            if (n.includes('finance')) return 'fa-coins';
-                            return 'fa-bullhorn';
-                          }
-                        %>
-                        <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
-                             data-name="<%= dept.name %>"
-                             data-id="<%= dept.id %>"
-                             onclick="selectDept(this, this.dataset.name, this.dataset.id)">
-                          <div class="tile-icon">
-                            <i class="fas <%= getIcon(dept.name) %>"></i>
-                          </div>
-                          <div class="tile-info">
-                            <strong><%= dept.name %></strong>
-                            <p><%= dept.description || 'Service unit' %></p>
-                          </div>
-                          <div class="selection-indicator">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                          </div>
-                        </div>
-                      <% }) %>
-                    </div>
-                    <input type="hidden" name="department_interest" id="deptInput" value="<%= (user && user.department_interest) ? user.department_interest : '' %>">
-                  </div>
-
-                  <div id="roleSelectionWrapper" class="form-group" style="display: none;">
-                    <label>Specific Position of Interest <span>*</span></label>
-                    <div class="role-pills" id="roleOptions">
-                       <% positions.forEach(pos => { %>
-                        <div class="role-pill <%= (user && user.position_interest === pos.title) ? 'active' : '' %>" 
-                             data-dept-id="<%= pos.department_id %>"
-                             data-title="<%= pos.title %>"
-                             onclick="selectRole(this, this.dataset.title)">
-                          <%= pos.title %>
-                        </div>
-                      <% }) %>
-                    </div>
-                    <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
-                  </div>
-
-                  <!-- NEW: Already serving check -->
-                  <div class="form-group" style="margin-bottom: 35px; background: rgba(23, 106, 96, 0.03); padding: 25px; border-radius: 20px; border: 1px solid rgba(23, 106, 96, 0.1);">
-                    <label class="checkbox-label">
-                      <input type="checkbox" name="already_serving" value="true">
-                      <div class="custom-check"></div>
-                      <div class="label-info">
-                        <strong style="color: #4ade80; font-size: 1.1rem; display: block; margin-bottom: 5px;">I am already serving at Ambassadors Assembly</strong>
-                        <p style="font-size: 0.9rem; opacity: 0.6; line-height: 1.5; margin: 0;">Check this if you are already a Pastor, Worker, or Choir member. This flags your account for verification rather than a new application.</p>
-                      </div>
-                    </label>
-                  </div>
-
-                  <div class="form-group">
-                    <label>Why do you want to serve in this capacity? (Motivation)</label>
-                    <textarea name="motivation" placeholder="Share your heart or specific reasons for choosing this outreach team..." class="glass-input"><%= user && user.motivation ? user.motivation : '' %></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <label>Occupation / Professional Background</label>
-                    <input type="text" name="occupation" placeholder="e.g. Software Engineer, Doctor, Student" value="<%= user && user.occupation ? user.occupation : '' %>">
-                  </div>
-
-                  <div class="form-actions" style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
-                    <button type="submit" class="submit-btn highlight" id="btnFinal">Complete Onboarding & Join A Team
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    </button>
-                    
-                    <div style="display: flex; gap: 20px; align-items: center; justify-content: center;">
-                      <button type="button" onclick="goToStep(4)" class="back-btn" style="padding: 0; border: none; background: transparent;">&larr; Back</button>
-                      <button type="submit" class="back-btn" style="border: none; background: transparent; color: var(--accent); opacity: 0.8;">I'll join a team later, just sign me in</button>
-                    </div>
-                  </div>
-                </div>
 
               </form>
             </div>
@@ -932,13 +830,23 @@ main.onboarding-page::before {
       tile.classList.add('selected');
       document.getElementById('deptInput').value = name;
       
+      // Clear position selection if switching departments or picking None
+      document.getElementById('posInput').value = '';
+      document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+
       const roleWrapper = document.getElementById('roleSelectionWrapper');
       const roles = document.querySelectorAll('.role-pill');
       let count = 0;
-      roles.forEach(r => {
-        if (r.dataset.deptId === id) { r.style.display = 'block'; count++; }
-        else r.style.display = 'none';
-      });
+      
+      if (name !== 'None') {
+        roles.forEach(r => {
+          if (r.dataset.deptId === id) { r.style.display = 'block'; count++; }
+          else r.style.display = 'none';
+        });
+      } else {
+        roles.forEach(r => r.style.display = 'none');
+      }
+      
       roleWrapper.style.display = count > 0 ? 'block' : 'none';
     }
 
@@ -954,8 +862,29 @@ main.onboarding-page::before {
     }
 
     function toggleMin(card, name) {
-      card.classList.toggle('selected');
-      card.querySelector('input').checked = card.classList.contains('selected');
+      const isNone = (name === 'None');
+      const container = card.closest('.ministry-groups-container');
+      
+      if (isNone) {
+        // If "None" is picked, deselect everything else
+        container.querySelectorAll('.min-card').forEach(c => {
+          if (c !== card) {
+            c.classList.remove('selected');
+            c.querySelector('input').checked = false;
+          }
+        });
+        card.classList.toggle('selected');
+        card.querySelector('input').checked = card.classList.contains('selected');
+      } else {
+        // If something else is picked, deselect "None"
+        const noneCard = container.querySelector('.min-card[data-name="None"]');
+        if (noneCard) {
+          noneCard.classList.remove('selected');
+          noneCard.querySelector('input').checked = false;
+        }
+        card.classList.toggle('selected');
+        card.querySelector('input').checked = card.classList.contains('selected');
+      }
     }
 
     function initFlatpickr() {
