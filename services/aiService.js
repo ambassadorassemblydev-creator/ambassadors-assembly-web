@@ -132,5 +132,35 @@ OPERATIONAL RULES:
             console.error('[AIService] Provider Error:', error.response?.data || error.message);
             return "Ambassador, I\u0027m momentarily offline. Our service times are Sundays at 8AM and 10AM, and Wednesdays at 6PM. I look forward to assisting you again soon!";
         }
+    },
+
+    async getElevenLabsSignedUrl(userId = null) {
+        try {
+            // High IQ: Fetch the latest church context from DB
+            const { context, userName } = await this.getChurchContext(userId);
+
+            // High IQ: Securely creating a signed URL with Dynamic Context Override
+            // This injects the church info directly into the AI's "brain" for this specific call
+            const response = await axios.post(`https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${process.env.ELEVENLABS_AGENT_ID}`, {
+                conversation_config_override: {
+                    agent: {
+                        prompt: {
+                            prompt: `You are the Ambassadors AI. Address the user as ${userName || 'Ambassador'}. 
+                                    Use the following church info to answer questions: ${context}`
+                        },
+                        first_message: `Greetings, ${userName || 'Ambassador'}! I am the Ambassadors AI. How can I assist your journey with us today?`
+                    }
+                }
+            }, {
+                headers: {
+                    'xi-api-key': process.env.ELEVENLABS_API_KEY
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            console.error('[AIService] ElevenLabs Error:', error.response?.data || error.message);
+            throw new Error('Failed to initiate voice connection');
+        }
     }
 };

@@ -674,32 +674,40 @@
         </button>
       </form>
       
-      <!-- ACTIVE CALL UI OVERLAY -->
+      <!-- PROFESSIONAL CINEMATIC CALL UI OVERLAY -->
       <div id="ai-call-overlay" class="ai-call-overlay">
-        <div class="call-content">
-          <div class="pulse-container">
-            <div class="spirit-pulse pulse-1"></div>
-            <div class="spirit-pulse pulse-2"></div>
-            <div class="spirit-pulse pulse-3"></div>
-            <div class="avatar-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="8" y1="23" x2="16" y2="23"></line>
-              </svg>
+        <div class="call-content-premium">
+          <div class="visualizer-container">
+            <canvas id="voice-visualizer" width="300" height="150"></canvas>
+            <div class="visualizer-orb"></div>
+          </div>
+          
+          <div class="call-meta">
+            <h4 id="call-status-label" class="status-label">INITIALIZING</h4>
+            <div class="connection-dots"><span></span><span></span><span></span></div>
+          </div>
+
+          <div class="agent-identity">
+            <div class="identity-icon">
+              <i class="fas fa-dove"></i>
+            </div>
+            <div class="identity-text">
+              <span class="text-xs font-bold tracking-[0.2em] opacity-40 uppercase">Voice Assistant</span>
+              <p class="text-lg font-black tracking-tighter">Ambassadors AI</p>
             </div>
           </div>
-          <div class="call-status-text" id="ai-call-status">Connecting...</div>
-          <p class="call-subtext">The Ambassador's Assistant is listening</p>
         </div>
-        <div class="call-actions">
-          <button id="end-call-btn" class="end-call-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path>
-              <line x1="23" y1="1" x2="1" y2="23"></line>
-            </svg>
-            End Call
+
+        <div class="call-footer">
+          <p class="call-hint">"You can ask about service times or request a prayer"</p>
+          <button id="end-call-btn" class="end-call-premium-btn">
+            <div class="btn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path>
+                <line x1="23" y1="1" x2="1" y2="23"></line>
+              </svg>
+            </div>
+            <span>END CONVERSATION</span>
           </button>
         </div>
       </div>
@@ -886,102 +894,180 @@
       100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     }
 
-    /* CALL OVERLAY STYLES */
+    /* PROFESSIONAL CINEMATIC CALL UI STYLES */
     .ai-call-overlay {
       position: absolute;
-      top: 80px; /* Below header */
+      top: 80px;
       left: 0;
       width: 100%;
       height: calc(100% - 80px);
-      background: linear-gradient(180deg, rgba(19, 78, 94, 0.98) 0%, rgba(14, 58, 48, 0.98) 100%);
+      background: rgba(14, 25, 23, 0.95);
+      backdrop-filter: blur(25px) saturate(180%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       z-index: 100;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       color: white;
+      padding: 40px 0;
     }
     .ai-call-overlay.active {
       opacity: 1;
       visibility: visible;
     }
-    .pulse-container {
+    .ai-call-overlay::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    .call-content-premium {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      gap: 30px;
       position: relative;
-      width: 150px;
+      z-index: 5;
+    }
+
+    .visualizer-container {
+      position: relative;
+      width: 100%;
       height: 150px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 30px;
     }
-    .avatar-circle {
-      width: 80px;
-      height: 80px;
+    #voice-visualizer {
+      width: 300px;
+      height: 150px;
+      filter: drop-shadow(0 0 15px rgba(37, 211, 102, 0.3));
+    }
+    .visualizer-orb {
+      position: absolute;
+      width: 12px;
+      height: 12px;
       background: #25D366;
       border-radius: 50%;
+      box-shadow: 0 0 20px #25D366, 0 0 40px rgba(37, 211, 102, 0.5);
+      z-index: 2;
+    }
+
+    .call-meta {
+      text-align: center;
+    }
+    .status-label {
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.4em;
+      color: #25D366;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+    }
+    .connection-dots {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+    .connection-dots span {
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: dot-pulse 1.5s infinite;
+    }
+    .connection-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .connection-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dot-pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .agent-identity {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px 20px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .identity-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #176a60 0%, #25D366 100%);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 5;
-      box-shadow: 0 0 30px rgba(37, 211, 102, 0.3);
+      font-size: 1.2rem;
     }
-    .avatar-circle svg { width: 40px; height: 40px; color: white; }
-    
-    .spirit-pulse {
-      position: absolute;
+    .identity-text p { margin: 0; line-height: 1.2; }
+
+    .call-footer {
       width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: #25D366;
-      opacity: 0.3;
-      animation: spirit-pulse 3s ease-out infinite;
+      padding: 0 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 5;
     }
-    .pulse-2 { animation-delay: 1s; }
-    .pulse-3 { animation-delay: 2s; }
-    
-    @keyframes spirit-pulse {
-      0% { transform: scale(0.6); opacity: 0.8; }
-      100% { transform: scale(1.8); opacity: 0; }
+    .call-hint {
+      font-size: 0.8rem;
+      opacity: 0.5;
+      font-style: italic;
+      text-align: center;
+      max-width: 200px;
     }
-    
-    .call-status-text {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 10px;
-      letter-spacing: -0.02em;
-    }
-    .call-subtext {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin: 0;
-    }
-    .call-actions {
-      margin-top: 50px;
-    }
-    .end-call-btn {
-      background: #ef4444;
-      color: white;
+    .end-call-premium-btn {
+      width: 100%;
+      max-width: 280px;
+      background: white;
+      color: #0e1917;
       border: none;
-      padding: 16px 32px;
-      border-radius: 100px;
-      font-weight: 800;
-      font-size: 0.9rem;
+      padding: 16px;
+      border-radius: 18px;
+      font-weight: 900;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
+      gap: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
-    .end-call-btn:hover {
-      transform: scale(1.05);
-      background: #dc2626;
-      box-shadow: 0 15px 30px rgba(239, 68, 68, 0.4);
+    .end-call-premium-btn:hover {
+      transform: translateY(-2px);
+      background: #ef4444;
+      color: white;
     }
-    .end-call-btn svg { width: 20px; height: 20px; }
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .end-call-premium-btn:hover .btn-icon {
+      background: rgba(255,255,255,0.2);
+    }
+    .btn-icon svg { width: 16px; height: 16px; }
     @media (max-width: 767px) {
       .ai-chat-window { width: calc(100vw - 40px); height: 500px; right: -10px; }
       #ambassadors-ai-container { bottom: 20px; right: 20px; }
@@ -1734,7 +1820,7 @@
 
 
 
-    <script src="https://cdn.jsdelivr.net/gh/balacodeio/Vapi-Web-UMD@latest/dist/latest/vapi-web-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@elevenlabs/client@latest/dist/index.min.js"></script>
     <script src="/js/voice-assistant.js"></script>
 
     <!-- PUSH NOTIFICATIONS SYSTEM -->

@@ -72,6 +72,7 @@ router.get('/maintenance', (req, res) => res.render('pages/maintenance'));
 // AI Assistant
 import { aiController } from '../controllers/aiController.js';
 router.post('/api/ai/chat', aiController.handleChat);
+router.post('/api/voice/create-web-call', aiController.handleVoiceCall);
 
 // Legal Pages
 router.get('/terms-of-service', pageController.renderTerms);

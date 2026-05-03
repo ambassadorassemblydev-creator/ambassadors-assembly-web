@@ -29,5 +29,18 @@ export const aiController = {
             console.error('[AIController] Chat Error:', error.message);
             res.status(500).json({ error: 'Failed to process AI chat' });
         }
+    },
+
+    async handleVoiceCall(req, res) {
+        try {
+            const userId = req.user?.id || null;
+            const callData = await aiService.getElevenLabsSignedUrl(userId);
+            
+            // High IQ: Return the signed URL for the frontend SDK
+            res.json(callData);
+        } catch (error) {
+            console.error('[AIController] Voice Error:', error.message);
+            res.status(500).json({ error: error.message || 'Failed to initiate voice call' });
+        }
     }
 };
