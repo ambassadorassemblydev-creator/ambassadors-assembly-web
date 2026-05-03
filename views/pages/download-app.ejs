@@ -18,7 +18,6 @@
                   <style>
                     .download-hero {
                         padding: 180px 6% 80px;
-                        /* High IQ: Soft ivory-green grained gradient */
                         background: linear-gradient(135deg, #ffffff 0%, #f4fcf6 100%);
                         position: relative;
                         overflow: hidden;
@@ -48,7 +47,7 @@
                         font-weight: 800;
                         letter-spacing: 0.4em;
                         text-transform: uppercase;
-                        color: #176a60; /* Emerald Text */
+                        color: #176a60;
                         margin-bottom: 25px;
                         display: block;
                     }
@@ -58,7 +57,7 @@
                         font-weight: 900;
                         line-height: 0.95;
                         letter-spacing: -0.05em;
-                        color: #1a1a1a; /* Obsidian Black */
+                        color: #1a1a1a;
                         margin-bottom: 40px;
                         text-transform: uppercase;
                     }
@@ -66,70 +65,65 @@
 
                     .download-grid {
                         display: grid;
-                        grid-template-columns: 1.2fr 0.8fr;
-                        gap: 50px;
+                        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                        gap: 30px;
                         margin-top: 60px;
                         text-align: left;
                     }
 
-                    .apk-card {
+                    .download-card {
                         background: rgba(255, 255, 255, 0.9);
                         border: 1.5px solid rgba(23, 106, 96, 0.15);
                         border-radius: 40px;
-                        padding: 50px;
+                        padding: 40px;
                         box-shadow: 0 30px 60px rgba(23, 106, 96, 0.05);
                         backdrop-filter: blur(10px);
+                        display: flex;
+                        flex-direction: column;
+                        transition: all 0.5s ease;
                     }
-                    .apk-card h2 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 900; color: #176a60; letter-spacing: -0.02em; }
-                    .apk-card p { margin-bottom: 35px; color: #334155; font-size: 1.2rem; line-height: 1.6; }
+                    .download-card:hover { transform: translateY(-10px); border-color: #176a60; }
+                    .download-card h2 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 900; color: #176a60; letter-spacing: -0.02em; }
+                    .download-card p { margin-bottom: 35px; color: #334155; font-size: 1.1rem; line-height: 1.6; flex-grow: 1; }
 
                     .btn-download {
                         background: #176a60;
-                        color: white;
-                        padding: 24px 48px;
+                        color: white !important;
+                        padding: 20px 32px;
                         border-radius: 24px;
                         text-decoration: none !important;
                         font-weight: 800;
-                        font-size: 1.25rem;
+                        font-size: 1.1rem;
                         display: inline-flex;
                         align-items: center;
-                        gap: 15px;
-                        width: fit-content;
+                        justify-content: center;
+                        gap: 12px;
                         transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
                         box-shadow: 0 15px 30px rgba(23, 106, 96, 0.25);
+                        cursor: pointer;
+                        border: none;
                     }
-                    .btn-download:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px rgba(23, 106, 96, 0.35); background: #134e5e; }
+                    .btn-download:hover { transform: scale(1.03); box-shadow: 0 20px 40px rgba(23, 106, 96, 0.35); background: #134e5e; }
+                    .btn-download.outline { background: transparent; border: 2px solid #176a60; color: #176a60 !important; box-shadow: none; }
 
-                    .pwa-info {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 25px;
+                    .notification-optin {
+                        margin-top: 80px;
+                        background: #176a60;
+                        border-radius: 40px;
+                        padding: 60px;
+                        color: white;
+                        text-align: center;
+                        position: relative;
+                        overflow: hidden;
                     }
-                    .pwa-step {
-                        background: #ffffff;
-                        border: 1.5px solid rgba(23, 106, 96, 0.08);
-                        padding: 30px;
-                        border-radius: 35px;
-                        transition: all 0.4s ease;
-                        box-shadow: 0 10px 20px rgba(0,0,0,0.02);
-                    }
-                    .pwa-step:hover { border-color: #176a60; transform: translateX(15px); box-shadow: 0 15px 40px rgba(23, 106, 96, 0.1); }
-                    .step-num { color: #176a60; font-weight: 900; font-size: 1.3rem; margin-bottom: 12px; display: block; opacity: 0.8; }
-                    .pwa-step h3 { font-size: 1.2rem; margin-bottom: 8px; color: #1a1a1a; font-weight: 800; }
-                    .pwa-step p { font-size: 0.95rem; color: #64748b; line-height: 1.5; }
-
-                    @media (max-width: 900px) {
-                        .download-grid { grid-template-columns: 1fr; gap: 30px; }
-                        .hero-title { font-size: 3.5rem; }
-                        .apk-card { padding: 35px 25px; }
-                    }
+                    .notification-optin h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
+                    .notification-optin p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+                    .btn-notify { background: white; color: #176a60 !important; padding: 20px 40px; border-radius: 20px; font-weight: 800; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; transition: all 0.3s ease; }
+                    .btn-notify:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
 
                     @media (max-width: 600px) {
-                        .download-hero { padding-top: 140px; }
-                        .hero-title { font-size: 2.5rem; letter-spacing: -0.02em; }
-                        .apk-card h2 { font-size: 2rem; }
-                        .apk-card p { font-size: 1rem; }
-                        .btn-download { width: 100%; justify-content: center; padding: 20px; }
+                        .notification-optin { padding: 40px 20px; border-radius: 30px; }
+                        .notification-optin h2 { font-size: 1.8rem; }
                     }
                   </style>
 
@@ -141,36 +135,46 @@
                             <h1 class="hero-title gsap-reveal">Divine <span class="text-emerald">Connection</span><br>On Every Device</h1>
                             
                             <div class="download-grid">
-                                <div class="apk-card gsap-reveal">
-                                    <h2>Android APK</h2>
-                                    <p>Download the official Android installation package directly to your device. Full performance, zero limits.</p>
-                                    <a href="#" id="apk-link" class="btn-download">
-                                        <i class="fas fa-download"></i>
+                                <!-- Android Card -->
+                                <div class="download-card gsap-reveal">
+                                    <h2>Android App</h2>
+                                    <p>Get the full Android experience. Direct APK download for maximum performance and instant updates.</p>
+                                    <a href="https://bxlmmvunfyvsbqakgxed.supabase.co/storage/v1/object/public/resources/apps/ambassadors-v1.apk" class="btn-download">
+                                        <i class="fab fa-android"></i>
                                         Download APK
                                     </a>
-                                    <div style="margin-top: 30px; font-size: 0.8rem; color: #888; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">
-                                        Current Version: v1.0.0 (Production)<br>
-                                        Last Updated: <%= new Date().toLocaleDateString() %>
-                                    </div>
                                 </div>
 
-                                <div class="pwa-info gsap-reveal">
-                                    <div class="pwa-step">
-                                        <span class="step-num">01</span>
-                                        <h3>Instant Install</h3>
-                                        <p>No app store needed. Tap the 'Share' or 'Menu' icon in your browser.</p>
-                                    </div>
-                                    <div class="pwa-step">
-                                        <span class="step-num">02</span>
-                                        <h3>Add to Home</h3>
-                                        <p>Select "Add to Home Screen" to install the Ambassadors app instantly.</p>
-                                    </div>
-                                    <div class="pwa-step">
-                                        <span class="step-num">03</span>
-                                        <h3>Launch Anywhere</h3>
-                                        <p>Access sermons, giving, and AI directly from your home screen.</p>
-                                    </div>
+                                <!-- iOS Card -->
+                                <div class="download-card gsap-reveal">
+                                    <h2>iOS (Apple)</h2>
+                                    <p>Optimized for iPhone and iPad. Install via our premium PWA experience with full Push Notification support.</p>
+                                    <button onclick="showIOSGuide()" class="btn-download outline">
+                                        <i class="fab fa-apple"></i>
+                                        Install on iOS
+                                    </button>
                                 </div>
+
+                                <!-- PWA Card -->
+                                <div class="download-card gsap-reveal">
+                                    <h2>Web Desktop</h2>
+                                    <p>Experience the Ambassadors Assembly on your PC or Mac. Install as a standalone application.</p>
+                                    <button id="pwa-install-btn" class="btn-download outline">
+                                        <i class="fas fa-desktop"></i>
+                                        Install as Web App
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Push Notification Opt-in -->
+                            <div class="notification-optin gsap-reveal">
+                                <h2>Never Miss a Word</h2>
+                                <p>Enable push notifications to receive daily devotionals, event alerts, and live stream updates directly on your device.</p>
+                                <button onclick="subscribePush()" id="push-btn" class="btn-notify">
+                                    <i class="fas fa-bell"></i>
+                                    Enable Notifications
+                                </button>
+                                <div id="push-status" style="margin-top: 15px; font-size: 0.9rem; font-weight: 700; display: none;"></div>
                             </div>
                         </div>
                     </section>
@@ -187,15 +191,46 @@
                         stagger: 0.2,
                         ease: 'power4.out'
                       });
+
+                      // Check notification status
+                      if (Notification.permission === 'granted') {
+                          document.getElementById('push-btn').style.display = 'none';
+                          const status = document.getElementById('push-status');
+                          status.innerText = '✅ Notifications are enabled';
+                          status.style.display = 'block';
+                      }
                     });
 
-                    document.getElementById('apk-link').addEventListener('click', (e) => {
-                        const link = e.currentTarget.getAttribute('href');
-                        if (link === '#') {
-                            e.preventDefault();
-                            alert("The High IQ APK link is coming soon! For now, please use the 'Add to Home Screen' method.");
+                    async function subscribePush() {
+                        const btn = document.getElementById('push-btn');
+                        const status = document.getElementById('push-status');
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enabling...';
+
+                        try {
+                            const success = await window.PWA.requestPermission();
+                            if (success) {
+                                btn.style.display = 'none';
+                                status.innerText = '✅ Notifications enabled successfully!';
+                                status.style.color = '#ffffff';
+                                status.style.display = 'block';
+                                showToast('Welcome to the loop! Notifications enabled.', 'success');
+                            } else {
+                                throw new Error('Permission denied');
+                            }
+                        } catch (err) {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fas fa-bell"></i> Try Again';
+                            alert('Notification permission was denied. Please enable them in your browser settings to receive updates.');
                         }
-                    });
+                    }
+
+                    function showIOSGuide() {
+                        window.AA.alert(
+                            "To install on iPhone:\n\n1. Tap the Share icon (box with arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add' to finish.",
+                            "iOS Installation Guide"
+                        );
+                    }
                   </script>
 
                 </div>

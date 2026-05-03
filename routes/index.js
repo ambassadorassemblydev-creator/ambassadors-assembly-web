@@ -6,7 +6,22 @@ import { authMiddleware } from '../middlewares/authMiddleware.js';
 import apiRoutes from './api.js'; // <-- ADD THIS
 import { watchController } from '../controllers/watchController.js';
 
+import { generateSitemap } from '../utils/sitemapGenerator.js';
+
 const router = express.Router();
+
+// ==========================================
+// SEO & SYSTEM
+// ==========================================
+router.get('/sitemap.xml', async (req, res) => {
+    try {
+        const xml = await generateSitemap();
+        res.header('Content-Type', 'application/xml');
+        res.send(xml);
+    } catch (error) {
+        res.status(500).end();
+    }
+});
 
 // ==========================================
 // PUBLIC VIEWS

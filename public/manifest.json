@@ -120,12 +120,44 @@
     }
   ],
   "scope_extensions": [
-    {
-      "type": "origin",
-      "origin": "https://theambassadorsassembly.org"
-    }
+    { "type": "origin", "origin": "https://theambassadorsassembly.org" },
+    { "type": "origin", "origin": "https://admin.theambassadorsassembly.org" },
+    { "type": "origin", "origin": "https://dash.theambassadorsassembly.org" },
+    { "type": "origin", "origin": "https://app.theambassadorsassembly.org" }
   ],
   "prefer_related_applications": false,
   "iarc_rating_id": "e58c174a-81d2-5c3c-32cc-34b8de4a52e9",
-  "related_applications": []
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=org.theambassadorsassembly.app",
+      "id": "org.theambassadorsassembly.app"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/the-ambassadors-assembly/id6446732825"
+    }
+  ],
+  "widgets": [
+    {
+      "name": "Daily Devotional",
+      "description": "Get your daily word from the Ambassadors.",
+      "tag": "daily-word",
+      "template": "devotional-widget",
+      "ms_ac_template": "widgets/devotional.json",
+      "data": "widgets/devotional-data.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_450,h_450/v1777418384/emerald-hero-bg.jpg",
+          "sizes": "450x450",
+          "type": "image/jpeg",
+          "label": "Daily Word Widget"
+        }
+      ]
+    }
+  ],
+  "note_taking": {
+    "new_note_url": "/my-account?tab=notes&action=new"
+  }
 }

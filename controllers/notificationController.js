@@ -1,5 +1,5 @@
 import webpush from 'web-push';
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -17,7 +17,7 @@ export const subscribe = async (req, res) => {
 
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-        const { error } = await supabase
+        const { error } = await supabaseService
             .from('push_subscriptions')
             .upsert({ 
                 user_id: userId, 
@@ -46,12 +46,13 @@ export const broadcast = async (req, res) => {
             .eq('user_id', userId)
             .single();
 
-        if (roleData?.roles?.name !== 'admin') {
-            return res.status(403).json({ error: 'Only Admins can broadcast messages.' });
+        const allowedRoles = ['admin', 'super_admin', 'pastor'];
+        if (!allowedRoles.includes(roleData?.roles?.name)) {
+            return res.status(403).json({ error: 'You do not have permission to broadcast messages.' });
         }
 
         // 2. Fetch all subscriptions
-        const { data: subs, error } = await supabase
+        const { data: subs, error } = await supabaseService
             .from('push_subscriptions')
             .select('subscription');
 
@@ -76,7 +77,7 @@ export const broadcast = async (req, res) => {
         if (expired.length > 0) {
             await Promise.all(
                 expired.map(endpoint => 
-                    supabase.from('push_subscriptions').delete().filter('subscription->>endpoint', 'eq', endpoint)
+                    supabaseService.from('push_subscriptions').delete().filter('subscription->>endpoint', 'eq', endpoint)
                 )
             );
         }

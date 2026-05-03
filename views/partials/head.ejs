@@ -19,6 +19,14 @@
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
   
+  <!-- Premium Loading Bar (NProgress) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  <style>
+    #nprogress .bar { background: #176a60 !important; height: 3px !important; }
+    #nprogress .spinner-icon { border-top-color: #176a60 !important; border-left-color: #176a60 !important; }
+  </style>
+  
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-446GXF82G8"></script>
   <script>
@@ -36,14 +44,9 @@
   <meta name="apple-mobile-web-app-title" content="Ambassadors">
   
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.log('Service Worker registered:', reg.scope))
-          .catch(err => console.log('Service Worker registration failed:', err));
-      });
-    }
+    window.APP_VAPID_PUBLIC_KEY = '<%= process.env.VAPID_PUBLIC_KEY %>';
   </script>
+  <script src="/js/pwa-handler.js" defer></script>
 
   <meta id="view" name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -261,4 +264,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <script src="/js/aa-ui.js" defer></script>
+  <script>
+    // High IQ: Global Page Transition Handler
+    window.addEventListener('beforeunload', () => NProgress.start());
+    window.addEventListener('load', () => NProgress.done());
+    
+    // Catch fetch/ajax starts if needed
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+        NProgress.start();
+        try {
+            const response = await originalFetch(...args);
+            return response;
+        } finally {
+            NProgress.done();
+        }
+    };
+  </script>
 </head>

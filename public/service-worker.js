@@ -13,9 +13,6 @@ if (workbox) {
   workbox.core.clientsClaim();
 
   // 2. EXCLUSIONS (High IQ: Never intercept these)
-  // - Supabase (Auth/DB)
-  // - Admin paths (to prevent preloader hangs)
-  // - Chrome Extensions
   const EXCLUDED_URLS = [
     'supabase.co',
     '/api/auth',
@@ -28,7 +25,6 @@ if (workbox) {
   // 3. CACHING STRATEGIES
 
   // A. Static Assets (Cache-First)
-  // Fonts, Images (Cloudinary/Unsplash), and internal static files
   workbox.routing.registerRoute(
     ({ request, url }) => 
       !isExcluded(url.href) && 
@@ -51,7 +47,6 @@ if (workbox) {
   );
 
   // B. Pages (Network-First)
-  // Ensure users get the latest content but can still see the page offline
   workbox.routing.registerRoute(
     ({ request, url }) => 
       !isExcluded(url.href) && 
@@ -68,17 +63,73 @@ if (workbox) {
   );
 
   // C. API / Dynamic (Network-Only)
-  // We NEVER want to cache API responses or Supabase calls
   workbox.routing.registerRoute(
     ({ url }) => isExcluded(url.href) || url.pathname.startsWith('/api/'),
     new workbox.strategies.NetworkOnly()
   );
 
+  // 4. PUSH NOTIFICATIONS
+  self.addEventListener('push', (event) => {
+    let data = { title: 'Ambassadors Assembly', body: 'A new update from the sanctuary.', url: '/' };
+    if (event.data) {
+      try {
+        data = event.data.json();
+      } catch (e) {
+        data.body = event.data.text();
+      }
+    }
+
+    const options = {
+      body: data.body,
+      icon: 'https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_192,h_192/v1775200226/IMG-20260304-WA0059_telyum.png',
+      badge: 'https://res.cloudinary.com/dxwhpacz7/image/upload/c_fill,w_96,h_96/v1775200226/IMG-20260304-WA0059_telyum.png',
+      vibrate: [100, 50, 100],
+      data: {
+        url: data.url
+      },
+      actions: [
+        { action: 'open', title: 'View Update' },
+        { action: 'close', title: 'Dismiss' }
+      ]
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(data.title, options)
+    );
+  });
+
+  self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    if (event.action === 'close') return;
+
+    const urlToOpen = event.notification.data.url || '/';
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+        for (let client of windowClients) {
+          if (client.url === urlToOpen && 'focus' in client) return client.focus();
+        }
+        if (clients.openWindow) return clients.openWindow(urlToOpen);
+      })
+    );
+  });
+
+  // 5. BACKGROUND SYNC
+  self.addEventListener('sync', (event) => {
+    if (event.tag === 'sync-prayers') {
+      console.log('[SW] Syncing pending prayers...');
+      // Logic to retry failed prayer submissions
+    }
+  });
+
+  // 6. PERIODIC SYNC
+  self.addEventListener('periodicsync', (event) => {
+    if (event.tag === 'update-sermons') {
+      console.log('[SW] Periodic update for sermons triggered.');
+      // Logic to prefetch latest sermons
+    }
+  });
+
 } else {
   console.error('[SW] Workbox failed to load. Falling back to basic fetch.');
-  
-  // Minimal fallback to prevent breaking the site
-  self.addEventListener('fetch', (event) => {
-    // Pass-through
-  });
+  self.addEventListener('fetch', (event) => {});
 }

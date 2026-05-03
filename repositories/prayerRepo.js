@@ -59,13 +59,13 @@ export const prayerRepo = {
         throw new Error('You have already interceded for this request.');
     }
 
-    // 2. Insert intercession (Use Service role to bypass RLS since we've already validated the user in the controller)
+    // 2. Insert intercession with conflict handling (High IQ: prevent error 23505)
     const { error: insertError } = await supabaseService
       .from('prayer_intercessors')
-      .insert([{
+      .upsert({
         prayer_request_id: requestId,
         user_id: userId
-      }]);
+      }, { onConflict: 'prayer_request_id,user_id' });
 
     if (insertError) {
         console.error(`[PrayerRepo] Insert Error:`, insertError);
