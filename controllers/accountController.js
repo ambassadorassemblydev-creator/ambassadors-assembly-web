@@ -437,30 +437,12 @@ export const accountController = {
           logger.info(`User ${userId} (${titleStr}) flagged for admin approval during onboarding.`);
         }
 
-        // Get the target role
-        const { data: roleData } = await supabaseService
-          .from('roles')
-          .select('id')
-          .eq('name', targetRoleName)
-          .single();
+        // Single source of truth: set role directly on profile
+        await supabaseService.from('profiles')
+          .update({ role_claim: targetRoleName })
+          .eq('id', userId);
 
-        if (roleData) {
-          // Deactivate any existing guest/lower role
-          await supabaseService.from('user_roles')
-            .update({ is_active: false, updated_at: new Date() })
-            .eq('user_id', userId)
-            .eq('is_active', true);
-
-          // Upsert new role
-          await supabaseService.from('user_roles').upsert({
-            user_id: userId,
-            role_id: roleData.id,
-            is_active: true,
-            assigned_at: new Date()
-          }, { onConflict: 'user_id,role_id' });
-
-          logger.info(`Role '${targetRoleName}' assigned to user ${userId} after onboarding`);
-        }
+        logger.info(`Role '${targetRoleName}' assigned to user ${userId} after onboarding`);
       } catch (roleErr) {
         logger.warn(`Non-critical role assignment error during onboarding: ${roleErr.message}`);
       }

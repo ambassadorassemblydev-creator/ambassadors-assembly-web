@@ -38,16 +38,16 @@ export const broadcast = async (req, res) => {
     try {
         const { title, body, url } = req.body;
 
-        // 1. Check for Admin Role
+        // 1. Check for Admin Role via profiles.role_claim
         const userId = req.user?.id;
-        const { data: roleData } = await supabase
-            .from('user_roles')
-            .select('roles(name)')
-            .eq('user_id', userId)
+        const { data: profileData } = await supabase
+            .from('profiles')
+            .select('role_claim')
+            .eq('id', userId)
             .single();
 
         const allowedRoles = ['admin', 'super_admin', 'pastor'];
-        if (!allowedRoles.includes(roleData?.roles?.name)) {
+        if (!allowedRoles.includes(profileData?.role_claim)) {
             return res.status(403).json({ error: 'You do not have permission to broadcast messages.' });
         }
 
