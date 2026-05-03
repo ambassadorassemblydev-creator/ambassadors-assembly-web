@@ -1,11 +1,11 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 
 /**
  * Testimony Repository
  * Premium data access for the Testimonies Masonry Grid
  */
 export const testimonyRepo = {
-  // Fetch all approved and published testimonies
+  // ... (previous methods)
   getApprovedTestimonies: async () => {
     const { data, error } = await supabase
       .from('testimonies')
@@ -18,7 +18,6 @@ export const testimonyRepo = {
     return data;
   },
 
-  // Fetch featured testimonies for homepage or landing
   getFeaturedTestimonies: async (limit = 3) => {
     const { data, error } = await supabase
       .from('testimonies')
@@ -33,9 +32,9 @@ export const testimonyRepo = {
     return data;
   },
 
-  // Submit a new testimony
+  // Submit a new testimony (High IQ: Use Service Role to bypass RLS for guest submissions)
   createTestimony: async (testimonyData) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('testimonies')
       .insert([testimonyData])
       .select()

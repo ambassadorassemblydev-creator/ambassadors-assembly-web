@@ -110,14 +110,15 @@ const authLimiter = rateLimit({
 
 
 // Set Security HTTP Headers (High IQ: Enabling CSP with specific exceptions)
+// Set Security HTTP Headers (High IQ: Enabling CSP with specific exceptions)
 app.use(helmet({
   contentSecurityPolicy: {
     useDefaults: true,
     directives: {
-      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://checkout.paystack.com", "https://js.paystack.co", "https://www.google.com/recaptcha/", "https://www.gstatic.com/recaptcha/", "https://js.sentry-cdn.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.multiscreensite.com", "https://code.jquery.com", "https://*.supabase.co", "https://*.dudacdn.net", "https://static-cdn.dwhitelabel.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://www.googletagmanager.com", "https://*.google-analytics.com"],
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://checkout.paystack.com", "https://js.paystack.co", "https://www.google.com/recaptcha/", "https://www.gstatic.com/recaptcha/", "https://js.sentry-cdn.com", "https://unpkg.com", "https://*.unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.multiscreensite.com", "https://code.jquery.com", "https://*.supabase.co", "https://*.dudacdn.net", "https://static-cdn.dwhitelabel.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://www.googletagmanager.com", "https://*.google-analytics.com", "https://vapi.ai", "https://*.vapi.ai"],
       "style-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.supabase.co", "https://*.dudacdn.net", "https://static-cdn.dwhitelabel.com", "https://*.multiscreensite.com"],
       "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://*.cdn-website.com", "https://static.cdn-website.com", "https://*.unsplash.com", "https://api.dicebear.com", "https://*.cloudinary.com", "https://*.multiscreensite.com", "https://*.betterstack.com", "https://*.betteruptime.com", "https://*.supabase.co", "https://*.duda.co", "https://*.dudacdn.net", "https://i.ytimg.com", "https://*.ytimg.com", "https://*.youtube.com", "https://www.gstatic.com"],
-      "connect-src": ["'self'", "data:", "https://res.cloudinary.com", "https://*.cloudinary.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://*.cdn-website.com", "https://*.unsplash.com", "https://api.dicebear.com", "https://cdnjs.cloudflare.com", "https://code.jquery.com", "https://www.gstatic.com", "https://api.paystack.co", "https://www.google.com/recaptcha/", "https://www.google-analytics.com", "https://*.google-analytics.com", "https://www.googletagmanager.com", "https://vitals.vercel-insights.com", "*.sentry.io", "https://rtc.multiscreensite.com", "https://*.multiscreensite.com", "https://cdn.jsdelivr.net", "https://sourcemaps-lambda.dwhitelabel.com", "https://unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.supabase.co", "wss://*.supabase.co", "https://bxlmmvunfyvsbqakgxed.supabase.co", "wss://bxlmmvunfyvsbqakgxed.supabase.co", "https://vapi.ai", "https://api.vapi.ai", "wss://api.vapi.ai"],
+      "connect-src": ["'self'", "data:", "https://res.cloudinary.com", "https://*.cloudinary.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://*.cdn-website.com", "https://*.unsplash.com", "https://api.dicebear.com", "https://cdnjs.cloudflare.com", "https://code.jquery.com", "https://www.gstatic.com", "https://api.paystack.co", "https://www.google.com/recaptcha/", "https://www.google-analytics.com", "https://*.google-analytics.com", "https://www.googletagmanager.com", "https://vitals.vercel-insights.com", "*.sentry.io", "https://rtc.multiscreensite.com", "https://*.multiscreensite.com", "https://cdn.jsdelivr.net", "https://sourcemaps-lambda.dwhitelabel.com", "https://unpkg.com", "https://*.unpkg.com", "https://uptime.betterstack.com", "https://*.betterstack.com", "https://*.supabase.co", "wss://*.supabase.co", "https://bxlmmvunfyvsbqakgxed.supabase.co", "wss://bxlmmvunfyvsbqakgxed.supabase.co", "https://vapi.ai", "https://*.vapi.ai", "wss://*.vapi.ai"],
       "frame-src": ["'self'", "https://ambassadors.betteruptime.com", "https://*.betterstack.com", "https://checkout.paystack.com", "https://paystack.com", "https://pstk.co", "https://www.youtube.com", "https://*.youtube.com", "https://*.youtube-nocookie.com", "https://player.vimeo.com", "https://*.supabase.co", "https://www.google.com", "https://www.google.com/recaptcha/"],
       "font-src": ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:", "https://*.multiscreensite.com", "https://static.cdn-website.com", "https://static-cdn.dwhitelabel.com", "https://irp.cdn-website.com", "https://lirp.cdn-website.com", "https://*.betterstack.com", "https://*.betteruptime.com", "https://unpkg.com", "https://*.supabase.co", "https://*.dudacdn.net"],
       "media-src": ["'self'", "https://res.cloudinary.com", "https://*.cloudinary.com", "https://*.supabase.co"],
@@ -130,6 +131,7 @@ app.use(helmet({
   },
   crossOriginEmbedderPolicy: false
 }));
+
 
 
 // Apply rate limiting to sensitive routes
@@ -151,15 +153,19 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // High IQ: Session configuration using Redis for persistence
+// Setting a specific name and domain for cross-subdomain compatibility
 app.use(session({
+  name: 'aa_session_v1',
   store: redis ? new RedisStore({ client: redis, prefix: "aa_sess:" }) : undefined,
   secret: process.env.SESSION_SECRET || "AA-AMBASSADORS-SESSION-KEY-2024",
   resave: false,
   saveUninitialized: false,
+  proxy: true,
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     sameSite: 'lax',
+    domain: process.env.NODE_ENV === 'production' ? '.theambassadorsassembly.org' : undefined,
     maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
   }
 }));
@@ -204,19 +210,20 @@ app.use(csrfProtection);
 app.use(csrfErrorHandler);
 
 
-// 2. Pass global variables to ALL EJS Templates (with CSRF stability)
+// 4. Pass global variables to ALL EJS Templates (with CSRF stability)
 app.use((req, res, next) => {
   // Simplified Logic: Generate a fresh token for any GET request that isn't an asset.
-  const isAsset = req.url.includes('.') || req.url.includes('/api/') || req.url.includes('/status/');
+  const isAsset = req.url.includes('.') || req.url.includes('/status/');
+  const isAPI = req.url.startsWith('/api/');
   
-  if (req.method === 'GET' && !isAsset) {
+  if (req.method === 'GET' && !isAsset && !isAPI) {
     if (typeof generateToken === 'function') {
       res.locals.csrfToken = generateToken(req, res);
-      // Diagnostic: Confirm token rotation in logs (Using info level for visibility)
-      logger.info(`CSRF Token Generated: ${req.url} | Token Prefix: ${res.locals.csrfToken.substring(0, 8)}...`);
+      // Diagnostic: Confirm token rotation in logs
+      logger.info(`[CSRF] Generated: ${req.url} | SESS: ${req.sessionID?.substring(0, 8)}...`);
     }
   } else {
-    // For POST, keep the submitted token so re-renders work.
+    // For non-GET or assets, attempt to reuse the existing token
     res.locals.csrfToken = req.body?._csrf || req.headers["x-csrf-token"];
   }
   

@@ -732,6 +732,10 @@
                               </div>
                               <form class="newsletter-form" id="newsletter-form">
                                 <input type="hidden" id="newsletter-csrf" value="<%= locals.csrfToken %>">
+                                <div class="newsletter-form__group" style="display: flex; gap: 10px; margin-bottom: 10px; width: 100%;">
+                                  <input type="text" id="newsletter-fname" class="newsletter-form__input" placeholder="First Name" required style="flex: 1;">
+                                  <input type="text" id="newsletter-lname" class="newsletter-form__input" placeholder="Last Name" required style="flex: 1;">
+                                </div>
                                 <input type="email" id="newsletter-email" class="newsletter-form__input" placeholder="Your email" required>
                                 <button type="submit" id="newsletter-submit" class="newsletter-form__btn">Subscribe</button>
                               </form>
@@ -740,6 +744,8 @@
                               <script>
                                 document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
                                   e.preventDefault();
+                                  const fname = document.getElementById('newsletter-fname').value;
+                                  const lname = document.getElementById('newsletter-lname').value;
                                   const email = document.getElementById('newsletter-email').value;
                                   const csrf = document.getElementById('newsletter-csrf').value;
                                   const btn = document.getElementById('newsletter-submit');
@@ -755,7 +761,7 @@
                                         'Content-Type': 'application/json',
                                         'x-csrf-token': csrf
                                       },
-                                      body: JSON.stringify({ email })
+                                      body: JSON.stringify({ email, first_name: fname, last_name: lname })
                                     });
                                     const data = await response.json();
                                     

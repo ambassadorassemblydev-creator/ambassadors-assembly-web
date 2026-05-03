@@ -457,12 +457,12 @@ export const pageController = {
     // Handle Testimony Submission
     handleTestimonySubmit: async (req, res) => {
         try {
-            const { title, content, is_anonymous, full_name_hp, 'g-recaptcha-response': recaptchaToken } = req.body;
+            const { title, content, is_anonymous, author_name: guestName, full_name_hp, 'g-recaptcha-response': recaptchaToken } = req.body;
             const userId = req.user?.id;
 
             // 0. Verify reCAPTCHA
             const score = await getRecaptchaScore(recaptchaToken);
-            if (score < 0.3) { // Stricter threshold for blocking, but we save the score anyway
+            if (score < 0.3) { 
                 return res.redirect(`${req.header('Referer') || '/testimonies'}?error=Security verification failed. Please try again.`);
             }
 
@@ -474,20 +474,24 @@ export const pageController = {
             }
 
             const isAnonymous = is_anonymous === 'true' || is_anonymous === 'on';
-            let authorName = 'Anonymous Member';
+            let authorName = guestName || 'Anonymous Member';
 
-            if (!isAnonymous && userId) {
-                // Fetch the real name from the profiles table
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('first_name, last_name')
-                    .eq('id', userId)
-                    .single();
-                
-                if (profile && profile.first_name) {
-                    authorName = `${profile.first_name} ${profile.last_name || ''}`.trim();
-                } else if (req.user?.user_metadata?.first_name) {
-                    authorName = `${req.user.user_metadata.first_name} ${req.user.user_metadata.last_name || ''}`.trim();
+            if (!isAnonymous) {
+                if (userId) {
+                    // Fetch the real name from the profiles table
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('first_name, last_name')
+                        .eq('id', userId)
+                        .single();
+                    
+                    if (profile && profile.first_name) {
+                        authorName = `${profile.first_name} ${profile.last_name || ''}`.trim();
+                    } else if (req.user?.user_metadata?.first_name) {
+                        authorName = `${req.user.user_metadata.first_name} ${req.user.user_metadata.last_name || ''}`.trim();
+                    }
+                } else if (guestName) {
+                    authorName = guestName;
                 }
             }
 

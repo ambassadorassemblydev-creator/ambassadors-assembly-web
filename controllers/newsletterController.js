@@ -6,13 +6,18 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const newsletterController = {
     handleSubscribe: async (req, res) => {
         try {
-            const { email } = req.body;
+            const { email, first_name, last_name } = req.body;
             if (!email) return res.status(400).json({ error: 'Email is required' });
 
             // 1. Save to database
             const { data, error } = await supabaseService
                 .from('newsletter_subscribers')
-                .upsert([{ email, is_active: true }], { onConflict: 'email' })
+                .upsert([{ 
+                    email, 
+                    first_name, 
+                    last_name, 
+                    is_active: true 
+                }], { onConflict: 'email' })
                 .select()
                 .single();
 
@@ -26,7 +31,7 @@ export const newsletterController = {
                     subject: 'Welcome to the Ambassadors Assembly Newsletter!',
                     html: `
                         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; rounded: 10px;">
-                            <h1 style="color: #176a60;">Welcome to the Family!</h1>
+                            <h1 style="color: #176a60;">Welcome to the Family, ${first_name || 'Ambassador'}!</h1>
                             <p>Thank you for subscribing to our newsletter. We're excited to have you with us.</p>
                             <p>Stay tuned for the latest news, resources, and updates from Ambassadors Assembly.</p>
                             <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">

@@ -83,11 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 1. Logged-in Restriction
-        if (!window.currentUser) {
-            addSystemMessage("Ambassador, please sign in to your account to use our Voice AI service.");
-            return;
-        }
+        // 1. Context Resolution (High IQ: Provide personal touch if logged in, fallback to guest)
+        const userContext = window.currentUser || { first_name: 'Ambassador', role: 'Guest' };
 
         if (isActive) {
             vapi.stop();
@@ -101,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // HIGH IQ: Pass user context to the AI
                 const assistantOverrides = {
                     variableValues: {
-                        userName: window.currentUser?.first_name || 'Ambassador',
-                        userRole: window.currentUser?.role || 'Member',
+                        userName: userContext.first_name || 'Ambassador',
+                        userRole: userContext.role || 'Guest',
                         churchAddress: window.churchContext?.address || '',
                         churchPhone: window.churchContext?.phone || '',
                         churchEmail: window.churchContext?.email || '',

@@ -813,12 +813,10 @@
           <div class="pf-grid">
             <div class="pf-g">
               <label class="pf-lbl">Title</label>
-              <select name="title" class="pf-inp">
-                <option value="" <%= !user.title ? 'selected' : '' %>>None</option>
-                <% ['Mr', 'Mrs', 'Ms', 'Bro', 'Sis', 'Dr', 'Pastor', 'Deacon', 'Deaconess', 'Elder', 'Minister', 'Bishop', 'Evangelist', 'Apostle', 'Prophet'].forEach(t => { %>
-                  <option value="<%= t %>" <%= user.title === t ? 'selected' : '' %>><%= t %></option>
-                <% }) %>
-              </select>
+              <div class="pf-inp" style="background:var(--g-pl); border-color:transparent; color:var(--g); font-weight:700;">
+                <%= user.title || 'None' %>
+              </div>
+              <span class="pf-hint">Email admin to change title.</span>
             </div>
             <div class="pf-g">
               <label class="pf-lbl">First Name</label>

@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 
 /**
  * Repository for handling systematic audit logging.
@@ -21,7 +21,8 @@ export const auditRepo = {
             const ip_address = req.ip || req.headers['x-forwarded-for'] || '0.0.0.0';
             const user_agent = req.headers['user-agent'] || 'Unknown';
 
-            const { error } = await supabase
+            // High IQ: Use service client to bypass RLS for critical system logs
+            const { error } = await supabaseService
                 .from('audit_log')
                 .insert([{
                     actor_id,
