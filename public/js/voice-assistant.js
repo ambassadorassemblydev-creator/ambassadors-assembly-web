@@ -1,3 +1,5 @@
+import { Conversation } from "https://cdn.jsdelivr.net/npm/@elevenlabs/client@latest/dist/index.min.js";
+
 /**
  * Ambassadors Assembly - Professional Voice Assistant
  * Powered by ElevenLabs Conversational AI
@@ -101,11 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const startCall = async () => {
-        if (typeof ElevenLabsClient === 'undefined') {
-            alert("ElevenLabs SDK is still loading. Please wait.");
-            return;
-        }
-
         try {
             console.log("[Voice] Initiating ElevenLabs Session...");
             updateUIState('INITIALIZING');
@@ -125,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const { signed_url } = await response.json();
             
             // 2. Start Conversation
-            conversation = await ElevenLabsClient.Conversation.startSession({
+            conversation = await Conversation.startSession({
                 signedUrl: signed_url,
                 onConnect: () => {
                     isActive = true;
