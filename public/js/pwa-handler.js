@@ -44,10 +44,15 @@ const PWA = {
 
             console.log('[PWA] User is subscribed:', subscription);
 
-            // Send subscription to server
+            // Send subscription to server with CSRF protection
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
             const response = await fetch('/api/notifications/subscribe', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-csrf-token': csrfToken
+                },
                 body: JSON.stringify({ subscription })
             });
 

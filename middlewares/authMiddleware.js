@@ -31,6 +31,12 @@ export const authMiddleware = {
   // 1. The "Observer": Checks if someone is logged in to update the Navbar. 
   checkUser: async (req, res, next) => {
     let token = req.cookies?.jwt;
+    
+    // High IQ: Support Authorization Header for API calls (e.g. from Admin portal)
+    if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
     let user = null;
 
     if (token && token !== 'loggedout') {
@@ -74,6 +80,12 @@ export const authMiddleware = {
   // 2. The "Bouncer": Completely BLOCKS users from viewing protected pages
   protect: async (req, res, next) => {
     let token = req.cookies?.jwt;
+
+    // High IQ: Support Authorization Header for API calls (e.g. from Admin portal)
+    if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
     let user = null;
 
     if (token && token !== 'loggedout') {

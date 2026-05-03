@@ -4,6 +4,9 @@
 <head>
   <meta charset="utf-8">
   
+  <!-- CSRF Protection (High IQ: Essential for PWA and AJAX stability) -->
+  <meta name="csrf-token" content="<%= locals.csrfToken %>">
+  
   <!-- LCP Image Preload -->
   <% if (locals.lcpImage) { %>
   <link rel="preload" as="image" href="<%= lcpImage %>" fetchpriority="high">

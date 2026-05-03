@@ -13,7 +13,7 @@ webpush.setVapidDetails(
 export const subscribe = async (req, res) => {
     try {
         const { subscription } = req.body;
-        const userId = req.session.user?.id;
+        const userId = req.user?.id;
 
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
@@ -39,7 +39,7 @@ export const broadcast = async (req, res) => {
         const { title, body, url } = req.body;
 
         // 1. Check for Admin Role
-        const userId = req.session.user?.id;
+        const userId = req.user?.id;
         const { data: roleData } = await supabase
             .from('user_roles')
             .select('roles(name)')
