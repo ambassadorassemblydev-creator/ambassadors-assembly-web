@@ -104,12 +104,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const startCall = async () => {
         try {
+            // 1. Check Microphone Permission First
+            let stream;
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            } catch (micErr) {
+                console.error("[Voice] Microphone Error:", micErr);
+                alert("Microphone access denied. Please enable microphone permissions in your browser settings to use the AI Assistant.");
+                stopCall();
+                return;
+            }
+
             console.log("[Voice] Initiating ElevenLabs Session...");
             updateUIState('INITIALIZING');
             callOverlay.classList.add('active');
             callBtn.classList.add('connecting');
 
-            // 1. Fetch Signed URL from our backend
+            // 2. Fetch Signed URL
             const response = await fetch('/api/voice/get-signed-url', {
                 method: 'POST',
                 headers: {
@@ -118,10 +129,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            if (!response.ok) throw new Error('Failed to get signed URL');
+            if (!response.ok) throw new Error('Failed to get signed URL from server.');
             const { signed_url } = await response.json();
             
-            // 2. Start Conversation
+            // 3. Start Conversation
             conversation = await Conversation.startSession({
                 signedUrl: signed_url,
                 onConnect: () => {
@@ -130,7 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log("[Voice] Connected to ElevenLabs");
                     addSystemMessage("Ambassadors AI is now live. You can speak freely.");
 
-                    // High IQ: Start the 90-second safety countdown
+                    // Start Visualizer with the stream we already got
+                    visualizer.start(stream);
+
                     if (callSafetyTimer) clearTimeout(callSafetyTimer);
                     callSafetyTimer = setTimeout(() => {
                         console.log("[Voice] 90s safety limit reached. Ending call.");
@@ -157,13 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // 3. Start Visualizer (Requires user media)
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            visualizer.start(stream);
-
         } catch (err) {
-            console.error("[Voice] Start Error:", err);
-            alert("Could not start voice call. Check your microphone settings.");
+            console.error("[Voice] General Start Error:", err);
+            alert("Could not start voice call: " + err.message);
             stopCall();
         }
     };
