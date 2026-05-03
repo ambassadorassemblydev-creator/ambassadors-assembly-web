@@ -1,4 +1,4 @@
-import { Conversation } from "https://cdn.jsdelivr.net/npm/@elevenlabs/client@latest/dist/index.min.js";
+import { Conversation } from "https://esm.sh/@elevenlabs/client";
 
 /**
  * Ambassadors Assembly - Professional Voice Assistant
