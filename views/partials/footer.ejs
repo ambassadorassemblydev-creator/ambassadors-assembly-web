@@ -870,10 +870,20 @@
       border-color: #ef4444; 
       animation: pulse-red 2s infinite;
     }
+    .ai-call-btn.connecting {
+      background: #176a60;
+      border-color: #176a60;
+      animation: pulse-green 2s infinite;
+    }
     @keyframes pulse-red {
       0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
       70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
       100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     }
 
     /* CALL OVERLAY STYLES */

@@ -1,60 +1,205 @@
 <%- include('../partials/head') %>
 
-<body class="bg-dark text-white d-flex align-items-center justify-content-center" style="min-height: 100vh; overflow: hidden; background: #0a0a0a;">
+<body class="d-flex align-items-center justify-content-center" style="min-height: 100vh; overflow: hidden; background: #f8faf9; font-family: 'Outfit', sans-serif;">
   
-  <div class="text-center gsap-reveal">
+  <!-- PREMIUM BACKGROUND DECORATION -->
+  <div class="fixed-inset overflow-hidden" style="position: absolute; inset: 0; z-index: -1;">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <div class="text-center gsap-reveal content-card">
     <!-- CINEMATIC LOADER -->
-    <div class="loader-wrapper mb-4">
-      <div class="loader-circle"></div>
-      <div class="loader-inner"></div>
-      <div class="loader-logo">
-         <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" alt="Logo" style="width: 40px; height: 40px; border-radius: 50%;">
+    <div class="loader-container mb-5">
+      <div class="loader-ring ring-1"></div>
+      <div class="loader-ring ring-2"></div>
+      <div class="loader-ring ring-3"></div>
+      <div class="loader-logo-wrap">
+         <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" alt="Ambassadors Logo" class="main-logo shadow-xl">
       </div>
     </div>
     
-    <h2 class="auth-text" style="font-family: 'Outfit', sans-serif; font-weight: 700; letter-spacing: -0.5px; opacity: 0.8;">Securing Session</h2>
-    <p class="text-muted small" style="letter-spacing: 1px; text-transform: uppercase; opacity: 0.5;">Please wait while we connect your Ambassador identity</p>
+    <div class="text-wrap">
+      <h2 class="auth-heading mb-2">Securing Your Session</h2>
+      <p class="auth-subtext">Connecting your Ambassador identity to the Kingdom network...</p>
+    </div>
+
+    <!-- PROGRESS INDICATOR -->
+    <div class="progress-wrap mt-4">
+      <div class="progress-bar-custom">
+        <div class="progress-fill"></div>
+      </div>
+      <div class="status-steps mt-3 d-flex justify-content-between px-2">
+        <span class="step-label active">Verify</span>
+        <span class="step-label">Sync</span>
+        <span class="step-label">Launch</span>
+      </div>
+    </div>
   </div>
 
   <input type="hidden" id="csrfToken" value="<%= locals.csrfToken %>">
 
   <style>
-    .loader-wrapper {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      margin: 0 auto;
+    :root {
+      --primary: #176a60;
+      --secondary: #25D366;
+      --bg-light: #f8faf9;
     }
-    .loader-circle {
+
+    .fixed-inset { pointer-events: none; }
+    
+    .bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+      animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .blob-1 {
+      width: 500px;
+      height: 500px;
+      background: var(--primary);
+      top: -100px;
+      left: -100px;
+    }
+    
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--secondary);
+      bottom: -100px;
+      right: -100px;
+      animation-delay: -5s;
+    }
+    
+    .blob-3 {
+      width: 300px;
+      height: 300px;
+      background: #10b981;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-duration: 25s;
+    }
+
+    .glass-overlay {
       position: absolute;
       inset: 0;
-      border: 2px solid rgba(23, 106, 96, 0.1);
-      border-top-color: #176a60;
-      border-radius: 50%;
-      animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+      background: radial-gradient(circle at center, transparent 0%, var(--bg-light) 70%);
     }
-    .loader-inner {
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(100px, 50px) scale(1.1); }
+    }
+
+    .content-card {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      padding: 3rem;
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+      max-width: 450px;
+      width: 90%;
+    }
+
+    .loader-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto;
+    }
+
+    .loader-ring {
       position: absolute;
-      inset: 10px;
-      border: 2px solid rgba(37, 211, 102, 0.05);
-      border-bottom-color: #25D366;
+      inset: 0;
+      border: 3px solid transparent;
       border-radius: 50%;
-      animation: spin-reverse 1s linear infinite;
     }
-    .loader-logo {
+
+    .ring-1 {
+      border-top-color: var(--primary);
+      animation: spin 2s linear infinite;
+    }
+    
+    .ring-2 {
+      inset: 10px;
+      border-bottom-color: var(--secondary);
+      animation: spin 1.5s linear infinite reverse;
+    }
+    
+    .ring-3 {
+      inset: 20px;
+      border-left-color: #10b981;
+      animation: spin 3s linear infinite;
+    }
+
+    .loader-logo-wrap {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+
+    .main-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid white;
+      object-fit: cover;
+    }
+
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes spin-reverse { to { transform: rotate(-360deg); } }
     
-    .auth-text {
-      background: linear-gradient(to bottom, #ffffff, #888);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .auth-heading {
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: #1a1a1a;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-subtext {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .progress-bar-custom {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(37, 211, 102, 0.5);
+    }
+
+    .step-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #cbd5e1;
+      transition: all 0.3s ease;
+    }
+
+    .step-label.active {
+      color: var(--primary);
     }
   </style>
 
@@ -64,7 +209,23 @@
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       // Reveal animation
-      gsap.from('.gsap-reveal', { y: 20, opacity: 0, duration: 1, ease: 'power4.out' });
+      gsap.from('.gsap-reveal', { 
+        y: 30, 
+        opacity: 0, 
+        duration: 1.2, 
+        ease: 'power4.out',
+        delay: 0.2 
+      });
+
+      // Progress simulation
+      const progressFill = document.querySelector('.progress-fill');
+      const stepLabels = document.querySelectorAll('.step-label');
+      
+      gsap.to(progressFill, {
+        width: '30%',
+        duration: 0.8,
+        ease: 'power2.inOut'
+      });
 
       // Handle the hash
       const handleAuthHash = async () => {
@@ -75,7 +236,7 @@
           return;
         }
 
-        // Parse hash into a session object (Supabase style)
+        // Parse hash into a session object
         const params = new URLSearchParams(hash.substring(1));
         const accessToken = params.get('access_token');
         const refreshToken = params.get('refresh_token');
@@ -85,6 +246,16 @@
           window.location.href = "/account/login?error=invalid_session";
           return;
         }
+
+        // Move progress to sync step
+        gsap.to(progressFill, {
+          width: '70%',
+          duration: 1.5,
+          ease: 'power2.inOut',
+          onStart: () => {
+            stepLabels[1].classList.add('active');
+          }
+        });
 
         const session = {
           access_token: accessToken,
@@ -103,8 +274,18 @@
           });
 
           if (response.ok) {
-            window.location.hash = ""; // Clear hash
-            window.location.href = "/my-account";
+            // Success step
+            gsap.to(progressFill, {
+              width: '100%',
+              duration: 0.5,
+              onComplete: () => {
+                stepLabels[2].classList.add('active');
+                setTimeout(() => {
+                  window.location.hash = ""; 
+                  window.location.href = "/my-account";
+                }, 400);
+              }
+            });
           } else {
             const data = await response.json();
             window.location.href = "/account/login?error=" + encodeURIComponent(data.message || "session_failed");
@@ -115,8 +296,8 @@
         }
       };
 
-      // Small delay to ensure hash is stable in some browsers
-      setTimeout(handleAuthHash, 500);
+      // Handle auth hash after a small delay
+      setTimeout(handleAuthHash, 800);
     });
   </script>
 </body>

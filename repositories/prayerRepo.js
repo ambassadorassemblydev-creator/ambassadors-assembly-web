@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 
 /**
  * Prayer Repository
@@ -39,26 +39,40 @@ export const prayerRepo = {
 
   // Record an intercession ("I prayed for this")
   intercede: async (requestId, userId) => {
-    // 1. Check if already interceded
-    const { data: existing } = await supabase
+    console.log(`[PrayerRepo] Intercede attempt for request ${requestId} by user ${userId}`);
+    
+    // 1. Check if already interceded (Use Service role to ensure we see all rows)
+    const { data: existing, error: checkError } = await supabaseService
       .from('prayer_intercessors')
       .select('id')
       .eq('prayer_request_id', requestId)
       .eq('user_id', userId)
       .maybeSingle();
 
-    if (existing) throw new Error('You have already interceded for this request.');
+    if (checkError) {
+        console.error(`[PrayerRepo] Error checking intercession:`, checkError);
+        throw checkError;
+    }
 
-    // 2. Insert intercession
-    const { error } = await supabase
+    if (existing) {
+        console.warn(`[PrayerRepo] User ${userId} already interceded for request ${requestId}`);
+        throw new Error('You have already interceded for this request.');
+    }
+
+    // 2. Insert intercession (Use Service role to bypass RLS since we've already validated the user in the controller)
+    const { error: insertError } = await supabaseService
       .from('prayer_intercessors')
       .insert([{
         prayer_request_id: requestId,
         user_id: userId
       }]);
 
-    if (error) throw error;
+    if (insertError) {
+        console.error(`[PrayerRepo] Insert Error:`, insertError);
+        throw insertError;
+    }
 
+    console.log(`[PrayerRepo] Successfully recorded intercession for ${requestId}`);
     // Trigger update for prayer count (happening via SQL trigger in Supabase)
     return true;
   }

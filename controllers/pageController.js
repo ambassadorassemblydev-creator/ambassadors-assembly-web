@@ -548,9 +548,11 @@ export const pageController = {
             if (!isHuman) return res.status(400).json({ error: 'Security verification failed.' });
 
             
+            console.log(`[PageController] User ${userId} interceding for request ${requestId}`);
             await prayerRepo.intercede(requestId, userId);
             
             // Log for AI
+            console.log(`[PageController] Audit logging intercession for ${userId}`);
             await auditLogger.log(userId, 'prayer_intercede', `Interceded for a prayer on the wall`, { requestId });
 
             return res.json({ success: true, message: 'Your prayer has been recorded. The wall glows brighter!' });

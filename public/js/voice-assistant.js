@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isActive = false;
             callBtn.classList.remove('active', 'connecting');
             if (callOverlay) callOverlay.classList.remove('active');
+            if (callStatusText) callStatusText.innerText = "Call Ended";
             addSystemMessage("Voice call ended.");
         });
 
@@ -60,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addSystemMessage("Connection failed. Check your microphone.");
             isActive = false;
             callBtn.classList.remove('active', 'connecting');
+            if (callOverlay) callOverlay.classList.remove('active');
         });
     };
 
@@ -77,8 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     callBtn.addEventListener('click', async () => {
+        console.log("[Voice] Start Call Button Pressed");
+        
         // High IQ: JIT Initialization if not already ready
         if (!initVapi()) {
+            console.warn("[Voice] Vapi not initialized, library may still be loading");
             alert("Voice assistant library is still loading from the cloud. Please wait 2 seconds and try again.");
             return;
         }
@@ -87,11 +92,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const userContext = window.currentUser || { first_name: 'Ambassador', role: 'Guest' };
 
         if (isActive) {
+            console.log("[Voice] Stopping active call");
             vapi.stop();
         } else {
+            console.log("[Voice] Initiating connection...");
+            
+            // Show connecting UI immediately for instant feedback
+            if (callOverlay) {
+                callOverlay.classList.add('active');
+                if (callStatusText) callStatusText.innerText = "Connecting...";
+            }
+            callBtn.classList.add('connecting');
+            addSystemMessage("Connecting to the Throne Room (Ambassadors AI)...");
+
             // Check for microphone permission
             try {
                 const testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                console.log("[Voice] Microphone permission granted");
                 // HIGH IQ: Stop the test stream immediately to release the microphone for Vapi
                 testStream.getTracks().forEach(track => track.stop());
                 
@@ -111,14 +128,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 vapi.stop();
                 
                 // Connect with full context
+                console.log("[Voice] Calling vapi.start()");
                 vapi.start(ASSISTANT_ID, assistantOverrides);
-                
-                addSystemMessage("Connecting to the Throne Room (Ambassadors AI)...");
-                callBtn.classList.add('connecting');
 
             } catch (err) {
-                console.error("Voice Error:", err);
+                console.error("[Voice] Media Error:", err);
                 alert("Microphone access is required for voice calls.");
+                // Reset UI on error
+                isActive = false;
+                callBtn.classList.remove('active', 'connecting');
+                if (callOverlay) callOverlay.classList.remove('active');
             }
         }
     });

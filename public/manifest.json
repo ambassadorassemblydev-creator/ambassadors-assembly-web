@@ -121,7 +121,8 @@
   ],
   "scope_extensions": [
     {
-      "origin": "theambassadorsassembly.org"
+      "type": "origin",
+      "origin": "https://theambassadorsassembly.org"
     }
   ],
   "prefer_related_applications": false,
