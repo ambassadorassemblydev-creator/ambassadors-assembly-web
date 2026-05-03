@@ -9,7 +9,7 @@ const isAuthenticated = (req, res, next) => {
     res.status(401).json({ error: 'Unauthorized' });
 };
 
-router.post('/subscribe', isAuthenticated, notificationController.subscribe);
+router.post('/subscribe', notificationController.subscribe);
 router.post('/broadcast', isAuthenticated, notificationController.broadcast);
 
 export default router;
