@@ -141,23 +141,22 @@ OPERATIONAL RULES:
 
             // High IQ: Securely creating a signed URL with Dynamic Context Override
             // This injects the church info directly into the AI's "brain" for this specific call
-            const response = await axios.post(`https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id=${process.env.ELEVENLABS_AGENT_ID}`, {
-                conversation_config_override: {
-                    agent: {
-                        prompt: {
-                            prompt: `You are the Ambassadors AI. Address the user as ${userName || 'Ambassador'}. 
-                                    Use the following church info to answer questions: ${context}`
-                        },
-                        first_message: `Greetings, ${userName || 'Ambassador'}! I am the Ambassadors AI. How can I assist your journey with us today?`
-                    }
-                }
-            }, {
+            const response = await axios.get(`https://api.elevenlabs.io/v1/convai/conversation/get-signed-url`, {
+                params: {
+                    agent_id: process.env.ELEVENLABS_AGENT_ID
+                },
                 headers: {
                     'xi-api-key': process.env.ELEVENLABS_API_KEY
                 }
             });
 
-            return response.data;
+            return {
+                signed_url: response.data.signed_url,
+                dynamic_variables: {
+                    user_name: userName || 'Ambassador',
+                    church_context: context
+                }
+            };
         } catch (error) {
             console.error('[AIService] ElevenLabs Error:', error.response?.data || error.message);
             throw new Error('Failed to initiate voice connection');

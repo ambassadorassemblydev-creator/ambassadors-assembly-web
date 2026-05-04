@@ -130,11 +130,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) throw new Error('Failed to get signed URL from server.');
-            const { signed_url } = await response.json();
+            const { signed_url, dynamic_variables } = await response.json();
             
             // 3. Start Conversation
             conversation = await Conversation.startSession({
                 signedUrl: signed_url,
+                dynamicVariables: dynamic_variables, // High IQ: Inject server-side context
                 onConnect: () => {
                     isActive = true;
                     updateUIState('CONNECTED');
