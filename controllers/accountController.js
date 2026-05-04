@@ -382,6 +382,11 @@ export const accountController = {
         role_claim: targetRoleClaim,
         department_interest: (validatedData.department_interest && validatedData.department_interest !== 'None') ? validatedData.department_interest : null,
         department_claim: (validatedData.department_interest && validatedData.department_interest !== 'None') ? validatedData.department_interest : null,
+        position_interest: (validatedData.position_interest && validatedData.position_interest !== 'None') ? validatedData.position_interest : null,
+        department: (validatedData.department_interest && validatedData.department_interest !== 'None') ? validatedData.department_interest : null,
+        ministry: (Array.isArray(validatedData.ministry_interests) && validatedData.ministry_interests.length > 0) 
+          ? validatedData.ministry_interests[0] 
+          : (validatedData.ministry_interests && validatedData.ministry_interests !== 'None' ? validatedData.ministry_interests : null),
         is_member: true,
         member_since: new Date(),
         country: 'Nigeria',

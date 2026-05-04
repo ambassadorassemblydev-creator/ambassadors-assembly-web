@@ -301,6 +301,8 @@ export const accountRepo = {
     if (updateData.is_member !== undefined) payload.is_member = updateData.is_member;
     if (updateData.member_since !== undefined) payload.member_since = updateData.member_since;
     if (updateData.interests !== undefined) payload.interests = updateData.interests;
+    if (updateData.department !== undefined) payload.department = updateData.department;
+    if (updateData.ministry !== undefined) payload.ministry = updateData.ministry;
 
     const { data, error } = await supabaseService
       .from('profiles')

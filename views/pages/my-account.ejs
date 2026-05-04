@@ -893,6 +893,49 @@
         </form>
       </div>
 
+      <!-- Church Service & Ministry (Read-Only Status) -->
+      <div class="aas-card">
+        <h3 class="aas-card-title" style="margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+          <i class="fas fa-church" style="color:var(--g);"></i> Church Service & Ministry
+        </h3>
+        <div class="pf-grid">
+          <div class="pf-g">
+            <label class="pf-lbl">Official Department</label>
+            <div class="pf-inp">
+              <%= (hasWorker && w.church_departments) ? w.church_departments.name : (user.department || 'None Assigned') %>
+            </div>
+          </div>
+          <div class="pf-g">
+            <label class="pf-lbl">Official Position</label>
+            <div class="pf-inp">
+              <%= (hasWorker && w.church_positions) ? w.church_positions.title : 'Member' %>
+            </div>
+          </div>
+          <div class="pf-g full">
+            <label class="pf-lbl">Fellowship / Ministry</label>
+            <div class="pf-inp">
+              <% if (user.ministry_members && user.ministry_members.length > 0) { %>
+                <%= user.ministry_members.map(m => m.ministries ? m.ministries.name : 'Unknown').join(', ') %>
+              <% } else { %>
+                <%= user.ministry || 'None Assigned' %>
+              <% } %>
+            </div>
+          </div>
+          <div class="pf-g">
+            <label class="pf-lbl">Department Interest</label>
+            <div class="pf-inp" style="background:#f8fafc; color:#64748b;">
+              <%= user.department_interest || 'None recorded' %>
+            </div>
+          </div>
+          <div class="pf-g">
+            <label class="pf-lbl">Position Interest</label>
+            <div class="pf-inp" style="background:#f8fafc; color:#64748b;">
+              <%= user.position_interest || 'None recorded' %>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Spiritual info (read-only) -->
       <div class="aas-card">
         <h3 class="aas-card-title" style="margin-bottom:20px;display:flex;align-items:center;gap:8px;">
