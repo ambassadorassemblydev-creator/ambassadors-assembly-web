@@ -71,7 +71,7 @@
                 <h2>Share the <span class="text-italic">Glory</span></h2>
                 <p>Tell us how God has been moving in your life. Your story will be reviewed and shared to inspire others.</p>
                 
-                <form action="/testimonies/submit" method="POST" class="actual-form">
+                <form action="/testimonies/submit" method="POST" class="actual-form no-disable">
                     <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                     <div class="hp-field" style="display:none !important; visibility:hidden !important;"><input type="text" name="full_name_hp" tabindex="-1" autocomplete="off"></div>
                     <% if (!locals.user) { %>
@@ -299,6 +299,11 @@
     .submit-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 15px 25px rgba(23, 106, 96, 0.3);
+    }
+    .submit-btn:active {
+        transform: translateY(0);
+        background: #115048;
+        color: white !important;
     }
     .close-panel { position: absolute; top: 25px; right: 25px; background: transparent; border: none; cursor: pointer; color: #1a1a1a; font-size: 2rem; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: background 0.3s; }
     .close-panel:hover { background: rgba(23, 106, 96, 0.1); color: var(--color_2); }

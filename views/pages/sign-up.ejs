@@ -178,6 +178,10 @@
                       border-color: #1a1a1a;
                       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
                     }
+                    .auth-submit-btn:active {
+                      background: #115048;
+                      color: white !important;
+                    }
 
                     .google-btn {
                       display: flex;
@@ -291,7 +295,7 @@
                           <span>Or continue with email</span>
                         </div>
 
-                        <form id="sign-up-form">
+                        <form id="sign-up-form" class="no-disable">
                             <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                             <!-- CSRF Token for JS handlers -->
                             <input type="hidden" name="_csrf_legacy" id="csrfToken" value="<%= locals.csrfToken %>">
@@ -468,6 +472,10 @@
           if (pwdInput.value !== confirmInput.value) {
             errorBox.textContent = "Passwords do not match.";
             errorBox.style.display = "block";
+            // Reset button just in case
+            submitBtn.textContent = "Create Account";
+            submitBtn.style.opacity = "1";
+            submitBtn.disabled = false;
             return;
           }
 

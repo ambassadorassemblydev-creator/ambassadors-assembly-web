@@ -90,7 +90,7 @@
                 <h2>Share your <span class="text-italic">burden</span></h2>
                 <p>We believe in the power of collective prayer. Your request will be reviewed by our team.</p>
                 
-                <form action="/prayer-wall/submit" method="POST" class="actual-form">
+                <form action="/prayer-wall/submit" method="POST" class="actual-form no-disable">
                     <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                     <div class="hp-field" style="display:none !important; visibility:hidden !important;"><input type="text" name="full_name_hp" tabindex="-1" autocomplete="off"></div>
                     <div class="form-group">
@@ -391,6 +391,7 @@
     .actual-form input:focus, .actual-form textarea:focus { border-color: var(--aa-green); background: #ffffff; }
     .submit-btn { width: 100%; background: #1a1a1a; color: white; border: none; padding: 18px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; }
     .submit-btn:hover { background: var(--aa-green); }
+    .submit-btn:active { background: #115048; color: white !important; transform: translateY(0); }
     .close-panel { color: #1a1a1a; opacity: 0.5; transition: 0.3s; background: transparent; border: none; cursor: pointer; position: absolute; top: 30px; right: 30px; }
     .close-panel:hover { opacity: 1; transform: rotate(90deg); }
 </style>
