@@ -409,7 +409,7 @@
                           <p>Skip outreach placement for now.</p>
                         </div>
                       </div>
-
+                       <% (Array.isArray(departments) ? departments : []).forEach(dept => { %>
                          <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
                               data-name="<%= dept.name %>"
                               data-id="<%= dept.id %>"
@@ -590,8 +590,7 @@
   #allWrapper, 
   #dm_content,
   #dmFlexHeaderContainer,
-  #flex-header,
- {
+  #flex-header {
     background-color: transparent !important;
     background-image: none !important;
   }
