@@ -75,6 +75,10 @@ const onboardingSchema = z.object({
   receive_sms_notifications: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
   receive_birthday_greeting: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
   receive_email_devotionals: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  
+  // Path Selection
+  onboarding_path: z.enum(['new_convert', 'existing_member', 'church_worker']).optional(),
+  role_claim: z.string().optional(),
 });
 
 export const accountController = {
@@ -316,14 +320,36 @@ export const accountController = {
         'outreach': 'other',
         'other': 'other'
       };
-      const source = sourceMap[validatedData.how_did_you_hear] || 'other';
-
-      // 3. Update Profile
-      const isAlreadyServing = validatedData.already_serving === 'true' || validatedData.already_serving === true;
+      const source = sourceMap[validatedData.how_did_you_hear] || 'other';      // 3. Update Profile
+      const path = validatedData.onboarding_path || 'new_convert';
+      const isAlreadyServing = (path === 'church_worker') || (validatedData.already_serving === 'true' || validatedData.already_serving === true);
+      
       const pastoralTitles = ['Pastor', 'Bishop', 'Apostle', 'Prophet', 'Evangelist'];
       const leaderTitles = ['Elder', 'Deacon', 'Deaconess', 'Minister'];
       const titleStr = validatedData.title || '';
-      const needsApproval = pastoralTitles.includes(titleStr) || leaderTitles.includes(titleStr) || isAlreadyServing;
+
+      // Role & Approval Logic based on Path
+      let targetRoleClaim = 'member';
+      let targetApprovalStatus = 'none';
+      let needsManualVerification = false;
+
+      if (path === 'church_worker') {
+        // High IQ: If they say they are a worker, they must pick a role claim
+        targetRoleClaim = validatedData.role_claim || 'worker';
+        targetApprovalStatus = 'pending';
+        needsManualVerification = true;
+      } else {
+        // New Converts and Existing Members start as regular members
+        targetRoleClaim = 'member';
+        targetApprovalStatus = 'none';
+      }
+
+      // Overriding role claim if they picked a high-authority title during regular onboarding
+      if (!needsManualVerification && (pastoralTitles.includes(titleStr) || leaderTitles.includes(titleStr))) {
+        targetRoleClaim = pastoralTitles.includes(titleStr) ? 'pastor' : 'leader';
+        targetApprovalStatus = 'pending';
+        needsManualVerification = true;
+      }
 
       const profileUpdates = {
         title: validatedData.title || null,
@@ -352,11 +378,10 @@ export const accountController = {
         receive_email_devotionals: validatedData.receive_email_devotionals ?? false,
         is_onboarded: true,
         already_serving: isAlreadyServing,
-        approval_status: needsApproval ? 'pending' : 'none',
-        role_claim: needsApproval ? (titleStr || (isAlreadyServing ? 'worker' : null)) : null,
+        approval_status: targetApprovalStatus,
+        role_claim: targetRoleClaim,
         department_interest: (validatedData.department_interest && validatedData.department_interest !== 'None') ? validatedData.department_interest : null,
         department_claim: (validatedData.department_interest && validatedData.department_interest !== 'None') ? validatedData.department_interest : null,
-        // High IQ: Syncing membership status
         is_member: true,
         member_since: new Date(),
         country: 'Nigeria',
@@ -442,31 +467,9 @@ export const accountController = {
         } catch (mErr) {
           logger.warn(`Non-critical error in ministry linking: ${mErr.message}`);
         }
-      }
-
-      // 5. Assign correct role — never leave user as 'guest' after onboarding
-      // NOTE: Picking a department during onboarding is an *interest*, not an approval.
-      // Everyone gets 'member' after onboarding. Admin promotes to 'worker' after reviewing
-      // the volunteer_application record in the Approvals Center.
-      try {
-        const title = validatedData.title || '';
-
-        let targetRoleName = 'member'; // All new users become 'member' after onboarding
-
-        // Pastoral/leader titles need admin approval — already handled by approval_status
-        if (needsApproval) {
-          logger.info(`User ${userId} (${titleStr}) flagged for admin approval during onboarding.`);
-        }
-
-        // Single source of truth: set role directly on profile
-        await supabaseService.from('profiles')
-          .update({ role_claim: targetRoleName })
-          .eq('id', userId);
-
-        logger.info(`Role '${targetRoleName}' assigned to user ${userId} after onboarding`);
-      } catch (roleErr) {
-        logger.warn(`Non-critical role assignment error during onboarding: ${roleErr.message}`);
-      }
+      }      // 5. Audit Logging
+      logger.info(`Onboarding completed for user: ${userId} with role claim: ${targetRoleClaim} (Path: ${path})`);
+    
 
       // 6. Finalize - Trigger Welcome & Redirect
       // User has configured Resend Automations - triggering 'auth.welcome'

@@ -191,6 +191,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     callBtn.addEventListener('click', () => {
+        const isLoggedIn = callBtn.getAttribute('data-logged-in') === 'true';
+        
+        if (!isLoggedIn) {
+            alert("Please log in to use the AI Voice Assistant.");
+            window.location.href = '/account/login?redirect=/';
+            return;
+        }
+
         if (isActive) {
             stopCall();
         } else {

@@ -61,10 +61,43 @@
               <form action="/onboarding" method="POST" class="ob-form" id="onboardingForm">
                 <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                 <input type="hidden" name="avatar_data" id="avatarDataInput">
-                <input type="hidden" name="current_step" id="currentStepInput" value="1">
+                <input type="hidden" name="onboarding_path" id="onboardingPathInput" value="">
+                <input type="hidden" name="current_step" id="currentStepInput" value="0">
                 
+                <!-- STEP 0: PATH SELECTION -->
+                <div id="stepSection0" class="form-section">
+                  <div class="path-selection-grid">
+                    <div class="path-card glass-fx" onclick="selectPath('new_convert')">
+                      <div class="path-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                      </div>
+                      <h3>New Convert / Visitor</h3>
+                      <p>I'm new to Christ or the Assembly and want to start my journey here.</p>
+                      <span class="path-btn">Get Started &rarr;</span>
+                    </div>
+
+                    <div class="path-card glass-fx" onclick="selectPath('existing_member')">
+                      <div class="path-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                      </div>
+                      <h3>Existing Member</h3>
+                      <p>I'm already a regular member of Ambassadors Assembly.</p>
+                      <span class="path-btn">Continue &rarr;</span>
+                    </div>
+
+                    <div class="path-card glass-fx highlight" onclick="selectPath('church_worker')">
+                      <div class="path-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                      </div>
+                      <h3>Church Worker / Leader</h3>
+                      <p>I am a Pastor, Leader, or Worker serving in a department.</p>
+                      <span class="path-btn">Verify Role &rarr;</span>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- STEP 1: AVATAR UPLOAD (COMPULSORY) -->
-                <div id="stepSection1" class="form-section">
+                <div id="stepSection1" class="form-section" style="display:none">
                   <div class="avatar-upload-container">
                     <div class="avatar-preview-box glass-fx" id="avatarPreviewBox">
                       <div class="placeholder-icon">
@@ -298,14 +331,14 @@
                 <!-- STEP 5: MINISTRY & FELLOWSHIP -->
                 <div id="stepSection5" class="form-section" style="display:none">
                   <div class="form-group">
-                    <label>Join a Ministry (Fellowship Groups)</label>
+                    <label>MINISTRIES (Designed For Every Stage Of Life)</label>
                     <div class="ministry-groups-container">
                       <!-- NONE OPTION AT THE VERY TOP -->
                       <div class="ministry-grid" style="margin-bottom: 25px;">
                         <div class="min-card" data-name="None" onclick="toggleMin(this, 'None')">
                           <input type="checkbox" name="ministry_interests" value="None" style="display:none">
                           <strong style="color: var(--accent);">I don't want to join any ministry</strong>
-                          <p>Skip fellowship group selection for now.</p>
+                          <p>Skip ministry selection for now.</p>
                           <div class="role-hint">No selection</div>
                         </div>
                       </div>
@@ -334,10 +367,14 @@
                                 <div class="min-card <%= isSelected ? 'selected' : '' %>" 
                                       data-name="<%= min.name %>"
                                       onclick="toggleMin(this, this.dataset.name)">
+                                  <div class="min-card-bg" style="background-image: url('<%= min.cover_image_url || 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=800' %>');"></div>
+                                  <div class="min-card-overlay"></div>
                                   <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
-                                  <strong><%= min.name %></strong>
-                                  <p><%= min.description ? min.description.substring(0, 60) + '...' : 'Kingdom community' %></p>
-                                  <div class="role-hint">Joining as Member</div>
+                                  <div class="min-card-content">
+                                    <strong><%= min.name %></strong>
+                                    <p><%= min.description ? min.description.substring(0, 45) + '...' : 'Kingdom community' %></p>
+                                    <div class="role-hint">Joining as Member</div>
+                                  </div>
                                 </div>
                               <% }) %>
                             </div>
@@ -348,7 +385,7 @@
                   </div>
 
                    <div class="form-group">
-                    <label>Service Placement (Outreach & Community) <span>*</span></label>
+                    <label>COMMUNITY IMPACT (Reaching Beyond The Walls) <span>*</span></label>
                     <div class="dept-selection-grid">
                       <!-- NONE OPTION -->
                       <div class="dept-tile" data-name="None" data-id="none" onclick="selectDept(this, 'None', 'none')">
@@ -356,8 +393,8 @@
                           <i class="fas fa-times-circle" style="color: var(--accent);"></i>
                         </div>
                         <div class="tile-info">
-                          <strong>I don't want to join any outreach/departments</strong>
-                          <p>Skip service placement for now.</p>
+                          <strong>I don't want to join any outreach/units</strong>
+                          <p>Skip outreach placement for now.</p>
                         </div>
                         <div class="selection-indicator">
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
@@ -369,14 +406,13 @@
                              data-name="<%= dept.name %>"
                              data-id="<%= dept.id %>"
                              onclick="selectDept(this, this.dataset.name, this.dataset.id)">
-                          <div class="tile-icon">
-                            <i class="fas fa-bullhorn"></i>
-                          </div>
-                          <div class="tile-info">
+                          <div class="min-card-bg" style="background-image: url('<%= dept.cover_image_url || 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800' %>');"></div>
+                          <div class="min-card-overlay"></div>
+                          <div class="tile-info" style="position: relative; z-index: 3; color: white;">
                             <strong><%= dept.name %></strong>
-                            <p><%= dept.description || 'Service unit' %></p>
+                            <p style="color: rgba(255,255,255,0.8);"><%= dept.description || 'Service unit' %></p>
                           </div>
-                          <div class="selection-indicator">
+                          <div class="selection-indicator" style="z-index: 4;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                           </div>
                         </div>
@@ -398,6 +434,21 @@
                       <% }) %>
                     </div>
                     <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
+                  </div>
+
+                  <!-- ROLE CLAIM FOR EXISTING WORKERS -->
+                  <div id="workerRoleClaimWrapper" class="form-group" style="display: none;">
+                    <label>Your Current Serving Role <span>*</span></label>
+                    <div class="custom-select-wrapper">
+                      <input type="hidden" name="role_claim" id="roleClaimInput" value="">
+                      <div class="custom-select-trigger">Select Serving Role</div>
+                      <div class="custom-options">
+                        <div class="option" data-value="worker">Worker</div>
+                        <div class="option" data-value="leader">Leader</div>
+                        <div class="option" data-value="pastor">Pastor</div>
+                      </div>
+                    </div>
+                    <p class="field-hint">Your selection will be verified by the admin team.</p>
                   </div>
 
                   <div class="form-actions dual">
@@ -500,7 +551,25 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
-    <style>
+  <style>
+    /* PATH SELECTION STYLES */
+    .path-selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 20px 0; }
+    .path-card { 
+      padding: 40px 30px !important; text-align: center; cursor: pointer; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      border: 2px solid rgba(23, 106, 96, 0.1) !important; display: flex; flex-direction: column; align-items: center; gap: 20px;
+      height: 100%; justify-content: space-between;
+    }
+    .path-card:hover { transform: translateY(-10px); border-color: var(--color_2, #176a60) !important; background: rgba(23, 106, 96, 0.02) !important; box-shadow: 0 30px 60px rgba(23, 106, 96, 0.1) !important; }
+    .path-card.highlight { border-color: rgba(23, 106, 96, 0.3) !important; background: rgba(23, 106, 96, 0.01) !important; }
+    .path-card h3 { font-size: 1.4rem; font-weight: 800; color: #1a1a1a; margin: 0; }
+    .path-card p { font-size: 0.95rem; color: rgba(26,26,26,0.6); margin: 0; line-height: 1.5; }
+    .path-btn { font-size: 0.9rem; font-weight: 800; color: var(--color_2, #176a60); text-transform: uppercase; letter-spacing: 1px; }
+    .path-icon { width: 80px; height: 80px; border-radius: 20px; background: rgba(23, 106, 96, 0.1); display: flex; align-items: center; justify-content: center; color: var(--color_2, #176a60); transition: 0.3s; }
+    .path-card:hover .path-icon { background: var(--color_2, #176a60); color: white; }
+
+    @media (max-width: 850px) {
+      .path-selection-grid { grid-template-columns: 1fr; }
+    }
 
   /* STRIP DUDA'S WHITE BACKGROUNDS FIRST */
   body.dmRoot, 
@@ -634,32 +703,60 @@ main.onboarding-page::before {
     .label-info p { font-size: 0.9rem; color: rgba(26, 26, 26, 0.6); margin: 0; }
 
     /* Ministry Grid */
-    .ministry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
+    .ministry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
     .min-card { 
-      background: #fafafa; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 16px; 
-      padding: 15px; cursor: pointer; transition: 0.3s; color: #1a1a1a;
+      background: #fafafa; border: 1.5px solid rgba(26,26,26,0.1); border-radius: 20px; 
+      height: 180px; cursor: pointer; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); color: #1a1a1a;
+      position: relative; overflow: hidden; display: flex; align-items: flex-end;
     }
-    .min-card:hover { background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: rgba(23, 106, 96, 0.3); }
-    .min-card.selected { border-color: var(--color_2, #176a60); background: rgba(23, 106, 96, 0.05); box-shadow: 0 5px 15px rgba(23, 106, 96, 0.1); }
-    .min-card strong { display: block; font-size: 14px; margin-bottom: 5px; color: #1a1a1a; }
-    .min-card p { font-size: 11px; color: rgba(26,26,26,0.6); line-height: 1.4; margin-bottom: 10px; }
-    .role-hint { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--color_2, #176a60); opacity: 0.6; }
+    .min-card-bg { 
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+      background-size: cover; background-position: center; transition: 0.6s; z-index: 1;
+    }
+    .min-card-overlay { 
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); z-index: 2;
+    }
+    .min-card-content { position: relative; z-index: 3; padding: 20px; color: white; width: 100%; }
+    
+    .min-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .min-card:hover .min-card-bg { transform: scale(1.1); }
+    .min-card.selected { border-color: #4ade80; border-width: 3px; box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+    
+    .min-card strong { display: block; font-size: 15px; margin-bottom: 5px; color: white; font-weight: 800; }
+    .min-card p { font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.4; margin-bottom: 8px; }
+    .role-hint { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #4ade80; opacity: 0.9; }
 
     /* Service Visuals / Dept Grid */
     .dept-selection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
     .dept-tile { 
       background: #fafafa; border: 1.5px solid rgba(26, 26, 26, 0.1); border-radius: 20px; 
-      padding: 20px; cursor: pointer; transition: 0.3s; border-left: 4px solid transparent; 
-      position: relative; color: #1a1a1a; display: flex; flex-direction: column; 
+      height: 180px; cursor: pointer; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+      position: relative; color: #1a1a1a; display: flex; align-items: flex-end; overflow: hidden;
     }
-    .dept-tile:hover { background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: rgba(23, 106, 96, 0.3); }
-    .dept-tile.selected { border-color: var(--color_2, #176a60); border-left-color: var(--color_2, #176a60); background: rgba(23, 106, 96, 0.05); }
+    .dept-tile:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .dept-tile:hover .min-card-bg { transform: scale(1.1); }
+    .dept-tile.selected { border-color: #4ade80; border-width: 3px; box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+    
+    .tile-info { position: relative; z-index: 3; padding: 20px; width: 100%; }
+    .tile-info strong { display: block; font-size: 15px; margin-bottom: 4px; color: white; font-weight: 800; }
+    .tile-info p { font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.4; margin: 0; }
+    .selection-indicator { position: absolute; top: 15px; right: 15px; color: #4ade80; opacity: 0; transform: scale(0.5); transition: 0.3s; z-index: 4; }
+    .dept-tile.selected .selection-indicator { opacity: 1; transform: scale(1); }
     
     .tile-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(23, 106, 96,0.1); display: flex; align-items: center; justify-content: center; color: var(--color_2, #176a60); margin-bottom: 15px; }
-    .tile-info strong { display: block; font-size: 15px; margin-bottom: 4px; color: #1a1a1a; }
-    .tile-info p { font-size: 11px; color: rgba(26,26,26,0.6); line-height: 1.4; margin: 0; }
-    .selection-indicator { position: absolute; top: 15px; right: 15px; color: var(--color_2, #176a60); opacity: 0; transform: scale(0.5); transition: 0.3s; }
-    .dept-tile.selected .selection-indicator { opacity: 1; transform: scale(1); }
+
+    /* Avatar refinement */
+    .avatar-preview-box {
+      width: 200px; height: 200px; border-radius: 100px; overflow: hidden;
+      border: 4px solid white; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      background: #f0f0f0; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 30px; position: relative;
+    }
+    .avatar-preview-box::after {
+      content: ''; position: absolute; inset: 0; border-radius: 100px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.1); pointer-events: none;
+    }
 
     .role-selector-wrap { margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(26,26,26,0.1); animation: fadeIn 0.4s ease-out; }
     .role-pills { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -756,6 +853,30 @@ main.onboarding-page::before {
       showToast('Avatar locked in!', 'success');
     }
 
+    function selectPath(path) {
+      document.getElementById('onboardingPathInput').value = path;
+      
+      // Update Step Labels based on path
+      const journeyLabel = document.querySelector('.step-indicator[data-step="4"]');
+      const journeyLine = document.querySelector('.step-line[data-line="4"]');
+      
+      if (path === 'existing_member' || path === 'church_worker') {
+        if (journeyLabel) journeyLabel.style.display = 'none';
+        if (journeyLine) journeyLine.style.display = 'none';
+      } else {
+        if (journeyLabel) journeyLabel.style.display = 'flex';
+        if (journeyLine) journeyLine.style.display = 'block';
+      }
+
+      // Show/Hide Role Claim for workers in Step 5
+      const workerRoleWrapper = document.getElementById('workerRoleClaimWrapper');
+      if (workerRoleWrapper) {
+        workerRoleWrapper.style.display = (path === 'church_worker') ? 'block' : 'none';
+      }
+
+      goToStep(1);
+    }
+
     function goToStep(num) {
       const sections = document.querySelectorAll('.form-section');
       const indicators = document.querySelectorAll('.step-indicator');
@@ -763,26 +884,40 @@ main.onboarding-page::before {
       const title = document.getElementById('onboardTitle');
       const sub = document.getElementById('onboardSub');
       const currentStepInput = document.getElementById('currentStepInput');
+      const path = document.getElementById('onboardingPathInput').value;
 
       // Validation
       if (num > parseInt(currentStepInput.value)) {
         if (!validateCurrentStep(parseInt(currentStepInput.value))) return;
       }
 
-      sections.forEach((s, idx) => s.style.display = (idx + 1 === num) ? 'block' : 'none');
+      // Branching logic: Skip Step 4 for Members and Workers
+      if (num === 4 && (path === 'existing_member' || path === 'church_worker')) {
+        goToStep(5);
+        return;
+      }
+
+      // Handle Back button branching
+      if (num === 4 && (path === 'existing_member' || path === 'church_worker')) {
+        goToStep(3);
+        return;
+      }
+
+      sections.forEach((s, idx) => s.style.display = (idx === num) ? 'block' : 'none');
       
       // Progress UI
       indicators.forEach((ind, idx) => {
-        if (idx + 1 <= num) ind.classList.add('active');
+        if (idx < num) ind.classList.add('active');
         else ind.classList.remove('active');
       });
       lines.forEach((line, idx) => {
-        if (idx + 1 < num) line.classList.add('active');
+        if (idx < num - 1) line.classList.add('active');
         else line.classList.remove('active');
       });
 
       // Headers
       const headers = [
+        ['Step 0', 'Choose Your Path', 'Tell us how you fit into the assembly family.'],
         ['Step 1', 'Kingdom Presence', 'Let’s start with your profile photo.'],
         ['Step 2', 'Personal Details', 'Basic information to help us know you better.'],
         ['Step 3', 'Life & Profession', 'Your professional background and personal story.'],
@@ -790,8 +925,8 @@ main.onboarding-page::before {
         ['Step 5', 'Ministry & Service', 'Where would you like to serve in the assembly?'],
         ['Step 6', 'Final Connection', 'Set your preferences and join the family.']
       ];
-      title.innerText = headers[num-1][1];
-      sub.innerText = headers[num-1][2];
+      title.innerText = headers[num][1];
+      sub.innerText = headers[num][2];
       currentStepInput.value = num;
 
       if (typeof gsap !== 'undefined') {
@@ -801,6 +936,7 @@ main.onboarding-page::before {
     }
 
     function validateCurrentStep(step) {
+      if (step === 0) return true;
       if (step === 1) {
         // Step 1 (Avatar) is now optional.
         return true;
@@ -821,16 +957,35 @@ main.onboarding-page::before {
           showToast('Security token missing. Please refresh the page.', 'error');
           return false;
         }
+
+        const path = document.getElementById('onboardingPathInput').value;
+        if (path === 'church_worker') {
+          const roleClaim = document.getElementById('roleClaimInput').value;
+          if (!roleClaim) {
+            showToast('Please select your current serving role.', 'error');
+            return false;
+          }
+        }
       }
       return true;
     }
 
     function selectDept(tile, name, id) {
-      document.querySelectorAll('.dept-tile').forEach(t => t.classList.remove('selected'));
-      tile.classList.add('selected');
-      document.getElementById('deptInput').value = name;
+      const isCurrentlySelected = tile.classList.contains('selected');
       
-      // Clear position selection if switching departments or picking None
+      // Deselect all other tiles
+      document.querySelectorAll('.dept-tile').forEach(t => t.classList.remove('selected'));
+      document.getElementById('deptInput').value = '';
+      
+      // Toggle if not already selected
+      if (!isCurrentlySelected) {
+        tile.classList.add('selected');
+        document.getElementById('deptInput').value = name;
+      }
+      
+      const newName = document.getElementById('deptInput').value;
+      
+      // Clear position selection if switching or unselecting
       document.getElementById('posInput').value = '';
       document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
 
@@ -838,7 +993,7 @@ main.onboarding-page::before {
       const roles = document.querySelectorAll('.role-pill');
       let count = 0;
       
-      if (name !== 'None') {
+      if (newName && newName !== 'None') {
         roles.forEach(r => {
           if (r.dataset.deptId === id) { r.style.display = 'block'; count++; }
           else r.style.display = 'none';
@@ -862,28 +1017,21 @@ main.onboarding-page::before {
     }
 
     function toggleMin(card, name) {
-      const isNone = (name === 'None');
       const container = card.closest('.ministry-groups-container');
+      const isCurrentlySelected = card.classList.contains('selected');
       
-      if (isNone) {
-        // If "None" is picked, deselect everything else
-        container.querySelectorAll('.min-card').forEach(c => {
-          if (c !== card) {
-            c.classList.remove('selected');
-            c.querySelector('input').checked = false;
-          }
-        });
-        card.classList.toggle('selected');
-        card.querySelector('input').checked = card.classList.contains('selected');
-      } else {
-        // If something else is picked, deselect "None"
-        const noneCard = container.querySelector('.min-card[data-name="None"]');
-        if (noneCard) {
-          noneCard.classList.remove('selected');
-          noneCard.querySelector('input').checked = false;
-        }
-        card.classList.toggle('selected');
-        card.querySelector('input').checked = card.classList.contains('selected');
+      // Enforce Single Selection: Deselect all other cards in the container
+      container.querySelectorAll('.min-card').forEach(c => {
+        c.classList.remove('selected');
+        const input = c.querySelector('input');
+        if (input) input.checked = false;
+      });
+      
+      // If it wasn't selected before, select it now. If it was, it stays unselected (toggling).
+      if (!isCurrentlySelected) {
+        card.classList.add('selected');
+        const input = card.querySelector('input');
+        if (input) input.checked = true;
       }
     }
 

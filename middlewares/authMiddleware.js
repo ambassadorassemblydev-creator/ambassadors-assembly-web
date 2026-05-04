@@ -173,11 +173,11 @@ export const authMiddleware = {
 
         const { data: profile } = await supabase
           .from('profiles')
-          .select('role')
+          .select('role_claim')
           .eq('id', userId)
           .single();
 
-        if (!profile || !roles.includes(profile.role)) {
+        if (!profile || !roles.includes(profile.role_claim)) {
           return res.status(403).json({ error: 'Forbidden' });
         }
         next();

@@ -23,14 +23,19 @@ export const subscribe = async (req, res) => {
                 user_id: userId, 
                 subscription,
                 updated_at: new Date().toISOString()
-            });
+            }, { onConflict: 'user_id' });
 
         if (error) throw error;
 
         res.status(200).json({ success: true });
     } catch (err) {
-        console.error('[NotificationController] Subscribe Error:', err);
-        res.status(500).json({ error: err.message });
+        console.error('[NotificationController] Subscribe Error Detailed:', {
+            userId: req.user?.id || req.session?.user?.id,
+            error: err,
+            message: err.message,
+            stack: err.stack
+        });
+        res.status(500).json({ error: 'Failed to subscribe to notifications', details: err.message });
     }
 };
 
