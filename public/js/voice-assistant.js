@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             callBtn.classList.add('connecting');
 
             // 2. Fetch Signed URL
-            const response = await fetch('/api/voice/create-web-call', {
+            const response = await fetch('/api/voice/get-signed-url', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
