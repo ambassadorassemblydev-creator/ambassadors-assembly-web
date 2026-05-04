@@ -454,6 +454,9 @@ export const accountController = {
               .single();
 
             if (mData) {
+              // Enforce single ministry: Delete any existing memberships first
+              await supabaseService.from('ministry_members').delete().eq('user_id', userId);
+              
               await supabaseService.from('ministry_members').upsert({
                 user_id: userId,
                 ministry_id: mData.id,

@@ -47,6 +47,17 @@ export const ministryRepo = {
 
     // Join a ministry
     joinMinistry: async (ministryId, userId, notes) => {
+        // Enforce Single Ministry Rule: Check if user already in a ministry
+        const { data: existing } = await supabase
+            .from('ministry_members')
+            .select('ministry_id')
+            .eq('user_id', userId)
+            .limit(1);
+
+        if (existing && existing.length > 0 && existing[0].ministry_id !== ministryId) {
+            throw new Error('You are already a member of a ministry. Please leave your current ministry before joining a new one.');
+        }
+
         const { data, error } = await supabase
             .from('ministry_members')
             .upsert({

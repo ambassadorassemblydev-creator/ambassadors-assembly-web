@@ -48,6 +48,18 @@ export const eventRepo = {
      * Register a user for an event
      */
     registerUser: async (eventId, userId) => {
+        // High IQ: Check if this is an outreach event
+        const { data: eventData } = await supabase
+            .from('events')
+            .select('event_type')
+            .eq('id', eventId)
+            .single();
+
+        // Enforce single outreach rule if applicable
+        if (eventData?.event_type === 'outreach') {
+            await eventRepo.enforceSingleOutreach(userId, eventId);
+        }
+
         // 1. Create registration
         const { data, error } = await supabase
             .from('event_registrations')
@@ -65,5 +77,33 @@ export const eventRepo = {
         await supabase.rpc('increment_event_attendees', { event_id_param: eventId });
 
         return data;
+    },
+
+    /**
+     * Enforce single outreach rule: User can only be registered for ONE active outreach at a time.
+     */
+    enforceSingleOutreach: async (userId, currentEventId) => {
+        // 1. Get all current outreach registrations for this user
+        const { data: existingRegs, error: fetchError } = await supabase
+            .from('event_registrations')
+            .select('id, event_id, events!inner(event_type)')
+            .eq('user_id', userId)
+            .eq('events.event_type', 'outreach');
+
+        if (fetchError) {
+            console.error('[EventRepo] Error checking existing outreaches:', fetchError.message);
+            return;
+        }
+
+        if (existingRegs && existingRegs.length > 0) {
+            for (const reg of existingRegs) {
+                if (reg.event_id !== currentEventId) {
+                    // Delete the old registration
+                    await supabase.from('event_registrations').delete().eq('id', reg.id);
+                    // Decrement the old event's attendee count
+                    await supabase.rpc('decrement_event_attendees', { event_id_param: reg.event_id });
+                }
+            }
+        }
     }
 };
