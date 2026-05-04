@@ -273,16 +273,16 @@ export const accountRepo = {
     
     // Onboarding fields
     if (updateData.gender !== undefined) payload.gender = updateData.gender;
-    if (updateData.date_of_birth !== undefined) payload.date_of_birth = updateData.date_of_birth;
-    if (updateData.marital_status !== undefined) payload.marital_status = updateData.marital_status;
-    if (updateData.wedding_anniversary !== undefined) payload.wedding_anniversary = updateData.wedding_anniversary;
+    if (updateData.date_of_birth !== undefined) payload.date_of_birth = updateData.date_of_birth || null;
+    if (updateData.marital_status !== undefined) payload.marital_status = updateData.marital_status || null;
+    if (updateData.wedding_anniversary !== undefined) payload.wedding_anniversary = updateData.wedding_anniversary || null;
     if (updateData.address !== undefined) payload.address_line_1 = updateData.address;
     if (updateData.is_baptized !== undefined) payload.is_baptized = updateData.is_baptized;
-    if (updateData.baptism_date !== undefined) payload.baptism_date = updateData.baptism_date;
+    if (updateData.baptism_date !== undefined) payload.baptism_date = updateData.baptism_date || null;
     if (updateData.is_onboarded !== undefined) payload.is_onboarded = updateData.is_onboarded;
     if (updateData.department_interest !== undefined) payload.department_interest = updateData.department_interest;
     if (updateData.position_interest !== undefined) payload.position_interest = updateData.position_interest;
-    if (updateData.salvation_date !== undefined) payload.salvation_date = updateData.salvation_date;
+    if (updateData.salvation_date !== undefined) payload.salvation_date = updateData.salvation_date || null;
     if (updateData.previous_church !== undefined) payload.previous_church = updateData.previous_church;
     if (updateData.occupation !== undefined) payload.occupation = updateData.occupation;
     

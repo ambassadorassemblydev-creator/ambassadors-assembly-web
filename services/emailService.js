@@ -41,9 +41,14 @@ export const emailService = {
    */
   async triggerAutomation(eventName, payload) {
     try {
+      // High IQ: The Resend API expects the target 'email' at the top level 
+      // of the event object, with other variables inside 'data'.
+      const { email, ...dataFields } = payload;
+      
       const { data, error } = await resend.events.send({
         name: eventName,
-        data: payload
+        email: email, // Top-level requirement
+        data: dataFields
       });
 
       if (error) {

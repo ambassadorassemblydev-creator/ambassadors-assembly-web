@@ -61,9 +61,9 @@ const onboardingSchema = z.object({
   // Avatar
   avatar_data: z.string().optional(),
   
-  // High IQ: Capture multiple interests
   interests: z.union([z.string(), z.array(z.string())]).optional(),
   ministry_interests: z.union([z.string(), z.array(z.string())]).optional(),
+  ministry_role_interest: z.string().optional(),
   
   // Professional & Profile
   employer: z.string().optional(),
@@ -460,7 +460,7 @@ export const accountController = {
               await supabaseService.from('ministry_members').upsert({
                 user_id: userId,
                 ministry_id: mData.id,
-                role: 'pending',
+                role: validatedData.ministry_role_interest || 'Member',
                 status: 'pending',
                 joined_at: new Date()
               }, { onConflict: 'user_id,ministry_id' });

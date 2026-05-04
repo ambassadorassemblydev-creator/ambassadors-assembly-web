@@ -71,7 +71,7 @@
     </div>
 
     <!-- ───────── TAB: OVERVIEW ───────── -->
-    <div class="aas-tab on" id="aas-overview">
+    <div class="aas-tab <%= activeTab === 'overview' ? 'on' : '' %>" id="aas-overview">
 
       <!-- Hero -->
       <div class="aas-hero">
@@ -256,7 +256,7 @@
 
 
     <!-- ───────── TAB: EVENTS ───────── -->
-    <div class="aas-tab" id="aas-events">
+    <div class="aas-tab <%= activeTab === 'events' ? 'on' : '' %>" id="aas-events">
       <div class="aas-ph">
         <div class="aas-eyebrow">My Calendar</div>
         <h1>Registered Events</h1>
@@ -299,7 +299,7 @@
 
 
     <!-- ───────── TAB: GIVING ───────── -->
-    <div class="aas-tab" id="aas-giving">
+    <div class="aas-tab <%= activeTab === 'giving' ? 'on' : '' %>" id="aas-giving">
       <div class="aas-ph">
         <div class="aas-eyebrow">Generosity & Faithfulness</div>
         <h1>Partnership History</h1>
@@ -347,7 +347,7 @@
 
 
     <!-- ───────── TAB: PRAYERS ───────── -->
-    <div class="aas-tab" id="aas-prayers">
+    <div class="aas-tab <%= activeTab === 'prayers' ? 'on' : '' %>" id="aas-prayers">
       <div class="aas-ph">
         <div class="aas-eyebrow">Intercession & Faith</div>
         <h1>My Prayer Requests</h1>
@@ -391,7 +391,7 @@
 
 
     <!-- ───────── TAB: NOTES ───────── -->
-    <div class="aas-tab" id="aas-notes">
+    <div class="aas-tab <%= activeTab === 'notes' ? 'on' : '' %>" id="aas-notes">
       <div class="aas-ph">
         <div class="aas-eyebrow">Sermon Notes & Journal</div>
         <h1>My Notes</h1>
@@ -416,7 +416,7 @@
 
 
     <!-- ───────── TAB: MINISTRY (FELLOWSHIP) ───────── -->
-    <div class="aas-tab" id="aas-ministry">
+    <div class="aas-tab <%= activeTab === 'ministry' ? 'on' : '' %>" id="aas-ministry">
       <div class="aas-ph">
         <div class="aas-eyebrow">Spiritual Community</div>
         <h1>Fellowship Groups</h1>
@@ -455,7 +455,7 @@
 
 
     <!-- ───────── TAB: OUTREACH & COMMUNITY IMPACT ───────── -->
-    <div class="aas-tab" id="aas-outreach">
+    <div class="aas-tab <%= activeTab === 'outreach' ? 'on' : '' %>" id="aas-outreach">
       <div class="aas-ph">
         <div class="aas-eyebrow">Service & Outreach</div>
         <h1>Outreach & Community Impact</h1>
@@ -483,9 +483,15 @@
                   <i class="fas fa-clock"></i> Interest Pending
                 </span>
               <% } else { %>
-                <a href="/my-account?tab=profile&interest=<%= encodeURIComponent(dept.name) %>" class="dept-apply">
-                  <i class="fas fa-arrow-right"></i> Show Interest
-                </a>
+                <% if (hasWorker) { %>
+                  <button class="dept-apply" onclick="showToast(`You are already part of the <%= w.church_departments ? w.church_departments.name : 'Outreach Team' %>. Please contact your HOD to change units.`, 'info')" style="cursor: help;">
+                    <i class="fas fa-lock" style="font-size: 10px;"></i> Serving Elsewhere
+                  </button>
+                <% } else { %>
+                  <a href="/my-account?tab=profile&interest=<%= encodeURIComponent(dept.name) %>" class="dept-apply">
+                    <i class="fas fa-arrow-right"></i> Show Interest
+                  </a>
+                <% } %>
               <% } %>
             </div>
           <% }) %>
@@ -500,7 +506,7 @@
 
 
     <!-- ───────── TAB: ATTENDANCE ───────── -->
-    <div class="aas-tab" id="aas-attendance">
+    <div class="aas-tab <%= activeTab === 'attendance' ? 'on' : '' %>" id="aas-attendance">
       <div class="aas-ph">
         <div class="aas-eyebrow">Service & Fellowship Tracking</div>
         <h1>Attendance Record</h1>
@@ -749,7 +755,7 @@
     <!-- ───────── TAB: PROFILE ───────── -->
 
 
-    <div class="aas-tab" id="aas-profile">
+    <div class="aas-tab <%= activeTab === 'profile' ? 'on' : '' %>" id="aas-profile">
       <div class="aas-ph">
         <div class="aas-eyebrow">Personal Information</div>
         <h1>My Profile</h1>
@@ -761,7 +767,7 @@
           <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
           <% if (locals.interest) { %>
             <% if (user.department_interest && user.department_interest.toLowerCase() === locals.interest.toLowerCase()) { %>
-              <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:16px; padding:20px; margin-bottom:26px; display:flex; align-items:center; gap:15px;">
+              <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:16px; padding:20px; margin-bottom:26px; display:flex; align-items:center; gap:15px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);">
                 <div style="width:44px; height:44px; border-radius:12px; background:#22c55e; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
                   <i class="fas fa-check-circle"></i>
                 </div>
@@ -771,16 +777,23 @@
                 </div>
               </div>
             <% } else { %>
-              <div style="background:var(--g-pl); border:1.5px dashed var(--g); border-radius:16px; padding:20px; margin-bottom:26px; display:flex; align-items:center; gap:15px; animation:aas-in .5s ease;">
-                <div style="width:44px; height:44px; border-radius:12px; background:var(--g); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
+              <div style="background:var(--g-pl); border:2px dashed var(--g); border-radius:16px; padding:24px; margin-bottom:30px; display:flex; align-items:center; gap:18px; animation:aas-in .5s ease, interest-pulse 2s infinite ease-in-out; box-shadow: 0 10px 25px rgba(23, 106, 96, 0.15);">
+                <div style="width:52px; height:52px; border-radius:14px; background:var(--g); color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
                   <i class="fas fa-hands-helping"></i>
                 </div>
                 <div style="flex:1;">
-                  <h4 style="font-size:14px; font-weight:800; color:var(--g); margin:0 0 3px;">Showing Interest: <%= interest %></h4>
-                  <p style="font-size:12px; color:var(--mu); margin:0;">Click "Confirm Interest & Save" below to notify the leadership team.</p>
+                  <div style="font-size:10px; font-weight:800; text-transform:uppercase; color:var(--g); letter-spacing:1px; margin-bottom:4px;">Action Required</div>
+                  <h4 style="font-size:15px; font-weight:900; color:var(--g); margin:0 0 4px;">Confirm Interest: <%= interest %></h4>
+                  <p style="font-size:13px; color:var(--mu); margin:0; line-height:1.4;">Click <strong>"Confirm Interest & Save"</strong> at the bottom of this form to notify our leaders.</p>
                 </div>
                 <input type="hidden" name="department_interest" value="<%= interest %>">
               </div>
+              <style>
+                @keyframes interest-pulse {
+                  0%, 100% { transform: scale(1); }
+                  50% { transform: scale(1.02); }
+                }
+              </style>
             <% } %>
           <% } %>
 

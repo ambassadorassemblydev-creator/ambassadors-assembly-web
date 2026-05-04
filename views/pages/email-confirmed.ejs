@@ -123,6 +123,11 @@
                       <h1>Email Confirmed!</h1>
                       <p>Your account has been successfully verified. Welcome to the Ambassadors Assembly! Tap below to head to your dashboard and complete your onboarding.</p>
 
+                      <style>
+                        .auth-bridge-spinner { width:50px; height:50px; border:3px solid rgba(23, 106, 96, 0.1); border-top:3px solid #176a60; border-radius:50%; animation:spin-bridge 1s linear infinite; }
+                        @keyframes spin-bridge { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                      </style>
+
                       <a href="/onboarding" class="auth-submit-btn">Go to Dashboard</a>
                       
                     </div>
@@ -150,6 +155,10 @@
           // But usually this page is reached via email link which HAS a hash.
           return;
         }
+
+        // Show centered bridge UI
+        const bridgeOverlay = document.getElementById('auth-bridge-overlay');
+        if (bridgeOverlay) bridgeOverlay.style.display = 'flex';
 
         console.log("Auth hash detected, establishing session...");
         const params = new URLSearchParams(hash.substring(1));
@@ -184,5 +193,11 @@
       handleAuthHash();
     });
   </script>
+  <!-- AUTH BRIDGE OVERLAY (High IQ Cinematic Loader) -->
+  <div id="auth-bridge-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.95); z-index:999999999; align-items:center; justify-content:center; flex-direction:column; backdrop-filter:blur(15px); transition:all 0.5s ease;">
+    <div class="auth-bridge-spinner"></div>
+    <h2 style="font-family:'Articulat CF Demi Bold', sans-serif; margin-top:25px; color:#1a1a1a; font-size: 28px;">Securing Your Session</h2>
+    <p style="color:rgba(26,26,26,0.5); font-size:16px; margin-top: 12px;">Connecting to the Kingdom network...</p>
+  </div>
 </body>
 </html>

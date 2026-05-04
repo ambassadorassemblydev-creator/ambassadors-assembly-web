@@ -335,11 +335,13 @@
                     <div class="ministry-groups-container">
                       <!-- NONE OPTION AT THE VERY TOP -->
                       <div class="ministry-grid" style="margin-bottom: 25px;">
-                        <div class="min-card" data-name="None" onclick="toggleMin(this, 'None')">
+                        <div class="min-card none-card" data-name="None" onclick="toggleMin(this, 'None')">
                           <input type="checkbox" name="ministry_interests" value="None" style="display:none">
-                          <strong style="color: var(--accent);">I don't want to join any ministry</strong>
-                          <p>Skip ministry selection for now.</p>
-                          <div class="role-hint">No selection</div>
+                          <div class="min-card-content">
+                            <i class="fas fa-times-circle" style="font-size: 2rem; color: #ef4444; margin-bottom: 15px;"></i>
+                            <strong>I don't want to join any ministry</strong>
+                            <p>I'll explore fellowship groups later.</p>
+                          </div>
                         </div>
                       </div>
 
@@ -367,7 +369,7 @@
                                 <div class="min-card <%= isSelected ? 'selected' : '' %>" 
                                       data-name="<%= min.name %>"
                                       onclick="toggleMin(this, this.dataset.name)">
-                                  <div class="min-card-bg" style="background-image: url('<%= min.cover_image_url || 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=800' %>');"></div>
+                                  <div class="min-card-bg" style="background: <%= min.cover_image_url ? `url('${min.cover_image_url}')` : 'linear-gradient(135deg, #176a60 0%, #115048 100%)' %>; background-size: cover; background-position: center;"></div>
                                   <div class="min-card-overlay"></div>
                                   <input type="checkbox" name="ministry_interests" value="<%= min.name %>" style="display:none" <%= isSelected ? 'checked' : '' %>>
                                   <div class="min-card-content">
@@ -384,29 +386,35 @@
                     </div>
                   </div>
 
+                  <!-- NEW: MINISTRY ROLE SELECTION -->
+                  <div id="minRoleSelectionWrapper" class="form-group" style="display: none; margin-top: -15px; margin-bottom: 30px;">
+                    <label>Ministry Role Of Interest <span>*</span></label>
+                    <div class="role-pills" id="minRoleOptions">
+                        <div class="role-pill active" onclick="selectMinRole(this, 'Member')">Member</div>
+                        <div class="role-pill" onclick="selectMinRole(this, 'Leader')">Leader</div>
+                        <div class="role-pill" onclick="selectMinRole(this, 'Coordinator')">Coordinator</div>
+                        <div class="role-pill" onclick="selectMinRole(this, 'Prayer Warrior')">Prayer Warrior</div>
+                    </div>
+                    <input type="hidden" name="ministry_role_interest" id="minRoleInput" value="Member">
+                  </div>
+
                    <div class="form-group">
                     <label>COMMUNITY IMPACT (Reaching Beyond The Walls) <span>*</span></label>
                     <div class="dept-selection-grid">
                       <!-- NONE OPTION -->
-                      <div class="dept-tile" data-name="None" data-id="none" onclick="selectDept(this, 'None', 'none')">
-                        <div class="tile-icon">
-                          <i class="fas fa-times-circle" style="color: var(--accent);"></i>
-                        </div>
-                        <div class="tile-info">
-                          <strong>I don't want to join any outreach/units</strong>
+                      <div class="dept-tile none-card" data-name="None" data-id="none" onclick="selectDept(this, 'None', 'none')">
+                        <div class="tile-info" style="text-align: center;">
+                          <i class="fas fa-ban" style="font-size: 2rem; color: #ef4444; margin-bottom: 15px; display: block;"></i>
+                          <strong>I don't want to join any outreach</strong>
                           <p>Skip outreach placement for now.</p>
-                        </div>
-                        <div class="selection-indicator">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                         </div>
                       </div>
 
-                       <% departments.forEach(dept => { %>
-                        <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
-                             data-name="<%= dept.name %>"
-                             data-id="<%= dept.id %>"
-                             onclick="selectDept(this, this.dataset.name, this.dataset.id)">
-                          <div class="min-card-bg" style="background-image: url('<%= dept.cover_image_url || 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800' %>');"></div>
+                         <div class="dept-tile <%= (user && user.department_interest === dept.name) ? 'selected' : '' %>" 
+                              data-name="<%= dept.name %>"
+                              data-id="<%= dept.id %>"
+                              onclick="selectDept(this, this.dataset.name, this.dataset.id)">
+                          <div class="min-card-bg" style="background: <%= dept.cover_image_url ? `url('${dept.cover_image_url}')` : 'linear-gradient(135deg, #176a60 0%, #115048 100%)' %>; background-size: cover; background-position: center;"></div>
                           <div class="min-card-overlay"></div>
                           <div class="tile-info" style="position: relative; z-index: 3; color: white;">
                             <strong><%= dept.name %></strong>
@@ -421,19 +429,19 @@
                     <input type="hidden" name="department_interest" id="deptInput" value="<%= (user && user.department_interest) ? user.department_interest : '' %>">
                   </div>
 
-                  <div id="roleSelectionWrapper" class="form-group" style="display: none;">
-                    <label>Specific Position of Interest <span>*</span></label>
-                    <div class="role-pills" id="roleOptions">
+                  <div id="outreachRoleSelectionWrapper" class="form-group" style="display: none;">
+                    <label>Outreach Position of Interest <span>*</span></label>
+                    <div class="role-pills" id="outreachRoleOptions">
                        <% positions.forEach(pos => { %>
                         <div class="role-pill <%= (user && user.position_interest === pos.title) ? 'active' : '' %>" 
                              data-dept-id="<%= pos.department_id %>"
                              data-title="<%= pos.title %>"
-                             onclick="selectRole(this, this.dataset.title)">
+                             onclick="selectOutreachRole(this, this.dataset.title)">
                           <%= pos.title %>
                         </div>
                       <% }) %>
                     </div>
-                    <input type="hidden" name="position_interest" id="posInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
+                    <input type="hidden" name="position_interest" id="outreachPosInput" value="<%= (user && user.position_interest) ? user.position_interest : '' %>">
                   </div>
 
                   <!-- ROLE CLAIM FOR EXISTING WORKERS -->
@@ -738,9 +746,15 @@ main.onboarding-page::before {
     .dept-tile:hover .min-card-bg { transform: scale(1.1); }
     .dept-tile.selected { border-color: #4ade80; border-width: 3px; box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
     
-    .tile-info { position: relative; z-index: 3; padding: 20px; width: 100%; }
+    .tile-info { position: relative; z-index: 3; padding: 20px; width: 100%; transition: 0.3s; }
     .tile-info strong { display: block; font-size: 15px; margin-bottom: 4px; color: white; font-weight: 800; }
     .tile-info p { font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.4; margin: 0; }
+    
+    .none-card { background: #ffffff !important; display: flex; align-items: center !important; justify-content: center; text-align: center; border: 2px dashed rgba(239, 68, 68, 0.2) !important; }
+    .none-card:hover { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.02) !important; }
+    .none-card.selected { border: 3px solid #ef4444 !important; background: rgba(239, 68, 68, 0.05) !important; }
+    .none-card .tile-info strong, .none-card .min-card-content strong { color: #ef4444 !important; }
+    .none-card .tile-info p, .none-card .min-card-content p { color: rgba(239, 68, 68, 0.6) !important; }
     .selection-indicator { position: absolute; top: 15px; right: 15px; color: #4ade80; opacity: 0; transform: scale(0.5); transition: 0.3s; z-index: 4; }
     .dept-tile.selected .selection-indicator { opacity: 1; transform: scale(1); }
     
@@ -986,11 +1000,11 @@ main.onboarding-page::before {
       const newName = document.getElementById('deptInput').value;
       
       // Clear position selection if switching or unselecting
-      document.getElementById('posInput').value = '';
-      document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+      document.getElementById('outreachPosInput').value = '';
+      document.querySelectorAll('#outreachRoleOptions .role-pill').forEach(p => p.classList.remove('active'));
 
-      const roleWrapper = document.getElementById('roleSelectionWrapper');
-      const roles = document.querySelectorAll('.role-pill');
+      const roleWrapper = document.getElementById('outreachRoleSelectionWrapper');
+      const roles = document.querySelectorAll('#outreachRoleOptions .role-pill');
       let count = 0;
       
       if (newName && newName !== 'None') {
@@ -1003,12 +1017,22 @@ main.onboarding-page::before {
       }
       
       roleWrapper.style.display = count > 0 ? 'block' : 'none';
+      if (count > 0 && newName !== 'None') {
+        roleWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        gsap.from(roleWrapper, { y: 20, opacity: 0, duration: 0.5 });
+      }
     }
 
-    function selectRole(pill, title) {
-      document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+    function selectOutreachRole(pill, title) {
+      document.querySelectorAll('#outreachRoleOptions .role-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
-      document.getElementById('posInput').value = title;
+      document.getElementById('outreachPosInput').value = title;
+    }
+
+    function selectMinRole(pill, title) {
+      document.querySelectorAll('#minRoleOptions .role-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      document.getElementById('minRoleInput').value = title;
     }
 
     function toggleTag(tag, val) {
@@ -1027,11 +1051,24 @@ main.onboarding-page::before {
         if (input) input.checked = false;
       });
       
+      const minRoleWrapper = document.getElementById('minRoleSelectionWrapper');
+
       // If it wasn't selected before, select it now. If it was, it stays unselected (toggling).
       if (!isCurrentlySelected) {
         card.classList.add('selected');
         const input = card.querySelector('input');
         if (input) input.checked = true;
+        
+        // Show role selection for ministries
+        if (name !== 'None') {
+          minRoleWrapper.style.display = 'block';
+          gsap.from(minRoleWrapper, { y: 20, opacity: 0, duration: 0.5 });
+          minRoleWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          minRoleWrapper.style.display = 'none';
+        }
+      } else {
+        minRoleWrapper.style.display = 'none';
       }
     }
 
