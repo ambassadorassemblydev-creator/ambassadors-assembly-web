@@ -132,10 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            if (response.status === 429) {
+            if (response.status === 429 || response.status === 403) {
                 const data = await response.json();
                 updateUIState('LIMIT REACHED');
-                alert(data.message);
+                alert(data.message || data.error || 'Weekly limit reached. Please try again next week!');
                 stopCall();
                 return;
             }
