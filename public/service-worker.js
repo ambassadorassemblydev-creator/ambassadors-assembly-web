@@ -8,8 +8,7 @@ const OFFLINE_URL = '/offline';
 const PRECACHE_ASSETS = [
   OFFLINE_URL,
   '/js/pwa-handler.js',
-  '/css/style.min.css',
-  '/images/emerald-hero-bg.png'
+  '/css/style.min.css'
 ];
 
 // 1. INSTALL: Pre-cache essential assets
