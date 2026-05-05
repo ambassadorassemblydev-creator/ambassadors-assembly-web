@@ -132,6 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            if (response.status === 429) {
+                const data = await response.json();
+                updateUIState('LIMIT REACHED');
+                alert(data.message);
+                stopCall();
+                return;
+            }
+
             if (!response.ok) throw new Error('Failed to get signed URL from server.');
             const { signed_url, dynamic_variables } = await response.json();
             

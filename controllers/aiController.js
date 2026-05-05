@@ -1,5 +1,6 @@
 import { aiService } from '../services/aiService.js';
 import { supabase } from '../config/supabase.js';
+import { redis } from '../config/redis.js';
 
 export const aiController = {
     async handleChat(req, res) {
@@ -33,9 +34,44 @@ export const aiController = {
 
     async handleVoiceCall(req, res) {
         try {
-            const userId = req.user?.id || null;
-            const callData = await aiService.getElevenLabsSignedUrl(userId);
+            const userId = req.user?.id || req.ip;
+            const limitKey = `voice_limit:${userId}`;
+            const limit = 3;
+            const windowSeconds = 7 * 24 * 60 * 60; // 7 days
+
+            // High IQ: Rate limiting logic
+            if (redis) {
+                const currentCount = await redis.get(limitKey);
+                
+                if (currentCount && parseInt(currentCount) >= limit) {
+                    const ttl = await redis.ttl(limitKey);
+                    const days = Math.floor(ttl / (24 * 3600));
+                    const hours = Math.floor((ttl % (24 * 3600)) / 3600);
+                    const minutes = Math.floor((ttl % 3600) / 60);
+                    
+                    let timeStr = "";
+                    if (days > 0) timeStr += `${days}d `;
+                    if (hours > 0) timeStr += `${hours}h `;
+                    if (minutes > 0 || timeStr === "") timeStr += `${minutes}m`;
+
+                    return res.status(429).json({ 
+                        error: `Weekly call limit reached.`,
+                        message: `Ambassador, you have reached your limit of ${limit} calls per week. Please try again in ${timeStr.trim()}.`
+                    });
+                }
+            }
+
+            const userIdForAI = req.user?.id || null;
+            const callData = await aiService.getElevenLabsSignedUrl(userIdForAI);
             
+            // Increment after successful url generation
+            if (redis) {
+                const newVal = await redis.incr(limitKey);
+                if (newVal === 1) {
+                    await redis.expire(limitKey, windowSeconds);
+                }
+            }
+
             // High IQ: Return the signed URL for the frontend SDK
             res.json(callData);
         } catch (error) {
