@@ -241,8 +241,10 @@
         const accessToken = params.get('access_token');
         const refreshToken = params.get('refresh_token');
         const expiresIn = params.get('expires_in');
+        const type = params.get('type'); // High IQ: Extract auth intent (signup/recovery)
 
         if (!accessToken) {
+          console.warn("Invalid session hash detected.");
           window.location.href = "/account/login?error=invalid_session";
           return;
         }
@@ -260,7 +262,7 @@
         const session = {
           access_token: accessToken,
           refresh_token: refreshToken,
-          expires_in: parseInt(expiresIn)
+          expires_in: parseInt(expiresIn) || 3600
         };
 
         try {
@@ -282,12 +284,13 @@
               onComplete: () => {
                 stepLabels[2].classList.add('active');
                 setTimeout(() => {
-                  window.location.hash = ""; 
+                  // High IQ: Clear hash to prevent accidental re-processing
+                  try { window.history.replaceState(null, null, window.location.pathname); } catch (e) {}
                   
                   // High IQ: Dynamic Redirect based on auth intent
-                  if (type === 'signup') {
+                  if (type === 'signup' || type === 'signup_confirm') {
                     window.location.href = "/email-confirmed";
-                  } else if (type === 'recovery') {
+                  } else if (type === 'recovery' || type === 'password_reset') {
                     window.location.href = "/auth/reset-password";
                   } else {
                     window.location.href = "/my-account";
