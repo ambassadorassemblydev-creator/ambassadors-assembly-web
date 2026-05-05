@@ -13,6 +13,7 @@ export const accountRepo = {
         *,
         ministry_members(
           role, 
+          is_active,
           ministries(name, slug, cover_image_url)
         ),
         user_roles!user_id(
@@ -33,7 +34,7 @@ export const accountRepo = {
         .select(`
           status, 
           church_positions(title), 
-          church_departments(name)
+          church_departments(id, name)
         `)
         .eq('user_id', userId);
         

@@ -466,7 +466,7 @@ export const accountController = {
                 user_id: userId,
                 ministry_id: mData.id,
                 role: validatedData.ministry_role_interest || 'Member',
-                status: 'pending',
+                is_active: false,
                 joined_at: new Date()
               }, { onConflict: 'user_id,ministry_id' });
             }

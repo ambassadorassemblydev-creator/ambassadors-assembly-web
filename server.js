@@ -204,6 +204,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// High IQ: API routes for Admin Portal must come BEFORE CSRF
+app.use('/api/notifications', notificationRoutes);
+
 // 3. Initialize CSRF Protection Globally
 // High IQ: No more exclusions needed as csrf-sync is rock solid with sessions.
 app.use(csrfProtection);
@@ -304,7 +307,6 @@ app.use((req, res, next) => {
 // 3. ROUTES
 // ==========================================
 app.use('/', indexRouter);
-app.use('/api/notifications', notificationRoutes);
 
 
 // Sentry Debug Route

@@ -433,7 +433,7 @@
             <div class="aas-min-info">
               <h3><%= m.name %></h3>
               <p><%= m.description || 'A ministry of Ambassadors Assembly.' %></p>
-              <span class="min-role-tag"><%= mm.role === 'pending' ? 'Pending Approval' : (mm.role || 'Member') %></span>
+              <span class="min-role-tag"><%= mm.is_active ? (mm.role || 'Member') : 'Pending Approval' %></span>
             </div>
             <a href="/ministries/<%= m.slug %>" class="btn-o" style="align-self:flex-start;">View</a>
           </div>
