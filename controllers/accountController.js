@@ -490,7 +490,17 @@ export const accountController = {
         }
       }      // 5. Audit Logging
       logger.info(`Onboarding completed for user: ${userId} with role claim: ${targetRoleClaim} (Path: ${path})`);
-    
+      
+      try {
+        await supabaseService.from('notifications').insert({
+          title: 'Member Onboarded',
+          message: `${req.user.email} has completed onboarding with the role claim: ${targetRoleClaim}.`,
+          type: 'success',
+          link: '/approvals'
+        });
+      } catch (e) {
+        logger.warn('Could not insert notification: ' + e.message);
+      }
 
       // 6. Finalize - Trigger Welcome & Redirect
       // User has configured Resend Automations - triggering 'auth.welcome'

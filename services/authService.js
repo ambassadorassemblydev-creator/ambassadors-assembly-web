@@ -28,6 +28,18 @@ export const authService = {
       throw new AppError(error.message, 400);
     }
 
+    try {
+      const { supabaseService } = await import('../config/supabase.js');
+      await supabaseService.from('notifications').insert({
+        title: 'New Member Registration',
+        message: `${userData.firstName} ${userData.lastName} (${userData.email}) just created an account.`,
+        type: 'info',
+        link: '/members'
+      });
+    } catch (e) {
+      logger.warn('Could not insert notification: ' + e.message);
+    }
+
     return data;
   },
 
