@@ -1140,11 +1140,12 @@
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
-              'X-CSRF-Token': '<%= locals.csrfToken %>'
+              'x-csrf-token': '<%= locals.csrfToken %>'
             },
             body: JSON.stringify({ 
               message: text, 
-              history: chatHistory 
+              history: chatHistory,
+              _csrf: '<%= locals.csrfToken %>'
             })
           });
           const data = await response.json();
@@ -1628,9 +1629,9 @@
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
-              'X-CSRF-Token': csrfToken
+              'x-csrf-token': csrfToken
             },
-            body: JSON.stringify({ shown: true })
+            body: JSON.stringify({ shown: true, _csrf: csrfToken })
           });
         } catch (e) { console.warn('Popup sync ignored'); }
       }

@@ -4,11 +4,22 @@ const {
   invalidCsrfTokenError,
   generateToken,
   getTokenFromRequest,
-  csrfSynchronisedProtection: csrfProtection,
+  csrfSynchronisedProtection,
 } = csrfSync({
   // High IQ: Read from both body and header for maximum compatibility with forms and AJAX
   getTokenFromRequest: (req) => (req.body ? req.body._csrf : undefined) || req.headers["x-csrf-token"],
 });
+
+/**
+ * High IQ Wrapper for CSRF Protection
+ * Skips CSRF if the request is authenticated via Bearer token (API usage from Admin Portal)
+ */
+const csrfProtection = (req, res, next) => {
+  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+    return next();
+  }
+  return csrfSynchronisedProtection(req, res, next);
+};
 
 /**
  * High IQ Error Handler
@@ -28,4 +39,4 @@ const csrfErrorHandler = (error, req, res, next) => {
   }
 };
 
-export { csrfProtection, generateToken, csrfErrorHandler };
+export { csrfProtection, generateToken, csrfErrorHandler };

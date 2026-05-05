@@ -103,8 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const startCall = async () => {
+        // High IQ: Show UI immediately to avoid "unresponsive" feeling
+        callOverlay.classList.add('active');
+        callBtn.classList.add('connecting');
+        updateUIState('CONNECTING...');
+
         try {
-            // 1. Check Microphone Permission First
+            // 1. Check Microphone Permission
             let stream;
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -117,8 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log("[Voice] Initiating ElevenLabs Session...");
             updateUIState('INITIALIZING');
-            callOverlay.classList.add('active');
-            callBtn.classList.add('connecting');
 
             // 2. Fetch Signed URL
             const response = await fetch('/api/voice/get-signed-url', {
@@ -135,14 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Start Conversation
             conversation = await Conversation.startSession({
                 signedUrl: signed_url,
-                dynamicVariables: dynamic_variables, // High IQ: Inject server-side context
+                dynamicVariables: dynamic_variables,
                 onConnect: () => {
                     isActive = true;
                     updateUIState('CONNECTED');
                     console.log("[Voice] Connected to ElevenLabs");
                     addSystemMessage("Ambassadors AI is now live. You can speak freely.");
 
-                    // Start Visualizer with the stream we already got
                     visualizer.start(stream);
 
                     if (callSafetyTimer) clearTimeout(callSafetyTimer);
@@ -200,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (isActive) {
+        if (isActive || callBtn.classList.contains('connecting')) {
             stopCall();
         } else {
             startCall();
