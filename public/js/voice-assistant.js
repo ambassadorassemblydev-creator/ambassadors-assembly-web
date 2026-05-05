@@ -48,7 +48,9 @@ class VoiceVisualizer {
         let x = 0;
 
         for (let i = 0; i < this.dataArray.length; i++) {
-            const barHeight = (this.dataArray[i] / 255) * height * 0.8;
+            let val = this.dataArray[i] * 1.8;
+            if (val > 255) val = 255;
+            const barHeight = (val / 255) * height * 0.8;
             
             // Cinematic Gradient (Emerald Theme)
             const gradient = this.ctx.createLinearGradient(0, height / 2 - barHeight / 2, 0, height / 2 + barHeight / 2);
@@ -66,7 +68,9 @@ class VoiceVisualizer {
     stop() {
         this.isActive = false;
         if (this.animationId) cancelAnimationFrame(this.animationId);
-        if (this.audioContext) this.audioContext.close();
+        if (this.audioContext && this.audioContext.state !== 'closed') {
+            this.audioContext.close().catch(e => console.warn(e));
+        }
         if (this.ctx) this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }

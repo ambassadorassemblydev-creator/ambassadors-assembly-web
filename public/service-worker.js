@@ -49,7 +49,7 @@ if (typeof workbox !== 'undefined') {
   workbox.core.clientsClaim();
 
   // EXCLUSIONS
-  const EXCLUDED_URLS = ['supabase.co', '/api/auth', '/admin', 'chrome-extension'];
+  const EXCLUDED_URLS = ['supabase.co', '/api/auth', '/admin', 'chrome-extension', 'cloudinary.com'];
   const isExcluded = (url) => EXCLUDED_URLS.some(e => url.includes(e));
 
   // A. Static Assets (Stale-While-Revalidate)
