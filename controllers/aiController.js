@@ -72,8 +72,11 @@ export const aiController = {
                 }
             }
 
-            // High IQ: Return the signed URL for the frontend SDK
-            res.json(callData);
+            // High IQ: Return the signed URL and remaining quota
+            res.json({ 
+                ...callData,
+                remaining: Math.max(0, limit - newVal)
+            });
         } catch (error) {
             console.error('[AIController] Voice Error:', error.message);
             res.status(500).json({ error: error.message || 'Failed to initiate voice call' });

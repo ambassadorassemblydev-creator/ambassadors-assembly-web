@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!response.ok) throw new Error('Failed to get signed URL from server.');
-            const { signed_url, dynamic_variables } = await response.json();
+            const { signed_url, dynamic_variables, remaining } = await response.json();
             
             // 3. Start Conversation
             conversation = await Conversation.startSession({
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     isActive = true;
                     updateUIState('CONNECTED');
                     console.log("[Voice] Connected to ElevenLabs");
-                    addSystemMessage("Ambassadors AI is now live. You can speak freely.");
+                    addSystemMessage(`Ambassadors AI is now live. You can speak freely. (${remaining} calls remaining this week)`);
 
                     visualizer.start(stream);
 
