@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 
 export const ministryRepo = {
     // Fetch top ministries for the homepage slider
@@ -48,7 +48,7 @@ export const ministryRepo = {
     // Join a ministry
     joinMinistry: async (ministryId, userId, notes) => {
         // Enforce Single Ministry Rule: Check if user already in a ministry
-        const { data: existing } = await supabase
+        const { data: existing } = await supabaseService
             .from('ministry_members')
             .select('ministry_id')
             .eq('user_id', userId)
@@ -58,12 +58,13 @@ export const ministryRepo = {
             throw new Error('You are already a member of a ministry. Please leave your current ministry before joining a new one.');
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseService
             .from('ministry_members')
             .upsert({
                 ministry_id: ministryId,
                 user_id: userId,
-                role: 'pending'
+                role: 'pending',
+                joined_at: new Date()
             }, { onConflict: 'ministry_id,user_id' });
 
         if (error) {
