@@ -55,19 +55,28 @@
                   </div>
                 </div>
 
-                <% if (ministry.ministry_leads && ministry.ministry_leads.length > 0) { %>
+                <% if (ministry.leader || ministry.co_leader) { %>
                   <div class="leads-section gsap-up">
                     <h4>Ministry Leadership</h4>
                     <div class="leads-grid">
-                      <% ministry.ministry_leads.forEach(lead => { %>
+                      <% if (ministry.leader) { %>
                         <div class="lead-item">
-                          <img src="<%= lead.profiles.avatar_url %>" alt="<%= lead.profiles.first_name %>">
+                          <img src="<%= ministry.leader.avatar_url || 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg' %>" alt="<%= ministry.leader.first_name %>">
                           <div class="lead-text">
-                            <strong><%= lead.profiles.first_name %> <%= lead.profiles.last_name %></strong>
+                            <strong><%= ministry.leader.first_name %> <%= ministry.leader.last_name %></strong>
                             <span>Ministry Lead</span>
                           </div>
                         </div>
-                      <% }) %>
+                      <% } %>
+                      <% if (ministry.co_leader) { %>
+                        <div class="lead-item">
+                          <img src="<%= ministry.co_leader.avatar_url || 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg' %>" alt="<%= ministry.co_leader.first_name %>">
+                          <div class="lead-text">
+                            <strong><%= ministry.co_leader.first_name %> <%= ministry.co_leader.last_name %></strong>
+                            <span>Co-Lead</span>
+                          </div>
+                        </div>
+                      <% } %>
                     </div>
                   </div>
                 <% } %>
@@ -77,6 +86,18 @@
               <div class="form-side" id="join-section">
                 <div class="join-card glass-fx gsap-up">
                   <h3>Get Involved</h3>
+                  
+                  <% if (locals.error) { %>
+                    <div class="error-alert" style="background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; border: 1px solid #fecaca;">
+                      <%= locals.error %>
+                    </div>
+                  <% } %>
+                  
+                  <% if (locals.success) { %>
+                    <div class="success-alert" style="background: #dcfce7; color: #166534; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; border: 1px solid #bbf7d0;">
+                      <%= locals.success %>
+                    </div>
+                  <% } %>
                   <p>Ready to serve? Fill out the form below to express your interest in joining the <%= ministry.name %>.</p>
                   
                   <% if (user) { %>

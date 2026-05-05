@@ -51,7 +51,7 @@ export const ministryRepo = {
         const { data: existing } = await supabaseService
             .from('ministry_members')
             .select('ministry_id')
-            .eq('user_id', userId)
+            .eq('user_id', userId)  
             .limit(1);
 
         if (existing && existing.length > 0 && existing[0].ministry_id !== ministryId) {
@@ -61,7 +61,7 @@ export const ministryRepo = {
         const { data, error } = await supabaseService
             .from('ministry_members')
             .upsert({
-                ministry_id: ministryId,
+                ministry_id: ministryId,                
                 user_id: userId,
                 role: 'pending',
                 joined_at: new Date()

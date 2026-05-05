@@ -222,9 +222,11 @@ app.use((req, res, next) => {
   
   if (req.method === 'GET' && !isAsset && !isAPI) {
     if (typeof generateToken === 'function') {
-      res.locals.csrfToken = generateToken(req, res);
-      // Diagnostic: Confirm token rotation in logs
-      logger.info(`[CSRF] Generated: ${req.url} | SESS: ${req.sessionID?.substring(0, 8)}...`);
+      // High IQ: Reuse existing token from session to prevent rotation mismatches during parallel requests
+      res.locals.csrfToken = req.session.csrfToken || generateToken(req, res);
+      if (!req.session.csrfToken) {
+        logger.info(`[CSRF] New Token Generated for: ${req.url} | SESS: ${req.sessionID?.substring(0, 8)}...`);
+      }
     }
   } else {
     // For non-GET or assets, attempt to reuse the existing token

@@ -46,11 +46,10 @@ export const emailService = {
       // of the event object, with other variables inside 'data'.
       const { email, ...dataFields } = payload;
       
-      const { data, error } = await resend.events.create({
-        name: eventName,
-        event: eventName, // Added both just in case, but 'event' is what it asked for
-        email: email, // Top-level requirement
-        data: dataFields
+      const { data, error } = await resend.events.send({
+        event: eventName,
+        email: email,
+        payload: dataFields
       });
 
       if (error) {

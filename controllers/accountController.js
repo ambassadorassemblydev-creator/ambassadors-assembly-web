@@ -162,6 +162,22 @@ export const accountController = {
       const validatedData = updateProfileSchema.parse(req.body);
       await accountRepo.updateProfile(req.user.id, validatedData);
       
+      // High IQ: If they expressed a new department interest, trigger the volunteer automation
+      if (validatedData.department_interest) {
+        try {
+          await emailService.triggerAutomation('volunteer.applied', {
+            email: req.user.email,
+            firstName: req.user.firstName || req.user.user_metadata?.first_name || 'Ambassador',
+            department: validatedData.department_interest,
+            notes: 'Expressed interest via dashboard profile update'
+          });
+          logger.info(`Volunteer automation triggered via profile update for user: ${req.user.id}`);
+        } catch (autoErr) {
+          logger.error(`Failed to trigger volunteer automation on profile update: ${autoErr.message}`);
+          // Don't fail the whole request if automation fails
+        }
+      }
+
       if (req.xhr || req.headers.accept?.includes('json')) {
         return res.json({ status: 'success', message: 'Profile updated successfully' });
       }

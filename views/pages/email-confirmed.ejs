@@ -128,6 +128,7 @@
                         @keyframes spin-bridge { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
                       </style>
 
+                      <input type="hidden" id="csrfToken" value="<%= locals.csrfToken %>">
                       <a href="/onboarding" class="auth-submit-btn">Go to Dashboard</a>
                       
                     </div>
@@ -173,9 +174,8 @@
           const response = await fetch('/api/auth/session', {
             method: 'POST',
             headers: { 
-              'Content-Type': 'application/json'
-              // Note: CSRF might be tricky here if it's the first visit, 
-              // but since it's a GET page first, res.locals.csrfToken should be set in head/navbar
+              'Content-Type': 'application/json',
+              'x-csrf-token': document.getElementById("csrfToken")?.value
             },
             body: JSON.stringify({ session })
           });

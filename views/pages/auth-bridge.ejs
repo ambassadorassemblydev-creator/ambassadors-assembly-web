@@ -264,6 +264,7 @@
         };
 
         try {
+          // Sync session to server-side cookies
           const response = await fetch('/api/auth/session', {
             method: 'POST',
             headers: { 
@@ -282,7 +283,15 @@
                 stepLabels[2].classList.add('active');
                 setTimeout(() => {
                   window.location.hash = ""; 
-                  window.location.href = "/my-account";
+                  
+                  // High IQ: Dynamic Redirect based on auth intent
+                  if (type === 'signup') {
+                    window.location.href = "/email-confirmed";
+                  } else if (type === 'recovery') {
+                    window.location.href = "/auth/reset-password";
+                  } else {
+                    window.location.href = "/my-account";
+                  }
                 }, 400);
               }
             });
