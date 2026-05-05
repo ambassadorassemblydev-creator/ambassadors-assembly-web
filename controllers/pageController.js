@@ -9,6 +9,8 @@ import { testimonyRepo } from '../repositories/testimonyRepo.js';
 import { prayerRepo } from '../repositories/prayerRepo.js';
 import { auditLogger } from '../utils/auditLogger.js';
 import { verifyRecaptcha, getRecaptchaScore } from '../utils/recaptcha.js';
+import { automationService } from '../services/automationService.js';
+import { emailService } from '../services/emailService.js';
 
 
 export const pageController = {
@@ -262,6 +264,18 @@ export const pageController = {
             if (!ministry) return res.status(404).json({ error: 'Ministry not found' });
 
             await ministryRepo.joinMinistry(ministry.id, userId, notes);
+            
+            // High IQ: Trigger automation for volunteer application
+            try {
+                await emailService.triggerAutomation('volunteer.applied', {
+                    email: req.user.email,
+                    firstName: req.user.user_metadata?.first_name || 'Ambassador',
+                    department: ministry.name,
+                    notes: notes || 'Ministry interest from website'
+                });
+            } catch (err) {
+                console.error('[PageController] Failed to trigger volunteer automation:', err.message);
+            }
             
             // Log for AI / Audit
             await auditLogger.log(userId, 'join_ministry', `Joined ${ministry.name} Ministry`, { ministry_slug: slug, notes });

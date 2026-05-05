@@ -420,11 +420,12 @@ export const accountController = {
             }, { onConflict: 'user_id' });
 
             // Create a formal volunteer application
+            const fullName = `${validatedData.firstName || req.user.user_metadata?.first_name || ''} ${validatedData.lastName || req.user.user_metadata?.last_name || ''}`.trim();
             const { data: application, error: insError } = await supabaseService.from('volunteer_applications').insert({
               user_id: userId,
               department_id: deptData.data.id,
               position_id: posData.data.id,
-              applicant_name: req.user.email, 
+              applicant_name: fullName || req.user.email, 
               applicant_email: req.user.email,
               motivation: isAlreadyServing 
                 ? 'EXISTING MEMBER: ' + (validatedData.motivation || 'Already serving in this capacity.')
@@ -463,12 +464,24 @@ export const accountController = {
               await supabaseService.from('ministry_members').delete().eq('user_id', userId);
               
               await supabaseService.from('ministry_members').upsert({
-                user_id: userId,
                 ministry_id: mData.id,
+                user_id: userId,
                 role: validatedData.ministry_role_interest || 'Member',
                 is_active: false,
                 joined_at: new Date()
               }, { onConflict: 'user_id,ministry_id' });
+
+              // High IQ: Trigger automation for each ministry interest
+              try {
+                await emailService.triggerAutomation('volunteer.applied', {
+                  email: req.user.email,
+                  firstName: req.user.user_metadata?.first_name || validatedData.firstName || 'Ambassador',
+                  department: mName,
+                  notes: 'Expressed interest during onboarding'
+                });
+              } catch (triggerErr) {
+                logger.warn(`Failed to trigger ministry automation for ${mName}: ${triggerErr.message}`);
+              }
             }
           }
           logger.info(`Ministry interests processed for user: ${userId}`);
