@@ -66,6 +66,17 @@
       img.src = 'https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg';
       img.classList.add('image-fallback');
     }
+
+    // High IQ: Auth Bridge Interceptor
+    // Detects Supabase auth hash fragments (Magic Link/Signup Confirm) on any page 
+    // and routes them to the auth callback bridge for session synchronization.
+    if (window.location.hash.includes('access_token=')) {
+      const currentPath = window.location.pathname;
+      const bridgePaths = ['/auth/callback', '/email-confirmed', '/auth-bridge'];
+      if (!bridgePaths.some(p => currentPath.startsWith(p))) {
+        window.location.href = '/auth/callback' + window.location.hash;
+      }
+    }
   </script>
 
   <!-- Sentry Tracking -->
