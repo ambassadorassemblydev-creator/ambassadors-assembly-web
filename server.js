@@ -26,6 +26,7 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
 import { siteConfigMiddleware } from './middlewares/siteConfigMiddleware.js';
 import { csrfProtection, generateToken, csrfErrorHandler } from './middlewares/csrfMiddleware.js';
+import { jobRunner } from './services/jobRunner.js';
 
 import { accountController } from './controllers/accountController.js';
 import statusMonitor from 'express-status-monitor';
@@ -332,6 +333,8 @@ app.use(globalErrorHandler);
 app.listen(PORT, () => {
   logger.info(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
+
+jobRunner.init();
 
 // Catch Unhandled Promise Rejections (e.g., DB goes down)
 process.on('unhandledRejection', err => {

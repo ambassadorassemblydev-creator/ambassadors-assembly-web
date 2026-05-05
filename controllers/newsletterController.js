@@ -1,5 +1,6 @@
 import { supabase, supabaseService } from '../config/supabase.js';
 import { Resend } from 'resend';
+import { getStandardTemplate } from '../utils/emailTemplates.js';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -23,25 +24,16 @@ export const newsletterController = {
 
             if (error) throw error;
 
-            // 2. Send welcome email via Resend
+            // 2. Trigger Welcome Automation in Resend
             try {
-                await resend.emails.send({
-                    from: 'Ambassadors Assembly <news@theambassadorsassembly.org>',
-                    to: email,
-                    subject: 'Welcome to the Ambassadors Assembly Newsletter!',
-                    html: `
-                        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; rounded: 10px;">
-                            <h1 style="color: #176a60;">Welcome to the Family, ${first_name || 'Ambassador'}!</h1>
-                            <p>Thank you for subscribing to our newsletter. We're excited to have you with us.</p>
-                            <p>Stay tuned for the latest news, resources, and updates from Ambassadors Assembly.</p>
-                            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-                            <p style="font-size: 12px; color: #666;">If you didn't sign up for this, you can safely ignore this email.</p>
-                        </div>
-                    `
+                await emailService.triggerAutomation('auth.welcome', {
+                    email,
+                    firstName: first_name || 'Ambassador',
+                    lastName: last_name || '',
+                    source: 'newsletter'
                 });
             } catch (emailError) {
-                console.error('[Newsletter] Failed to send welcome email:', emailError.message);
-                // We don't fail the whole request if email fails, as long as DB is updated
+                console.error('[Newsletter] Failed to trigger welcome automation:', emailError.message);
             }
 
             return res.status(200).json({ success: true, message: 'Successfully subscribed!' });
@@ -55,18 +47,44 @@ export const newsletterController = {
 export const adminEmailController = {
     sendCustomEmail: async (req, res) => {
         try {
-            const { to, subject, message, html } = req.body;
+            const { to, subject, message, html, title } = req.body;
             if (!to || !subject) return res.status(400).json({ error: 'Recipient and subject are required' });
+
+            const emailHtml = html || getStandardTemplate(title || subject, message);
 
             const { data, error } = await resend.emails.send({
                 from: 'Ambassadors Assembly <office@theambassadorsassembly.org>',
                 to,
                 subject,
                 text: message,
-                html: html || `<div style="font-family: sans-serif; white-space: pre-wrap;">${message}</div>`
+                html: emailHtml
             });
 
             if (error) throw error;
+
+            // Log the email in the background
+            try {
+                // Find user_id if possible
+                const { data: profile } = await supabaseService
+                    .from('profiles')
+                    .select('id, first_name, last_name')
+                    .eq('email', to)
+                    .single();
+
+                await supabaseService.from('email_log').insert([{
+                    recipient_email: to,
+                    recipient_name: profile ? `${profile.first_name} ${profile.last_name}` : null,
+                    recipient_user_id: profile?.id || null,
+                    template_name: 'custom_admin',
+                    subject,
+                    body_preview: message.substring(0, 200),
+                    resend_email_id: data.id,
+                    status: 'sent',
+                    sent_at: new Date().toISOString()
+                }]);
+            } catch (logErr) {
+                console.error('[AdminEmail] Logging failed:', logErr.message);
+            }
 
             return res.status(200).json({ success: true, message: 'Email sent successfully!', id: data.id });
         } catch (error) {

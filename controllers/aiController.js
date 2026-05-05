@@ -63,6 +63,8 @@ export const aiController = {
 
             const userIdForAI = req.user?.id || null;
             const callData = await aiService.getElevenLabsSignedUrl(userIdForAI);
+
+            let remaining = limit;
             
             // Increment after successful url generation
             if (redis) {
@@ -70,12 +72,13 @@ export const aiController = {
                 if (newVal === 1) {
                     await redis.expire(limitKey, windowSeconds);
                 }
+                remaining = Math.max(0, limit - newVal);
             }
 
             // High IQ: Return the signed URL and remaining quota
             res.json({ 
                 ...callData,
-                remaining: Math.max(0, limit - newVal)
+                remaining
             });
         } catch (error) {
             console.error('[AIController] Voice Error:', error.message);

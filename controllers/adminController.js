@@ -54,5 +54,20 @@ export const adminController = {
       logger.error(`Manual Sync Error: ${err.message}`);
       res.status(500).json({ error: err.message });
     }
+  },
+
+  /**
+   * GET /api/admin/milestones/sync
+   * Manually triggers birthday and anniversary checks
+   */
+  manualSyncMilestones: async (req, res, next) => {
+    try {
+      logger.info('Manual sync requested for daily milestones');
+      const result = await automationService.processDailyMilestones();
+      res.json({ status: 'success', ...result });
+    } catch (err) {
+      logger.error(`Manual Milestone Sync Error: ${err.message}`);
+      res.status(500).json({ error: err.message });
+    }
   }
 };
