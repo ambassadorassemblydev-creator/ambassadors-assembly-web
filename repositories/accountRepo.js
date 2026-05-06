@@ -43,6 +43,52 @@ export const accountRepo = {
       } else {
         data.church_workers = [];
       }
+
+      // High IQ: Self-Healing / Migration Logic
+      // If user has a 'department' string in profile but NO church_workers record, auto-provision it.
+      if (data.church_workers.length === 0 && data.department && data.department !== 'None' && data.department !== 'None recorded') {
+        try {
+          const { data: dept } = await supabaseService
+            .from('church_departments')
+            .select('id, name')
+            .ilike('name', data.department)
+            .maybeSingle();
+
+          if (dept) {
+            // Find a default 'Member' position for this department
+            const { data: pos } = await supabaseService
+              .from('church_positions')
+              .select('id, title')
+              .eq('department_id', dept.id)
+              .ilike('title', 'Member')
+              .maybeSingle();
+
+            if (pos) {
+              const { data: newWorker, error: insErr } = await supabaseService
+                .from('church_workers')
+                .insert([{
+                  user_id: userId,
+                  department_id: dept.id,
+                  position_id: pos.id,
+                  status: 'active',
+                  start_date: new Date()
+                }])
+                .select(`
+                  status, 
+                  church_positions(title), 
+                  church_departments(id, name)
+                `)
+                .single();
+
+              if (!insErr && newWorker) {
+                data.church_workers = [newWorker];
+              }
+            }
+          }
+        } catch (err) {
+          console.error('Self-healing church_worker migration failed:', err);
+        }
+      }
     }
 
     return data;
