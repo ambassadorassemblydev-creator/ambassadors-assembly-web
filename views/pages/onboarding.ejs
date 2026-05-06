@@ -971,6 +971,14 @@ main.onboarding-page::before {
           return false;
         }
 
+        const dept = document.getElementById('deptInput').value;
+        const pos = document.getElementById('outreachPosInput').value;
+        
+        if (dept && dept !== 'None' && !pos) {
+          showToast('Please select a position within your chosen outreach team.', 'error');
+          return false;
+        }
+
         const path = document.getElementById('onboardingPathInput').value;
         if (path === 'church_worker') {
           const roleClaim = document.getElementById('roleClaimInput').value;

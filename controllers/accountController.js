@@ -78,7 +78,15 @@ const onboardingSchema = z.object({
   
   // Path Selection
   onboarding_path: z.enum(['new_convert', 'existing_member', 'church_worker']).optional(),
-  role_claim: z.string().optional(),
+  role_claim: z.string().optional()
+}).refine(data => {
+  if (data.department_interest && data.department_interest !== 'None' && !data.position_interest) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please select a position for your department interest",
+  path: ["position_interest"]
 });
 
 export const accountController = {
