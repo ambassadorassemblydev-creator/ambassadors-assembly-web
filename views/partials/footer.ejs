@@ -1507,10 +1507,10 @@
 
 
       .share-card-visual {
-        width: 100%; aspect-ratio: 1/1.6;
+        width: 100%; aspect-ratio: 1/1.7;
         background: #041c18;
         color: white; text-align: center; position: relative; overflow: hidden;
-        display: flex; flex-direction: column; align-items: center; padding: 25px 20px;
+        display: flex; flex-direction: column; align-items: center; padding: 20px 20px 15px;
         font-family: 'Inter', sans-serif;
       }
       .card-background {
@@ -1520,8 +1520,8 @@
       }
       .card-noise {
         position: absolute; inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        opacity: 0.15; z-index: 2; mix-blend-mode: overlay; pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.08; z-index: 2; mix-blend-mode: overlay; pointer-events: none;
       }
       .card-confetti {
         position: absolute; inset: 0;
@@ -1530,13 +1530,13 @@
       }
 
       /* Header */
-      .card-header { position: relative; z-index: 10; margin-bottom: 15px; width: 100%; }
+      .card-header { position: relative; z-index: 10; margin-bottom: 10px; width: 100%; }
       .card-logo { margin-bottom: 10px; }
       .card-logo img { height: 35px; border-radius: 5px; background: white; padding: 3px; }
       
       .congrats-text { font-family: 'Playball', cursive, serif; font-size: 32px; color: #fbbf24; margin: 0; font-weight: 400; }
       .you-are-now { font-size: 10px; font-weight: 800; letter-spacing: 2px; opacity: 0.9; display: block; margin: 5px 0; }
-      .commissioned-title { font-size: 38px; font-weight: 900; line-height: 0.9; margin: 0; letter-spacing: -1px; text-transform: uppercase; }
+      .commissioned-title { font-size: 34px; font-weight: 900; line-height: 0.9; margin: 0; letter-spacing: -1px; text-transform: uppercase; }
       
       .mission-ribbon {
         display: inline-block; background: linear-gradient(90deg, transparent, #d97706, transparent);
@@ -1546,16 +1546,16 @@
 
       /* Mission Statement */
       .mission-statement {
-        position: relative; z-index: 10; font-size: 10.5px; font-weight: 600; line-height: 1.5;
-        margin: 15px 0; opacity: 0.9;
+        position: relative; z-index: 10; font-size: 10px; font-weight: 600; line-height: 1.4;
+        margin: 10px 0; opacity: 0.9;
       }
       .text-emerald { color: #10b981; font-weight: 800; }
 
       /* User Section */
-      .user-display { position: relative; z-index: 10; margin: 10px 0; display: flex; flex-direction: column; align-items: center; }
+      .user-display { position: relative; z-index: 10; margin: 8px 0; display: flex; flex-direction: column; align-items: center; }
       .avatar-frame {
-        width: 130px; height: 130px; border-radius: 50%; border: 3px solid #10b981;
-        padding: 5px; background: rgba(16, 185, 129, 0.1); margin-bottom: 15px;
+        width: 120px; height: 120px; border-radius: 50%; border: 3px solid #10b981;
+        padding: 5px; background: rgba(16, 185, 129, 0.1); margin-bottom: 12px;
       }
       .avatar-frame img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
       
@@ -1571,8 +1571,8 @@
       /* Icon Grid */
       .mission-icons-grid {
         position: relative; z-index: 10; width: 100%;
-        display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-        margin: 20px 0;
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+        margin: 15px 0;
       }
       .mission-icon-item { display: flex; flex-direction: column; align-items: center; }
       .m-icon-cir {
@@ -1593,7 +1593,7 @@
       .banner-text small { font-size: 7.5px; opacity: 0.7; display: block; margin-top: 2px; }
 
       /* Share Block */
-      .share-prompt-block { position: relative; z-index: 10; width: 100%; margin-top: 15px; }
+      .share-prompt-block { position: relative; z-index: 10; width: 100%; margin-top: 10px; }
       .share-news { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 10px; }
       .share-news i { color: #10b981; font-size: 18px; }
       .share-news strong { font-size: 10px; display: block; letter-spacing: 1px; }
