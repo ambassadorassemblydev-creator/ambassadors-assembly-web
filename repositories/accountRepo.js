@@ -324,14 +324,46 @@ export const accountRepo = {
           .single();
 
         if (dept) {
-          await supabaseService
-            .from('volunteer_applications')
-            .upsert({
-              user_id: userId,
-              church_department_id: dept.id,
-              status: 'pending',
-              motivation: 'Expressed interest via Dashboard'
-            }, { onConflict: 'user_id,church_department_id' });
+          // Fetch profile details for required fields
+          const { data: profile } = await supabaseService
+            .from('profiles')
+            .select('first_name, last_name, email')
+            .eq('id', userId)
+            .single();
+
+          // Fetch a default position (Volunteer) for the department
+          const { data: pos } = await supabaseService
+            .from('church_positions')
+            .select('id')
+            .eq('department_id', dept.id)
+            .ilike('title', '%Volunteer%')
+            .maybeSingle();
+
+          // If no 'Volunteer' position, take the first one
+          let positionId = pos?.id;
+          if (!positionId) {
+            const { data: firstPos } = await supabaseService
+              .from('church_positions')
+              .select('id')
+              .eq('department_id', dept.id)
+              .limit(1)
+              .maybeSingle();
+            positionId = firstPos?.id;
+          }
+
+          if (positionId) {
+            await supabaseService
+              .from('volunteer_applications')
+              .upsert({
+                user_id: userId,
+                department_id: dept.id,
+                position_id: positionId,
+                applicant_name: `${profile?.first_name || ''} ${profile?.last_name || ''}`.trim() || profile?.email || 'Anonymous Member',
+                applicant_email: profile?.email || 'no-email@ambassadors.org',
+                status: 'pending',
+                motivation: 'Expressed interest via Dashboard'
+              }, { onConflict: 'user_id,department_id' });
+          }
         }
       } catch (err) {
         console.error('Failed to auto-create volunteer application:', err);

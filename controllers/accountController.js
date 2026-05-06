@@ -349,15 +349,18 @@ export const accountController = {
       let targetApprovalStatus = 'none';
       let needsManualVerification = false;
 
-      if (path === 'church_worker') {
+      if (path === 'church_worker' || isAlreadyServing) {
         // High IQ: If they say they are a worker, they must pick a role claim
-        targetRoleClaim = validatedData.role_claim || 'worker';
+        targetRoleClaim = validatedData.role_claim || (isAlreadyServing ? 'worker' : 'member');
         targetApprovalStatus = 'pending';
         needsManualVerification = true;
       } else {
-        // New Converts and Existing Members start as regular members
+        // New Converts and regular members start as regular members
         targetRoleClaim = 'member';
         targetApprovalStatus = 'none';
+        
+        // If they have department interest, they still need to be "none" but show up in Outreach
+        // Actually, let's keep them as 'none' for membership, but the outreach query should find them
       }
 
       // Overriding role claim if they picked a high-authority title during regular onboarding
@@ -532,7 +535,7 @@ export const accountController = {
 
       await auditRepo.logAction(req, 'complete_onboarding', 'Completed full profile onboarding', 'profiles', userId, profileUpdates);
 
-      return res.redirect('/confirmation?type=onboarding');
+      return res.redirect('/confirmation?type=onboarding&triggerShare=true');
     } catch (err) {
       logger.error(`Onboarding Submission Error: ${err.message}`);
       

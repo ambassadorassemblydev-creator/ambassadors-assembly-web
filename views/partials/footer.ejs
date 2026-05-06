@@ -1361,10 +1361,11 @@
           <i class="fas fa-times"></i>
         </button>
         
-        <!-- The card to be captured (High IQ Advert Style) -->
+        <!-- The card to be captured (Premium Commissioned Design) -->
         <div id="shareCardImage" class="share-card-visual">
           <div class="card-background"></div>
           <div class="card-noise"></div>
+          <div class="card-confetti"></div>
           
           <!-- Header Section -->
           <div class="card-header">
@@ -1372,74 +1373,83 @@
               <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" alt="Logo" crossorigin="anonymous">
             </div>
             <div class="header-main">
-              <span class="welcome-line">JOIN US TODAY</span>
-              <h1 class="mission-title">BORN</h1>
-              <h1 class="impact-title">TO <span class="text-emerald">PREACH</span></h1>
-            </div>
-            <p class="mission-subtext">YOU'RE NOT JUST IN THE CHURCH,<br>YOU ARE THE CHURCH ON MISSION.</p>
-          </div>
-
-          <!-- Avatar Section -->
-          <div class="avatar-container">
-            <div class="avatar-ring-outer">
-              <div class="avatar-ring-inner">
-                <img src="<%= user.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user.first_name || user.id || 'Ambassador') %>" alt="Avatar" crossorigin="anonymous">
-              </div>
-            </div>
-            <div class="avatar-sweep"></div>
-          </div>
-
-          <!-- Identity Block -->
-          <div class="identity-pill">
-            <span class="pill-label">KINGDOM COMMISSION</span>
-            <h2 class="user-name"><%= user.first_name %> <%= user.last_name %></h2>
-            <div class="pill-divider"></div>
-          </div>
-
-          <!-- Status Block -->
-          <div class="status-block">
-            <p class="status-label">STATUS: <span class="text-emerald">OFFICIALLY COMMISSIONED</span></p>
-            <div class="commission-badge">
-              <i class="fas fa-shield-alt text-gold"></i>
-              <span>AMBASSADOR FOR CHRIST</span>
-            </div>
-          </div>
-
-          <!-- Icon Grid -->
-          <div class="icons-grid">
-            <div class="icon-item">
-              <div class="icon-circle"><i class="fas fa-users"></i></div>
-              <div class="icon-text">
-                <strong>INVITE</strong>
-                <span class="text-emerald">A FRIEND</span>
-                <small>Share the hope.</small>
-              </div>
-            </div>
-            <div class="icon-item">
-              <div class="icon-circle"><i class="fas fa-paper-plane"></i></div>
-              <div class="icon-text">
-                <strong>SHARE YOUR</strong>
-                <span class="text-emerald">JOURNEY</span>
-                <small>Inspire others.</small>
-              </div>
-            </div>
-            <div class="icon-item">
-              <div class="icon-circle"><i class="fas fa-globe"></i></div>
-              <div class="icon-text">
-                <strong>JOIN THE</strong>
-                <span class="text-emerald">MISSION</span>
-                <small>Let's change lives.</small>
+              <h2 class="congrats-text">Congratulations</h2>
+              <span class="you-are-now">YOU ARE NOW</span>
+              <h1 class="commissioned-title">OFFICIALLY<br>COMMISSIONED</h1>
+              <div class="mission-ribbon">
+                <span>INTO THE KINGDOM MISSION</span>
               </div>
             </div>
           </div>
 
-          <!-- Footer Block -->
-          <div class="card-footer">
-            <p class="footer-together">TOGETHER,<br><strong>WE BUILD HIS KINGDOM.</strong></p>
-            <div class="footer-btn">
-              &copy; 2026 THE AMBASSADORS ASSEMBLY
+          <!-- Mission Message -->
+          <p class="mission-statement">
+            You are not just a member,<br>
+            you are an <span class="text-emerald">ambassador for Christ</span><br>
+            with purpose, power and mandate.
+          </p>
+
+          <!-- User Section -->
+          <div class="user-display">
+            <div class="avatar-frame">
+              <img src="<%= user.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user.first_name || user.id || 'Ambassador') %>" alt="Avatar" crossorigin="anonymous">
+            </div>
+            <div class="name-box">
+              <span class="name-line"></span>
+              <h2 class="user-name"><%= user.first_name %> <%= user.last_name %></h2>
+              <span class="name-line"></span>
             </div>
           </div>
+
+          <!-- Welcome Message -->
+          <div class="welcome-block">
+            <p class="welcome-faith">WELCOME TO THE FAMILY OF FAITH,</p>
+            <h3 class="welcome-home">WELCOME HOME! <i class="fas fa-heart"></i></h3>
+          </div>
+
+          <!-- Icon Grid (Worship, Grow, Serve, Impact) -->
+          <div class="mission-icons-grid">
+            <div class="mission-icon-item">
+              <div class="m-icon-cir"><i class="fas fa-users"></i></div>
+              <span class="m-icon-label">WE WORSHIP<br>TOGETHER</span>
+            </div>
+            <div class="mission-icon-item">
+              <div class="m-icon-cir"><i class="fas fa-book-open"></i></div>
+              <span class="m-icon-label">WE GROW<br>TOGETHER</span>
+            </div>
+            <div class="mission-icon-item">
+              <div class="m-icon-cir"><i class="fas fa-hands-holding-heart"></i></div>
+              <span class="m-icon-label">WE SERVE<br>TOGETHER</span>
+            </div>
+            <div class="mission-icon-item">
+              <div class="m-icon-cir"><i class="fas fa-globe-africa"></i></div>
+              <span class="m-icon-label">WE IMPACT<br>TOGETHER</span>
+            </div>
+          </div>
+
+          <!-- Final Banner -->
+          <div class="final-impact-banner">
+            <div class="banner-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="banner-text">
+              <p>THANK YOU <span class="text-emerald">FOR JOINING US</span> IN <span class="text-emerald">ADVANCING GOD'S KINGDOM.</span></p>
+              <small>Your journey of impact starts now!</small>
+            </div>
+          </div>
+
+          <!-- Share Prompt & Hashtags -->
+          <div class="share-prompt-block">
+            <div class="share-news">
+               <i class="fas fa-share-square"></i>
+               <div>
+                 <strong>SHARE YOUR GOOD NEWS!</strong>
+                 <small>Let others know you're now an Ambassador for Christ.</small>
+               </div>
+            </div>
+            <div class="hashtags">
+              #AmbassadorForChrist #KingdomCommissioned #LivingFaithFoundation
+            </div>
+          </div>
+
         </div>
 
         <div class="popup-actions">
@@ -1497,103 +1507,98 @@
 
 
       .share-card-visual {
-        width: 100%; aspect-ratio: 1/1.5;
+        width: 100%; aspect-ratio: 1/1.6;
         background: #041c18;
         color: white; text-align: center; position: relative; overflow: hidden;
-        display: flex; flex-direction: column; align-items: center; padding: 40px 20px;
+        display: flex; flex-direction: column; align-items: center; padding: 25px 20px;
         font-family: 'Inter', sans-serif;
       }
       .card-background {
         position: absolute; inset: 0;
-        background: radial-gradient(circle at 50% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 60%);
+        background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
         z-index: 1;
       }
       .card-noise {
         position: absolute; inset: 0;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        opacity: 0.1; z-index: 2; mix-blend-mode: overlay; pointer-events: none;
+        opacity: 0.15; z-index: 2; mix-blend-mode: overlay; pointer-events: none;
+      }
+      .card-confetti {
+        position: absolute; inset: 0;
+        background-image: url('https://www.transparenttextures.com/patterns/dust.png');
+        opacity: 0.2; z-index: 3;
       }
 
       /* Header */
-      .card-header { position: relative; z-index: 10; margin-bottom: 25px; width: 100%; }
-      .card-logo { margin-bottom: 20px; }
-      .card-logo img { height: 40px; border-radius: 8px; background: white; padding: 4px; }
+      .card-header { position: relative; z-index: 10; margin-bottom: 15px; width: 100%; }
+      .card-logo { margin-bottom: 10px; }
+      .card-logo img { height: 35px; border-radius: 5px; background: white; padding: 3px; }
       
-      .welcome-line {
-        display: flex; align-items: center; justify-content: center; gap: 15px;
-        font-size: 10px; font-weight: 800; letter-spacing: 3px; opacity: 0.8;
-      }
-      .welcome-line::before, .welcome-line::after { content: ""; height: 1px; width: 40px; background: rgba(255,255,255,0.3); }
+      .congrats-text { font-family: 'Playball', cursive, serif; font-size: 32px; color: #fbbf24; margin: 0; font-weight: 400; }
+      .you-are-now { font-size: 10px; font-weight: 800; letter-spacing: 2px; opacity: 0.9; display: block; margin: 5px 0; }
+      .commissioned-title { font-size: 38px; font-weight: 900; line-height: 0.9; margin: 0; letter-spacing: -1px; text-transform: uppercase; }
       
-      .mission-title { font-size: 45px; font-family: serif; font-weight: 300; margin: 10px 0 -10px; letter-spacing: 5px; }
-      .impact-title { font-size: 45px; font-weight: 900; margin: 0; letter-spacing: -1px; }
-      .text-emerald { color: #10b981; }
-      .text-gold { color: #fbbf24; }
+      .mission-ribbon {
+        display: inline-block; background: linear-gradient(90deg, transparent, #d97706, transparent);
+        padding: 5px 40px; margin-top: 10px; border-radius: 4px;
+      }
+      .mission-ribbon span { font-size: 9px; font-weight: 900; letter-spacing: 1.5px; }
+
+      /* Mission Statement */
+      .mission-statement {
+        position: relative; z-index: 10; font-size: 10.5px; font-weight: 600; line-height: 1.5;
+        margin: 15px 0; opacity: 0.9;
+      }
+      .text-emerald { color: #10b981; font-weight: 800; }
+
+      /* User Section */
+      .user-display { position: relative; z-index: 10; margin: 10px 0; display: flex; flex-direction: column; align-items: center; }
+      .avatar-frame {
+        width: 130px; height: 130px; border-radius: 50%; border: 3px solid #10b981;
+        padding: 5px; background: rgba(16, 185, 129, 0.1); margin-bottom: 15px;
+      }
+      .avatar-frame img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
       
-      .mission-subtext { font-size: 9px; font-weight: 700; color: #fbbf24; letter-spacing: 1px; margin-top: 15px; line-height: 1.4; opacity: 0.8; }
+      .name-box { display: flex; align-items: center; gap: 15px; width: 100%; }
+      .name-line { flex: 1; height: 1px; background: rgba(251, 191, 36, 0.3); }
+      .user-name { font-family: 'Playball', cursive, serif; font-size: 28px; color: #fbbf24; margin: 0; font-weight: 400; white-space: nowrap; }
 
-      /* Avatar */
-      .avatar-container { position: relative; z-index: 10; margin: 20px 0; }
-      .avatar-ring-outer {
-        width: 160px; height: 160px; border-radius: 50%;
-        background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-        padding: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-      }
-      .avatar-ring-inner {
-        width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
-        border: 2px solid #041c18; background: #121212;
-      }
-      .avatar-ring-inner img { width: 100%; height: 100%; object-fit: cover; }
-      .avatar-sweep {
-        position: absolute; top: 50%; left: 50%; width: 250px; height: 120px;
-        border: 1px solid rgba(251, 191, 36, 0.2); border-radius: 50%;
-        transform: translate(-50%, -50%) rotate(-15deg); z-index: -1;
-      }
+      /* Welcome Block */
+      .welcome-block { position: relative; z-index: 10; margin: 10px 0; }
+      .welcome-faith { font-size: 9px; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; opacity: 0.7; }
+      .welcome-home { font-size: 24px; font-weight: 900; color: #fbbf24; margin: 0; letter-spacing: 1px; }
 
-      /* Identity Pill */
-      .identity-pill {
-        position: relative; z-index: 10;
-        background: #061a18; border: 1.5px solid #d97706;
-        border-radius: 20px; padding: 12px 30px; margin-top: -30px;
-        min-width: 260px; box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-      }
-      .pill-label { display: block; font-size: 9px; font-weight: 900; color: #10b981; letter-spacing: 2px; margin-bottom: 5px; }
-      .user-name { font-size: 24px; font-weight: 800; margin: 0; color: white; text-transform: capitalize; }
-      .pill-divider { width: 40px; height: 3px; background: #10b981; margin: 10px auto 0; border-radius: 10px; }
-
-      /* Status */
-      .status-block { position: relative; z-index: 10; margin-top: 20px; }
-      .status-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 15px; }
-      .commission-badge {
-        display: inline-flex; align-items: center; gap: 10px;
-        background: #061a18; border: 1px solid #d97706;
-        padding: 10px 25px; border-radius: 100px; font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
-      }
-
-      /* Icons Grid */
-      .icons-grid {
+      /* Icon Grid */
+      .mission-icons-grid {
         position: relative; z-index: 10; width: 100%;
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-        margin-top: 30px; padding: 0 10px;
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+        margin: 20px 0;
       }
-      .icon-item { text-align: center; }
-      .icon-circle {
-        width: 40px; height: 40px; border-radius: 50%; margin: 0 auto 10px;
-        background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3);
-        display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 16px;
+      .mission-icon-item { display: flex; flex-direction: column; align-items: center; }
+      .m-icon-cir {
+        width: 38px; height: 38px; border-radius: 50%; background: rgba(251, 191, 36, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.4); display: flex; align-items: center;
+        justify-content: center; color: #fbbf24; font-size: 14px; margin-bottom: 6px;
       }
-      .icon-text { font-size: 8px; line-height: 1.2; }
-      .icon-text strong { display: block; font-weight: 900; letter-spacing: 1px; }
-      .icon-text span { display: block; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px; }
-      .icon-text small { opacity: 0.5; font-size: 7px; }
+      .m-icon-label { font-size: 7.5px; font-weight: 900; line-height: 1.2; letter-spacing: 0.2px; opacity: 0.9; }
 
-      /* Footer */
-      .card-footer { position: relative; z-index: 10; margin-top: 30px; width: 100%; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; }
-      .footer-together { font-size: 10px; opacity: 0.8; margin-bottom: 15px; line-height: 1.4; }
-      .footer-btn {
-        background: #fbbf24; color: #000; padding: 12px 20px; border-radius: 8px;
-        font-weight: 900; font-size: 11px; letter-spacing: 1px; width: 100%;
+      /* Final Banner */
+      .final-impact-banner {
+        position: relative; z-index: 10; width: 100%; background: rgba(16, 185, 129, 0.05);
+        border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px;
+        padding: 12px; display: flex; align-items: center; gap: 12px; text-align: left;
       }
+      .banner-icon { width: 32px; height: 32px; color: #fbbf24; font-size: 20px; flex-shrink: 0; }
+      .banner-text p { font-size: 8.5px; font-weight: 900; margin: 0; line-height: 1.3; }
+      .banner-text small { font-size: 7.5px; opacity: 0.7; display: block; margin-top: 2px; }
+
+      /* Share Block */
+      .share-prompt-block { position: relative; z-index: 10; width: 100%; margin-top: 15px; }
+      .share-news { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 10px; }
+      .share-news i { color: #10b981; font-size: 18px; }
+      .share-news strong { font-size: 10px; display: block; letter-spacing: 1px; }
+      .share-news small { font-size: 8.5px; opacity: 0.6; }
+      .hashtags { font-size: 8px; font-weight: 700; color: #10b981; opacity: 0.6; letter-spacing: 0.5px; }
 
       .popup-actions { padding: 25px 25px; text-align: center; }
       .popup-actions h3 { font-size: 1.1rem; color: #176a60; margin-bottom: 8px; font-weight: 800; }
