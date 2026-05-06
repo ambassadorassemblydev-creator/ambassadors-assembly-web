@@ -306,12 +306,8 @@
         <p>Your complete record of giving and financial partnership with the church.</p>
       </div>
 
-      <!-- Big total card -->
-      <div class="aas-card" style="background:linear-gradient(135deg,var(--g) 0%,var(--g-lt) 100%);color:#fff;margin-bottom:22px;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;opacity:.8;margin-bottom:7px;">Total Partnership (All Time)</div>
-        <div style="font-size:40px;font-weight:900;font-family:'Outfit',sans-serif;margin-bottom:4px;">₦<%= parseFloat(stats.totalGiving || 0).toLocaleString() %></div>
-        <div style="opacity:.75;font-size:12.5px;"><%= (donations||[]).length %> contributions recorded</div>
-      </div>
+      <!-- Partnership History -->
+
 
       <% if (donations && donations.length > 0) { %>
         <div class="aas-card">
@@ -787,6 +783,7 @@
                   <p style="font-size:13px; color:var(--mu); margin:0; line-height:1.4;">Click <strong>"Confirm Interest & Save"</strong> at the bottom of this form to notify our leaders.</p>
                 </div>
                 <input type="hidden" name="department_interest" value="<%= interest %>">
+                <input type="hidden" name="position_interest" id="outreachPosInput" value="<%= (user && user.position_interest) ? user.position_interest : 'Member' %>">
               </div>
               <style>
                 @keyframes interest-pulse {
