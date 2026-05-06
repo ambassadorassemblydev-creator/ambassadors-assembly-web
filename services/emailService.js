@@ -43,13 +43,26 @@ export const emailService = {
   async triggerAutomation(eventName, payload) {
     try {
       // High IQ: The Resend API expects the target 'email' at the top level 
-      // of the event object, with other variables inside 'data'.
-      const { email, ...dataFields } = payload;
+      // of the event object, with other variables inside 'payload'.
+      // We extract 'email' and then flatten any nested 'payload' objects
+      // to ensure template variables like {{firstName}} work correctly.
+      const { email, ...rest } = payload;
       
+      // If the incoming payload has its own 'payload' key (common in API logs), 
+      // merge its contents to the top level for Resend.
+      const flattenedPayload = {
+        ...rest,
+        ...(rest.payload || {})
+      };
+      
+      // Remove redundant keys
+      delete flattenedPayload.payload;
+      delete flattenedPayload.event;
+
       const { data, error } = await resend.events.send({
         event: eventName,
         email: email,
-        payload: dataFields
+        payload: flattenedPayload
       });
 
       if (error) {
