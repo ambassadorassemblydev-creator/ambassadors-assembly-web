@@ -5,10 +5,9 @@ const PWA = {
         if (!('serviceWorker' in navigator)) return;
 
         try {
-            const registration = await navigator.serviceWorker.register('/service-worker.js');
-            console.log('[PWA] Service Worker registered.');
-
-            await navigator.serviceWorker.ready;
+            // Wait for the SW registered in head.ejs to be ready
+            const registration = await navigator.serviceWorker.ready;
+            console.log('[PWA] Service Worker ready.');
             
             // 1. If granted, ensure subscription is fresh
             if (Notification.permission === 'granted') {

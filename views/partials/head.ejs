@@ -53,6 +53,15 @@
   
   <script>
     window.APP_VAPID_PUBLIC_KEY = '<%= process.env.VAPID_PUBLIC_KEY %>';
+    
+    // High IQ: Inline registration ensures PWA scanners and browsers detect the SW immediately
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('[PWA] SW registered via inline script ✅'))
+          .catch(err => console.error('[PWA] SW registration failed ❌', err));
+      });
+    }
   </script>
   <script src="/js/pwa-handler.js" defer></script>
 
