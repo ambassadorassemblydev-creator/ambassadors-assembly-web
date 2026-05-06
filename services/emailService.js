@@ -49,7 +49,7 @@ export const emailService = {
       const { data, error } = await resend.events.send({
         event: eventName,
         email: email,
-        payload: dataFields
+        ...dataFields
       });
 
       if (error) {
