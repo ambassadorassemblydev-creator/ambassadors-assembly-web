@@ -29,7 +29,7 @@ export const accountRepo = {
 
     // Fetch church workers separately to prevent PostgREST JSON coercion limitations on ambiguous FKs
     if (data) {
-      const { data: workers, error: workersErr } = await supabase
+      const { data: workers, error: workersErr } = await supabaseService
         .from('church_workers')
         .select(`
           status, 

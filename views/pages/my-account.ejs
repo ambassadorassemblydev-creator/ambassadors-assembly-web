@@ -470,17 +470,21 @@
               </div>
               <h2 class="dept-nm"><%= dept.name %></h2>
               <p class="dept-ds"><%= dept.description || 'Serving the house of God with excellence and dedication.' %></p>
-              <% if (hasWorker && w.church_departments && w.church_departments.id === dept.id) { %>
+              <% 
+                const myDept = user.church_workers ? user.church_workers.find(cw => cw.church_departments && cw.church_departments.id === dept.id) : null;
+                const isInterested = user.department_interest && user.department_interest.toLowerCase() === dept.name.toLowerCase();
+              %>
+              <% if (myDept) { %>
                 <span style="background:var(--g-pl);color:var(--g);padding:9px 18px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;display:inline-flex;align-items:center;gap:7px;">
                   <i class="fas fa-check-circle"></i> My Outreach Team
                 </span>
-              <% } else if (user.department_interest && user.department_interest.toLowerCase() === dept.name.toLowerCase()) { %>
+              <% } else if (isInterested) { %>
                 <span style="background:#fff3cd;color:#856404;padding:9px 18px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;display:inline-flex;align-items:center;gap:7px;border:1px solid #ffeeba;">
                   <i class="fas fa-clock"></i> Interest Pending
                 </span>
               <% } else { %>
                 <% if (hasWorker) { %>
-                  <button class="dept-apply" onclick="showToast(`You are already part of the <%= w.church_departments ? w.church_departments.name : 'Outreach Team' %>. Please contact your HOD to change units.`, 'info')" style="cursor: help;">
+                  <button class="dept-apply" onclick="showToast(`You are already part of an Outreach Team. Please contact your HOD to change units.`, 'info')" style="cursor: help;">
                     <i class="fas fa-lock" style="font-size: 10px;"></i> Serving Elsewhere
                   </button>
                 <% } else { %>
