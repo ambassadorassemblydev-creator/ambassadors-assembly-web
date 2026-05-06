@@ -993,16 +993,10 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    // Check if we should automatically trigger the share card (e.g. from onboarding)
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('triggerShare') === 'true') {
-      setTimeout(() => {
-        triggerShareCardPopup();
-        // Clean up the URL so it doesn't trigger on reload
-        const newUrl = window.location.pathname + window.location.hash;
-        window.history.replaceState({}, document.title, newUrl);
-      }, 1500); // Wait 1.5s for the dashboard to settle
-    }
+    // Show the share card celebration on every visit to the dashboard
+    setTimeout(() => {
+      triggerShareCardPopup();
+    }, 2500); 
   });
 </script>
 
