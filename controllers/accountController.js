@@ -25,6 +25,8 @@ const updateProfileSchema = z.object({
   previous_church: z.string().optional(),
   interests: z.array(z.string()).optional(),
   department_interest: z.string().optional(),
+  receive_push_notifications: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  push_token: z.string().optional(),
 });
 
 // Combined Onboarding Schema
@@ -75,6 +77,8 @@ const onboardingSchema = z.object({
   receive_sms_notifications: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
   receive_birthday_greeting: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
   receive_email_devotionals: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  receive_push_notifications: z.preprocess(val => val === 'true' || val === true, z.boolean()).optional(),
+  push_token: z.string().optional(),
   
   // Path Selection
   onboarding_path: z.enum(['new_convert', 'existing_member', 'church_worker']).optional(),
@@ -403,6 +407,8 @@ export const accountController = {
         receive_sms_notifications: validatedData.receive_sms_notifications ?? false,
         receive_birthday_greeting: validatedData.receive_birthday_greeting ?? true,
         receive_email_devotionals: validatedData.receive_email_devotionals ?? false,
+        receive_push_notifications: validatedData.receive_push_notifications ?? true,
+        push_token: validatedData.push_token || null,
         is_onboarded: true,
         already_serving: isAlreadyServing,
         approval_status: targetApprovalStatus,

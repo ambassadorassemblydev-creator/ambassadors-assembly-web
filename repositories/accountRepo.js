@@ -298,6 +298,9 @@ export const accountRepo = {
     if (updateData.already_serving !== undefined) payload.already_serving = updateData.already_serving;
     if (updateData.role_claim !== undefined) payload.role_claim = updateData.role_claim;
     if (updateData.department_claim !== undefined) payload.department_claim = updateData.department_claim;
+    if (updateData.receive_push_notifications !== undefined) payload.receive_push_notifications = updateData.receive_push_notifications;
+    if (updateData.push_token !== undefined) payload.push_token = updateData.push_token;
+    
     if (updateData.approval_status !== undefined) payload.approval_status = updateData.approval_status;
     if (updateData.is_member !== undefined) payload.is_member = updateData.is_member;
     if (updateData.member_since !== undefined) payload.member_since = updateData.member_since;

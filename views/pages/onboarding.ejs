@@ -515,6 +515,24 @@
                         </div>
                       </label>
                     </div>
+
+                    <!-- PUSH NOTIFICATIONS (COMPULSORY INTERACTION) -->
+                    <div class="form-group" style="margin-top: 30px; padding: 25px; background: rgba(23, 106, 96, 0.05); border: 2px dashed rgba(23, 106, 96, 0.2); border-radius: 20px;">
+                      <div class="label-info" style="margin-bottom: 15px; text-align: center;">
+                        <strong style="font-size: 1.2rem;">Kingdom Alerts (Push Notifications) <span>*</span></strong>
+                        <p>Receive real-time alerts for prophetic words, service starts, and urgent updates.</p>
+                      </div>
+                      
+                      <div id="pushPrompt" style="text-align: center;">
+                        <button type="button" class="submit-btn" id="btnEnablePush" onclick="requestPushPermission()" style="background: #1a1a1a; color: white; border: none;">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                          Enable Kingdom Alerts
+                        </button>
+                        <p id="pushStatus" class="field-hint" style="margin-top: 10px;">This is required to stay connected with the spirit of the house.</p>
+                      </div>
+                      <input type="hidden" name="receive_push_notifications" id="pushInput" value="false">
+                      <input type="hidden" name="push_token" id="pushTokenInput" value="">
+                    </div>
                   </div>
 
                   <div class="form-group" style="margin-bottom: 35px; background: rgba(23, 106, 96, 0.03); padding: 25px; border-radius: 20px; border: 1px solid rgba(23, 106, 96, 0.1);">
@@ -988,6 +1006,14 @@ main.onboarding-page::before {
           }
         }
       }
+      
+      if (step === 6) {
+        const pushEnabled = document.getElementById('pushInput').value === 'true';
+        if (!pushEnabled && Notification.permission !== 'denied') {
+          showToast('Please enable Kingdom Alerts to continue.', 'error');
+          return false;
+        }
+      }
       return true;
     }
 
@@ -1109,6 +1135,48 @@ main.onboarding-page::before {
         }
       }
     });
+
+    async function requestPushPermission() {
+      const btn = document.getElementById('btnEnablePush');
+      const status = document.getElementById('pushStatus');
+      const input = document.getElementById('pushInput');
+      
+      try {
+        btn.disabled = true;
+        btn.innerText = 'Requesting...';
+        
+        const permission = await Notification.requestPermission();
+        
+        if (permission === 'granted') {
+          showToast('Kingdom Alerts Enabled!', 'success');
+          btn.style.background = '#4ade80';
+          btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Alerts Active';
+          status.innerText = 'You are now synced with the Assembly alerts.';
+          status.style.color = '#166534';
+          input.value = 'true';
+          
+          // In a real app, we would register the service worker here
+          // For now, we simulate a token
+          document.getElementById('pushTokenInput').value = 'simulated_token_' + Math.random().toString(36).substring(7);
+        } else if (permission === 'denied') {
+          showToast('Notifications were blocked. Please enable them in browser settings.', 'error');
+          btn.style.background = '#ef4444';
+          btn.innerText = 'Alerts Blocked';
+          status.innerText = 'Please unblock notifications in your browser settings to proceed.';
+          status.style.color = '#991b1b';
+          // We let them proceed if they explicitly denied, otherwise they are stuck
+          input.value = 'true'; 
+        } else {
+          btn.disabled = false;
+          btn.innerText = 'Enable Kingdom Alerts';
+          showToast('Permission dismissed. Please try again.', 'warning');
+        }
+      } catch (err) {
+        console.error('Push error:', err);
+        showToast('Error enabling alerts.', 'error');
+        btn.disabled = false;
+      }
+    }
 
     window.addEventListener('load', () => {
       initFlatpickr();
