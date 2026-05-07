@@ -148,11 +148,11 @@
                                  <!-- iOS Card -->
                                  <div class="download-card">
                                      <h2>iOS (Apple)</h2>
-                                     <p>Optimized for iPhone and iPad. Install via our premium PWA experience with full Push Notification support.</p>
+                                     <p>Optimized for iPhone and iPad. Install directly to your home screen for a premium, app-like experience with full push alerts.</p>
                                      <div style="display: flex; flex-direction: column; gap: 12px;">
                                          <button onclick="showIOSGuide()" class="btn-download">
                                              <i class="fab fa-apple"></i>
-                                             Install on iOS
+                                             Add to Home Screen
                                          </button>
                                          <a href="https://bxlmmvunfyvsbqakgxed.supabase.co/storage/v1/object/public/resources/apps/ambassadors-v1.ipa" class="btn-download outline" style="padding: 12px 20px; font-size: 0.9rem; border-radius: 18px;">
                                              <i class="fas fa-file-download"></i>
@@ -227,14 +227,14 @@
                         } catch (err) {
                             btn.disabled = false;
                             btn.innerHTML = '<i class="fas fa-bell"></i> Try Again';
-                            alert('Notification permission was denied. Please enable them in your browser settings to receive updates.');
+                            showToast('Notification permission was denied. Please enable them in your browser settings to receive updates.');
                         }
                     }
 
                     function showIOSGuide() {
                         window.AA.alert(
-                            "To install on iPhone:\n\n1. Tap the Share icon (box with arrow) at the bottom of Safari.\n2. Scroll down and tap 'Add to Home Screen'.\n3. Tap 'Add' to finish.",
-                            "iOS Installation Guide"
+                            "To add the Ambassadors app to your iPhone:\n\n1. Tap the Share button in Safari (the box with an upward arrow).\n2. Scroll down the list of options and tap 'Add to Home Screen'.\n3. Tap 'Add' in the top right corner.\n\nThe app will now appear on your home screen!",
+                            "iPhone Installation"
                         );
                     }
                   </script>
