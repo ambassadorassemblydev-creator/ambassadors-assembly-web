@@ -108,7 +108,7 @@ const getBaseLayout = (contentHtml, previewText = "") => `
       <tr>
         <td class="hero-banner">
           <div class="logo-box">
-            <img src="https://theambassadorsassembly.org/images/logo.png" width="80" height="80" alt="Ambassadors Assembly">
+            <img src="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775200226/IMG-20260304-WA0059_telyum.jpg" width="80" height="80" alt="Ambassadors Assembly">
           </div>
         </td>
       </tr>
