@@ -1052,7 +1052,16 @@ main.onboarding-page::before {
       roleWrapper.style.display = count > 0 ? 'block' : 'none';
       if (count > 0 && newName !== 'None') {
         roleWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        gsap.from(roleWrapper, { y: 20, opacity: 0, duration: 0.5 });
+        if (typeof gsap !== 'undefined') {
+          gsap.from(roleWrapper, { y: 20, opacity: 0, duration: 0.5 });
+        }
+        
+        // High IQ: Auto-select 'Member' role by default for departments, matching ministry behavior
+        roles.forEach(r => {
+          if (r.style.display !== 'none' && r.dataset.title === 'Member') {
+            selectOutreachRole(r, 'Member');
+          }
+        });
       }
     }
 
