@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { Buffer } from 'node:buffer';
 import { withRetry } from '../utils/fetchUtils.js';
 import { automationService } from '../services/automationService.js';
+import { getApplicationTemplate } from '../utils/emailTemplates.js';
 
 const updateProfileSchema = z.object({
   title: z.string().optional(),
@@ -122,7 +123,6 @@ export const accountController = {
 
       // Calculate localized stats
       const stats = {
-        totalGiving: donations.reduce((sum, d) => sum + Number(d.amount), 0).toFixed(2),
         eventCount: events.length,
         prayerCount: prayers.length,
         noteCount: notes.length
@@ -177,11 +177,17 @@ export const accountController = {
       // High IQ: If they expressed a new department interest, trigger the volunteer automation
       if (validatedData.department_interest) {
         try {
-          await emailService.triggerAutomation('volunteer.applied', {
-            email: req.user.email,
-            firstName: req.user.firstName || req.user.user_metadata?.first_name || 'Ambassador',
-            department: validatedData.department_interest,
-            notes: 'Expressed interest via dashboard profile update'
+          // High IQ: Use the new localized premium template for volunteer interests
+          const firstName = req.user.firstName || req.user.user_metadata?.first_name || 'Ambassador';
+          const html = getApplicationTemplate(firstName, validatedData.department_interest);
+          
+          await emailService.sendEmail({
+            to: req.user.email,
+            subject: `Impact Team Interest: ${validatedData.department_interest}`,
+            html,
+            recipientName: firstName,
+            recipientUserId: req.user.id,
+            templateName: 'volunteer_interest_update'
           });
           logger.info(`Volunteer automation triggered via profile update for user: ${req.user.id}`);
         } catch (autoErr) {
@@ -506,11 +512,17 @@ export const accountController = {
 
               // High IQ: Trigger automation for each ministry interest
               try {
-                await emailService.triggerAutomation('volunteer.applied', {
-                  email: req.user.email,
-                  firstName: req.user.user_metadata?.first_name || validatedData.firstName || 'Ambassador',
-                  department: mName,
-                  notes: 'Expressed interest during onboarding'
+                // High IQ: Use new localized premium template for ministry interests
+                const firstName = req.user.user_metadata?.first_name || validatedData.firstName || 'Ambassador';
+                const html = getApplicationTemplate(firstName, mName);
+                
+                await emailService.sendEmail({
+                  to: req.user.email,
+                  subject: `Ministry Interest: ${mName}`,
+                  html,
+                  recipientName: firstName,
+                  recipientUserId: userId,
+                  templateName: 'ministry_interest_onboarding'
                 });
               } catch (triggerErr) {
                 logger.warn(`Failed to trigger ministry automation for ${mName}: ${triggerErr.message}`);
@@ -536,13 +548,10 @@ export const accountController = {
       }
 
       // 6. Finalize - Trigger Welcome & Redirect
-      // User has configured Resend Automations - triggering 'auth.welcome'
       try {
-        await emailService.triggerAutomation('auth.welcome', {
-            email: req.user.email,
-            firstName: req.user.first_name || validatedData.firstName || 'Ambassador',
-            lastName: req.user.last_name || validatedData.lastName || ''
-        });
+        const welcomeName = validatedData.firstName || req.user.first_name || req.user.user_metadata?.first_name || 'Ambassador';
+        await emailService.sendWelcomeEmail(req.user.email, welcomeName, userId);
+        logger.info(`[Onboarding] New premium welcome email scheduled for ${req.user.email}`);
       } catch (emailErr) {
         logger.error(`Welcome automation failed but onboarding proceeded: ${emailErr.message}`);
       }
