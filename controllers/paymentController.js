@@ -48,14 +48,15 @@ export const paymentController = {
                 // 2. Finalize in DB
                 const result = await donationRepo.verifyAndCompleteDonation(reference, amount, categoryId, userId, email);
                 
-                // 3. Trigger Resend Automation
-                await emailService.triggerAutomation('donation.success', {
-                    email,
+                // 3. Send Donation Success Email
+                await emailService.sendDonationSuccessEmail({
+                    to: email,
+                    name: req.user?.user_metadata?.first_name || 'Ambassador',
                     amount,
                     reference,
-                    receiptNumber: result.donation?.receipt_number || reference,
-                    categoryId,
-                    firstName: req.user?.user_metadata?.first_name || 'Ambassador'
+                    categoryName: categoryId || 'General Giving',
+                    userId,
+                    donationId: result.donation?.id
                 });
 
                 // 4. Alert Admin (High Priority)
@@ -129,14 +130,15 @@ export const paymentController = {
                     return res.sendStatus(200);
                 }
 
-                // Trigger Automation for Webhook success too
-                await emailService.triggerAutomation('donation.success', {
-                    email: customer.email,
+                // Trigger Success Email for Webhook success too
+                await emailService.sendDonationSuccessEmail({
+                    to: customer.email,
+                    name: customer.first_name || 'Ambassador',
                     amount: amount / 100,
                     reference,
-                    receiptNumber: dbResult.donation?.receipt_number || reference,
-                    categoryId,
-                    firstName: customer.first_name || 'Ambassador'
+                    categoryName: categoryId || 'General Giving',
+                    userId,
+                    donationId: dbResult.donation?.id
                 });
 
                 // Trigger Admin Alert for Webhook too
@@ -151,9 +153,10 @@ export const paymentController = {
                 const { reference, message, customer } = event.data;
                 logger.warn(`[Paystack Webhook] Charge failed for ${customer.email}: ${message} (Ref: ${reference})`);
                 
-                // Optionally notify the user about the failure
-                await emailService.triggerAutomation('donation.failed', {
-                    email: customer.email,
+                // Notify the user about the failure
+                await emailService.sendDonationFailedEmail({
+                    to: customer.email,
+                    name: customer.first_name || 'Ambassador',
                     reason: message,
                     reference
                 });

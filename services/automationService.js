@@ -1,15 +1,28 @@
 import { supabase, supabaseService } from '../config/supabase.js';
 import { emailService } from './emailService.js';
 import { logger } from '../config/logger.js';
-import { getStandardTemplate } from '../utils/emailTemplates.js';
+import { 
+    getStandardTemplate, 
+    getReengagementTemplate, 
+    getMilestoneTemplate, 
+    getApplicationTemplate 
+} from '../utils/emailTemplates.js';
 
 /**
- * AutomationService handles complex business logic triggers
- * that lead to email sequences and lifecycle management.
+ * AutomationService
+ * Handles complex business logic triggers that lead to automated email sequences 
+ * and community lifecycle management.
+ * 
+ * DESIGN RATIONALE: Personalized re-engagement and proactive milestone celebration 
+ * to foster a deeply connected congregation.
  */
 export const automationService = {
     /**
-     * Checks for members who haven't attended a service in X days.
+     * Missed Attendance Processor
+     * Logic: Identifies members who haven't logged an attendance record in X days.
+     * Triggers a warm 'We Miss You' template to encourage re-engagement.
+     * 
+     * @param {number} days - Threshold of inactivity.
      */
     async processMissedAttendance(days = 14) {
         try {
@@ -20,7 +33,7 @@ export const automationService = {
             // 1. Get all active profiles
             const { data: profiles, error: pError } = await supabase
                 .from('profiles')
-                .select('id, email, first_name')
+                .select('id, email, first_name, last_name')
                 .eq('status', 'active');
 
             if (pError) throw pError;
@@ -42,11 +55,19 @@ export const automationService = {
 
                 // If no records found within the cutoff period
                 if (!records || records.length === 0) {
-                    logger.info(`Triggering 'attendance.missed' for ${profile.email}`);
-                    await emailService.triggerAutomation('attendance.missed', {
-                        email: profile.email,
-                        firstName: profile.first_name || 'Ambassador',
-                        missedSince: cutoffStr
+                    const firstName = profile.first_name || 'Ambassador';
+                    const subject = `We've Missed You, ${firstName}!`;
+                    // High IQ: Use specialized re-engagement template to show genuine concern
+                    const html = getReengagementTemplate(firstName);
+
+                    logger.info(`Sending missed attendance email to ${profile.email}`);
+                    await emailService.sendEmail({
+                        to: profile.email,
+                        subject,
+                        html,
+                        recipientName: `${profile.first_name} ${profile.last_name}`,
+                        recipientUserId: profile.id,
+                        templateName: 'missed_attendance'
                     });
                 }
             }
@@ -59,7 +80,9 @@ export const automationService = {
     },
 
     /**
-     * Daily check for birthdays and anniversaries
+     * Daily Milestone Processor
+     * Logic: Scans active profiles for birthdays or wedding anniversaries occurring TODAY.
+     * High IQ: Filters by month-day to ensure anniversaries work across all years.
      */
     async processDailyMilestones() {
         try {
@@ -81,30 +104,22 @@ export const automationService = {
 
             for (const profile of todayBirthdays) {
                 const subject = `Happy Birthday, ${profile.first_name || 'Ambassador'}! 🎂`;
-                const title = "Happy Birthday!";
-                const message = `Dear ${profile.first_name || 'Ambassador'},\n\nOn behalf of the entire Ambassadors Assembly family, we want to wish you a very happy birthday! May this new year of your life be filled with God's grace, favor, and abundant blessings.\n\n"The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you; the Lord turn his face toward you and give you peace." - Numbers 6:24-26\n\nHave a wonderful celebration!`;
-
-                const html = getStandardTemplate(title, message, 'Celebrate Your Day', 'https://www.theambassadorsassembly.org/my-account');
-
-                const result = await emailService.sendEmail({
-                    to: profile.email,
-                    subject,
-                    html
+                // High IQ: Use milestone template for personal touch
+                const html = getMilestoneTemplate({
+                    name: profile.first_name,
+                    milestoneType: 'Birthday',
+                    title: `Happy Birthday, ${profile.first_name}! 🎂`,
+                    message: "The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you."
                 });
 
-                if (result.success) {
-                    await supabaseService.from('email_log').insert([{
-                        recipient_email: profile.email,
-                        recipient_name: `${profile.first_name} ${profile.last_name}`,
-                        recipient_user_id: profile.id,
-                        template_name: 'birthday_greeting',
-                        subject,
-                        body_preview: message.substring(0, 200),
-                        resend_email_id: result.data.id,
-                        status: 'sent',
-                        sent_at: new Date().toISOString()
-                    }]);
-                }
+                await emailService.sendEmail({
+                    to: profile.email,
+                    subject,
+                    html,
+                    recipientName: `${profile.first_name} ${profile.last_name}`,
+                    recipientUserId: profile.id,
+                    templateName: 'birthday_greeting'
+                });
             }
 
             // 2. Process Wedding Anniversaries
@@ -119,30 +134,22 @@ export const automationService = {
 
             for (const profile of todayAnniversaries) {
                 const subject = `Happy Wedding Anniversary! 💍`;
-                const title = "Happy Anniversary!";
-                const message = `Dear ${profile.first_name || 'Ambassador'},\n\nWishing you a very happy wedding anniversary! We celebrate the love and commitment you share. May God continue to bless your union and fill your home with joy and harmony.\n\n"And over all these virtues put on love, which binds them all together in perfect unity." - Colossians 3:14`;
-
-                const html = getStandardTemplate(title, message, 'View Dashboard', 'https://www.theambassadorsassembly.org/my-account');
-
-                const result = await emailService.sendEmail({
-                    to: profile.email,
-                    subject,
-                    html
+                // High IQ: Celebrate marriage with dedicated milestone layout
+                const html = getMilestoneTemplate({
+                    name: profile.first_name,
+                    milestoneType: 'Wedding Anniversary',
+                    title: `Happy Wedding Anniversary! 💍`,
+                    message: "May God continue to bless your union and fill your home with joy and harmony."
                 });
 
-                if (result.success) {
-                    await supabaseService.from('email_log').insert([{
-                        recipient_email: profile.email,
-                        recipient_name: `${profile.first_name} ${profile.last_name}`,
-                        recipient_user_id: profile.id,
-                        template_name: 'anniversary_greeting',
-                        subject,
-                        body_preview: message.substring(0, 200),
-                        resend_email_id: result.data.id,
-                        status: 'sent',
-                        sent_at: new Date().toISOString()
-                    }]);
-                }
+                await emailService.sendEmail({
+                    to: profile.email,
+                    subject,
+                    html,
+                    recipientName: `${profile.first_name} ${profile.last_name}`,
+                    recipientUserId: profile.id,
+                    templateName: 'anniversary_greeting'
+                });
             }
 
             logger.info(`[Automation] Completed milestones: ${todayBirthdays.length} birthdays, ${todayAnniversaries.length} anniversaries.`);
@@ -154,11 +161,15 @@ export const automationService = {
     },
 
     /**
-     * Triggered when a new volunteer application is submitted
+     * Volunteer Application Handler
+     * Triggered immediately after a member submits an application to join a ministry.
+     * Provides instant confirmation and sets expectations for leadership review.
+     * 
+     * @param {Object} application - The submitted application record.
      */
     async handleVolunteerApplication(application) {
         try {
-            const { applicant_email, applicant_name, department_id } = application;
+            const { applicant_email, applicant_name, department_id, user_id } = application;
             
             // Get department name
             const { data: dept } = await supabase
@@ -167,14 +178,22 @@ export const automationService = {
                 .eq('id', department_id)
                 .single();
 
-            await emailService.triggerAutomation('volunteer.applied', {
-                email: applicant_email,
-                firstName: applicant_name.split(' ')[0],
-                department: dept?.name || 'the department',
-                applicationId: application.id
+            const firstName = applicant_name.split(' ')[0];
+            const deptName = dept?.name || 'the department';
+            // High IQ: Inform applicant with specialized application status layout
+            const html = getApplicationTemplate(firstName, deptName);
+
+            await emailService.sendEmail({
+                to: applicant_email,
+                subject,
+                html,
+                recipientName: applicant_name,
+                recipientUserId: user_id,
+                templateName: 'volunteer_application'
             });
         } catch (error) {
             logger.error('Failed to handle volunteer application trigger:', error);
         }
     }
 };
+
