@@ -180,7 +180,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: '1y',
   etag: true,
-  lastModified: true
+  lastModified: true,
+  dotfiles: 'allow' // High IQ: Essential for .well-known/assetlinks.json to be served
 }));
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 

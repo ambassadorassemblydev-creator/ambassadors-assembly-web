@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "org.theambassadorsassembly.twa",
+        "sha256_cert_fingerprints": ["2E:0D:D4:5F:DC:4B:C7:F5:23:79:B2:58:B9:DA:B7:75:15:81:D0:DD:AC:7F:1D:AA:18:A3:AC:C9:08:C7:03:C6"]
+      }
+    }]
