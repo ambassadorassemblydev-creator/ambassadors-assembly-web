@@ -17,15 +17,14 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   
   <!-- Font Preloading (High IQ: Mitigates FOIT and improves LCP) -->
-  <link rel="preload" href="/fonts/Articulatcf-regular.otf" as="font" type="font/otf" crossorigin>
-  <link rel="preload" href="/fonts/Articulat-CF-Demi-Bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" as="style">
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
   
   <!-- Google Fonts (Premium Typography) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playball&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playball&family=Inter:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Premium Loading Bar (NProgress) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css">
@@ -148,24 +147,10 @@
       font-display: swap;
     }
     
-    /* Optimized Articulat font definitions with swap display */
-    @font-face {
-      font-family: 'Articulat CF Demi Bold';
-      src: url('/fonts/Articulat-CF-Demi-Bold.ttf') format('truetype');
-      font-weight: 600;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Articulat CF';
-      src: url('/fonts/Articulatcf-regular.otf') format('opentype');
-      font-weight: 400;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Articulat_CF_Normal';
-      src: url('/fonts/Articulat_CF_Normal.otf') format('opentype');
-      font-weight: 400;
-      font-display: swap;
+    /* High IQ: Modern, Geometric Font Overrides (Free Alternatives) */
+    :root {
+      --heading-font: 'Outfit', sans-serif;
+      --body-font: 'Inter', sans-serif;
     }
     img[width][height] { height: auto; }
     body[data-page-alias="home"] #dm [data-show-on-page-only="home"] { display: block !important; }

@@ -151,7 +151,7 @@
 .profile-info h3 { 
   font-size: 1.1rem; 
   margin: 0 0 8px; 
-  font-family: 'Articulat CF Demi Bold'; 
+  font-family: 'var(--heading-font)'; 
   color: #1a1a1a;
   line-height: 1.2;
 }

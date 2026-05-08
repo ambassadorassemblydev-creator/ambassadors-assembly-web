@@ -244,7 +244,7 @@
       --glass-border: rgba(26, 26, 26, 0.1);
     }
 
-    body { font-family: 'Articulat_CF_Normal', sans-serif; color: #1a1a1a; }
+    body { font-family: var(--body-font), sans-serif; color: #1a1a1a; }
 
     /* BACKGROUND */
     .watch-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: var(--color_1); }
@@ -273,7 +273,7 @@
     .badge-live { background: #1a1a1a; padding: 4px 12px; border-radius: 0px; font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #ffffff; }
     .badge-live.active { background: var(--accent); color: #ffffff; }
     .speaker-pill { color: #1a1a1a; font-weight: 600; font-size: 14px; border-bottom: 2px solid var(--accent); }
-    .content-info h1 { font-family: 'Articulat CF Demi Bold'; font-size: clamp(32px, 4vw, 48px); margin: 0 0 15px; color: #1a1a1a; }
+    .content-info h1 { font-family: var(--heading-font); font-size: clamp(32px, 4vw, 48px); margin: 0 0 15px; color: #1a1a1a; }
     .description { color: #4a4a4a; line-height: 1.6; font-size: 18px; }
 
     .quick-actions { display: flex; gap: 15px; margin-top: 40px; }
@@ -298,7 +298,7 @@
     /* COUNTDOWN */
     .countdown-overlay { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; align-items: center; justify-content: center; text-align: center; background: #fdfbf7; }
     .pre-live { font-weight: 800; color: var(--accent); letter-spacing: 3px; font-size: 12px; }
-    #countdown-timer { font-size: 84px; font-family: 'Articulat CF Heavy'; margin: 10px 0; color: #1a1a1a; }
+    #countdown-timer { font-size: 84px; font-family: var(--heading-font); margin: 10px 0; color: #1a1a1a; }
 
     /* INTERACTION HUB */
     .interaction-hub { 

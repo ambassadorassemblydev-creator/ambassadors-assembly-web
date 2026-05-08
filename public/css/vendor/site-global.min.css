@@ -1,4 +1,4 @@
-﻿@media all {
+@media all {
     #dm div.dmContent h1 {
         color: #666
     }
@@ -44,7 +44,7 @@
     .dmRestaurantMenu .menuItemName,
     .dmRestaurantMenu .menuItemPrice,
     .map-popup-description {
-        font-family: 'Articulat_CF_Normal';
+        font-family: 'var(--body-font)';
         color: rgba(255, 255, 255, .75)
     }
 
@@ -174,7 +174,7 @@
     #dm div.dmNewParagraph p {
         color: rgba(255, 255, 255, .75);
         direction: ltr;
-        font-family: Articulat_CF_Normal;
+        font-family: var(--body-font);
         font-weight: 400;
         font-style: normal;
         text-decoration: none
@@ -313,7 +313,7 @@
     #dmRoot #dm div.dmContent h6 {
         color: #fff;
         direction: ltr;
-        font-family: "Articulat CF Demi Bold";
+        font-family: "var(--heading-font)";
         font-weight: 400;
         font-style: normal;
         text-decoration: none
@@ -1473,7 +1473,7 @@ div.buttons .text {
         text-transform: none !important;
         border-top-left-radius: 0 !important;
         justify-content: flex-start !important;
-        font-family: Articulatcf-regular !important;
+        font-family: var(--body-font) !important;
         border-bottom-right-radius: 0 !important;
         -webkit-border-radius: 0 !important;
         margin: 0 !important;

@@ -48,7 +48,7 @@ const PWA = {
             width: 90%;
             max-width: 500px;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            font-family: 'Articulatcf-regular', sans-serif;
+            font-family: 'var(--body-font)', sans-serif;
         `;
 
         prompt.innerHTML = `

@@ -887,7 +887,7 @@
         color: #666
       }
       #dm div.dmInner {
-        font-family: Articulat_CF_Normal;
+        font-family: var(--body-font);
         color: rgba(255, 255, 255, .75)
       }
       #dm div.dmContent h1 {
@@ -896,7 +896,7 @@
       }
       #dm div.dmNewParagraph p {
         color: rgba(255, 255, 255, .75);
-        font-family: Articulat_CF_Normal
+        font-family: var(--body-font)
       }
       #dm div.dmContent h2,
       #dm div.dmContent h3,
@@ -916,7 +916,7 @@
       #dmRoot #dm div.dmContent h3 {
         color: #fff;
         direction: ltr;
-        font-family: "Articulat CF Demi Bold";
+        font-family: "var(--heading-font)";
         font-weight: 400;
         font-style: normal;
         text-decoration: none
@@ -1189,7 +1189,7 @@
         border-radius: 0 !important;
         text-transform: none !important;
         justify-content: flex-start !important;
-        font-family: Articulatcf-regular !important;
+        font-family: var(--body-font) !important;
         -webkit-border-radius: 0 !important;
         text-align: left !important;
         padding: 0 15px !important;
