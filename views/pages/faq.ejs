@@ -26,50 +26,78 @@
 
                   <section class="faq-content">
                     <div class="faq-container">
+                      
+                      <!-- Q1 -->
                       <div class="faq-item glass-fx">
-                        <button class="faq-question">What time are your services? <span class="icon">+</span></button>
+                        <button class="faq-question">Where is the church located? <span class="icon">+</span></button>
                         <div class="faq-answer">
-                          <p>We have two services on Sundays: First Service at 8:00 AM and Second Service at 10:00 AM. We also hold a Mid-Week Bible Study on Wednesdays at 6:00 PM.</p>
-                        </div>
-                      </div>
-
-                      <div class="faq-item glass-fx">
-                        <button class="faq-question">Where are you located? <span class="icon">+</span></button>
-                        <div class="faq-answer">
-                          <p><%= locals.churchSettings?.church_address || 'The Ambassadors Assembly' %></p>
-                          <div class="map-link">
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=<%= encodeURIComponent(locals.churchSettings?.church_address || 'The Ambassadors Assembly') %>" target="_blank" class="map-btn">Get Directions ↗</a>
+                          <p>We are located at <strong>No. 7, Fashe Street, Omole Phase 2 Extension, Isheri Olowoora, Lagos</strong>. Free parking is available, and our welcome team is ready to guide you. You can get directions using the button below:</p>
+                          <div class="map-link" style="margin-top: 15px;">
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=<%= encodeURIComponent(locals.churchSettings?.church_address || '7, Fashe street, Omole Phase 2 Extension, Isheri Olowoora, Lagos') %>" target="_blank" class="map-btn" style="display: inline-block; padding: 12px 24px; background: #1a1a1a; color: white; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 0.9rem; transition: 0.3s;">Get Directions ↗</a>
                           </div>
                         </div>
                       </div>
 
+                      <!-- Q2 -->
                       <div class="faq-item glass-fx">
-                        <button class="faq-question">Is there a dress code? <span class="icon">+</span></button>
+                        <button class="faq-question">What time are your services? <span class="icon">+</span></button>
                         <div class="faq-answer">
-                          <p>We encourage you to come as you are. Whether you prefer dressing up in your Sunday best or dressing more casually, you are welcome here. We believe God looks at the heart, not the outward appearance.</p>
+                          <p>Our official service timetable is as follows:</p>
+                          <ul style="list-style: none; padding: 0; line-height: 1.8; margin-bottom: 15px; color: rgba(26,26,26,0.7);">
+                            <li><strong>Sundays:</strong>
+                              <br>&bull; Green Pastures (Discipleship): 7:30 AM — 8:10 AM
+                              <br>&bull; Celebration Service: 8:15 AM — 10:00 AM
+                            </li>
+                            <li style="margin-top: 10px;"><strong>Wednesdays:</strong>
+                              <br>&bull; Midweek Service / Bible Study: 6:00 PM — 7:30 PM
+                            </li>
+                            <li style="margin-top: 10px;"><strong>Mondays:</strong>
+                              <br>&bull; Virtual Prayer Meeting: 8:00 PM — 9:00 PM (Online)
+                            </li>
+                          </ul>
                         </div>
                       </div>
 
+                      <!-- Q3 -->
                       <div class="faq-item glass-fx">
-                        <button class="faq-question">Do you have programs for children? <span class="icon">+</span></button>
+                        <button class="faq-question">Do I need to be a member to attend? <span class="icon">+</span></button>
                         <div class="faq-answer">
-                          <p>Yes, we have a vibrant Children's Ministry that runs concurrently with our main services. Your children will be taught the Word of God in a safe, fun, and engaging environment tailored to their age group.</p>
+                          <p>No, absolutely not. Everyone is welcome to attend our services and programs. Whether you are visiting for the first time, exploring faith, or looking for a home cell, you are part of the family.</p>
                         </div>
                       </div>
 
+                      <!-- Q4 -->
                       <div class="faq-item glass-fx">
-                        <button class="faq-question">How can I join a ministry or serve? <span class="icon">+</span></button>
+                        <button class="faq-question">Is there a place for children? <span class="icon">+</span></button>
                         <div class="faq-answer">
-                          <p>We would love for you to get involved! You can explore our various ministries on the Ministries page and sign up there, or you can create an account and complete the Volunteer Application in your dashboard.</p>
+                          <p>Yes, we have a dedicated Children's Church (Junior Church) that nurtures kids from infancy up to 12 years old. They will learn the Bible in a safe, dynamic, and engaging environment while you enjoy the main service.</p>
                         </div>
                       </div>
 
+                      <!-- Q5 -->
                       <div class="faq-item glass-fx">
-                        <button class="faq-question">How do I request prayer? <span class="icon">+</span></button>
+                        <button class="faq-question">How can I join a department? <span class="icon">+</span></button>
                         <div class="faq-answer">
-                          <p>You can submit a prayer request through our Prayer Wall on the website. Our intercessory team and the church family will partner with you in prayer.</p>
+                          <p>To serve in a department or become a worker, you can sign up after service at the information desk or directly online. Register for an account on our website, complete your onboarding, and complete the department request in your dashboard.</p>
                         </div>
                       </div>
+
+                      <!-- Q6 -->
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">Do you offer counseling or prayer support? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>Yes! Pastoral support, counseling, and prayer are fully available. You can submit prayer requests on our virtual Prayer Wall, or request private pastoral sessions by speaking to us directly after services.</p>
+                        </div>
+                      </div>
+
+                      <!-- Q7 -->
+                      <div class="faq-item glass-fx">
+                        <button class="faq-question">Are services streamed online? <span class="icon">+</span></button>
+                        <div class="faq-answer">
+                          <p>Yes, our services are streamed live online! You can watch live via the Streams section on this website, or connect through our official YouTube and Facebook channels.</p>
+                        </div>
+                      </div>
+
                     </div>
                   </section>
                 </main>

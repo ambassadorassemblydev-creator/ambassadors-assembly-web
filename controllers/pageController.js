@@ -622,6 +622,20 @@ export const pageController = {
         }
     },
 
+    // Render Membership Page
+    renderMembership: async (req, res) => {
+        try {
+            res.render('pages/membership', {
+                pageTitle: 'Membership Criteria | The Ambassadors Assembly',
+                currentPath: req.path,
+                preloaderText: 'MEMBERSHIP'
+            });
+        } catch (error) {
+            console.error('[PageController] Error rendering membership page:', error.message);
+            res.status(500).render('pages/error', { message: 'Error loading page' });
+        }
+    },
+
     // Render Terms of Service
     renderTerms: (req, res) => {
         res.render('pages/legal/terms', {
@@ -640,12 +654,15 @@ export const pageController = {
 
     // Render cinematic Confirmation Page
     renderConfirmation: (req, res) => {
-        const { type, reference } = req.query;
+        const { type, reference, amount, category, email } = req.query;
         res.render('pages/confirmation', {
             pageTitle: 'Success | The Ambassadors Assembly',
             currentPath: req.path,
             type: type || 'default',
-            reference: reference || null
+            reference: reference || null,
+            amount: amount || null,
+            category: category || null,
+            email: email || null
         });
     }
 };

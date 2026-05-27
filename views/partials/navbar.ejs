@@ -56,22 +56,32 @@
                 <div id="group_5ii" class="flex-element group glass" data-auto="flex-element-group"
                   data-hidden-on-mobile="">
                   <!-- Custom minimal nav: Join Us + Sign In -->
-                 <!-- ========= MINIMAL DESKTOP NAV ========= -->
-<div class="aa-nav" id="aa-nav">
-  <a href="/fund-the-buildings" class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/fund-the-buildings' ? 'active-link' : '' %>">Fund the Buildings</a>
-  <a href="/meet-the-pastor" class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/meet-the-pastor' ? 'active-link' : '' %>">Meet Our Pastor</a>
-  <a href="/plan-a-visit" class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/plan-a-visit' ? 'active-link' : '' %>">Plan Your Visit</a>
-  
-  <% if (user) { %>
-    <!-- If they are logged in, show their account link -->
-    <a href="/my-account" class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/my-account' ? 'active-link' : '' %>">
-      Hello, <%= (user.user_metadata && user.user_metadata.first_name) ? user.user_metadata.first_name : user.first_name || 'Member' %>
-    </a>
-  <% } else { %>
-    <!-- If they are NOT logged in, show Sign In -->
-    <a href="/account/login" class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/account/login' ? 'active-link' : '' %>">Sign In</a>
-  <% } %>
-</div>
+                  <!-- ========= MINIMAL DESKTOP NAV ========= -->
+                  <div class="aa-nav" id="aa-nav">
+                    <a href="/fund-the-buildings"
+                      class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/fund-the-buildings' ? 'active-link' : '' %>">Fund
+                      the Buildings</a>
+                    <a href="/meet-the-pastor"
+                      class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/meet-the-pastor' ? 'active-link' : '' %>">Meet
+                      Our Pastor</a>
+                    <a href="/plan-a-visit"
+                      class="aa-nav__link <%= typeof currentPath !== 'undefined' && currentPath === '/plan-a-visit' ? 'active-link' : '' %>">Plan
+                      Your Visit</a>
+
+                    <% if (user) { %>
+                      <!-- If they are logged in, show their account link -->
+                      <a href="/my-account"
+                        class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/my-account' ? 'active-link' : '' %>">
+                        Hello, <%= (user.user_metadata && user.user_metadata.first_name) ? user.user_metadata.first_name
+                          : user.first_name || 'Member' %>
+                      </a>
+                      <% } else { %>
+                        <!-- If they are NOT logged in, show Sign In -->
+                        <a href="/account/login"
+                          class="aa-nav__signin <%= typeof currentPath !== 'undefined' && currentPath === '/account/login' ? 'active-link' : '' %>">Sign
+                          In</a>
+                        <% } %>
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,7 +99,8 @@
 <div class="account-container" id="account-container">
   <!-- The Floating Bubble -->
   <button class="account-fab" id="account-fab" aria-label="Account Actions">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
       <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
       <circle cx="12" cy="7" r="4" />
     </svg>
@@ -101,19 +112,23 @@
       <div class="account-panel__user">
         <div class="user-avatar">
           <% if (user) { %>
-            <img src="<%= user.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user.first_name || user.id || 'Ambassador') %>" alt="Avatar">
-          <% } else { %>
-            <i class="fas fa-user-circle"></i>
-          <% } %>
+            <img
+              src="<%= user.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (user.first_name || user.id || 'Ambassador') %>"
+              alt="Avatar">
+            <% } else { %>
+              <i class="fas fa-user-circle"></i>
+              <% } %>
         </div>
         <div class="user-info">
           <% if (user) { %>
             <span class="user-greeting">Welcome,</span>
-            <span class="user-name"><%= user.first_name || 'Ambassador' %></span>
-          <% } else { %>
-            <span class="user-greeting">Peace be with you,</span>
-            <span class="user-name">Ambassador</span>
-          <% } %>
+            <span class="user-name">
+              <%= user.first_name || 'Ambassador' %>
+            </span>
+            <% } else { %>
+              <span class="user-greeting">Peace be with you,</span>
+              <span class="user-name">Ambassador</span>
+              <% } %>
         </div>
       </div>
       <button class="account-panel__close" id="account-panel-close">&times;</button>
@@ -144,26 +159,26 @@
         <a href="/account/logout" class="logout-link">
           <i class="fas fa-sign-out-alt"></i> Sign Out
         </a>
-      <% } else { %>
-        <div class="guest-msg">
-          <p>Join the family to track your spiritual journey, join ministries, and grow with us.</p>
-          <a href="/account/login" class="btn-signin">Sign In Now</a>
-          <p class="register-text">New here? <a href="/onboarding">Register</a></p>
-        </div>
-      <% } %>
+        <% } else { %>
+          <div class="guest-msg">
+            <p>Join the family to track your spiritual journey, join ministries, and grow with us.</p>
+            <a href="/account/login" class="btn-signin">Sign In Now</a>
+            <p class="register-text">New here? <a href="/onboarding">Register</a></p>
+          </div>
+          <% } %>
     </div>
   </div>
 </div>
 
 <style>
-.account-container {
+  .account-container {
     position: fixed;
     bottom: 100px;
     left: 30px;
     z-index: 10000;
-}
+  }
 
-.account-fab {
+  .account-fab {
     width: 65px;
     height: 65px;
     background: #115048;
@@ -174,18 +189,21 @@
     justify-content: center;
     color: white;
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+  }
 
-.account-fab:hover {
+  .account-fab:hover {
     transform: scale(1.1) rotate(5deg);
     background: #176a60;
-}
+  }
 
-.account-fab svg { width: 28px; height: 28px; }
+  .account-fab svg {
+    width: 28px;
+    height: 28px;
+  }
 
-.account-panel {
+  .account-panel {
     position: absolute;
     bottom: 80px;
     left: 0;
@@ -194,145 +212,281 @@
     backdrop-filter: blur(20px);
     border: 1px solid rgba(113, 178, 128, 0.2);
     border-radius: 24px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px) scale(0.95);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     transform-origin: bottom left;
     overflow: hidden;
-}
+  }
 
-.account-panel.active {
+  .account-panel.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0) scale(1);
-}
+  }
 
-.account-panel__header {
+  .account-panel__header {
     padding: 25px;
     background: linear-gradient(135deg, #115048 0%, #176a60 100%);
     color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
+  }
 
-.account-panel__user { display: flex; align-items: center; gap: 15px; }
+  .account-panel__user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
 
-.user-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; }
-.user-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.user-avatar i { font-size: 30px; }
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.user-info { display: flex; flex-direction: column; }
-.user-greeting { font-size: 0.75rem; opacity: 0.8; }
-.user-name { font-size: 1rem; font-weight: 700; }
+  .user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-.account-panel__close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; opacity: 0.7; transition: 0.3s; }
-.account-panel__close:hover { opacity: 1; }
+  .user-avatar i {
+    font-size: 30px;
+  }
 
-.account-panel__body { padding: 25px; }
-.panel-subtitle { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 700; margin-bottom: 15px; }
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
 
-.quick-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-.quick-action {
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    padding: 15px; background: #f8fafc; border-radius: 16px;
-    text-decoration: none; color: #1e293b; transition: all 0.3s;
+  .user-greeting {
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+
+  .user-name {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .account-panel__close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+  }
+
+  .account-panel__close:hover {
+    opacity: 1;
+  }
+
+  .account-panel__body {
+    padding: 25px;
+  }
+
+  .panel-subtitle {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .quick-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #1e293b;
+    transition: all 0.3s;
     border: 1px solid #f1f5f9;
-}
-.quick-action:hover { background: #176a60; color: white; transform: translateY(-3px); }
-.quick-action i { font-size: 18px; }
-.quick-action span { font-size: 0.75rem; font-weight: 600; }
+  }
 
-.panel-divider { height: 1px; background: #f1f5f9; margin: 15px 0; }
-.logout-link { display: flex; align-items: center; gap: 10px; color: #ef4444; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
-.logout-link:hover { transform: translateX(5px); }
+  .quick-action:hover {
+    background: #176a60;
+    color: white;
+    transform: translateY(-3px);
+  }
 
-.guest-msg { text-align: center; }
-.guest-msg p { font-size: 0.85rem; color: #64748b; line-height: 1.5; margin-bottom: 20px; }
-.btn-signin {
-    display: block; width: 100%; padding: 15px; background: #115048;
-    color: white; text-decoration: none; border-radius: 14px;
-    font-weight: 700; transition: all 0.3s; margin-bottom: 15px;
-}
-.btn-signin:hover { background: #176a60; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(17, 80, 72, 0.2); }
-.register-text { font-size: 0.8rem; color: #94a3b8; }
-.register-text a { color: #176a60; font-weight: 700; text-decoration: none; }
+  .quick-action i {
+    font-size: 18px;
+  }
 
-@media (max-width: 767px) {
-    .account-container { left: 20px; bottom: 80px; }
-    .account-fab { width: 55px; height: 55px; }
-    .account-panel { width: 280px; bottom: 70px; }
-}
+  .quick-action span {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .panel-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 15px 0;
+  }
+
+  .logout-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ef4444;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .logout-link:hover {
+    transform: translateX(5px);
+  }
+
+  .guest-msg {
+    text-align: center;
+  }
+
+  .guest-msg p {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .btn-signin {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: #115048;
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    font-weight: 700;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+  }
+
+  .btn-signin:hover {
+    background: #176a60;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(17, 80, 72, 0.2);
+  }
+
+  .register-text {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .register-text a {
+    color: #176a60;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  @media (max-width: 767px) {
+    .account-container {
+      left: 20px;
+      bottom: 80px;
+    }
+
+    .account-fab {
+      width: 55px;
+      height: 55px;
+    }
+
+    .account-panel {
+      width: 280px;
+      bottom: 70px;
+    }
+  }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const fab = document.getElementById('account-fab');
     const panel = document.getElementById('account-panel');
     const close = document.getElementById('account-panel-close');
-    
+
     // Function to update the UI with real data
     const updateAccountUI = async () => {
-        try {
-            const response = await fetch('/api/profile/me');
-            const result = await response.json();
-            if (result.status === 'success' && result.data) {
-                const profile = result.data;
-                const nameEls = document.querySelectorAll('.user-name');
-                const avatarContainer = document.querySelector('.user-avatar');
-                const desktopNavName = document.querySelector('.aa-nav__signin');
+      try {
+        const response = await fetch('/api/profile/me');
+        const result = await response.json();
+        if (result.status === 'success' && result.data) {
+          const profile = result.data;
+          const nameEls = document.querySelectorAll('.user-name');
+          const avatarContainer = document.querySelector('.user-avatar');
+          const desktopNavName = document.querySelector('.aa-nav__signin');
 
-                // Update Name everywhere
-                nameEls.forEach(el => {
-                    el.textContent = profile.first_name || 'Ambassador';
-                });
+          // Update Name everywhere
+          nameEls.forEach(el => {
+            el.textContent = profile.first_name || 'Ambassador';
+          });
 
-                if (desktopNavName) {
-                    desktopNavName.textContent = `Hello, ${profile.first_name || 'Member'}`;
-                }
+          if (desktopNavName) {
+            desktopNavName.textContent = `Hello, ${profile.first_name || 'Member'}`;
+          }
 
-                // Update Avatar (Handle case where <img> doesn't exist yet)
-                if (avatarContainer && profile.avatar_url) {
-                    let img = avatarContainer.querySelector('img');
-                    if (!img) {
-                        avatarContainer.innerHTML = `<img src="${profile.avatar_url}" alt="Avatar">`;
-                    } else {
-                        img.src = profile.avatar_url;
-                    }
-                }
+          // Update Avatar (Handle case where <img> doesn't exist yet)
+          if (avatarContainer && profile.avatar_url) {
+            let img = avatarContainer.querySelector('img');
+            if (!img) {
+              avatarContainer.innerHTML = `<img src="${profile.avatar_url}" alt="Avatar">`;
+            } else {
+              img.src = profile.avatar_url;
             }
-        } catch (err) {
-            console.warn('Silent Profile Sync Failed:', err);
+          }
         }
+      } catch (err) {
+        console.warn('Silent Profile Sync Failed:', err);
+      }
     };
 
     if (fab && panel) {
-        fab.addEventListener('click', () => {
-            const isOpening = !panel.classList.contains('active');
-            panel.classList.toggle('active');
-            
-            // If opening, trigger a quick data sync
-            if (isOpening) {
-                updateAccountUI();
-            }
-        });
-        
-        if (close) {
-            close.addEventListener('click', () => {
-                panel.classList.remove('active');
-            });
+      fab.addEventListener('click', () => {
+        const isOpening = !panel.classList.contains('active');
+        panel.classList.toggle('active');
+
+        // If opening, trigger a quick data sync
+        if (isOpening) {
+          updateAccountUI();
         }
-        
-        // Close on outside click
-        document.addEventListener('click', (e) => {
-            if (!panel.contains(e.target) && !fab.contains(e.target)) {
-                panel.classList.remove('active');
-            }
+      });
+
+      if (close) {
+        close.addEventListener('click', () => {
+          panel.classList.remove('active');
         });
+      }
+
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!panel.contains(e.target) && !fab.contains(e.target)) {
+          panel.classList.remove('active');
+        }
+      });
     }
-});
+  });
 </script>
 <!-- ========= END ACCOUNT PANEL ========= -->
 
@@ -358,31 +512,56 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- Left: Main nav links -->
     <nav class="fs-menu__nav" id="fs-menu-nav">
       <!-- <div class="fs-menu__link-mask"><a href="/connect" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/connect' ? 'active-link' : '' %>">Connect</a></div> -->
-      <div class="fs-menu__link-mask"><a href="/about" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/about' ? 'active-link' : '' %>">About Us</a></div>
-      <div class="fs-menu__link-mask"><a href="/meet-the-pastor" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/meet-the-pastor' ? 'active-link' : '' %>">Meet Our Pastor</a></div>
-      <div class="fs-menu__link-mask"><a href="/staff" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/staff' ? 'active-link' : '' %>">Our Team</a></div>
-      <div class="fs-menu__link-mask"><a href="/give" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/give' ? 'active-link' : '' %>">Giving</a></div>
-      <div class="fs-menu__link-mask"><a href="/fund-the-buildings" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/fund-the-buildings' ? 'active-link' : '' %>">Fund the Buildings</a></div>
+      <div class="fs-menu__link-mask"><a href="/about"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/about' ? 'active-link' : '' %>">About
+          Us</a></div>
+      <div class="fs-menu__link-mask"><a href="/membership"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/membership' ? 'active-link' : '' %>">Membership</a>
+      </div>
+      <div class="fs-menu__link-mask"><a href="/meet-the-pastor"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/meet-the-pastor' ? 'active-link' : '' %>">Meet
+          Our Pastor</a></div>
+      <div class="fs-menu__link-mask"><a href="/staff"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/staff' ? 'active-link' : '' %>">Our
+          Team</a></div>
+      <div class="fs-menu__link-mask"><a href="/give"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/give' ? 'active-link' : '' %>">Giving</a>
+      </div>
+      <!-- <div class="fs-menu__link-mask"><a href="/fund-the-buildings" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/fund-the-buildings' ? 'active-link' : '' %>">Fund the Buildings</a></div> -->
       <!-- <div class="fs-menu__link-mask"><a href="/watch" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/watch' ? 'active-link' : '' %>">Watch</a></div> -->
-      <div class="fs-menu__link-mask"><a href="/plan-a-visit" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/plan-a-visit' ? 'active-link' : '' %>">Plan Your Visit</a></div>
-      <div class="fs-menu__link-mask"><a href="/ministries" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/ministries' ? 'active-link' : '' %>">Ministries</a></div>
-      <div class="fs-menu__link-mask"><a href="/events" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/events' ? 'active-link' : '' %>">Events</a></div>
-      <div class="fs-menu__link-mask"><a href="/sermons" class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/sermons' ? 'active-link' : '' %>">Sermons Archive</a></div>
+      <div class="fs-menu__link-mask"><a href="/plan-a-visit"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/plan-a-visit' ? 'active-link' : '' %>">Plan
+          Your Visit</a></div>
+      <div class="fs-menu__link-mask"><a href="/ministries"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/ministries' ? 'active-link' : '' %>">Ministries</a>
+      </div>
+      <div class="fs-menu__link-mask"><a href="/events"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/events' ? 'active-link' : '' %>">Events</a>
+      </div>
+      <div class="fs-menu__link-mask"><a href="/sermons"
+          class="fs-menu__link <%= typeof currentPath !== 'undefined' && currentPath === '/sermons' ? 'active-link' : '' %>">Sermons
+          Archive</a></div>
     </nav>
 
     <!-- Right: Details -->
     <div class="fs-menu__details" id="fs-menu-details">
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Address:</p>
-        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_address || 'The Ambassadors Assembly' %></p>
+        <p class="fs-menu__detail-text">
+          <%= locals.churchSettings?.church_address || 'The Ambassadors Assembly' %>
+        </p>
       </div>
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Email:</p>
-        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_email || 'info@theambassadorsassembly.org' %></p>
+        <p class="fs-menu__detail-text">
+          <%= locals.churchSettings?.church_email || 'info@theambassadorsassembly.org' %>
+        </p>
       </div>
       <div class="fs-menu__detail-group">
         <p class="fs-menu__detail-label">Call:</p>
-        <p class="fs-menu__detail-text"><%= locals.churchSettings?.church_phone || '+234 000 000 0000' %></p>
+        <p class="fs-menu__detail-text">
+          <%= locals.churchSettings?.church_phone || '+234 000 000 0000' %>
+        </p>
       </div>
       <div class="fs-menu__socials">
         <a href="<%= locals.churchSettings?.social_youtube || '#' %>" class="fs-menu__social" aria-label="YouTube">
@@ -403,28 +582,34 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 <!-- ========= END FULLSCREEN MENU OVERLAY ========= -->
 <style>
-/* Social Icon Sizing */
-.fs-menu__social {
-    font-size: 20px; /* High IQ: Optimized size */
+  /* Social Icon Sizing */
+  .fs-menu__social {
+    font-size: 20px;
+    /* High IQ: Optimized size */
     color: rgba(255, 255, 255, 0.6);
     transition: all 0.3s ease;
-}
-.fs-menu__social:hover {
+  }
+
+  .fs-menu__social:hover {
     color: var(--aa-green, #71b280);
     transform: translateY(-3px);
-}
-/* Active Nav Link Styles */
-.active-link {
-    color: #25D366 !important; /* Brand Green */
+  }
+
+  /* Active Nav Link Styles */
+  .active-link {
+    color: #25D366 !important;
+    /* Brand Green */
     font-weight: 700;
-}
-.fs-menu__link.active-link {
+  }
+
+  .fs-menu__link.active-link {
     color: #ffffff !important;
     opacity: 1 !important;
-    text-decoration: underline; /* Or whatever style looks best in your fullscreen menu */
-}
+    text-decoration: underline;
+    /* Or whatever style looks best in your fullscreen menu */
+  }
 
-.account-fab {
+  .account-fab {
     position: fixed;
     bottom: 100px;
     left: 30px;
@@ -436,203 +621,255 @@ document.addEventListener('DOMContentLoaded', () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10000; /* Balanced with AI Chat */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 10000;
+    /* Balanced with AI Chat */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     color: white;
-    bottom: 100px !important; /* Raised to clear sticky bar */
-}
+    bottom: 100px !important;
+    /* Raised to clear sticky bar */
+  }
 
-.account-fab:hover {
+  .account-fab:hover {
     transform: scale(1.1) translateY(-5px);
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(113, 178, 128, 0.5);
-}
+  }
 
-.account-fab svg {
+  .account-fab svg {
     width: 28px;
     height: 28px;
-}
+  }
 
-@media (max-width: 768px) {
+  @media (max-width: 768px) {
     .account-fab {
-        width: 55px;
-        height: 55px;
-        bottom: 80px;
-        left: 20px;
+      width: 55px;
+      height: 55px;
+      bottom: 80px;
+      left: 20px;
     }
-}
+  }
 </style>
 <!-- ========= STICKY BOTTOM BAR (AA CUSTOM) ========= -->
-<% if (locals.stickyConfig && stickyConfig.is_active && typeof currentPath !== 'undefined' && !currentPath.startsWith('/my-account')) { %>
-<div class="aa-sticky-bar" id="aa-sticky-bar" style="background: <%= stickyConfig.bg_color || 'rgba(14, 14, 14, 0.85)' %>; color: <%= stickyConfig.text_color || '#f5f0e8' %>">
-  <div class="aa-sticky-bar__inner">
-    <!-- Left: Static Times -->
-    <div class="aa-sticky-bar__times">
-      <span class="aa-sticky-bar__label"><%= stickyConfig.label %></span>
-      <% if (stickyConfig.times && Array.isArray(stickyConfig.times)) { %>
-        <% stickyConfig.times.forEach(time => { %>
-          <span class="aa-sticky-bar__time"><%= time %></span>
-        <% }) %>
-      <% } %>
-    </div>
+<% if (locals.stickyConfig && stickyConfig.is_active && typeof currentPath !=='undefined' &&
+  !currentPath.startsWith('/my-account')) { %>
+  <div class="aa-sticky-bar" id="aa-sticky-bar"
+    style="background: <%= stickyConfig.bg_color || 'rgba(14, 14, 14, 0.85)' %>; color: <%= stickyConfig.text_color || '#f5f0e8' %>">
+    <div class="aa-sticky-bar__inner">
+      <!-- Left: Static Times -->
+      <div class="aa-sticky-bar__times">
+        <span class="aa-sticky-bar__label">
+          <%= stickyConfig.label %>
+        </span>
+        <% if (stickyConfig.times && Array.isArray(stickyConfig.times)) { %>
+          <% stickyConfig.times.forEach(time=> { %>
+            <span class="aa-sticky-bar__time">
+              <%= time %>
+            </span>
+            <% }) %>
+              <% } %>
+      </div>
 
-    <!-- Center/Right: Scrolling Content (Always Active if text exists) -->
-    <div class="aa-sticky-bar__dynamic is-scrolling" 
-         style="--scroll-speed: <%= stickyConfig.speed || 15 %>s">
-      <div class="aa-sticky-bar__scroll-track">
-        <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
-        <span class="aa-sticky-bar__info"><%= stickyConfig.info_text %></span>
+      <!-- Center/Right: Scrolling Content (Always Active if text exists) -->
+      <div class="aa-sticky-bar__dynamic is-scrolling" style="--scroll-speed: <%= stickyConfig.speed || 15 %>s">
+        <div class="aa-sticky-bar__scroll-track">
+          <span class="aa-sticky-bar__info">
+            <%= stickyConfig.info_text %>
+          </span>
+          <span class="aa-sticky-bar__info">
+            <%= stickyConfig.info_text %>
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: CTA -->
+      <div class="aa-sticky-bar__watch">
+        <a href="<%= stickyConfig.cta_link %>" style="color: <%= stickyConfig.text_color || '#f5f0e8' %>">
+          <%= stickyConfig.cta_text %>
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+        </a>
       </div>
     </div>
-
-    <!-- Right: CTA -->
-    <div class="aa-sticky-bar__watch">
-      <a href="<%= stickyConfig.cta_link %>" style="color: <%= stickyConfig.text_color || '#f5f0e8' %>">
-        <%= stickyConfig.cta_text %> 
-        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-      </a>
-    </div>
   </div>
-</div>
 
-<style>
-  .aa-sticky-bar {
-    position: fixed !important;
-    bottom: 30px !important; /* Raised for better visual clearance */
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    min-width: 500px;
-    max-width: 90%;
-    border-radius: 100px !important;
-    z-index: 15000 !important;
-    height: 52px !important;
-    display: flex !important;
-    align-items: center !important;
-    background: rgba(14, 14, 14, 0.95) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-    padding: 0 5px;
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  /* Robust hiding class using high specificity to ensure JS control */
-  .aa-sticky-bar.is-hidden {
-    opacity: 0 !important;
-    transform: translateX(-50%) translateY(100px) !important;
-    pointer-events: none !important;
-  }
-
-  .aa-sticky-bar__inner {
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 25px;
-    height: 100%;
-    gap: 30px;
-  }
-
-  .aa-sticky-bar__times {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .aa-sticky-bar__label { opacity: 0.5; font-weight: 800; }
-
-  .aa-sticky-bar__dynamic {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    border-left: 1px solid rgba(255,255,255,0.1);
-    border-right: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .aa-sticky-bar__scroll-track {
-    display: flex;
-    white-space: nowrap;
-    gap: 100px;
-    width: max-content; /* CRITICAL: Calculate full content width */
-  }
-
-  .aa-sticky-bar__dynamic.is-scrolling .aa-sticky-bar__scroll-track {
-    animation: aaStickyMarquee var(--scroll-speed, 15s) linear infinite;
-  }
-
-  @keyframes aaStickyMarquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); } /* Halfway if we have duplicates */
-  }
-
-  .aa-sticky-bar__info { 
-    font-size: 0.8rem; 
-    font-weight: 500;
-    flex-shrink: 0; /* CRITICAL: Prevent shrinking so width matches content for marquee */
-  }
-
-  .aa-sticky-bar__watch a {
-    display: flex; align-items: center; gap: 8px;
-    text-decoration: none; font-weight: 800; font-size: 0.75rem;
-    text-transform: uppercase; letter-spacing: 0.1em;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 8px 16px; border-radius: 100px;
-    transition: all 0.3s ease;
-  }
-
-  .aa-sticky-bar__watch a:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); }
-
-  .aa-sticky-bar__watch svg { width: 12px; height: 12px; }
-
-  /* Mobile Overrides */
-  @media (max-width: 767px) {
+  <style>
     .aa-sticky-bar {
-      min-width: 90% !important;
-      bottom: 20px !important;
-      height: 44px !important;
+      position: fixed !important;
+      bottom: 30px !important;
+      /* Raised for better visual clearance */
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      min-width: 500px;
+      max-width: 90%;
+      border-radius: 100px !important;
+      z-index: 15000 !important;
+      height: 52px !important;
+      display: flex !important;
+      align-items: center !important;
+      background: rgba(14, 14, 14, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      padding: 0 5px;
+      opacity: 1;
+      pointer-events: all;
     }
-    .aa-sticky-bar__times { display: none; }
-    .aa-sticky-bar__dynamic { border: none; padding: 0 10px; }
-    .aa-sticky-bar__info { font-size: 0.7rem; }
-    .aa-sticky-bar__watch a { font-size: 0.65rem; padding: 6px 12px; }
-  }
-</style>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const stickyBar = document.getElementById('aa-sticky-bar');
-    // Targeted selector for the custom Duda footer container
-    const footer = document.querySelector('#flex-footer') || document.querySelector('.dmFooterContainer');
-    
-    if (stickyBar && footer) {
+    /* Robust hiding class using high specificity to ensure JS control */
+    .aa-sticky-bar.is-hidden {
+      opacity: 0 !important;
+      transform: translateX(-50%) translateY(100px) !important;
+      pointer-events: none !important;
+    }
+
+    .aa-sticky-bar__inner {
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 25px;
+      height: 100%;
+      gap: 30px;
+    }
+
+    .aa-sticky-bar__times {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .aa-sticky-bar__label {
+      opacity: 0.5;
+      font-weight: 800;
+    }
+
+    .aa-sticky-bar__dynamic {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .aa-sticky-bar__scroll-track {
+      display: flex;
+      white-space: nowrap;
+      gap: 100px;
+      width: max-content;
+      /* CRITICAL: Calculate full content width */
+    }
+
+    .aa-sticky-bar__dynamic.is-scrolling .aa-sticky-bar__scroll-track {
+      animation: aaStickyMarquee var(--scroll-speed, 15s) linear infinite;
+    }
+
+    @keyframes aaStickyMarquee {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+
+      /* Halfway if we have duplicates */
+    }
+
+    .aa-sticky-bar__info {
+      font-size: 0.8rem;
+      font-weight: 500;
+      flex-shrink: 0;
+      /* CRITICAL: Prevent shrinking so width matches content for marquee */
+    }
+
+    .aa-sticky-bar__watch a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 8px 16px;
+      border-radius: 100px;
+      transition: all 0.3s ease;
+    }
+
+    .aa-sticky-bar__watch a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .aa-sticky-bar__watch svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Mobile Overrides */
+    @media (max-width: 767px) {
+      .aa-sticky-bar {
+        min-width: 90% !important;
+        bottom: 20px !important;
+        height: 44px !important;
+      }
+
+      .aa-sticky-bar__times {
+        display: none;
+      }
+
+      .aa-sticky-bar__dynamic {
+        border: none;
+        padding: 0 10px;
+      }
+
+      .aa-sticky-bar__info {
+        font-size: 0.7rem;
+      }
+
+      .aa-sticky-bar__watch a {
+        font-size: 0.65rem;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const stickyBar = document.getElementById('aa-sticky-bar');
+      // Targeted selector for the custom Duda footer container
+      const footer = document.querySelector('#flex-footer') || document.querySelector('.dmFooterContainer');
+
+      if (stickyBar && footer) {
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    stickyBar.classList.add('is-hidden');
-                } else {
-                    stickyBar.classList.remove('is-hidden');
-                }
-            });
-        }, { 
-            threshold: 0.05, // Trigger as soon as 5% of footer enters
-            rootMargin: '0px 0px -20px 0px' 
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              stickyBar.classList.add('is-hidden');
+            } else {
+              stickyBar.classList.remove('is-hidden');
+            }
+          });
+        }, {
+          threshold: 0.05, // Trigger as soon as 5% of footer enters
+          rootMargin: '0px 0px -20px 0px'
         });
-        
-        observer.observe(footer);
-    }
-});
-</script>
 
-<% } %>
-<!-- ========= END STICKY BOTTOM BAR ========= -->
+        observer.observe(footer);
+      }
+    });
+  </script>
+
+  <% } %>
+    <!-- ========= END STICKY BOTTOM BAR ========= -->

@@ -213,7 +213,7 @@
       document.getElementById('custom-amount').value = amt;
     }
 
-    function payWithPaystack() {
+    async function payWithPaystack() {
       const amountInp = document.getElementById('custom-amount');
       const payBtn = document.getElementById('project-pay-btn');
       const amount = amountInp.value;
@@ -234,64 +234,106 @@
         return;
       }
 
-      // 🛡️ DOUBLE-PAYMENT PROTECTION
+      // ── 🛡️ DOUBLE-PAYMENT PROTECTION ──
       payBtn.disabled = true;
-      payBtn.textContent = "Opening Secure Checkout...";
+      payBtn.textContent = "Initializing Secure Payment...";
 
-      const handler = PaystackPop.setup({
-        key: '<%= locals.PAYSTACK_PUBLIC_KEY %>',
-        email: email,
-        amount: amount * 100, // Kobo
-        currency: "NGN",
-        ref: 'AA-PROJ-' + Math.floor((Math.random() * 1e9) + 1),
-        metadata: {
-          custom_fields: [
-            { display_name: "Project", variable_name: "project", value: "<%= project.name %>" },
-            { display_name: "Type", variable_name: "type", value: "building_fund" }
-          ]
-        },
-        callback: async function(response) {
-          try {
-            payBtn.textContent = "Verifying Seed...";
-            
-            const verifyRes = await fetch('/api/payments/verify', {
-              method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': '<%= locals.csrfToken %>'
-               },
-              body: JSON.stringify({
-                reference: response.reference,
-                amount: amount,
-                categoryId: '<%= project.id %>',
-                type: 'building_fund',
-                email: email
-              })
+      try {
+        // ── Step 1: Get reCAPTCHA token (if available) ────────
+        let recaptchaToken = null;
+        if (typeof grecaptcha !== 'undefined') {
+          recaptchaToken = await new Promise((resolve) => {
+            grecaptcha.ready(() => {
+              grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'donation_init' }).then(resolve);
             });
+          });
+        }
 
-            const result = await verifyRes.json();
-            
-            if (result.success) {
-              showToast('Thank you for your seed! Your kingdom investment has been logged.', 'success');
-              // High IQ: Include reference for the receipt page
-              setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}`, 2000);
-            } else {
-              showToast('Payment verify issue: ' + (result.message || 'Check reference'), 'error');
+        // ── Step 2: Initialize payment on the server ──────────
+        const initRes = await fetch('/api/payments/initialize', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': '<%= locals.csrfToken %>'
+          },
+          body: JSON.stringify({
+            email: email,
+            amount: parseFloat(amount),
+            categoryId: '<%= project.id %>',
+            donationType: 'building_fund',
+            notes: 'Building Project: <%= project.name %>',
+            'g-recaptcha-response': recaptchaToken
+          })
+        });
+
+        const initResult = await initRes.json();
+
+        if (!initResult.success) {
+          showToast(initResult.message || 'Could not initialize payment. Please try again.', 'error');
+          payBtn.disabled = false;
+          payBtn.textContent = "Plant Your Seed →";
+          return;
+        }
+
+        // ── Step 3: Open Paystack checkout ──────────
+        payBtn.textContent = "Opening Secure Checkout...";
+
+        const handler = PaystackPop.setup({
+          key: '<%= locals.PAYSTACK_PUBLIC_KEY %>',
+          email: email,
+          amount: parseFloat(amount) * 100, // Kobo
+          currency: "NGN",
+          ref: initResult.reference,
+          access_code: initResult.access_code,
+          callback: async function(response) {
+            try {
+              payBtn.textContent = "Verifying Seed...";
+              
+              // ── Step 4: Verify payment on the server ────────
+              const verifyRes = await fetch('/api/payments/verify', {
+                method: 'POST',
+                headers: { 
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': '<%= locals.csrfToken %>'
+                 },
+                body: JSON.stringify({
+                  reference: response.reference,
+                  'g-recaptcha-response': recaptchaToken
+                })
+              });
+
+              const result = await verifyRes.json();
+              
+              if (result.success) {
+                showToast('Thank you for your seed! Your kingdom investment has been logged.', 'success');
+                // High IQ: Include reference, amount, category and email for the receipt page
+                setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}&amount=${amount}&category=Building%20Fund&email=${encodeURIComponent(email)}`, 2000);
+              } else {
+                showToast('Payment verify issue: ' + (result.message || 'Check reference'), 'error');
+                payBtn.disabled = false;
+                payBtn.textContent = "Plant Your Seed →";
+              }
+            } catch (err) {
+              console.error('[Payment] Verify Error:', err);
+              showToast('Network error during verification. Reference: ' + response.reference, 'error');
               payBtn.disabled = false;
               payBtn.textContent = "Plant Your Seed →";
             }
-          } catch (err) {
-            console.error('[Payment] Verify Error:', err);
-            showToast('Network error during verification. Reference: ' + response.reference, 'error');
+          },
+          onClose: function() {
+            payBtn.disabled = false;
+            payBtn.textContent = "Plant Your Seed →";
+            showToast('Transaction cancelled.', 'info');
           }
-        },
-        onClose: function() {
-          payBtn.disabled = false;
-          payBtn.textContent = "Plant Your Seed →";
-          showToast('Transaction cancelled.', 'info');
-        }
-      });
-      handler.openIframe();
+        });
+        handler.openIframe();
+
+      } catch (err) {
+        console.error('[Payment] Init Error:', err);
+        showToast('Could not connect to payment server. Please try again.', 'error');
+        payBtn.disabled = false;
+        payBtn.textContent = "Plant Your Seed →";
+      }
     }
   </script>
 </body>

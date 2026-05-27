@@ -55,12 +55,35 @@
             </p>
           </header>
 
-          <% if (locals.reference) { %>
+          <% if (locals.reference || locals.amount || locals.category || locals.email) { %>
             <div class="conf-details">
-              <div class="detail-item">
+              <% if (locals.reference) { %>
+              <div class="detail-item" style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.05);">
                 <span class="label">Reference ID</span>
                 <span class="value"><%= reference %></span>
               </div>
+              <% } %>
+              
+              <% if (locals.email) { %>
+              <div class="detail-item" style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                <span class="label">Receipt Sent To</span>
+                <span class="value" style="font-family: inherit; color: inherit; font-weight: 500;"><%= email %></span>
+              </div>
+              <% } %>
+              
+              <% if (locals.category) { %>
+              <div class="detail-item" style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                <span class="label">Fund Type</span>
+                <span class="value" style="font-family: inherit; color: inherit; font-weight: 500;"><%= category %></span>
+              </div>
+              <% } %>
+              
+              <% if (locals.amount) { %>
+              <div class="detail-item">
+                <span class="label">Amount</span>
+                <span class="value" style="color: var(--aa-green, #176a60);">₦<%= Number(amount).toLocaleString() %></span>
+              </div>
+              <% } %>
             </div>
           <% } %>
 

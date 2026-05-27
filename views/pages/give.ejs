@@ -275,15 +275,38 @@
       wrapper.classList.remove('open');
     });
 
-    function initiateGiving() {
+    /**
+     * ============================================================
+     * initiateGiving() — Server-Side Initialization Flow
+     * ============================================================
+     * 1. Collects amount, category, and email from the form
+     * 2. Calls POST /api/payments/initialize on the server
+     *    → Server generates a unique reference + idempotency key
+     *    → Server creates a pending donation in the database
+     *    → Server calls Paystack API to initialize the transaction
+     *    → Server returns the access_code for PaystackPop
+     * 3. Opens PaystackPop with the server-provided access_code
+     * 4. On success, calls POST /api/payments/verify to finalize
+     * 
+     * DOUBLE-PAYMENT PROTECTION:
+     * - Server generates the reference (can't be spoofed)
+     * - Idempotency key blocks duplicate intents within 5 minutes
+     * - DB UNIQUE constraint on reference prevents double inserts
+     * - Status check (pending→completed) prevents double completions
+     * ============================================================
+     */
+    async function initiateGiving() {
       const payBtn = document.querySelector('.give-submit-btn');
-      let amount = customInp.value || document.querySelector('.preset-btn.active').dataset.amt;
+      const activePreset = document.querySelector('.preset-btn.active');
+      let amount = customInp.value || (activePreset ? activePreset.dataset.amt : null);
       let fund = document.getElementById('fund-type').value;
+      let fundName = document.getElementById('fundSelectedName').textContent;
       let reason = document.getElementById('give-reason').value;
       
       // Resolve Email from session
       const email = "<%= locals.user ? locals.user.email : '' %>";
       
+      // ── Validation ──────────────────────────────────────────
       if (!amount || isNaN(amount) || amount < 100) {
         showToast('Please enter a valid seed amount (minimum ₦100)', 'error');
         return;
@@ -295,79 +318,113 @@
         return;
       }
 
-      // 🛡️ DOUBLE-PAYMENT PROTECTION
+      // ── 🛡️ DOUBLE-PAYMENT PROTECTION: Disable button immediately ──
       payBtn.disabled = true;
-      payBtn.textContent = "Opening Secure Checkout...";
-      
-      const handler = PaystackPop.setup({
-        key: "<%= paystackPublicKey %>", 
-        email: email,
-        amount: amount * 100, // Kobo
-        currency: "NGN",
-        ref: 'AA-GEN-' + Math.floor((Math.random() * 1e9) + 1),
-        metadata: {
-          custom_fields: [
-            { display_name: "Fund Type", variable_name: "fund_type", value: fund },
-            { display_name: "Reason", variable_name: "reason", value: reason || "General" }
-          ]
-        },
-        callback: async function(response) {
-          try {
-            payBtn.textContent = "Verifying Seed...";
-            
-            // 0. High IQ: Get reCAPTCHA token
-            let recaptchaToken = null;
-            if (typeof grecaptcha !== 'undefined') {
-                recaptchaToken = await new Promise((resolve) => {
-                    grecaptcha.ready(() => {
-                        grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'donation_verify' }).then(resolve);
-                    });
-                });
-            }
+      payBtn.textContent = "Initializing Secure Payment...";
 
-            const verifyRes = await fetch('/api/payments/verify', {
-              method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': '<%= locals.csrfToken %>'
-               },
-              body: JSON.stringify({
-                reference: response.reference,
-                amount: amount,
-                categoryId: fund,
-                type: 'general_giving',
-                email: email,
-                notes: reason,
-                'g-recaptcha-response': recaptchaToken
-              })
+      try {
+        // ── Step 1: Get reCAPTCHA token (if available) ────────
+        let recaptchaToken = null;
+        if (typeof grecaptcha !== 'undefined') {
+          recaptchaToken = await new Promise((resolve) => {
+            grecaptcha.ready(() => {
+              grecaptcha.execute('<%= locals.recaptchaSiteKey %>', { action: 'donation_init' }).then(resolve);
             });
+          });
+        }
 
+        // ── Step 2: Initialize payment on the server ──────────
+        // The server generates a unique reference, creates a pending
+        // donation, and calls Paystack API to get the access_code.
+        const initRes = await fetch('/api/payments/initialize', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': '<%= locals.csrfToken %>'
+          },
+          body: JSON.stringify({
+            email: email,
+            amount: parseFloat(amount),
+            categoryId: fund,
+            donationType: fundName || 'General',
+            notes: reason,
+            'g-recaptcha-response': recaptchaToken
+          })
+        });
 
-            const result = await verifyRes.json();
-            
-            if (result.success) {
-              showToast('Seed received with Honor! Thank you for your partnership.', 'success');
-              // High IQ: Include reference for the receipt page
-              setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}`, 2000);
-            } else {
-              showToast('Verification failed: ' + (result.message || 'Check reference'), 'error');
+        const initResult = await initRes.json();
+
+        if (!initResult.success) {
+          showToast(initResult.message || 'Could not initialize payment. Please try again.', 'error');
+          payBtn.disabled = false;
+          payBtn.textContent = "Partner Now";
+          return;
+        }
+
+        // ── Step 3: Open Paystack checkout with server access code ──
+        payBtn.textContent = "Opening Secure Checkout...";
+
+        const handler = PaystackPop.setup({
+          key: "<%= paystackPublicKey %>",
+          email: email,
+          amount: parseFloat(amount) * 100, // Kobo
+          currency: "NGN",
+          ref: initResult.reference, // Server-generated reference (not client-generated)
+          access_code: initResult.access_code, // Server-provided access code
+          callback: async function(response) {
+            try {
+              payBtn.textContent = "Verifying Seed...";
+
+              // ── Step 4: Verify payment on the server ────────
+              // Server re-verifies with Paystack API and updates
+              // the donation status to 'completed'.
+              const verifyRes = await fetch('/api/payments/verify', {
+                method: 'POST',
+                headers: { 
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': '<%= locals.csrfToken %>'
+                },
+                body: JSON.stringify({
+                  reference: response.reference,
+                  'g-recaptcha-response': recaptchaToken
+                })
+              });
+
+              const result = await verifyRes.json();
+              
+              if (result.success) {
+                showToast('Seed received with Honor! Thank you for your partnership.', 'success');
+                // Redirect to the confirmation page with the receipt reference
+                setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}&amount=${amount}&category=${encodeURIComponent(fundName || 'General Giving')}&email=${encodeURIComponent(email)}`, 2000);
+              } else {
+                showToast('Verification issue: ' + (result.message || 'Please contact support with reference: ' + response.reference), 'error');
+                payBtn.disabled = false;
+                payBtn.textContent = "Partner Now";
+              }
+            } catch (err) {
+              console.error('[Giving] Verify Error:', err);
+              showToast('Network error during verification. Your payment is safe. Reference: ' + response.reference, 'error');
               payBtn.disabled = false;
               payBtn.textContent = "Partner Now";
             }
-          } catch (err) {
-            console.error('[Giving] Verify Error:', err);
-            showToast('Network error during verification. Reference: ' + response.reference, 'error');
+          },
+          onClose: function() {
+            payBtn.disabled = false;
+            payBtn.textContent = "Partner Now";
+            showToast('Transaction cancelled.', 'info');
           }
-        },
-        onClose: function() {
-          payBtn.disabled = false;
-          payBtn.textContent = "Partner Now";
-          showToast('Transaction cancelled.', 'info');
-        }
-      });
-      handler.openIframe();
+        });
+        handler.openIframe();
+
+      } catch (err) {
+        console.error('[Giving] Init Error:', err);
+        showToast('Could not connect to payment server. Please try again.', 'error');
+        payBtn.disabled = false;
+        payBtn.textContent = "Partner Now";
+      }
     }
   </script>
   <script src="https://js.paystack.co/v1/inline.js"></script>
 </body>
 </html>
+

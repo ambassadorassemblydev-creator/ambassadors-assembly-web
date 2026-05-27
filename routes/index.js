@@ -41,6 +41,7 @@ router.get('/events', pageController.renderEventsArchive);
 router.get('/events/:slug', pageController.renderEventDetail);
 router.get('/give', pageController.renderGive);
 router.get('/about', pageController.renderAbout);
+router.get('/membership', pageController.renderMembership);
 router.get('/meet-the-pastor', pageController.renderMeetThePastor);
 router.get('/connect', pageController.renderConnect);
 router.get('/plan-a-visit', pageController.renderPlanVisit);
