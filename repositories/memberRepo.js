@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 import { logger } from '../config/logger.js';
 
 export const memberRepo = {
@@ -9,7 +9,7 @@ export const memberRepo = {
   searchMembers: async (query = '') => {
     try {
       // Base query fetching profiles and their associated worker roles
-      let dbQuery = supabase
+      let dbQuery = supabaseService
         .from('profiles')
         .select(`
           id,
@@ -70,7 +70,7 @@ export const memberRepo = {
    */
   getStaff: async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseService
         .from('church_workers')
         .select(`
           profiles!user_id (
@@ -109,7 +109,7 @@ export const memberRepo = {
    */
   getDepartments: async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseService
         .from('church_departments')
         .select('*')
         .eq('is_active', true)

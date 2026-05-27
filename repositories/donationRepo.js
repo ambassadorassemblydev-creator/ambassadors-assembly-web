@@ -311,7 +311,7 @@ export const donationRepo = {
    * @returns {Promise<Array>} Audit log entries
    */
   getAuditLog: async ({ donationId, reference, eventType, limit = 50 } = {}) => {
-    let query = supabase
+    let query = supabaseService
       .from('payment_audit_log')
       .select('*')
       .order('created_at', { ascending: false })
@@ -339,7 +339,7 @@ export const donationRepo = {
    * @returns {Promise<Array>} List of completed donations
    */
   getUserDonationHistory: async (userId) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('donations')
       .select(`
         *,
@@ -365,7 +365,7 @@ export const donationRepo = {
    * @returns {Promise<Array>} Active donation categories
    */
   getActiveCategories: async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('donation_categories')
       .select('*')
       .eq('is_active', true)
@@ -383,7 +383,7 @@ export const donationRepo = {
    * @returns {Promise<Array>} Building fund categories
    */
   getBuildingProjects: async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('donation_categories')
       .select('*')
       .eq('is_building_fund', true)

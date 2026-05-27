@@ -96,7 +96,7 @@ export const accountRepo = {
 
   // Fetch only the 5 most recent donations
   getRecentDonations: async (userId) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('donations')
       .select('amount, status, created_at, donation_categories(name)')
       .eq('user_id', userId)
@@ -110,7 +110,7 @@ export const accountRepo = {
 
   // Fetch all donations for historical analysis
   getFullDonationHistory: async (userId) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('donations')
       .select('amount, created_at, status, donation_categories(name)')
       .eq('user_id', userId)
@@ -123,7 +123,7 @@ export const accountRepo = {
 
   // Fetch all notes saved by the user
   getUserNotes: async (userId) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('member_notes')
       .select('*')
       .eq('author_id', userId)
@@ -138,7 +138,7 @@ export const accountRepo = {
     const oneYearAgo = new Date();
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('attendance_records')
       .select('service_date, attendance, service_name')
       .eq('user_id', userId)
@@ -166,7 +166,7 @@ export const accountRepo = {
     }
 
     // 2. Check for active events (Temporal lookup)
-    const { data: activeEvents } = await supabase
+    const { data: activeEvents } = await supabaseService
       .from('events')
       .select('id, title, start_date, end_date')
       .lte('start_date', now.toISOString())
@@ -204,7 +204,7 @@ export const accountRepo = {
     }
 
     // Check if already marked for today's specific service
-    const { data: existing } = await supabase
+    const { data: existing } = await supabaseService
       .from('attendance_records')
       .select('id')
       .eq('user_id', userId)
@@ -216,7 +216,7 @@ export const accountRepo = {
       return { success: true, message: `You are already marked present for ${serviceName} today.` };
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('attendance_records')
       .insert([{
         user_id: userId,
@@ -266,7 +266,7 @@ export const accountRepo = {
    * Fetch all active church departments for onboarding selection
    */
   getDepartments: async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('church_departments')
       .select('id, name, slug, description')
       .eq('is_active', true)
@@ -280,7 +280,7 @@ export const accountRepo = {
    * Fetch all church positions for role selection in onboarding
    */
   getPositions: async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('church_positions')
       .select('id, title, department_id')
       .order('title', { ascending: true });
@@ -293,7 +293,7 @@ export const accountRepo = {
    * Fetch all active ministries for onboarding selection
    */
   getMinistries: async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('ministries')
       .select('id, name, description, slug, category')
       .eq('is_active', true)
@@ -426,7 +426,7 @@ export const accountRepo = {
    * Fetch all events a user has registered for
    */
   getUserEvents: async (userId) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('event_registrations')
       .select(`
         *,
@@ -443,7 +443,7 @@ export const accountRepo = {
    * Fetch all prayer requests submitted by a user
    */
   getUserPrayers: async (userId) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseService
       .from('prayer_requests')
       .select('*')
       .eq('user_id', userId)

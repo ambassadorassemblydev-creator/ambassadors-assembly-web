@@ -1,9 +1,9 @@
-import { supabase } from '../config/supabase.js';
+import { supabase, supabaseService } from '../config/supabase.js';
 
 export const eventRepo = {
     // Fetch upcoming events with full metadata
     getUpcomingEvents: async (limit = 10) => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseService
             .from('events')
             .select('*')
             .eq('status', 'upcoming')
@@ -19,7 +19,7 @@ export const eventRepo = {
 
     // High IQ: Fetch a specific event by its slug including registration details
     getEventBySlug: async (slug) => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseService
             .from('events')
             .select('*')
             .eq('slug', slug)
@@ -33,7 +33,7 @@ export const eventRepo = {
      * Check if a user is already registered for an event
      */
     checkRegistration: async (eventId, userId) => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseService
             .from('event_registrations')
             .select('id')
             .eq('event_id', eventId)
@@ -49,7 +49,7 @@ export const eventRepo = {
      */
     registerUser: async (eventId, userId) => {
         // High IQ: Check if this is an outreach event
-        const { data: eventData } = await supabase
+        const { data: eventData } = await supabaseService
             .from('events')
             .select('event_type')
             .eq('id', eventId)
@@ -61,7 +61,7 @@ export const eventRepo = {
         }
 
         // 1. Create registration
-        const { data, error } = await supabase
+        const { data, error } = await supabaseService
             .from('event_registrations')
             .insert([{
                 event_id: eventId,
@@ -74,7 +74,7 @@ export const eventRepo = {
         if (error) throw error;
 
         // 2. Increment attendee count
-        await supabase.rpc('increment_event_attendees', { event_id_param: eventId });
+        await supabaseService.rpc('increment_event_attendees', { event_id_param: eventId });
 
         return data;
     },
@@ -84,7 +84,7 @@ export const eventRepo = {
      */
     enforceSingleOutreach: async (userId, currentEventId) => {
         // 1. Get all current outreach registrations for this user
-        const { data: existingRegs, error: fetchError } = await supabase
+        const { data: existingRegs, error: fetchError } = await supabaseService
             .from('event_registrations')
             .select('id, event_id, events!inner(event_type)')
             .eq('user_id', userId)
@@ -99,9 +99,9 @@ export const eventRepo = {
             for (const reg of existingRegs) {
                 if (reg.event_id !== currentEventId) {
                     // Delete the old registration
-                    await supabase.from('event_registrations').delete().eq('id', reg.id);
+                    await supabaseService.from('event_registrations').delete().eq('id', reg.id);
                     // Decrement the old event's attendee count
-                    await supabase.rpc('decrement_event_attendees', { event_id_param: reg.event_id });
+                    await supabaseService.rpc('decrement_event_attendees', { event_id_param: reg.event_id });
                 }
             }
         }
