@@ -392,8 +392,7 @@
                     'X-CSRF-Token': '<%= locals.csrfToken %>'
                   },
                   body: JSON.stringify({
-                    reference: response.reference,
-                    'g-recaptcha-response': recaptchaToken
+                    reference: response.reference
                   })
                 });
   

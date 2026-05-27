@@ -297,16 +297,7 @@ export const paymentController = {
         });
       }
 
-      // ── reCAPTCHA verification (if token provided) ──────────
-      if (req.body['g-recaptcha-response']) {
-        const isHuman = await verifyRecaptcha(req.body['g-recaptcha-response']);
-        if (!isHuman) {
-          return res.status(400).json({
-            success: false,
-            message: 'Security verification failed. Please try again.',
-          });
-        }
-      }
+
 
       // ── Audit: callback received ────────────────────────────
       await donationRepo.createAuditEntry({
