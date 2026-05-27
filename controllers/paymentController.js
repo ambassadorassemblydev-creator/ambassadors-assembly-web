@@ -174,6 +174,8 @@ export const paymentController = {
         }
       }
 
+      const donorName = req.user?.user_metadata?.full_name || null;
+
       // ── Initialize transaction with Paystack API ────────────
       const paystackResult = await paystackService.initializeTransaction({
         email,
@@ -185,9 +187,12 @@ export const paymentController = {
           donationType: normalizedDonationType || undefined,
           notes: notes || undefined,
           idempotencyKey,
+          donorName: donorName || undefined,
           custom_fields: [
             { display_name: 'Fund Type', variable_name: 'fund_type', value: normalizedDonationType || 'General' },
             { display_name: 'Reason', variable_name: 'reason', value: notes || 'General Giving' },
+            { display_name: 'Donor Name', variable_name: 'donor_name', value: donorName || 'Guest Partner' },
+            { display_name: 'Donor Email', variable_name: 'donor_email', value: email },
           ],
         },
       });
@@ -198,7 +203,7 @@ export const paymentController = {
         idempotency_key: idempotencyKey,
         amount: parsedAmount,
         donor_email: email,
-        donor_name: req.user?.user_metadata?.full_name || null,
+        donor_name: donorName,
         user_id: userId,
         category_id: categoryId || null,
         donation_type: normalizedDonationType || null,
