@@ -56,6 +56,36 @@ function getClientIp(req) {
 }
 
 
+/**
+ * Map a raw donation type string (e.g. from category names) to allowed database enum values.
+ * 
+ * Allowed values: 'tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'
+ * 
+ * @param {string} type - Raw donation type or category name
+ * @returns {string} Allowed enum value
+ */
+function resolveDonationType(type) {
+  if (!type) return 'other';
+  const lowerType = type.toLowerCase().trim();
+  
+  if (lowerType.includes('tithe')) return 'tithe';
+  if (lowerType.includes('offering')) return 'offering';
+  if (lowerType.includes('worship') || lowerType.includes('building') || lowerType.includes('permanent')) {
+    return 'building_fund';
+  }
+  if (lowerType.includes('welfare') || lowerType.includes('benevolence')) return 'welfare';
+  if (lowerType.includes('mission')) return 'missions';
+  if (lowerType.includes('special') || lowerType.includes('seed')) return 'special';
+  
+  // Direct check constraint match or fallback
+  const allowed = ['tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'];
+  const formatted = lowerType.replace(/[-\s]+/g, '_');
+  if (allowed.includes(formatted)) return formatted;
+  
+  return 'other';
+}
+
+
 export const paymentController = {
 
   /**
@@ -118,14 +148,7 @@ export const paymentController = {
       }
 
       // ── Normalize and validate donationType ─────────────────
-      const allowedTypes = ['tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'];
-      let normalizedDonationType = donationType ? donationType.toLowerCase().trim() : null;
-      if (normalizedDonationType) {
-        normalizedDonationType = normalizedDonationType.replace(/[-\s]+/g, '_');
-        if (!allowedTypes.includes(normalizedDonationType)) {
-          normalizedDonationType = 'other';
-        }
-      }
+      const normalizedDonationType = resolveDonationType(donationType);
 
       // ── Generate server-side reference and idempotency key ──
       const reference = paystackService.generateReference(
@@ -512,13 +535,7 @@ export const paymentController = {
           // Create the donation record retroactively
           logger.info(`[PaymentController] Webhook: No pending donation for ${reference}. Creating retroactively.`);
 
-          let webhookDonationType = metadata?.donationType ? metadata.donationType.toLowerCase().trim() : null;
-          if (webhookDonationType) {
-            webhookDonationType = webhookDonationType.replace(/[-\s]+/g, '_');
-            if (!['tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'].includes(webhookDonationType)) {
-              webhookDonationType = 'other';
-            }
-          }
+          const webhookDonationType = resolveDonationType(metadata?.donationType);
 
           const donation = await donationRepo.createDonationIntent({
             reference,
@@ -806,13 +823,7 @@ export const paymentController = {
           continue;
         }
 
-        let syncDonationType = txn.metadata?.donationType ? txn.metadata.donationType.toLowerCase().trim() : null;
-        if (syncDonationType) {
-          syncDonationType = syncDonationType.replace(/[-\s]+/g, '_');
-          if (!['tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'].includes(syncDonationType)) {
-            syncDonationType = 'other';
-          }
-        }
+        const syncDonationType = resolveDonationType(txn.metadata?.donationType);
 
         // Create and complete the donation record
         const donation = await donationRepo.createDonationIntent({
