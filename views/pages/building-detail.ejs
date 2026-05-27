@@ -278,7 +278,7 @@
         payBtn.textContent = "Opening Secure Checkout...";
 
         const handler = PaystackPop.setup({
-          key: '<%= locals.PAYSTACK_PUBLIC_KEY %>',
+          key: '<%= locals.paystackPublicKey || paystackPublicKey %>',
           email: email,
           amount: parseFloat(amount) * 100, // Kobo
           currency: "NGN",
