@@ -207,7 +207,13 @@
     }
     .give-submit-btn:hover { background: var(--aa-green); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
     .give-submit-btn:active { transform: translateY(0); background: #115048; color: white !important; }
-    .give-submit-btn:active { transform: translateY(0); background: #115048; color: white !important; }
+    .give-submit-btn:disabled {
+      background: #2a2a2a !important;
+      color: #888888 !important;
+      cursor: not-allowed !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
 
     .security-badges { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px; opacity: 0.3; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
