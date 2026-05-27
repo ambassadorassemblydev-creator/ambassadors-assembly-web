@@ -132,8 +132,9 @@ app.use(helmet({
 
   },
   referrerPolicy: {
-    policy: "strict-origin-when-cross-origin"
+    policy: "no-referrer-when-downgrade"
   },
+  crossOriginResourcePolicy: false,
   crossOriginEmbedderPolicy: false
 }));
 
