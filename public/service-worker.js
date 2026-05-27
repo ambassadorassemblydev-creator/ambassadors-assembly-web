@@ -36,7 +36,7 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-  self.clientsClaim();
+  self.clients.claim();
 });
 
 // 3. LOAD WORKBOX
