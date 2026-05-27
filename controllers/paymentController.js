@@ -117,9 +117,19 @@ export const paymentController = {
         }
       }
 
+      // ── Normalize and validate donationType ─────────────────
+      const allowedTypes = ['tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'];
+      let normalizedDonationType = donationType ? donationType.toLowerCase().trim() : null;
+      if (normalizedDonationType) {
+        normalizedDonationType = normalizedDonationType.replace(/[-\s]+/g, '_');
+        if (!allowedTypes.includes(normalizedDonationType)) {
+          normalizedDonationType = 'other';
+        }
+      }
+
       // ── Generate server-side reference and idempotency key ──
       const reference = paystackService.generateReference(
-        donationType === 'building_fund' ? 'BLD' : 'GEN'
+        normalizedDonationType === 'building_fund' ? 'BLD' : 'GEN'
       );
       const idempotencyKey = paystackService.generateIdempotencyKey(
         email, parsedAmount, categoryId
@@ -172,11 +182,11 @@ export const paymentController = {
         metadata: {
           userId: userId || undefined,
           categoryId: categoryId || undefined,
-          donationType: donationType || undefined,
+          donationType: normalizedDonationType || undefined,
           notes: notes || undefined,
           idempotencyKey,
           custom_fields: [
-            { display_name: 'Fund Type', variable_name: 'fund_type', value: donationType || 'General' },
+            { display_name: 'Fund Type', variable_name: 'fund_type', value: normalizedDonationType || 'General' },
             { display_name: 'Reason', variable_name: 'reason', value: notes || 'General Giving' },
           ],
         },
@@ -191,7 +201,7 @@ export const paymentController = {
         donor_name: req.user?.user_metadata?.full_name || null,
         user_id: userId,
         category_id: categoryId || null,
-        donation_type: donationType || null,
+        donation_type: normalizedDonationType || null,
         notes: notes || null,
         paystack_access_code: paystackResult.access_code,
         ip_address: clientIp,
@@ -205,7 +215,7 @@ export const paymentController = {
         actor_id: userId,
         paystack_reference: reference,
         amount: parsedAmount,
-        description: `Payment initialized for ${email}. Category: ${donationType || 'General'}. Amount: ₦${parsedAmount}`,
+        description: `Payment initialized for ${email}. Category: ${normalizedDonationType || 'General'}. Amount: ₦${parsedAmount}`,
         ip_address: clientIp,
       });
 
@@ -497,6 +507,14 @@ export const paymentController = {
           // Create the donation record retroactively
           logger.info(`[PaymentController] Webhook: No pending donation for ${reference}. Creating retroactively.`);
 
+          let webhookDonationType = metadata?.donationType ? metadata.donationType.toLowerCase().trim() : null;
+          if (webhookDonationType) {
+            webhookDonationType = webhookDonationType.replace(/[-\s]+/g, '_');
+            if (!['tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'].includes(webhookDonationType)) {
+              webhookDonationType = 'other';
+            }
+          }
+
           const donation = await donationRepo.createDonationIntent({
             reference,
             idempotency_key: `webhook-${reference}`, // Unique key for webhook-created donations
@@ -505,7 +523,7 @@ export const paymentController = {
             donor_name: `${customer?.first_name || ''} ${customer?.last_name || ''}`.trim() || null,
             user_id: metadata?.userId || null,
             category_id: metadata?.categoryId || null,
-            donation_type: metadata?.donationType || null,
+            donation_type: webhookDonationType || null,
             notes: metadata?.notes || null,
             ip_address: paystackData.ip_address,
           });
@@ -783,6 +801,14 @@ export const paymentController = {
           continue;
         }
 
+        let syncDonationType = txn.metadata?.donationType ? txn.metadata.donationType.toLowerCase().trim() : null;
+        if (syncDonationType) {
+          syncDonationType = syncDonationType.replace(/[-\s]+/g, '_');
+          if (!['tithe', 'offering', 'building_fund', 'special', 'welfare', 'missions', 'other'].includes(syncDonationType)) {
+            syncDonationType = 'other';
+          }
+        }
+
         // Create and complete the donation record
         const donation = await donationRepo.createDonationIntent({
           reference: txn.reference,
@@ -792,7 +818,7 @@ export const paymentController = {
           donor_name: `${txn.customer?.first_name || ''} ${txn.customer?.last_name || ''}`.trim() || null,
           user_id: txn.metadata?.userId || null,
           category_id: txn.metadata?.categoryId || null,
-          donation_type: txn.metadata?.donationType || null,
+          donation_type: syncDonationType || null,
           ip_address: txn.ip_address,
         });
 
