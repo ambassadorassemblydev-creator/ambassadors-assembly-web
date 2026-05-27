@@ -371,42 +371,44 @@
           currency: "NGN",
           ref: initResult.reference, // Server-generated reference (not client-generated)
           access_code: initResult.access_code, // Server-provided access code
-          callback: async function(response) {
-            try {
-              payBtn.textContent = "Verifying Seed...";
-
-              // ── Step 4: Verify payment on the server ────────
-              // Server re-verifies with Paystack API and updates
-              // the donation status to 'completed'.
-              const verifyRes = await fetch('/api/payments/verify', {
-                method: 'POST',
-                headers: { 
-                  'Content-Type': 'application/json',
-                  'X-CSRF-Token': '<%= locals.csrfToken %>'
-                },
-                body: JSON.stringify({
-                  reference: response.reference,
-                  'g-recaptcha-response': recaptchaToken
-                })
-              });
-
-              const result = await verifyRes.json();
-              
-              if (result.success) {
-                showToast('Seed received with Honor! Thank you for your partnership.', 'success');
-                // Redirect to the confirmation page with the receipt reference
-                setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}&amount=${amount}&category=${encodeURIComponent(fundName || 'General Giving')}&email=${encodeURIComponent(email)}`, 2000);
-              } else {
-                showToast('Verification issue: ' + (result.message || 'Please contact support with reference: ' + response.reference), 'error');
+          callback: function(response) {
+            (async () => {
+              try {
+                payBtn.textContent = "Verifying Seed...";
+  
+                // ── Step 4: Verify payment on the server ────────
+                // Server re-verifies with Paystack API and updates
+                // the donation status to 'completed'.
+                const verifyRes = await fetch('/api/payments/verify', {
+                  method: 'POST',
+                  headers: { 
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': '<%= locals.csrfToken %>'
+                  },
+                  body: JSON.stringify({
+                    reference: response.reference,
+                    'g-recaptcha-response': recaptchaToken
+                  })
+                });
+  
+                const result = await verifyRes.json();
+                
+                if (result.success) {
+                  showToast('Seed received with Honor! Thank you for your partnership.', 'success');
+                  // Redirect to the confirmation page with the receipt reference
+                  setTimeout(() => window.location.href = `/confirmation?type=donation&reference=${result.donation?.receipt_number || response.reference}&amount=${amount}&category=${encodeURIComponent(fundName || 'General Giving')}&email=${encodeURIComponent(email)}`, 2000);
+                } else {
+                  showToast('Verification issue: ' + (result.message || 'Please contact support with reference: ' + response.reference), 'error');
+                  payBtn.disabled = false;
+                  payBtn.textContent = "Partner Now";
+                }
+              } catch (err) {
+                console.error('[Giving] Verify Error:', err);
+                showToast('Network error during verification. Your payment is safe. Reference: ' + response.reference, 'error');
                 payBtn.disabled = false;
                 payBtn.textContent = "Partner Now";
               }
-            } catch (err) {
-              console.error('[Giving] Verify Error:', err);
-              showToast('Network error during verification. Your payment is safe. Reference: ' + response.reference, 'error');
-              payBtn.disabled = false;
-              payBtn.textContent = "Partner Now";
-            }
+            })();
           },
           onClose: function() {
             payBtn.disabled = false;
