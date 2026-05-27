@@ -651,8 +651,7 @@
   }
 </style>
 <!-- ========= STICKY BOTTOM BAR (AA CUSTOM) ========= -->
-<% if (locals.stickyConfig && stickyConfig.is_active && typeof currentPath !=='undefined' &&
-  !currentPath.startsWith('/my-account')) { %>
+<% if (locals.stickyConfig && stickyConfig.is_active && typeof currentPath !=='undefined' && !currentPath.startsWith('/my-account')) { %>
   <div class="aa-sticky-bar" id="aa-sticky-bar"
     style="background: <%= stickyConfig.bg_color || 'rgba(14, 14, 14, 0.85)' %>; color: <%= stickyConfig.text_color || '#f5f0e8' %>">
     <div class="aa-sticky-bar__inner">
