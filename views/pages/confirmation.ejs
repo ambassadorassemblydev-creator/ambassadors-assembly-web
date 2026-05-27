@@ -89,7 +89,7 @@
 
           <div class="conf-actions">
             <% if (type === 'donation' && locals.reference) { %>
-              <a href="https://paystack.com/receipt/<%= reference %>" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #176a60, #115048);">View Receipt</a>
+              <button onclick="window.print()" class="btn btn-primary" style="background: linear-gradient(135deg, #176a60, #115048); border: none; cursor: pointer;">Print Receipt</button>
             <% } %>
             <a href="/my-account<%= locals.query && locals.query.triggerShare === 'true' ? '?triggerShare=true' : '' %>" class="btn <%= type === 'donation' ? 'btn-secondary' : 'btn-primary' %>">Go to Dashboard</a>
             <a href="/" class="btn btn-secondary">Return Home</a>
@@ -246,6 +246,60 @@
     .btn-secondary:hover {
       background: rgba(0, 0, 0, 0.1);
       transform: translateY(-2px);
+    }
+
+    /* PREMIUM PRINT STYLESHEET */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      /* Hide all UI clutter, backgrounds, navigation and buttons */
+      #preloader,
+      .glow,
+      .conf-icon-wrapper,
+      .conf-ripple,
+      .conf-actions,
+      .btn,
+      footer,
+      nav,
+      .navbar,
+      header.conf-header p {
+        display: none !important;
+      }
+      .confirmation-page {
+        padding: 0 !important;
+        background: none !important;
+        min-height: auto !important;
+      }
+      .glass-fx {
+        border: none !important;
+        box-shadow: none !important;
+        background: none !important;
+        padding: 20px !important;
+        max-width: 100% !important;
+      }
+      .conf-title {
+        font-size: 2.2rem !important;
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
+        color: #000000 !important;
+        margin-bottom: 10px !important;
+      }
+      .conf-details {
+        background: none !important;
+        border: 1px solid #000000 !important;
+        border-radius: 12px !important;
+        padding: 20px !important;
+      }
+      .detail-item {
+        border-bottom: 1px dashed #cccccc !important;
+        padding-bottom: 12px !important;
+        margin-bottom: 12px !important;
+      }
+      .detail-item:last-child {
+        border-bottom: none !important;
+      }
     }
 
     @media (max-width: 600px) {
