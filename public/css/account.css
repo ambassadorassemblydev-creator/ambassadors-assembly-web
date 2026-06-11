@@ -178,7 +178,23 @@
 .member-id { font-size: 11px; color: rgba(26,26,26,0.4); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
 
 
-.nav-links { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+@media (min-width: 769px) {
+  .nav-links {
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: none; /* Firefox */
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
 .nav-item { margin-bottom: 8px; }
 .nav-link span {
   transition: var(--sidebar-transition);

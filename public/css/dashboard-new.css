@@ -575,6 +575,8 @@
   cursor: pointer;
   transition: all .2s ease;
   outline: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 .bday-tab-btn:hover {
   background: var(--g-pl);
