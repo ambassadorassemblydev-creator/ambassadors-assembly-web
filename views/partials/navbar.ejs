@@ -29,7 +29,7 @@
                       data-widget-type="image" id="1582896589" data-binding="" editablewidget="true">
                       <a href="/" id="1719806939" file="false"><img
                           src="https://res.cloudinary.com/dxwhpacz7/image/upload/w_400,h_100,c_pad/v1775383070/IMG-20260304-WA0059_2.jpg"
-                          alt="Ambassadors Assembly" id="1249898586" class=""
+                          alt="Ambassadors Assembly" id="IMG-20260304-WA0059-removebg-preview_1" class=""
                           data-dm-image-path="https://res.cloudinary.com/dxwhpacz7/image/upload/v1775383070/IMG-20260304-WA0059_2.jpg"
                           onerror="handleImageLoadError(this)"></a>
                     </div>
@@ -98,6 +98,7 @@
 <!-- ========= ACCOUNT PANEL (QUICK ACTIONS) ========= -->
 <div class="account-container" id="account-container">
   <!-- The Floating Bubble -->
+  <% if (typeof currentPath === 'undefined' || !currentPath.startsWith('/my-account')) { %>
   <button class="account-fab" id="account-fab" aria-label="Account Actions">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
       stroke-linejoin="round">
@@ -105,6 +106,7 @@
       <circle cx="12" cy="7" r="4" />
     </svg>
   </button>
+  <% } %>
 
   <!-- The Expandable Panel -->
   <div class="account-panel" id="account-panel">

@@ -730,15 +730,23 @@
                                 <h2 class="newsletter-text__title">Don't miss out on the inside scoop!</h2>
                                 <p class="newsletter-text__sub">Subscribe to our newsletter &amp; enjoy the latest News &amp; resources.</p>
                               </div>
-                              <form class="newsletter-form" id="newsletter-form">
+                              <form class="newsletter-form" id="newsletter-form" style="flex-direction: column; align-items: stretch; gap: 15px;">
                                 <input type="hidden" id="newsletter-csrf" value="<%= locals.csrfToken %>">
-                                <div class="newsletter-form__group" style="display: flex; gap: 10px; margin-bottom: 10px; width: 100%;">
+                                <div class="newsletter-form__group" style="display: flex; gap: 15px; width: 100%;">
                                   <input type="text" id="newsletter-fname" class="newsletter-form__input" placeholder="First Name" required style="flex: 1;">
                                   <input type="text" id="newsletter-lname" class="newsletter-form__input" placeholder="Last Name" required style="flex: 1;">
                                 </div>
-                                <input type="email" id="newsletter-email" class="newsletter-form__input" placeholder="Your email" required>
-                                <button type="submit" id="newsletter-submit" class="newsletter-form__btn">Subscribe</button>
+                                <input type="email" id="newsletter-email" class="newsletter-form__input" placeholder="Your email" required style="width: 100%;">
+                                <button type="submit" id="newsletter-submit" class="newsletter-form__btn" style="align-self: flex-start;">Subscribe</button>
                               </form>
+                              <style>
+                                @media (max-width: 768px) {
+                                  #newsletter-submit {
+                                    width: 100% !important;
+                                    align-self: stretch !important;
+                                  }
+                                }
+                              </style>
                               <div id="newsletter-message" style="margin-top: 10px; font-size: 14px; font-weight: bold; display: none;"></div>
                               
                               <script>

@@ -247,6 +247,167 @@
       </div>
       <% } %>
 
+      <!-- Birthdays Today & Tomorrow -->
+      <div class="aas-card" style="margin-top: 24px;">
+        <div class="aas-card-row" style="margin-bottom: 20px;">
+          <div>
+            <div class="aas-eyebrow">Celebrations</div>
+            <h3 class="aas-card-title">Birthdays Today &amp; Tomorrow</h3>
+          </div>
+        </div>
+
+        <%
+          // 1. Calculate today and tomorrow MM-DD strings in local timezone
+          const bdayToday = new Date();
+          const bdayTodayStr = String(bdayToday.getMonth() + 1).padStart(2, '0') + '-' + String(bdayToday.getDate()).padStart(2, '0');
+
+          const bdayTomorrow = new Date();
+          bdayTomorrow.setDate(bdayToday.getDate() + 1);
+          const bdayTomorrowStr = String(bdayTomorrow.getMonth() + 1).padStart(2, '0') + '-' + String(bdayTomorrow.getDate()).padStart(2, '0');
+
+          // 2. Filter birthdays list
+          const todayBirthdaysList = (locals.birthdays || []).filter(b => {
+            if (!b.date_of_birth) return false;
+            const parts = b.date_of_birth.split('-');
+            if (parts.length < 3) return false;
+            return `${parts[1]}-${parts[2]}` === bdayTodayStr;
+          });
+
+          const tomorrowBirthdaysList = (locals.birthdays || []).filter(b => {
+            if (!b.date_of_birth) return false;
+            const parts = b.date_of_birth.split('-');
+            if (parts.length < 3) return false;
+            return `${parts[1]}-${parts[2]}` === bdayTomorrowStr;
+          });
+
+          // Helper to format date
+          const formatDayOnly = (dob) => {
+            if (!dob) return '';
+            const parts = dob.split('-');
+            if (parts.length < 3) return '';
+            const day = parseInt(parts[2], 10);
+            const getOrdinal = (d) => {
+              if (d > 3 && d < 21) return 'th';
+              switch (d % 10) {
+                case 1:  return "st";
+                case 2:  return "nd";
+                case 3:  return "rd";
+                default: return "th";
+              }
+            };
+            const monthsNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const monthName = monthsNames[parseInt(parts[1], 10) - 1];
+            return `${monthName} ${day}${getOrdinal(day)}`;
+          };
+        %>
+
+        <div class="bday-tabs-container">
+          <div class="bday-tabs-header">
+            <button class="bday-tab-btn active" id="bday-tab-btn-today" onclick="switchBdayTab('today')">
+              Today (<%= todayBirthdaysList.length %>)
+            </button>
+            <button class="bday-tab-btn" id="bday-tab-btn-tomorrow" onclick="switchBdayTab('tomorrow')">
+              Tomorrow (<%= tomorrowBirthdaysList.length %>)
+            </button>
+          </div>
+
+          <div class="bday-tabs-content">
+            <!-- TODAY PANEL -->
+            <div class="bday-panel" id="bday-panel-today" style="display: block;">
+              <% if (todayBirthdaysList.length > 0) { %>
+                <div class="aas-bday-list">
+                  <% todayBirthdaysList.forEach(b => { %>
+                    <div class="aas-bday-row">
+                      <div class="aas-bday-user">
+                        <% if (b.avatar_url) { %>
+                          <img src="<%= b.avatar_url %>" class="aas-bday-av">
+                        <% } else { %>
+                          <div class="aas-bday-init">
+                            <%= b.first_name ? b.first_name[0].toUpperCase() : '' %><%= b.last_name ? b.last_name[0].toUpperCase() : '' %>
+                          </div>
+                        <% } %>
+                        <div class="aas-bday-name-group">
+                          <span class="aas-bday-name"><%= b.first_name %> <%= b.last_name %></span>
+                          <span class="aas-bday-email"><%= b.email %></span>
+                        </div>
+                      </div>
+                      <div class="aas-bday-actions">
+                        <span class="aas-bday-date">🎂 <%= formatDayOnly(b.date_of_birth) %></span>
+                        <a href="mailto:<%= b.email %>?subject=<%= encodeURIComponent('Happy Birthday, ' + b.first_name + '! 🎂') %>&body=<%= encodeURIComponent('Dear ' + b.first_name + ',\n\nWishing you a very happy birthday filled with God\'s blessings, joy, and peace!\n\nHave a wonderful celebration.\n\nWarm regards,\n' + (user.first_name || 'Ambassador')) %>" class="btn-wish">
+                          <i class="fas fa-envelope"></i> Send Wish
+                        </a>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              <% } else { %>
+                <div class="aas-bday-empty">
+                  <i class="fas fa-cake-candles"></i>
+                  <p>No birthdays today.</p>
+                </div>
+              <% } %>
+            </div>
+
+            <!-- TOMORROW PANEL -->
+            <div class="bday-panel" id="bday-panel-tomorrow" style="display: none;">
+              <% if (tomorrowBirthdaysList.length > 0) { %>
+                <div class="aas-bday-list">
+                  <% tomorrowBirthdaysList.forEach(b => { %>
+                    <div class="aas-bday-row">
+                      <div class="aas-bday-user">
+                        <% if (b.avatar_url) { %>
+                          <img src="<%= b.avatar_url %>" class="aas-bday-av">
+                        <% } else { %>
+                          <div class="aas-bday-init">
+                            <%= b.first_name ? b.first_name[0].toUpperCase() : '' %><%= b.last_name ? b.last_name[0].toUpperCase() : '' %>
+                          </div>
+                        <% } %>
+                        <div class="aas-bday-name-group">
+                          <span class="aas-bday-name"><%= b.first_name %> <%= b.last_name %></span>
+                          <span class="aas-bday-email"><%= b.email %></span>
+                        </div>
+                      </div>
+                      <div class="aas-bday-actions">
+                        <span class="aas-bday-date">🎂 <%= formatDayOnly(b.date_of_birth) %></span>
+                        <a href="mailto:<%= b.email %>?subject=<%= encodeURIComponent('Happy Birthday, ' + b.first_name + '! 🎂') %>&body=<%= encodeURIComponent('Dear ' + b.first_name + ',\n\nWishing you a very happy birthday filled with God\'s blessings, joy, and peace!\n\nHave a wonderful celebration.\n\nWarm regards,\n' + (user.first_name || 'Ambassador')) %>" class="btn-wish">
+                          <i class="fas fa-envelope"></i> Send Wish
+                        </a>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              <% } else { %>
+                <div class="aas-bday-empty">
+                  <i class="fas fa-cake-candles"></i>
+                  <p>No birthdays tomorrow.</p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function switchBdayTab(tabName) {
+          const todayPanel = document.getElementById('bday-panel-today');
+          const tomorrowPanel = document.getElementById('bday-panel-tomorrow');
+          const todayBtn = document.getElementById('bday-tab-btn-today');
+          const tomorrowBtn = document.getElementById('bday-tab-btn-tomorrow');
+
+          if (tabName === 'today') {
+            todayPanel.style.display = 'block';
+            tomorrowPanel.style.display = 'none';
+            todayBtn.classList.add('active');
+            tomorrowBtn.classList.remove('active');
+          } else {
+            todayPanel.style.display = 'none';
+            tomorrowPanel.style.display = 'block';
+            todayBtn.classList.remove('active');
+            tomorrowBtn.classList.add('active');
+          }
+        }
+      </script>
+
     </div><!-- /overview -->
 
 

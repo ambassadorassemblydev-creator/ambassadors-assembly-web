@@ -121,5 +121,24 @@ export const memberRepo = {
       logger.error(`Error fetching departments: ${error.message}`);
       return [];
     }
+  },
+
+  /**
+   * Get all active members' birthdays
+   */
+  getAllBirthdays: async () => {
+    try {
+      const { data, error } = await supabaseService
+        .from('profiles')
+        .select('id, first_name, last_name, email, date_of_birth, avatar_url')
+        .eq('status', 'active')
+        .not('date_of_birth', 'is', null);
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      logger.error(`Error fetching birthdays: ${error.message}`);
+      return [];
+    }
   }
 };

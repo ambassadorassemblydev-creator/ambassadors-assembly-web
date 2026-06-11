@@ -551,3 +551,152 @@
 @media print {
   .no-print { display: none !important; }
 }
+
+/* ──────────────────── BIRTHDAYS TABS & ROWS ──────────────────── */
+.bday-tabs-container {
+  display: flex;
+  flex-direction: column;
+}
+.bday-tabs-header {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1.5px solid var(--bdr);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.bday-tab-btn {
+  background: var(--wh);
+  border: 1.5px solid var(--bdr);
+  color: var(--mu);
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+  outline: none;
+}
+.bday-tab-btn:hover {
+  background: var(--g-pl);
+  color: var(--g);
+  border-color: var(--g-lt);
+}
+.bday-tab-btn.active {
+  background: var(--g);
+  color: var(--wh);
+  border-color: var(--g);
+  box-shadow: 0 4px 12px rgba(74, 140, 90, 0.25);
+}
+.aas-bday-list {
+  display: flex;
+  flex-direction: column;
+}
+.aas-bday-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1.5px solid var(--bdr);
+}
+.aas-bday-row:last-child {
+  border-bottom: none;
+}
+.aas-bday-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.aas-bday-av {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.05);
+}
+.aas-bday-init {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--g-pl);
+  color: var(--g);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+.aas-bday-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.aas-bday-name {
+  font-weight: 800;
+  color: var(--dk);
+  font-size: 14.5px;
+}
+.aas-bday-email {
+  font-size: 11.5px;
+  color: var(--mu);
+  font-weight: 600;
+}
+.aas-bday-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.aas-bday-date {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--g);
+  background: var(--g-pl);
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+.btn-wish {
+  background: transparent;
+  color: var(--g);
+  border: 1.5px solid var(--g);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.btn-wish:hover {
+  background: var(--g);
+  color: var(--wh);
+  box-shadow: 0 4px 10px rgba(74, 140, 90, 0.2);
+}
+.aas-bday-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--mu);
+}
+.aas-bday-empty i {
+  font-size: 32px;
+  opacity: 0.25;
+  margin-bottom: 10px;
+  display: block;
+}
+.aas-bday-empty p {
+  font-size: 13.5px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .aas-bday-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .aas-bday-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

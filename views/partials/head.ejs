@@ -139,6 +139,8 @@
   <link rel="stylesheet" href="/css/vendor/home-page.min.css" id="homeCssLink" type="text/css" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="/css/vendor/site-global.min.css" id="siteGlobalCss" type="text/css" media="print" onload="this.media='all'">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
     @font-face {
       font-family: "AppleGaramond-Light";
       src: url("/fonts/AppleGaramond-Light.ttf");
@@ -147,13 +149,47 @@
       font-display: swap;
     }
     
-    /* High IQ: Modern, Geometric Font Overrides (Free Alternatives) */
+    /* High IQ: Modern, Geometric Font Overrides (Google Sans) */
     :root {
-      --heading-font: 'Outfit', sans-serif;
-      --body-font: 'Inter', sans-serif;
+      --heading-font: 'Google Sans', sans-serif !important;
+      --body-font: 'Google Sans', sans-serif !important;
     }
     img[width][height] { height: auto; }
     body[data-page-alias="home"] #dm [data-show-on-page-only="home"] { display: block !important; }
+
+    /* Set global typography to Google Sans while protecting FontAwesome icons */
+    body, p, h1, h2, h3, h4, h5, h6, a, span, button, input, select, textarea, div:not([class*="fa-"]):not([class*="swiper-"]) {
+      font-family: "Google Sans", sans-serif;
+    }
+
+    /* Ensure Manrope, Georgia etc. are overridden on layout components */
+    .aa-nav__link, .aa-nav__signin, .love-giant, .love-center__text, .section-label, .section-title, .section-link,
+    .sermon-card__title, .sermon-card__link, .event-card-new__tag, .event-card-new__title, .event-card-new__link,
+    .about-card__name, .about-content__title, .about-content__subtitle, .about-content__desc, .about-btn,
+    .newsletter-text__title, .newsletter-text__sub, .newsletter-form__input, .newsletter-form__btn,
+    .chat-tooltip, .fs-menu__close-text, .fs-menu__link, .fs-menu__detail-label, .fs-menu__detail-text,
+    .fs-menu__social, .visit-hero h1, .visit-hero p, .day, .slot, .expect-text h2, .expect-text p, .feature-text h4,
+    .feature-text p, .expect-card-premium h4, .expect-card-premium p, .btn-signin, .register-text {
+      font-family: "Google Sans", sans-serif !important;
+    }
+
+    /* CSS classes for variable style */
+    .google-sans-global {
+      font-family: "Google Sans", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-style: normal;
+      font-variation-settings:
+        "GRAD" 0;
+    }
+    .google-sans-heading {
+      font-family: "Google Sans", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 700;
+      font-style: normal;
+      font-variation-settings:
+        "GRAD" 0;
+    }
   </style>
   
   <link rel="stylesheet" href="/css/style.min.css?v=1.1">

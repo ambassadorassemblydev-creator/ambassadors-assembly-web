@@ -1,6 +1,7 @@
 import { accountRepo } from '../repositories/accountRepo.js';
 import { eventRepo } from '../repositories/eventRepo.js';
 import { auditRepo } from '../repositories/auditRepo.js';
+import { memberRepo } from '../repositories/memberRepo.js';
 import { AppError } from '../utils/AppError.js';
 import { logger } from '../config/logger.js';
 import { supabaseService } from '../config/supabase.js';
@@ -107,14 +108,15 @@ export const accountController = {
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
 
       // Fetch all data in parallel — departments now included for integrated sidebar
-      const [profile, donations, events, prayers, notes, departments, attendance] = await Promise.all([
+      const [profile, donations, events, prayers, notes, departments, attendance, birthdays] = await Promise.all([
         accountRepo.getUserDashboardData(userId),
         accountRepo.getFullDonationHistory(userId),
         accountRepo.getUserEvents(userId),
         accountRepo.getUserPrayers(userId),
         accountRepo.getUserNotes(userId),
         accountRepo.getDepartments(),
-        accountRepo.getUserAttendance(userId)
+        accountRepo.getUserAttendance(userId),
+        memberRepo.getAllBirthdays()
       ]);
 
       if (!profile) {
@@ -151,6 +153,7 @@ export const accountController = {
         stats,
         departments: departments || [],
         attendance: attendance || [],
+        birthdays: birthdays || [],
         activeTab: tab,
         interest: req.query.interest || null,
         isStaff: !!profile.church_workers && profile.church_workers.length > 0,

@@ -102,7 +102,30 @@ export const automationService = {
 
             const todayBirthdays = birthdayProfiles.filter(p => p.date_of_birth?.slice(5, 10) === monthDay);
 
+            const startOfToday = new Date();
+            startOfToday.setHours(0, 0, 0, 0);
+            const startOfTodayStr = startOfToday.toISOString();
+
             for (const profile of todayBirthdays) {
+                // High IQ: Check if a birthday greeting has already been sent to this user today
+                const { data: sentLog, error: logError } = await supabaseService
+                    .from('email_log')
+                    .select('id')
+                    .eq('recipient_user_id', profile.id)
+                    .eq('template_name', 'birthday_greeting')
+                    .eq('status', 'sent')
+                    .gte('created_at', startOfTodayStr)
+                    .limit(1);
+
+                if (logError) {
+                    logger.error(`[Automation] Error checking birthday email log for user ${profile.id}:`, logError);
+                }
+
+                if (sentLog && sentLog.length > 0) {
+                    logger.info(`[Automation] Birthday email already sent today to ${profile.email}, skipping.`);
+                    continue;
+                }
+
                 const subject = `Happy Birthday, ${profile.first_name || 'Ambassador'}! 🎂`;
                 // High IQ: Use milestone template for personal touch
                 const html = getMilestoneTemplate({
@@ -133,6 +156,25 @@ export const automationService = {
             const todayAnniversaries = anniversaryProfiles.filter(p => p.wedding_anniversary?.slice(5, 10) === monthDay);
 
             for (const profile of todayAnniversaries) {
+                // High IQ: Check if an anniversary greeting has already been sent to this user today
+                const { data: sentLog, error: logError } = await supabaseService
+                    .from('email_log')
+                    .select('id')
+                    .eq('recipient_user_id', profile.id)
+                    .eq('template_name', 'anniversary_greeting')
+                    .eq('status', 'sent')
+                    .gte('created_at', startOfTodayStr)
+                    .limit(1);
+
+                if (logError) {
+                    logger.error(`[Automation] Error checking anniversary email log for user ${profile.id}:`, logError);
+                }
+
+                if (sentLog && sentLog.length > 0) {
+                    logger.info(`[Automation] Anniversary email already sent today to ${profile.email}, skipping.`);
+                    continue;
+                }
+
                 const subject = `Happy Wedding Anniversary! 💍`;
                 // High IQ: Celebrate marriage with dedicated milestone layout
                 const html = getMilestoneTemplate({
