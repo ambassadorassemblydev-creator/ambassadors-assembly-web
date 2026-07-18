@@ -297,7 +297,7 @@ export const pageController = {
                 .from('events')
                 .select('*')
                 .eq('event_type', 'outreach')
-                .eq('status', 'published')
+                .eq('status', 'upcoming')
                 .gte('start_date', new Date().toISOString())
                 .order('start_date', { ascending: true })
                 .limit(4);
